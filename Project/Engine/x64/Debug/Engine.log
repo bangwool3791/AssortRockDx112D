@@ -1,0 +1,14 @@
+﻿  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\test.cso
+  pch.cpp
+  CDevice.cpp
+  CEngine.cpp
+  CEntity.cpp
+  CKeyMgr.cpp
+  CLevel.cpp
+  CLevelMgr.cpp
+  CPathMgr.cpp
+  CTimeMgr.cpp
+  Engine.cpp
+  test.cpp
+  코드를 생성하고 있습니다...
+  Engine.vcxproj -> C:\Development\MyEngine\DirectX11\External\Library\Engine\Engine_debug.lib

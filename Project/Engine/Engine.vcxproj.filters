@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{277fbd1b-83e0-4bc9-8ac5-9e100919a7c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{61b1e06f-dd1b-4436-940d-61528747c747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\00. Header">
+      <UniqueIdentifier>{592fa50a-6d12-4fab-be43-3bfa73f2c714}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Module">
+      <UniqueIdentifier>{7d8d5f93-81bc-4a20-9605-427e94c8de28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\01. Engine">
+      <UniqueIdentifier>{27eaf2b7-d78d-4885-95f7-088c006f1d8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Device">
+      <UniqueIdentifier>{08944dae-fbe3-4b99-aa8c-75e5fee09ab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager">
+      <UniqueIdentifier>{34087106-7646-432a-8fc9-0fbad4e0e4ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Level">
+      <UniqueIdentifier>{09ca2359-c94b-414f-a832-9e4ba3d949eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\HLSL">
+      <UniqueIdentifier>{1c9ce558-b92b-4030-a2e9-ecac660b5a98}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleMath.h">
+      <Filter>Engine\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="struct.h">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CEngine.h">
+      <Filter>Engine\01. Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CDevice.h">
+      <Filter>Engine\02. Device</Filter>
+    </ClInclude>
+    <ClInclude Include="CEntity.h">
+      <Filter>Engine\Module</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevel.h">
+      <Filter>Engine\04. Level</Filter>
+    </ClInclude>
+    <ClInclude Include="CKeyMgr.h">
+      <Filter>Engine\03. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevelMgr.h">
+      <Filter>Engine\03. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CPathMgr.h">
+      <Filter>Engine\03. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimeMgr.h">
+      <Filter>Engine\03. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="test.h">
+      <Filter>Engine\Module</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CEngine.cpp">
+      <Filter>Engine\01. Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CDevice.cpp">
+      <Filter>Engine\02. Device</Filter>
+    </ClCompile>
+    <ClCompile Include="CEntity.cpp">
+      <Filter>Engine\Module</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevel.cpp">
+      <Filter>Engine\04. Level</Filter>
+    </ClCompile>
+    <ClCompile Include="CKeyMgr.cpp">
+      <Filter>Engine\03. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevelMgr.cpp">
+      <Filter>Engine\03. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CPathMgr.cpp">
+      <Filter>Engine\03. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimeMgr.cpp">
+      <Filter>Engine\03. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="test.cpp">
+      <Filter>Engine\Module</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SimpleMath.inl">
+      <Filter>Engine\Module</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="test.fx">
+      <Filter>Engine\HLSL</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
