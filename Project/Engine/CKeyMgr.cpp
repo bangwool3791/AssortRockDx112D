@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CKeyMgr.h"
-
 #include "CEngine.h"
 
 int vkarr[(UINT)KEY::END]
@@ -87,9 +86,11 @@ CKeyMgr::~CKeyMgr()
 
 void CKeyMgr::init()
 {
+	std::back_insert_iterator<vector<tKeyInfo>> inserter{ m_vecKey };
+
 	for (UINT i = 0; i < (UINT)KEY::END; ++i)
 	{
-		m_vecKey.push_back(tKeyInfo{ (KEY)i, KEY_STATE::NONE, false });
+		*inserter = tKeyInfo{ (KEY)i, KEY_STATE::NONE, false };
 	}
 	int a = 'Q';
 }

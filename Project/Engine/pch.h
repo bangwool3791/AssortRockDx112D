@@ -10,18 +10,5 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 
-#include <Windows.h>
-#include <vector>
-#include <list>
-#include <map>
-#include <string>
-using std::vector;
-using std::list;
-using std::map;
-using std::make_pair;
-
-using std::string;
-using std::wstring;
-
 #include "global.h"
 #endif //PCH_H

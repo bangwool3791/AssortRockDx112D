@@ -30,10 +30,16 @@
     <ClInclude Include="targetver.h">
       <Filter>Default</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Default</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Default</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

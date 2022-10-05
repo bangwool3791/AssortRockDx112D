@@ -1,19 +1,8 @@
 ﻿// Client.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
-#include "framework.h"
+#include "pch.h"
 #include "Client.h"
-
-#include <Engine/global.h>
-#include <Engine/CEngine.h>
-
-#ifdef _DEBUG
-#pragma comment(lib, "Engine\\Engine_debug.lib")
-#else
-#pragma comment(lib, "Engine\\Engine.lib")
-#endif
-
-#define MAX_LOADSTRING 100
 
 HINSTANCE g_hInst = nullptr;
 HWND    g_hWnd = nullptr;
@@ -29,9 +18,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
-
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetBreakAlloc(508);
+    g_hInst = hInstance;
     // 전역 문자열을 초기화합니다.
     MyRegisterClass(hInstance);
 
@@ -46,7 +35,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MSG msg;
 
 
-    CEngine::GetInst()->init(g_hWnd, 1200, 800);
+    if (FAILED(CEngine::GetInst()->init(g_hWnd, 1600, 900)))
+    {
+        MessageBox(nullptr, L"엔진 초기화 실패", L"에러", MB_OK);
+        return 0;
+    }
     // 기본 메시지 루프입니다:
     while (true)
     {

@@ -1,38 +1,47 @@
 #pragma once
-#include <wrl.h>
+
+class CConstBuffer;
 
 class CDevice
 {
 	SINGLE(CDevice);
+private:
+	HWND							m_hWnd;
 
-private :
-	HWND m_hWnd;
-	
-	ComPtr<ID3D11Device> m_pDevice;
-	ComPtr<ID3D11DeviceContext> m_pDeviceContext;
+	ComPtr<ID3D11Device>			m_pDevice;				// GPU 메모리 관리
+	ComPtr<ID3D11DeviceContext>		m_pDeviceContext;		// GPU Rendering
 
-	ComPtr<ID3D11Texture2D> m_pRenderTargetTex;
-	//A rendertarget is a resource that can be written by the output-merger stage at the end of a render pass. 
-	//Each render-target should also have a corresponding depth-stencil view.
-	ComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
+	ComPtr<ID3D11Texture2D>			m_pRenderTargetTex;		// Render Target
+	ComPtr<ID3D11RenderTargetView>	m_pRenderTargetView;	// RenderTarget 을 설명
 
-	ComPtr<ID3D11Texture2D>		m_pDepthStencilTex;
-	ComPtr<ID3D11DepthStencilView> m_pDepthStencilView;
-	
-	ComPtr<IDXGISwapChain>			m_pSwapChain;
-	D3D11_VIEWPORT			m_tViewPort;
+	ComPtr<ID3D11Texture2D>			m_pDepthStencilTex;		// 깊이 저장 타겟
+	ComPtr<ID3D11DepthStencilView>	m_pDepthStencilView;	// DSTex 를 설명	
 
-	Vec2					m_vRenderResolution;
+	ComPtr<IDXGISwapChain>			m_pSwapChain;			// RenderTarget(FrontBuffer, BackBuffer) 를 관리 및 역할 교체 지시
+	D3D11_VIEWPORT					m_tViewPort;			// 백버퍼를 윈도우에 그릴 영역(위치, 크기) 지정
 
-public :
+	Vec2							m_vRenderResolution;	// 렌더링 버퍼 해상도
+
+	ComPtr<ID3D11SamplerState>		m_arrSampler[(UINT)SAMPLER_TYPE::END];
+
+	CConstBuffer* m_arrCB[(UINT)CB_TYPE::END];
+
+
+
+public:
 	int init(HWND _hWnd, Vec2 _vResolution);
-	void Present();
 	void TargetClear();
+	void Present();
+
 private:
 	int CreateSwapchain();
 	int CreateTarget();
-public :
+	int CreateConstBuffer();
+	int CreateSampler();
+
+public:
 	ID3D11Device* GetDevice() { return m_pDevice.Get(); }
 	ID3D11DeviceContext* GetContext() { return m_pDeviceContext.Get(); }
+	CConstBuffer* GetConstBuffer(CB_TYPE _eType) { return m_arrCB[(UINT)_eType]; }
 };
 

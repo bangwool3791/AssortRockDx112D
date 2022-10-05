@@ -4,10 +4,10 @@
 #include "CPathMgr.h"
 #include "CTimeMgr.h"
 #include "CKeyMgr.h"
+#include "CResMgr.h"
 #include "CLevelMgr.h"
-#include "CDevice.h"
 
-#include "test.h"
+#include "CDevice.h"
 
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
@@ -17,7 +17,7 @@ CEngine::CEngine()
 
 CEngine::~CEngine()
 {
-	::release();
+
 }
 
 int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
@@ -43,10 +43,9 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CPathMgr::GetInst()->init();
 	CKeyMgr::GetInst()->init();
 	CTimeMgr::GetInst()->init();
+	CResMgr::GetInst()->init();
 	CLevelMgr::GetInst()->init();
 
-
-	::init();
 
 
 	return S_OK;
@@ -65,9 +64,7 @@ void CEngine::tick()
 	CTimeMgr::GetInst()->tick();
 	CKeyMgr::GetInst()->tick();
 
-	//CLevelMgr::GetInst()->tick();
-
-	::tick();
+	CLevelMgr::GetInst()->tick();
 }
 
 void CEngine::render()
@@ -76,9 +73,7 @@ void CEngine::render()
 
 	CTimeMgr::GetInst()->render();
 
-	//CLevelMgr::GetInst()->render();
-
-	::render();
+	CLevelMgr::GetInst()->render();
 
 	CDevice::GetInst()->Present();
 }
