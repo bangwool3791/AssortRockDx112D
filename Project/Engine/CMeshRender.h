@@ -1,20 +1,20 @@
 #pragma once
 #include "CComponent.h"
 
-class CMesh;
-class CMaterial;
+#include "CMesh.h"
+#include "CMaterial.h"
 
 class CMeshRender
 	:public CComponent
 {
 private :
-	CMesh*				m_pMesh;
-	CMaterial*			m_pMtrl;
+	Ptr<CMesh>				m_pMesh;
+	Ptr<CMaterial>			m_pMtrl;
 
 public :
-	void SetMesh(CMesh* _pMesh) { m_pMesh = _pMesh; }
-	void SetMaterial(CMaterial* _pMtrl) { m_pMtrl = _pMtrl; }
-	CMaterial* GetMaterial() { return m_pMtrl; }
+	void SetMesh(Ptr<CMesh> _pMesh) { m_pMesh = _pMesh; }
+	void SetMaterial(Ptr<CMaterial> _pMtrl) { m_pMtrl = _pMtrl; }
+	Ptr<CMaterial> GetMaterial() { return m_pMtrl; }
 public:
 	virtual void tick() override;
 	virtual void finaltick() override;

@@ -17,11 +17,11 @@ private:
 
 public:
 	template<typename T>
-	inline void AddRes(const wstring& _strKey, T* _pRes);
+	inline void AddRes(const wstring& _strKey, Ptr<T> _pRes);
 	template<typename T>
-	T* Load(const wstring& _strKey, const wstring& _strRelativePath);
+	Ptr<T> Load(const wstring& _strKey, const wstring& _strRelativePath);
 	template<typename T>
-	T* FindRes(const wstring& _strKey);
+	Ptr<T> FindRes(const wstring& _strKey);
 
 public :
 	void init();
@@ -52,19 +52,19 @@ RES_TYPE GetType()
 }
 
 template<typename T>
-inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
+inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T> _pRes)
 {
 	RES_TYPE eResType = ::GetType<T>();
 	
-	CRes* pRes = FindRes<T>(_strKey);
+	CRes* pRes = FindRes<T>(_strKey).Get();
 
 	assert(!pRes);
 	
-	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
+	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes.Get()));
 }
 
 template<typename T>
-inline T* CResMgr::FindRes(const wstring& _strKey)
+inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 {
 	auto iter = m_arrRes[(UINT)::GetType<T>()].find(_strKey);
 
@@ -75,14 +75,14 @@ inline T* CResMgr::FindRes(const wstring& _strKey)
 }
 
 template<typename T>
-inline T* CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath)
+inline Ptr<T> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativePath)
 {
 	//1. 타입을 읽어온다.
 	//2. 경로를 완성한다.
 	//3. 리소스 객체를 완성한다.
 	RES_TYPE eResType = GetType<T>();
 
-	CRes* pResource = FindRes<T>(_strKey);
+	CRes* pResource = FindRes<T>(_strKey).Get();
 
 	if (nullptr != pResource)
 		return (T*)pResource;

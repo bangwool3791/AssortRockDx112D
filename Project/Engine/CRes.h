@@ -1,4 +1,5 @@
 #pragma once
+#include "Ptr.h"
 #include "CEntity.h"
 
 class CRes :
@@ -10,6 +11,16 @@ private:
     const RES_TYPE  m_eResType;
     int             m_iRefCount;
 
+public:
+    void AddRef()
+    {
+        ++m_iRefCount;
+    }
+    
+    void Release()
+    {
+        --m_iRefCount;
+    }
 public:
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath) = 0;
@@ -24,6 +35,8 @@ public:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
 
+    template<typename T>
+    friend class Ptr;
 
 public:
     CRes(RES_TYPE _eResType);

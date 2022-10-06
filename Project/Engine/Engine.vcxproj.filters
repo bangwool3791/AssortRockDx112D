@@ -79,6 +79,12 @@
     <Filter Include="Engine\07. Resource\04. Material">
       <UniqueIdentifier>{946a9c26-1aa8-4bc7-89ce-e330a3d0b5d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\03. Script">
+      <UniqueIdentifier>{4a669ca0-4bd8-43e2-9fa0-af61701f056d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts">
+      <UniqueIdentifier>{4c87c13c-05d4-40b7-b604-35d7f112157d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +171,15 @@
     <ClInclude Include="CMaterial.h">
       <Filter>Engine\07. Resource\04. Material</Filter>
     </ClInclude>
+    <ClInclude Include="CScript.h">
+      <Filter>Engine\06. Component\03. Script</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h">
+      <Filter>Engine\08. Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Ptr.h">
+      <Filter>Engine\07. Resource</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -238,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="CMaterial.cpp">
       <Filter>Engine\07. Resource\04. Material</Filter>
+    </ClCompile>
+    <ClCompile Include="CScript.cpp">
+      <Filter>Engine\06. Component\03. Script</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp">
+      <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

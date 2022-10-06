@@ -270,7 +270,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 void CResMgr::CreateDefaultMaterial()
 {
-	CMaterial* pMaterial{};
+	Ptr<CMaterial> pMaterial{};
 	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TestShader"));
 	AddRes(L"TestMtrl", pMaterial);

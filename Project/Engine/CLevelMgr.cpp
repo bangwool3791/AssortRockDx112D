@@ -11,6 +11,7 @@
 
 #include "CTexture.h"
 #include "CMaterial.h"
+#include "CPlayerScript.h"
 
 CLevelMgr::CLevelMgr()
 	:m_pCurLevel{nullptr}
@@ -31,13 +32,14 @@ void CLevelMgr::init()
 	m_pCurLevel->GetLayer(3)->SetName(L"Monster");
 	m_pCurLevel->GetLayer(4)->SetName(L"MonsterProjectile");
 
-	CTexture* pTexture = CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\Player.bmp");
+	Ptr<CTexture> pTexture = CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\Player.bmp");
 	pTexture->UpdateData(0, PIPELINE_STAGE::PS);
 
 	auto pObject = new CGameObject;
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CPlayerScript);
 	
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));

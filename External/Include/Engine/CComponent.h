@@ -12,6 +12,7 @@ private:
 	CGameObject* m_pOwnerObject;
 	const COMPONENT_TYPE m_eType;
 public:
+	virtual void begin() {}
 	virtual void tick() {};
 	virtual void finaltick()= 0;
 

@@ -15,13 +15,15 @@
   CMesh.cpp
   CMeshRender.cpp
   CPathMgr.cpp
+  CPlayerScript.cpp
   CRes.cpp
   CResMgr.cpp
+  CScript.cpp
   CShader.cpp
-  CTexture.cpp
-  CTimeMgr.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  CTexture.cpp
+  CTimeMgr.cpp
   CTransform.cpp
   Engine.cpp
   func.cpp

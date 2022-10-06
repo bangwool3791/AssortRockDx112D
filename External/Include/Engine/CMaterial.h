@@ -1,18 +1,17 @@
 #pragma once
 #include "CRes.h"
 #include "pch.h"
-
-class CGraphicsShader;
+#include "CGraphicsShader.h"
 
 class CMaterial :
 	public CRes
 {
 private:
 	tMtrlConst			m_tConst;
-	CGraphicsShader*	m_pShader;
+	Ptr<CGraphicsShader>	m_pShader;
 public :
 	void SetScalarParam(SCALAR_PARAM _eScalarType, void* _pData);
-	void SetShader(CGraphicsShader* _pShader) { m_pShader = _pShader; }
+	void SetShader(Ptr<CGraphicsShader> _pShader) { m_pShader = _pShader; }
 	
 	void UpdateData();
 
