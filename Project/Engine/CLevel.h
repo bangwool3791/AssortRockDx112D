@@ -9,6 +9,7 @@ private:
 	array<CLayer, MAX_LAYER>		m_arrLayer;
 
 public :
+	void begin();
 	void tick();
 	void finaltick();
 	void render();

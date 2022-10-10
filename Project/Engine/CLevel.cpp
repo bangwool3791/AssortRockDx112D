@@ -12,6 +12,14 @@ CLevel::~CLevel()
 
 }
 
+void CLevel::begin()
+{
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		m_arrLayer[i].begin();
+	}
+}
+
 void CLevel::tick()
 {
 	tick_function(m_arrLayer);

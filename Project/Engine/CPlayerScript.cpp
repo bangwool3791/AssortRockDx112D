@@ -51,18 +51,18 @@ void CPlayerScript::tick()
 
 	if (PRESS == KEY_PRESSED(KEY::NUM_1))
 	{
-		if (nullptr != MeshRender() && nullptr != MeshRender()->GetMaterial())
+		if (nullptr != MeshRender() && nullptr != MeshRender()->GetSharedMaterial())
 		{
-			MeshRender()->GetMaterial()->SetScalarParam(INT_0, &a);
-		}
+			MeshRender()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+		}1
 	}
 
 	if (PRESS == KEY_PRESSED(KEY::NUM_2))
 	{
 		a = 1;
-		if (nullptr != MeshRender() && nullptr != MeshRender()->GetMaterial())
+		if (nullptr != MeshRender() && nullptr != MeshRender()->GetSharedMaterial())
 		{
-			MeshRender()->GetMaterial()->SetScalarParam(INT_0, &a);
+			MeshRender()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 		}
 	}
 }

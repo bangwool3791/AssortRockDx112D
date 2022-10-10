@@ -8,10 +8,10 @@
 #include "CMaterial.h"
 
 class CResMgr
+	:public CSingletone<CResMgr>
 {
-	SINGLE(CResMgr);
 private:
-	map<wstring, CRes*>					m_arrRes[(UINT)RES_TYPE::END];
+	map<wstring, Ptr<CRes>>				m_arrRes[(UINT)RES_TYPE::END];
 	vector<D3D11_INPUT_ELEMENT_DESC>	m_vecLayoutInfo;
 	UINT								m_iLayoutOffset;
 
@@ -34,6 +34,10 @@ private:
 	void CreateDefaultGraphicsShader();
 	void CreateDefaultMaterial();
 	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName);
+
+public :
+	CResMgr();
+	~CResMgr();
 };
 
 template<typename T>
@@ -71,7 +75,7 @@ inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 	if (iter == m_arrRes[(UINT)::GetType<T>()].end())
 		return nullptr;
 
-	return (T*)iter->second;
+	return (T*)iter->second.Get();
 }
 
 template<typename T>

@@ -16,6 +16,14 @@ CLayer::~CLayer()
 
 }
 
+void CLayer::begin()
+{
+	for (size_t i = 0; i < m_vecGameObject.size(); ++i)
+	{
+		m_vecGameObject[i]->begin();
+	}
+}
+
 void CLayer::tick()
 {
 	for (auto iter{ m_vecGameObject.begin()}; iter != m_vecGameObject.end(); ++iter)

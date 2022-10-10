@@ -49,7 +49,8 @@ enum PIPELINE_STAGE
 	HS = 0x02,
 	DS = 0x04,
 	GS = 0x08,
-	PS = 0x10
+	PS = 0x10,
+	ALL_STAGE = VS | HS | DS | GS | PS,
 };
 
 enum class RES_TYPE
@@ -100,4 +101,24 @@ enum SCALAR_PARAM
 	MAT_1,
 	MAT_2,
 	MAT_3,
+};
+
+enum TEX_PARAM
+{
+	TEX_0,
+	TEX_1,
+	TEX_2,
+	TEX_3,
+	TEX_4,
+	TEX_5,
+	TEX_6,
+	TEX_7,
+
+	TEX_CUBE_0,
+	TEX_CUBE_1,
+
+	TEX_ARR_0,
+	TEX_ARR_1,
+
+	TEX_END,
 };

@@ -12,7 +12,6 @@ struct Vtx
 // ================
 struct tTransform
 {
-	Vec4 vPos;
 	Matrix matWorld;
 	Matrix matWV;
 	Matrix matWVP;

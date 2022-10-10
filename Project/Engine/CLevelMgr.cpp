@@ -33,7 +33,6 @@ void CLevelMgr::init()
 	m_pCurLevel->GetLayer(4)->SetName(L"MonsterProjectile");
 
 	Ptr<CTexture> pTexture = CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\Player.bmp");
-	pTexture->UpdateData(0, PIPELINE_STAGE::PS);
 
 	auto pObject = new CGameObject;
 
@@ -42,11 +41,24 @@ void CLevelMgr::init()
 	pObject->AddComponent(new CPlayerScript);
 	
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
-
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
 	int a = 0;
-	pObject->MeshRender()->GetMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &a);
+	pObject->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &a);
+	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTexture);
 	m_pCurLevel->AddGameObject(pObject, 0);
+
+	//auto pMonster = new CGameObject;
+
+	//pMonster->AddComponent(new CTransform);
+	//pMonster->AddComponent(new CMeshRender);
+
+	//pMonster->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pMonster->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+
+	////pMonster->MeshRender()->GetSharedMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &a);
+	////pMonster->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTexture);
+	//m_pCurLevel->AddGameObject(pObject, 0);
+	m_pCurLevel->begin();
 }
 
 void CLevelMgr::tick()

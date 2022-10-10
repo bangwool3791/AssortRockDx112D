@@ -18,7 +18,7 @@ void Safe_Del_Map(map<T1, T2>& _map)
 	for (; iter != _map.end(); ++iter)
 	{
 		if (nullptr != iter->second)
-			delete iter->second;
+			delete iter->second.Get();
 	}
 	_map.clear();
 }

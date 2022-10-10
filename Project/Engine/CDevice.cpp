@@ -72,13 +72,15 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 
 	if (FAILED(CreateSampler()))
 	{
-
+		MessageBox(nullptr, L"샘플러 생성 실패", L"Device 초기화 실패", MB_OK);
+		return E_FAIL;
 	}
 
 	// 상수버퍼 생성
 	if (FAILED(CreateConstBuffer()))
 	{
-
+		MessageBox(nullptr, L"상수버퍼 생성 실패", L"Device 초기화 실패", MB_OK);
+		return E_FAIL;
 	}
 
 	return S_OK;
@@ -174,7 +176,7 @@ int CDevice::CreateTarget()
 int CDevice::CreateConstBuffer()
 {
 	m_arrCB[(UINT)CB_TYPE::TRANSFORM] = new CConstBuffer(CB_TYPE::TRANSFORM);
-	m_arrCB[(UINT)CB_TYPE::TRANSFORM]->Create(sizeof(Vec4));
+	m_arrCB[(UINT)CB_TYPE::TRANSFORM]->Create(sizeof(tTransform));
 
 
 	m_arrCB[(UINT)CB_TYPE::MATERIAL] = new CConstBuffer(CB_TYPE::MATERIAL);

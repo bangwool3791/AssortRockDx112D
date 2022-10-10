@@ -3,8 +3,8 @@
 class CLevel;
 
 class CLevelMgr
+	:public CSingletone<CLevelMgr>
 {
-	SINGLE(CLevelMgr);
 private:
 	CLevel*			m_pCurLevel;
 
@@ -13,5 +13,8 @@ public:
 	void tick();
 	void finaltick();
 	void render();
+
+	CLevelMgr();
+	~CLevelMgr();
 };
 

@@ -20,6 +20,13 @@ public:
     void Release()
     {
         --m_iRefCount;
+
+        //assert(!(m_iRefCount < 0));
+
+        if (0 == m_iRefCount)
+        {
+            delete this;
+        }
     }
 public:
     // 파일로 부터 로딩

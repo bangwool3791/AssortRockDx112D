@@ -99,8 +99,8 @@ struct tKeyInfo
 
 
 class CKeyMgr
+	:public CSingletone<CKeyMgr>
 {
-	SINGLE(CKeyMgr);
 private:
 	vector<tKeyInfo>	m_vecKey;
 	Vec2				m_vMousePos;
@@ -118,5 +118,8 @@ public:
 	}
 
 	Vec2 GetMousePos() { return m_vMousePos; }
+
+	CKeyMgr();
+	~CKeyMgr();
 };
 

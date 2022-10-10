@@ -132,7 +132,7 @@
       <EntryPointName>VS_Test</EntryPointName>
     </FxCompile>
     <FxCompile>
-      <ShaderModel>4.0_level_9_3</ShaderModel>
+      <ShaderModel>5.0</ShaderModel>
     </FxCompile>
     <PreBuildEvent>
       <Command>
@@ -166,7 +166,7 @@
       <Command>cd$(SolutionDir)call EngineCopy.bat</Command>
     </PreBuildEvent>
     <FxCompile>
-      <ShaderModel>4.0_level_9_3</ShaderModel>
+      <ShaderModel>5.0</ShaderModel>
       <ShaderType>
       </ShaderType>
       <EntryPointName>main</EntryPointName>
@@ -187,12 +187,15 @@
     <ClInclude Include="CMaterial.h" />
     <ClInclude Include="CMesh.h" />
     <ClInclude Include="CMeshRender.h" />
+    <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CPathMgr.h" />
     <ClInclude Include="CPlayerScript.h" />
+    <ClInclude Include="CRenderComponent.h" />
     <ClInclude Include="CRes.h" />
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CScript.h" />
     <ClInclude Include="CShader.h" />
+    <ClInclude Include="singleton.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTimeMgr.h" />
     <ClInclude Include="CTransform.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="func.h" />
     <ClInclude Include="global.h" />
+    <ClInclude Include="GlobalComponent.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="SimpleMath.h" />
@@ -220,8 +224,10 @@
     <ClCompile Include="CMaterial.cpp" />
     <ClCompile Include="CMesh.cpp" />
     <ClCompile Include="CMeshRender.cpp" />
+    <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CPathMgr.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
+    <ClCompile Include="CRenderComponent.cpp" />
     <ClCompile Include="CRes.cpp" />
     <ClCompile Include="CResMgr.cpp" />
     <ClCompile Include="CScript.cpp" />

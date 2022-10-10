@@ -26,8 +26,14 @@ void CTransform::finaltick()
 
 void CTransform::UpdateData()
 {
-	CConstBuffer* pConstBuffer = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);
+	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);
 
-	pConstBuffer->SetData(m_vRelativePos);
-	pConstBuffer->UpdateData(PIPELINE_STAGE::VS);
+	tTransform transform = {};
+	transform.matWorld = m_matWorld;
+	transform.matWV;
+	transform.matWVP;
+
+
+	pCB->SetData(&transform);
+	pCB->UpdateData(PIPELINE_STAGE::VS);
 }

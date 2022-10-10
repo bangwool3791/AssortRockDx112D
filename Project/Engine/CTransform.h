@@ -14,6 +14,8 @@ private :
 	Vec3		m_vRelativeScale;
 	Vec3		m_vRelativeRotation;
 
+	Matrix		m_matWorld;
+
 public :
 	void SetRelativePos(Vec3 _vPos) { m_vRelativePos = _vPos; }
 	void SetRelativeScale(Vec3 _vPos) { m_vRelativeScale = _vPos; }

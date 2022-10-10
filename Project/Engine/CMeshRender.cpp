@@ -3,7 +3,7 @@
 #include "CTransform.h"
 
 CMeshRender::CMeshRender()
-	:CComponent{ COMPONENT_TYPE::MESHRENDER }
+	:CRenderComponent{ COMPONENT_TYPE::MESHRENDER }
 {	
 
 }
@@ -26,13 +26,13 @@ void CMeshRender::finaltick()
 void CMeshRender::render()
 {
 	//여기서 왜 트랜스폼?
-	if (nullptr == m_pMtrl || nullptr == m_pMesh)
+	if (nullptr == GetCurMaterial() || nullptr == GetMesh())
 		return;
 
 	Transform()->UpdateData();
 
-	m_pMtrl->UpdateData();
+	GetCurMaterial()->UpdateData();
 
-	m_pMesh->render();
+	GetMesh()->render();
 }
 

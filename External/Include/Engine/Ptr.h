@@ -76,7 +76,7 @@ public :
 	}
 	
 private :
-	T* m_pRes;
+	T* m_pRes{};
 };
 
 template<typename T>

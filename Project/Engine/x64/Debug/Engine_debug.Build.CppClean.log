@@ -2,12 +2,12 @@ c:\development\myengine\directx11\project\engine\x64\debug\engine_debug.pch
 c:\development\myengine\directx11\external\library\engine\engine_debug.pdb
 c:\development\myengine\directx11\external\library\engine\engine_debug.idb
 c:\development\myengine\directx11\project\engine\x64\debug\pch.obj
-c:\development\myengine\directx11\project\engine\x64\debug\cshader.obj
-c:\development\myengine\directx11\project\engine\x64\debug\cscript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cresmgr.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cres.obj
+c:\development\myengine\directx11\project\engine\x64\debug\crendercomponent.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cplayerscript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cpathmgr.obj
+c:\development\myengine\directx11\project\engine\x64\debug\cmonsterscript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmeshrender.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmesh.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmaterial.obj
@@ -27,6 +27,8 @@ c:\development\myengine\directx11\project\engine\x64\debug\engine.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ctransform.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ctimemgr.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ctexture.obj
+c:\development\myengine\directx11\project\engine\x64\debug\cshader.obj
+c:\development\myengine\directx11\project\engine\x64\debug\cscript.obj
 c:\development\myengine\directx11\external\library\engine\test.cso
 c:\development\myengine\directx11\external\library\engine\engine_debug.lib
 c:\development\myengine\directx11\project\engine\x64\debug\engine.tlog\cl.command.1.tlog
