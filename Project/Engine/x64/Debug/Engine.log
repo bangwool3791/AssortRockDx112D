@@ -1,5 +1,15 @@
-﻿  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\test.cso
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\register.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\std2d.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\test.cso
   pch.cpp
+  CCamera.cpp
+  CCameraScript.cpp
   CComponent.cpp
   CConstBuffer.cpp
   CDevice.cpp
@@ -12,20 +22,21 @@
   CLevel.cpp
   CLevelMgr.cpp
   CMaterial.cpp
-C:\Development\MyEngine\DirectX11\Project\Engine\CMaterial.cpp(68,40): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Development\MyEngine\DirectX11\Project\Engine\CMaterial.cpp(65,40): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   CMesh.cpp
   CMeshRender.cpp
   CMonsterScript.cpp
   CPathMgr.cpp
   CPlayerScript.cpp
   CRenderComponent.cpp
-  CRes.cpp
-  CResMgr.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  CRes.cpp
+  CResMgr.cpp
   CScript.cpp
   CShader.cpp
   CTexture.cpp
+C:\Development\MyEngine\DirectX11\Project\Engine\CTexture.cpp(15,9): warning C4101: 'a' :참조되지 않은 지역 변수입니다.
   CTimeMgr.cpp
   CTransform.cpp
   Engine.cpp

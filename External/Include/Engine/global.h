@@ -28,6 +28,8 @@ using std::cbegin;
 using std::end;
 using std::cend;
 
+#include <typeinfo>
+
 #include <d3d11.h>
 /*
 * Compile HLSL code or an effect file into bytecode for a given target.
@@ -52,5 +54,5 @@ using namespace DirectX::SimpleMath;
 #include "define.h"
 #include "struct.h"
 #include "func.h"
-
+#include "d3dUtil.h"
 #include "singleton.h"

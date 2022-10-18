@@ -23,6 +23,7 @@ typedef Vector4 Vec4;
 #define KEY_PRESSED(key)	CKeyMgr::GetInst()->GetKeyState(key) == KEY_STATE::PRESS
 #define KEY_TAP(key)		CKeyMgr::GetInst()->GetKeyState(key) == KEY_STATE::TAP
 #define KEY_RELEASE(key)	CKeyMgr::GetInst()->GetKeyState(key) == KEY_STATE::RELEASE
+#define KEY_DIR	            CKeyMgr::GetInst()->GetMouseDir(key)
 
 #define MAX_LAYER 32
 
@@ -42,7 +43,34 @@ enum class CB_TYPE
 	END,
 };
 
+// Rasterizer State
+enum class RS_TYPE
+{
+	CULL_BACK,
+	CULL_FRONT,
+	CULL_NONE,
+	WIRE_FRAME,
+	END,
+};
 
+// BlendState Type
+enum class BS_TYPE
+{
+	DEFAULT,
+	ALPHABLEND,
+	ONE_ONE,
+
+	END,
+};
+
+enum class DS_TYPE
+{
+	LESS,
+	GREATER,
+	NO_WRITE,
+	NO_TEST_NO_WRITE,
+	END,
+};
 enum PIPELINE_STAGE
 {
 	VS = 0x01,
@@ -53,6 +81,13 @@ enum PIPELINE_STAGE
 	ALL_STAGE = VS | HS | DS | GS | PS,
 };
 
+enum class SHADER_DOMAIN
+{
+	DOMAIN_OPAQUE,		//불투명 단계
+	//셰이더에서 눕기따기
+	DOMAIN_MASK,		//출력, 비출력
+	DOMAIN_TRANSPARENT, //반투명
+};
 enum class RES_TYPE
 {
 	MESH,
@@ -69,8 +104,19 @@ enum class RES_TYPE
 enum COMPONENT_TYPE
 {
 	TRANSFORM,
+	CAMERA,
+
+	// render
 	MESHRENDER,
+	TILEMAP,
+	PARTICLESYSTEM,
+	SKYBOX,
+	DECAL,
+	LANDSCAPE,
+
+
 	END,
+
 	SCRIPT,
 };
 
@@ -121,4 +167,12 @@ enum TEX_PARAM
 	TEX_ARR_1,
 
 	TEX_END,
+};
+
+enum class DIR
+{
+	RIGHT,
+	UP,
+	FRONT,
+	END,
 };

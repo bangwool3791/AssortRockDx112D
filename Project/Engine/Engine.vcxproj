@@ -73,11 +73,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)External\Library\$(ProjectName)\</OutDir>
     <TargetName>$(ProjectName)_debug</TargetName>
-    <IncludePath>$(SolutionDir)External\Include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)External\Library\;$(IncludePath);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External\Include\;C:\Development\MyEngine\DirectX11\Project\Engine;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\Library\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>$(SolutionDir)External\Library\$(ProjectName)\</OutDir>
+    <IncludePath>$(SolutionDir)External\Include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)External\Library\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -129,10 +131,11 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <FxCompile>
-      <EntryPointName>VS_Test</EntryPointName>
+      <EntryPointName>main</EntryPointName>
     </FxCompile>
     <FxCompile>
       <ShaderModel>5.0</ShaderModel>
+      <ShaderType>Effect</ShaderType>
     </FxCompile>
     <PreBuildEvent>
       <Command>
@@ -166,13 +169,13 @@
       <Command>cd$(SolutionDir)call EngineCopy.bat</Command>
     </PreBuildEvent>
     <FxCompile>
-      <ShaderModel>5.0</ShaderModel>
-      <ShaderType>
-      </ShaderType>
+      <ShaderModel>4.0_level_9_3</ShaderModel>
       <EntryPointName>main</EntryPointName>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CCamera.h" />
+    <ClInclude Include="CCameraScript.h" />
     <ClInclude Include="CComponent.h" />
     <ClInclude Include="CConstBuffer.h" />
     <ClInclude Include="CDevice.h" />
@@ -195,6 +198,8 @@
     <ClInclude Include="CResMgr.h" />
     <ClInclude Include="CScript.h" />
     <ClInclude Include="CShader.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="extern.cpp" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="CTexture.h" />
     <ClInclude Include="CTimeMgr.h" />
@@ -210,6 +215,8 @@
     <ClInclude Include="struct.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CCamera.cpp" />
+    <ClCompile Include="CCameraScript.cpp" />
     <ClCompile Include="CComponent.cpp" />
     <ClCompile Include="CConstBuffer.cpp" />
     <ClCompile Include="CDevice.cpp" />
@@ -248,6 +255,8 @@
     <None Include="SimpleMath.inl" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="register.fx" />
+    <FxCompile Include="std2d.fx" />
     <FxCompile Include="test.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

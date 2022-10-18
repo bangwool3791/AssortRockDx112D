@@ -2,6 +2,7 @@
 #include "CEntity.h"
 
 class CComponent;
+class CCamera;
 class CTransform;
 class CRenderComponent;
 class CMeshRender;
@@ -26,9 +27,9 @@ public :
 public :
 	void AddComponent(CComponent* _pComponent);
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
-	GET_COMPONENT(Transform, TRANSFORM);
+	GET_COMPONENT(Transform,  TRANSFORM);
 	GET_COMPONENT(MeshRender, MESHRENDER);
-
+	GET_COMPONENT(Camera,	  CAMERA);
 	template<typename T>
 	T* GetScript();
 public :

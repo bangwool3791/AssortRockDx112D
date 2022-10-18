@@ -31,6 +31,6 @@ private:
 
 public:
     CTexture();
-    ~CTexture();
+    virtual ~CTexture();
 };
 

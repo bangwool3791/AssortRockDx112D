@@ -52,9 +52,6 @@
     <Filter Include="HLSL">
       <UniqueIdentifier>{1c9ce558-b92b-4030-a2e9-ecac660b5a98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Module">
-      <UniqueIdentifier>{7d8d5f93-81bc-4a20-9605-427e94c8de28}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07. Resource\03. Shader\ComputeShader">
       <UniqueIdentifier>{7faed8e1-6a75-49c1-a5ce-8504642ced0d}</UniqueIdentifier>
     </Filter>
@@ -88,6 +85,12 @@
     <Filter Include="Engine\06. Component\02. RenderComponent\MeshRender">
       <UniqueIdentifier>{bba20c21-96a3-412f-a030-b874f60c4851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\04. Camera">
+      <UniqueIdentifier>{7724e083-5eee-4b22-8060-14cd4dab1cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\Module">
+      <UniqueIdentifier>{7d8d5f93-81bc-4a20-9605-427e94c8de28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -100,7 +103,7 @@
       <Filter>Engine\00. Header</Filter>
     </ClInclude>
     <ClInclude Include="SimpleMath.h">
-      <Filter>Module</Filter>
+      <Filter>Engine\08. Scripts\Module</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
       <Filter>Engine\00. Header</Filter>
@@ -115,7 +118,7 @@
       <Filter>Engine\02. Device</Filter>
     </ClInclude>
     <ClInclude Include="CEntity.h">
-      <Filter>Module</Filter>
+      <Filter>Engine\08. Scripts\Module</Filter>
     </ClInclude>
     <ClInclude Include="CLevel.h">
       <Filter>Engine\04. Level</Filter>
@@ -195,6 +198,18 @@
     <ClInclude Include="CMonsterScript.h">
       <Filter>Engine\08. Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="d3dUtil.h">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="extern.cpp">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CCamera.h">
+      <Filter>Engine\06. Component\04. Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraScript.h">
+      <Filter>Engine\08. Scripts\Module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -210,7 +225,7 @@
       <Filter>Engine\02. Device</Filter>
     </ClCompile>
     <ClCompile Include="CEntity.cpp">
-      <Filter>Module</Filter>
+      <Filter>Engine\08. Scripts\Module</Filter>
     </ClCompile>
     <ClCompile Include="CLevel.cpp">
       <Filter>Engine\04. Level</Filter>
@@ -281,14 +296,26 @@
     <ClCompile Include="CMonsterScript.cpp">
       <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="CCamera.cpp">
+      <Filter>Engine\06. Component\04. Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraScript.cpp">
+      <Filter>Engine\08. Scripts\Module</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
-      <Filter>Module</Filter>
+      <Filter>Engine\08. Scripts\Module</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="test.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="register.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="std2d.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

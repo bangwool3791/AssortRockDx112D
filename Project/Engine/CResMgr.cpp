@@ -254,18 +254,46 @@ void CResMgr::CreateDefaultTexture()
 
 void CResMgr::CreateDefaultGraphicsShader()
 {
-	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT, "POSITION");
-	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT, "COLOR");
-	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT, "TEXCOORD");
-
+	AddInputLayout(DXGI_FORMAT_R32G32B32_FLOAT		, "POSITION");
+	AddInputLayout(DXGI_FORMAT_R32G32B32A32_FLOAT	, "COLOR");
+	AddInputLayout(DXGI_FORMAT_R32G32_FLOAT			, "TEXCOORD");
 
 	CGraphicsShader* pShader = nullptr;
 
 	pShader = new CGraphicsShader();
-	pShader->CreateVertexShader(L"shader\\test.fx", "VS_Test");
-	pShader->CreatePixelShader(L"shader\\test.fx", "PS_Test");
-
+	pShader->CreateVertexShader(L"shader\\test.fx",		"VS_Test");
+	pShader->CreatePixelShader (L"shader\\test.fx" ,	"PS_Test");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	
 	AddRes<CGraphicsShader>(L"TestShader", pShader);
+
+	pShader = new CGraphicsShader();
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+
+	/*
+	* 앞에는 그려지나, 언제던지 먼 사물체 그려질 수 있다. 
+	*/
+	AddRes<CGraphicsShader>(L"Std2DShader", pShader);
+
+	/*
+	* 알파블랜드용 셰이더
+	*/
+	pShader = new CGraphicsShader();
+	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
+	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D_AlphaBlend");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	AddRes<CGraphicsShader>(L"Std2DAlphaBlendShader", pShader);
 }
 
 void CResMgr::CreateDefaultMaterial()
@@ -274,6 +302,14 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TestShader"));
 	AddRes(L"TestMtrl", pMaterial);
+
+	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
+	AddRes(L"Std2DMtrl", pMaterial);
+
+	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
+	AddRes(L"Std2DAlphaBlendMtrl", pMaterial);
 }
 
 void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)

@@ -1,5 +1,12 @@
 #pragma once
 #include "CComponent.h"
+
+#include "CKeyMgr.h"
+#include "CTimeMgr.h"
+#include "CResMgr.h"
+
+#include "GlobalComponent.h"
+
 class CScript :
     public CComponent
 {

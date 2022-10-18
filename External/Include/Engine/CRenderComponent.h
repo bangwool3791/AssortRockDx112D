@@ -27,7 +27,10 @@ public:
 	}
 	Ptr<CMaterial> GetSharedMaterial();
 
-	Ptr<CMaterial> GetCurMaterial() { return m_pCurMtrl; }
+	Ptr<CMaterial> GetCurMaterial() 
+	{
+		return m_pCurMtrl; 
+	}
 	Ptr<CMaterial> GetDynamicMaterial();
 public:
 	virtual void render() = 0;

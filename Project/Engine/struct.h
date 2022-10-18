@@ -13,9 +13,11 @@ struct Vtx
 struct tTransform
 {
 	Matrix matWorld;
-	Matrix matWV;
-	Matrix matWVP;
+	Matrix matView;
+	Matrix matProj;
 };
+
+extern tTransform g_transform;
 
 struct tMtrlConst
 {

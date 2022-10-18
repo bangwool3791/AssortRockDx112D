@@ -12,6 +12,7 @@ CTexture::CTexture()
 
 CTexture::~CTexture()
 {
+    int a;
 }
 
 int CTexture::Load(const wstring& _strFilePath)

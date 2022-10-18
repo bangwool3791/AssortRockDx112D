@@ -27,22 +27,22 @@ void CPlayerScript::tick()
 
 	if (PRESS == KEY_PRESSED(KEY::LEFT))
 	{
-		vPos.x -= CTimeMgr::GetInst()->GetDeltaTime() * 1.f;
+		vPos.x -= CTimeMgr::GetInst()->GetDeltaTime() * 100.f;
 	}
 
 	if (PRESS == KEY_PRESSED(KEY::RIGHT))
 	{
-		vPos.x += CTimeMgr::GetInst()->GetDeltaTime() * 1.f;
+		vPos.x += CTimeMgr::GetInst()->GetDeltaTime() * 100.f;
 	}
 
 	if (PRESS == KEY_PRESSED(KEY::UP))
 	{
-		vPos.y += CTimeMgr::GetInst()->GetDeltaTime() * 1.f;
+		vPos.y += CTimeMgr::GetInst()->GetDeltaTime() * 100.f;
 	}
 
 	if (PRESS == KEY_PRESSED(KEY::DOWN))
 	{
-		vPos.y -= CTimeMgr::GetInst()->GetDeltaTime() * 1.f;
+		vPos.y -= CTimeMgr::GetInst()->GetDeltaTime() * 100.f;
 	}
 
 	Transform()->SetRelativePos(vPos);
@@ -54,7 +54,7 @@ void CPlayerScript::tick()
 		if (nullptr != MeshRender() && nullptr != MeshRender()->GetSharedMaterial())
 		{
 			MeshRender()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
-		}1
+		}
 	}
 
 	if (PRESS == KEY_PRESSED(KEY::NUM_2))

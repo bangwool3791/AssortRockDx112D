@@ -17,10 +17,7 @@ CMaterial::CMaterial()
 
 CMaterial::~CMaterial()
 {
-	for (size_t i{ 0 }; i < TEX_END; ++i)
-	{
-		m_arrTex[i] = nullptr;
-	}
+
 }
 
 void CMaterial::SetScalarParam(SCALAR_PARAM _eScalarType, void* _pData)

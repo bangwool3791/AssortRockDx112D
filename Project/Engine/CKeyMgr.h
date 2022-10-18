@@ -104,8 +104,8 @@ class CKeyMgr
 private:
 	vector<tKeyInfo>	m_vecKey;
 	Vec2				m_vMousePos;
-
-
+	Vec2				m_vPrevMousePos;
+	Vec2				m_vMouseDir;
 
 public:
 	void init();
@@ -117,8 +117,9 @@ public:
 		return m_vecKey[(UINT)_key].eState;
 	}
 
-	Vec2 GetMousePos() { return m_vMousePos; }
-
+	Vec2  GetMousePos() { return m_vMousePos; }
+	Vec2  GetMouseDir() { return m_vMouseDir; }
+	Vec2& GetMouseDir_() { return m_vMouseDir; }
 	CKeyMgr();
 	~CKeyMgr();
 };

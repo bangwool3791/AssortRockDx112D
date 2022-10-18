@@ -23,7 +23,7 @@ public :
 
 		m_pRes = ptr;
 		if(m_pRes)
-		m_pRes->AddRef();
+			m_pRes->AddRef();
 	}
 
 	void operator =(const Ptr<T>& ptr)

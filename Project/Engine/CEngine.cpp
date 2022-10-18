@@ -54,7 +54,7 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 void CEngine::progress()
 {
 	tick();
-
+	finaltick();
 	render();
 }
 
@@ -65,6 +65,11 @@ void CEngine::tick()
 	CKeyMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->tick();
+}
+
+void CEngine::finaltick()
+{
+	CLevelMgr::GetInst()->finaltick();
 }
 
 void CEngine::render()

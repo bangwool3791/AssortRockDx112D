@@ -135,12 +135,15 @@ void CKeyMgr::tick()
 				m_vecKey[i].bPrevPress = false;
 			}
 		}
-
+		m_vPrevMousePos = m_vMousePos;
 		POINT ptMouse = {};
 		GetCursorPos(&ptMouse);
 		ScreenToClient(CEngine::GetInst()->GetMainHwnd(), &ptMouse);
 		m_vMousePos.x = (float)ptMouse.x;
 		m_vMousePos.y = (float)ptMouse.y;
+
+		m_vMouseDir = m_vMousePos - m_vPrevMousePos;
+		m_vMouseDir.y *= -1.f;
 	}
 
 	else
