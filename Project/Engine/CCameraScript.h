@@ -11,6 +11,9 @@ public:
     virtual void tick() override;
 
     void         Move();
+
+public :
+    CLONE(CCameraScript);
 public:
     CCameraScript();
     ~CCameraScript();

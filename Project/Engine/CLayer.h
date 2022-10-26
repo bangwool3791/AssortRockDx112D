@@ -11,7 +11,6 @@ class CLayer
 public :
 	CLayer();
 	~CLayer();
-
 public :
 	void begin();
 	void tick();
@@ -19,12 +18,23 @@ public :
 	void render();
 
 private :
-	vector<CGameObject*> m_vecGameObject;
+	//부모 오브젝트 보관 vector
+	vector<CGameObject*>			m_vecParent;
+	//부모, 자식 오브젝트 보관 vector, 랜더시 게임 오브젝트를 한곳에 모으고, 랜더 그룹을 나누기 위함
+	vector<CGameObject*>			m_vecObjects;
+	int								m_iLayerIdx;
+
 public :
-	void AddGameObject(auto _pObject)
-	{
-		back_insert_iterator iter{ m_vecGameObject };
-		*iter = _pObject;
-	}
+	const vector<CGameObject*>& GetParentObjects() { return m_vecParent; }
+	const vector<CGameObject*>& GetObjects() { return m_vecObjects; }
+
+	void RegisterObject(auto _pObj) { m_vecObjects.push_back(_pObj); }
+	void clear()					{ m_vecObjects.clear(); }
+	CLONE_DUMMY(CLayer);
+public :
+	void AddGameObject(CGameObject*_pObject);
+	int	 GetLayerIndex()			{ return m_iLayerIdx; }
+	friend class CLevel;
+	friend class CGameObject;
 
 };

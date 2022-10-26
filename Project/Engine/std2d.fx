@@ -7,6 +7,7 @@
 struct VTX_IN
 {
     float3 vPos : POSITION;
+    float4 vColor : COLOR;
     float2 vUV : TEXCOORD;
 };
 
@@ -14,11 +15,11 @@ struct VTX_IN
 struct VTX_OUT
 {
     float4 vPos : SV_Position;
+    float4 vColor : COLOR;
     float2 vUV : TEXCOORD;
 };
 
-
-VTX_OUT VS_Std2D(VTX_IN _in)
+VTX_OUT VS_DragEffect(VTX_IN _in)
 {
     VTX_OUT output = (VTX_OUT)0.f;
 
@@ -27,6 +28,17 @@ VTX_OUT VS_Std2D(VTX_IN _in)
     float4 vProjPos = mul(vViewPos, g_matProj);
 
     output.vPos = vProjPos;
+    output.vColor = _in.vColor;
+    output.vUV = _in.vUV;
+
+    return output;
+}
+
+VTX_OUT VS_Std2D(VTX_IN _in)
+{
+    VTX_OUT output = (VTX_OUT)0.f;
+
+    output.vPos = mul(float4(_in.vPos, 1.f), g_matWVP);
     output.vUV = _in.vUV;
 
     return output;
@@ -44,7 +56,6 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     return vOutColor;
 }
 
-
 float4 PS_Std2D_AlphaBlend(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
@@ -53,7 +64,6 @@ float4 PS_Std2D_AlphaBlend(VTX_OUT _in) : SV_Target
 
     return vOutColor;
 }
-
 #endif
 
 

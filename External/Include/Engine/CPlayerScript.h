@@ -6,6 +6,8 @@ class CPlayerScript :
 public :
     virtual void begin();
     virtual void tick();
+
+    CLONE(CPlayerScript);
 public:
     CPlayerScript();
     ~CPlayerScript();

@@ -7,6 +7,7 @@ class CTransform;
 class CRenderComponent;
 class CMeshRender;
 class CScript;
+class CCollider2D;
 
 #define GET_COMPONENT(classname, CLASSNAME ) C##classname* classname() { return ( C##classname*)GetComponent(COMPONENT_TYPE::CLASSNAME); }
 
@@ -14,26 +15,58 @@ class CScript;
 class CGameObject
 	:public CEntity
 {
+protected:
+	//부모 오브젝트
+	CGameObject*								  m_pParent;
+	vector<CGameObject*>						  m_vecChild;
+	int											  m_iLayerIdx;
+public :
+	CGameObject* Get_Parent()
+	{
+		return m_pParent;
+	}
+	vector<CGameObject*>& GetChilds()
+	{
+		return m_vecChild;
+	}
+
+	int GetLayerIndex()
+	{
+		return m_iLayerIdx;
+	}
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
-	vector<CScript*>	m_vecScripts;
-	CRenderComponent* m_pRenderComponent{};
+	vector<CScript*>							  m_vecScripts;
+	CRenderComponent*							  m_pRenderComponent{};
 public :
-	void begin();
-	void tick();
-	void finaltick();
-	void render();
+	virtual void begin();
+	virtual void tick();
+	virtual void finaltick();
+	virtual void render();
+public :
+	CRenderComponent* GetRenderComponent() {return m_pRenderComponent;}
 
 public :
+	friend class CLayer;
+public :
 	void AddComponent(CComponent* _pComponent);
+	void AddChild(CGameObject* _pGameObejct)
+	{
+		_pGameObejct->m_pParent = this;
+		m_vecChild.push_back(_pGameObejct);
+	}
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
 	GET_COMPONENT(Transform,  TRANSFORM);
 	GET_COMPONENT(MeshRender, MESHRENDER);
 	GET_COMPONENT(Camera,	  CAMERA);
+	GET_COMPONENT(Collider2D, COLLIDER2D);
 	template<typename T>
 	T* GetScript();
+
+	CLONE(CGameObject);
 public :
 	CGameObject();
+	CGameObject(const CGameObject& rhs);
 	virtual ~CGameObject();
 };
 

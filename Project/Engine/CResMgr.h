@@ -6,6 +6,9 @@
 #include "CTexture.h"
 #include "CGraphicsShader.h"
 #include "CMaterial.h"
+#include "CPrefab.h"
+
+#include "CGameObject.h"
 
 class CResMgr
 	:public CSingletone<CResMgr>
@@ -33,6 +36,7 @@ private:
 	void CreateDefaultTexture();
 	void CreateDefaultGraphicsShader();
 	void CreateDefaultMaterial();
+	void CreateDefaultPrefab();
 	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName);
 
 public :
@@ -51,6 +55,8 @@ RES_TYPE GetType()
 		return RES_TYPE::MATERIAL;
 	if (typeid(T).hash_code() == typeid(CTexture).hash_code())
 		return RES_TYPE::TEXTURE;
+	if (typeid(T).hash_code() == typeid(CPrefab).hash_code())
+		return RES_TYPE::PREFAB;
 	else
 		return RES_TYPE::END;	
 }

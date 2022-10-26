@@ -22,7 +22,12 @@ public:
     // _iPipelineStage : PIPELINE_STAGE, register binding
     void UpdateData(UINT _iPipelineStage);
 
-
+    /*
+    * ConstBuffer는 장치에 한개씩 할당
+    * 다수 객체에서 접근
+    */
+    
+    CLONE_ASSERT(CConstBuffer);
 public:
     CConstBuffer(CB_TYPE _CBType);
     ~CConstBuffer();

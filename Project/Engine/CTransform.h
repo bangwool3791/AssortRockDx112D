@@ -9,6 +9,7 @@ public:
 	CTransform();
 	virtual ~CTransform();
 
+	CLONE(CTransform);
 private :
 	Vec3		m_vRelativePos;
 	Vec3		m_vRelativeScale;
@@ -17,10 +18,13 @@ private :
 	Vec3		m_vRelativeDir[(UINT)DIR::END];
 	Matrix		m_matWorld;
 
+	//부모 행렬의 영향을 받을지 않받을지 결정하는 bool 변수
+	bool		m_blgnParentScale;
 public :
 	void SetRelativePos(Vec3 _vPos) { m_vRelativePos = _vPos; }
 	void SetRelativeScale(Vec3 _vPos) { m_vRelativeScale = _vPos; }
 	void SetRelativeRotation(Vec3 _vPos) { m_vRelativeRotation = _vPos; }
+
 	void SetRelativePos(float _x, float _y, float _z ) { m_vRelativePos = Vec3{_x,_y,_z}; }
 	void SetRelativeScale(float _x, float _y, float _z) { m_vRelativeScale = Vec3{ _x,_y,_z }; }
 	void SetRelativeRotation(float _x, float _y, float _z) { m_vRelativeRotation = Vec3{ _x,_y,_z }; }
@@ -32,6 +36,13 @@ public :
 	Vec3& GetRelativeRotation_() { return m_vRelativeRotation; }
 	Vec3 GetRelativeDir(DIR _eType) { return m_vRelativeDir[(UINT)_eType]; }
 	Vec3& GetRelativeDir_(DIR _eType) { return m_vRelativeDir[(UINT)_eType]; }
+
+	Vec3 GetWorldPos() { return m_matWorld.Translation(); }
+	Vec3 GetWorldScale();
+
+	void SetIgnoreParentScale(bool _blgn) { m_blgnParentScale = _blgn; }
+	
+	const Matrix& GetWorldMat() { return m_matWorld; }
 public :
 	void tick();
 	void finaltick();

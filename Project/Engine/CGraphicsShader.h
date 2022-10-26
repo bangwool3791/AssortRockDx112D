@@ -35,9 +35,10 @@ public :
 
     void CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName);
 
-    void UpdateDate();
+    void UpdateData();
     
 public :
+    void SetTopology(D3D11_PRIMITIVE_TOPOLOGY _eTopology) { m_eTopology = _eTopology; }
     void SetRSType(RS_TYPE _eType) { m_eRSType = _eType; }
     void SetBSType(BS_TYPE _eType) { m_eBSType = _eType; }
     void SetDSType(DS_TYPE _eType) { m_eDSType = _eType; }

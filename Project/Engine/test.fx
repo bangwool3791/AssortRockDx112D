@@ -39,14 +39,14 @@ float4 PS_Test(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
 
-    //if (g_int_0)
-    //{
-    //    vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
-    //}
-    //else
-    //{
-    //    vOutColor = g_tex_0.Sample(g_sam_1, _in.vUV);
-    //}     
+    if (g_int_0)
+    {
+        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    }
+    else
+    {
+        vOutColor = g_tex_0.Sample(g_sam_1, _in.vUV);
+    }     
 
     return vOutColor;
 }

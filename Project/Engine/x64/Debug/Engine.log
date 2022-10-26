@@ -1,5 +1,16 @@
 ﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\debugdraw.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\DragEffect.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Development\MyEngine\DirectX11\Project\Engine\editor.fx(77,25-41): warning X3203: signed/unsigned mismatch, unsigned assumed
+C:\Development\MyEngine\DirectX11\Project\Engine\editor.fx(78,28-44): warning X3203: signed/unsigned mismatch, unsigned assumed
+  
+  compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\editor.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
   compilation object save succeeded; see C:\Development\MyEngine\DirectX11\External\Library\Engine\register.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
@@ -10,36 +21,51 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   pch.cpp
   CCamera.cpp
   CCameraScript.cpp
+  CCollider2D.cpp
+  CCollisionMgr.cpp
   CComponent.cpp
   CConstBuffer.cpp
   CDevice.cpp
+  CDrag.cpp
+  CDragScript.cpp
   CEngine.cpp
   CEntity.cpp
+  CEventMgr.cpp
   CGameObject.cpp
   CGraphicsShader.cpp
+  CGrid2DScript.cpp
   CKeyMgr.cpp
   CLayer.cpp
   CLevel.cpp
   CLevelMgr.cpp
   CMaterial.cpp
-C:\Development\MyEngine\DirectX11\Project\Engine\CMaterial.cpp(65,40): warning C4267: '인수': 'size_t'에서 'UINT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   CMesh.cpp
   CMeshRender.cpp
+  CMissileScript.cpp
   CMonsterScript.cpp
   CPathMgr.cpp
   CPlayerScript.cpp
+  CPrefab.cpp
   CRenderComponent.cpp
-  코드를 생성하고 있습니다...
-  컴파일하고 있습니다...
+  CRenderMgr.cpp
   CRes.cpp
   CResMgr.cpp
+  CResMgr_init.cpp
   CScript.cpp
   CShader.cpp
   CTexture.cpp
-C:\Development\MyEngine\DirectX11\Project\Engine\CTexture.cpp(15,9): warning C4101: 'a' :참조되지 않은 지역 변수입니다.
   CTimeMgr.cpp
   CTransform.cpp
   Engine.cpp
   func.cpp
+  QuadNode.cpp
   코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
+  QuadTree.cpp
+  코드를 생성하고 있습니다...
+CLevel.obj : warning LNK4006: "void __cdecl Instantiate(class CGameObject *,struct DirectX::SimpleMath::Vector3,int)" (?Instantiate@@YAXPEAVCGameObject@@UVector3@SimpleMath@DirectX@@H@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
+CLevel.obj : warning LNK4006: "void __cdecl DebugDrawRect(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,float)" (?DebugDrawRect@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@11M@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
+CLevel.obj : warning LNK4006: "void __cdecl DebugDrawCircle(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,float,float)" (?DebugDrawCircle@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@MM@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
   Engine.vcxproj -> C:\Development\MyEngine\DirectX11\External\Library\Engine\Engine_debug.lib

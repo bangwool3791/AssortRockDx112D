@@ -18,6 +18,8 @@ public :
     void UpdateData();
     void render();
 
+    CLONE_ASSERT(CMesh);
+
 virtual int Load(const wstring& _strFilePath) override
 {
     return S_OK;

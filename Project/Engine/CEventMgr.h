@@ -1,0 +1,18 @@
+#pragma once
+#include "singleton.h"
+
+#include "global.h"
+
+class CEventMgr :
+	public CSingletone<CEventMgr>
+{
+private:
+	vector<tEvent> m_vecEvent;
+public :
+	void tick();
+public:
+	void AddEvent(tEvent& _evn) { m_vecEvent.push_back(_evn); }
+public:
+	CEventMgr();
+	~CEventMgr();
+};

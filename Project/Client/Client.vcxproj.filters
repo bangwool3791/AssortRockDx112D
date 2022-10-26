@@ -16,6 +16,12 @@
     <Filter Include="Default">
       <UniqueIdentifier>{287072a8-17a9-4883-abc9-9060d654c9de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Editor">
+      <UniqueIdentifier>{b981dd30-bda9-48ba-a3a5-8b111fd3d797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor\CGameObjectEx">
+      <UniqueIdentifier>{25d6f4f9-b330-4257-9eb2-82564b4947d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -33,6 +39,12 @@
     <ClInclude Include="pch.h">
       <Filter>Default</Filter>
     </ClInclude>
+    <ClInclude Include="CEditor.h">
+      <Filter>Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameObjectEx.h">
+      <Filter>Editor\CGameObjectEx</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -40,6 +52,12 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditor.cpp">
+      <Filter>Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameObjectEx.cpp">
+      <Filter>Editor\CGameObjectEx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

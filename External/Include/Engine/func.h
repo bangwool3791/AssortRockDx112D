@@ -32,6 +32,15 @@ void Safe_Del_Array(InputIter begin, InputIter end)
 }
 
 template<typename T>
+void Safe_Del_Vec(T vec)
+{
+	for (auto Iter{ vec.begin()}; Iter != vec.end(); ++Iter)
+	{
+		delete* Iter;
+	}
+}
+
+template<typename T>
 void tick_function(T& container)
 {
 	for (auto iter{ container.begin() }; iter != container.end(); ++iter)
@@ -57,3 +66,20 @@ void render_function(T& container)
 		iter->render();
 	}
 }
+
+template<typename T>
+void clear_function(T& container)
+{
+	for (auto iter{ container.begin() }; iter != container.end(); ++iter)
+	{
+		iter->clear();
+	}
+}
+
+#include "CGameObject.h"
+void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
+
+#ifdef _DEBUG
+void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
+void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);
+#endif

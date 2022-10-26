@@ -5,11 +5,13 @@
 
 #include "CLevel.h"
 #include "CGameObject.h"
+#include "CDrag.h"
 #include "GlobalComponent.h"
+#include "CGrid2DScript.h"
 #include "CPlayerScript.h"
 #include "CMonsterScript.h"
 #include "CCameraScript.h"
-
+#include "CDragScript.h"
 
 CLevelMgr::CLevelMgr()
 	: m_pCurLevel(nullptr)
@@ -48,9 +50,13 @@ void CLevelMgr::init()
 	pCamObj->AddComponent(new CTransform);
 	pCamObj->AddComponent(new CCamera);
 	pCamObj->AddComponent(new CCameraScript);
-
+	/*
+	* LAYER_MAX까지 Render
+	*/
+	pCamObj->Camera()->SetLayerMaskAll();
+	pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
 	m_pCurLevel->AddGameObject(pCamObj, 0);
-
+	
 	// GameObject 초기화
 	CGameObject* pObject = nullptr;
 
@@ -59,35 +65,34 @@ void CLevelMgr::init()
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CPlayerScript);
-
+	
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
-	pObject->Transform()->SetRelativeScale(Vec3(512.f, 512.f, 1.f));
+	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DAlphaBlendMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_CIRCLE);
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
 	m_pCurLevel->AddGameObject(pObject, 0);
-
 	/*
-	* 몬스터
+	* Drag Function Object
 	*/
-	pObject = new CGameObject;
-	pObject->SetName(L"Monster");
+	pObject = new CDrag;
+	pObject->SetName(L"Drag");
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CMonsterScript);
-
-	pObject->Transform()->SetRelativePos(Vec3(300.f, 0.f, 700.f));
-	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.9f));
+	pObject->AddComponent(new CDragScript);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TestMtrl"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
 
 	m_pCurLevel->AddGameObject(pObject, 0);
+
 	m_pCurLevel->begin();
 }
 

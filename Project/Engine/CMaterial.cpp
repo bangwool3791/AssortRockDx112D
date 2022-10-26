@@ -15,6 +15,14 @@ CMaterial::CMaterial()
 	}
 }
 
+CMaterial::CMaterial(const CMaterial& _other)
+	: CRes(RES_TYPE::MATERIAL)
+	, m_tConst(_other.m_tConst)
+	, m_pShader(_other.m_pShader)
+{
+	m_pMasterMtrl = const_cast<CMaterial*>(&_other);
+}
+
 CMaterial::~CMaterial()
 {
 
@@ -59,7 +67,7 @@ void CMaterial::SetScalarParam(SCALAR_PARAM _eScalarType, void* _pData)
 
 void CMaterial::UpdateData()
 {
-	for (size_t i{ 0 }; i < TEX_END; ++i)
+	for (UINT i{ 0 }; i < (UINT)TEX_END; ++i)
 	{
 		if(nullptr != m_arrTex[i])
 			m_arrTex[i]->UpdateData(i, ALL_STAGE);
@@ -69,10 +77,24 @@ void CMaterial::UpdateData()
 	pCB->SetData(&m_tConst);
 	pCB->UpdateData(PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
-	m_pShader->UpdateDate();
+	m_pShader->UpdateData();
 }
 
 void CMaterial::SetTexParam(TEX_PARAM _eTex, Ptr<CTexture> _pTex)
 {
 	m_arrTex[_eTex] = _pTex;
+}
+
+void CMaterial::Clear()
+{
+	ID3D11ShaderResourceView* pSRV = nullptr;
+
+	for (UINT i{ 0 }; i < (UINT)TEX_END; ++i)
+	{
+		CONTEXT->VSSetShaderResources(i, 1, &pSRV);
+		CONTEXT->HSSetShaderResources(i, 1, &pSRV);
+		CONTEXT->DSSetShaderResources(i, 1, &pSRV);
+		CONTEXT->GSSetShaderResources(i, 1, &pSRV);
+		CONTEXT->PSSetShaderResources(i, 1, &pSRV);
+	}
 }

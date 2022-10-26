@@ -28,7 +28,7 @@ private:
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath);
 
-
+    CLONE_DUMMY(CTexture);
 public:
     CTexture();
     virtual ~CTexture();

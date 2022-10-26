@@ -2,9 +2,15 @@
 #include "CLevel.h"
 #include "func.cpp"
 
+
 CLevel::CLevel()
 {
 	m_arrLayer[0].SetName(L"Default");
+
+	for (int i = 0; i < MAX_LAYER; ++i)
+	{
+		m_arrLayer[i].m_iLayerIdx = i;
+	}
 }
 
 CLevel::~CLevel()
@@ -22,6 +28,7 @@ void CLevel::begin()
 
 void CLevel::tick()
 {
+	clear_function(m_arrLayer);
 	tick_function(m_arrLayer);
 }
 

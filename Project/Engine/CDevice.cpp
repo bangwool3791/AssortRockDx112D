@@ -67,7 +67,8 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 	m_tViewPort.TopLeftY = 0;
 	m_tViewPort.Width = _vResolution.x;
 	m_tViewPort.Height = _vResolution.y;
-
+	m_tViewPort.MinDepth = 0;
+	m_tViewPort.MaxDepth = 1;
 	m_pDeviceContext->RSSetViewports(1, &m_tViewPort);
 
 	if (FAILED(CreateSampler()))
@@ -80,7 +81,7 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 	if (FAILED(CreateConstBuffer()))
 	{
 		MessageBox(nullptr, L"상수버퍼 생성 실패", L"Device 초기화 실패", MB_OK);
-		return E_FAIL;ㄴ
+		return E_FAIL;
 	}
 
 	if (FAILED(CreateRasterizerState()))
@@ -222,6 +223,7 @@ int CDevice::CreateSampler()
 
 
 	// 샘플러 바인딩
+	//
 	CONTEXT->VSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
 	CONTEXT->HSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
 	CONTEXT->DSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
@@ -271,31 +273,46 @@ int CDevice::CreateBlendState()
 {
 	HRESULT hr = S_OK;
 
+	// Default 블렌딩
 	m_arrBS[(UINT)BS_TYPE::DEFAULT] = nullptr;
 
-	D3D11_BLEND_DESC desc{};
 
-	desc.AlphaToCoverageEnable					= false;
-	desc.IndependentBlendEnable					= false;
 
-	desc.RenderTarget[0].BlendEnable			= true;
+	D3D11_BLEND_DESC desc = {};
 
-	desc.RenderTarget[0].BlendOp				= D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-	desc.RenderTarget[0].SrcBlend				= D3D11_BLEND_SRC_ALPHA;
-	desc.RenderTarget[0].DestBlend				= D3D11_BLEND_INV_SRC_ALPHA;
+	// Alpha Blend
+	desc.AlphaToCoverageEnable = false;
+	desc.IndependentBlendEnable = false;
 
-	desc.RenderTarget[0].BlendOpAlpha			= D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
-	desc.RenderTarget[0].SrcBlendAlpha			= D3D11_BLEND_ONE;
-	desc.RenderTarget[0].DestBlendAlpha			= D3D11_BLEND_ZERO;
+
+	desc.RenderTarget[0].BlendEnable = true;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+
+	desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
 
 	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
+
+
+
 	hr = DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::ALPHABLEND].GetAddressOf());
 
-	desc.RenderTarget[0].SrcBlend				= D3D11_BLEND_ONE;
-	desc.RenderTarget[0].DestBlend				= D3D11_BLEND_ONE;
 
-	hr = DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::ONE_ONE].GetAddressOf());
+	// One One Blend
+	desc.AlphaToCoverageEnable = false;
+	desc.IndependentBlendEnable = false;
+
+	desc.RenderTarget[0].BlendEnable = true;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::ONE_ONE].GetAddressOf());
 
 	return hr;
 }

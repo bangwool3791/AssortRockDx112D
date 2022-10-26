@@ -21,7 +21,7 @@ public:
 	void AddGameObject(CGameObject* _pObject, UINT _iLayerIdx);
 	void AddGameObject(CGameObject* _pObject, const wstring& _strLayerName);
 
-
+	CLONE_DUMMY(CLevel);
 public:
 	CLevel();
 	virtual ~CLevel();

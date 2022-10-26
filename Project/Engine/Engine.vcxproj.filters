@@ -91,6 +91,33 @@
     <Filter Include="Engine\08. Scripts\Module">
       <UniqueIdentifier>{7d8d5f93-81bc-4a20-9605-427e94c8de28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Manager\06. RenderMgr">
+      <UniqueIdentifier>{90ca4d70-6f33-4227-b754-d55673fe916f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\07. EventMgr">
+      <UniqueIdentifier>{69b49e52-076a-4e05-948b-9d58381bc01c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\09. Optimize">
+      <UniqueIdentifier>{7605838f-b108-45c4-928a-9f840da18433}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. GameObject\Drag">
+      <UniqueIdentifier>{dd55ee78-4a56-4f8e-8f49-9ebe8479b490}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\08_1. Mouse">
+      <UniqueIdentifier>{c1d20873-2aba-4115-b200-3de8486fd5cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\08. Prefab">
+      <UniqueIdentifier>{ad84ed9d-6344-4abe-bf9a-1c902757f304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\09. CollisionMgr">
+      <UniqueIdentifier>{c84a0e5c-7b3e-4ca3-9fe3-e354ded53c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\05. Collider2D">
+      <UniqueIdentifier>{316b5957-65f0-429f-94c6-bc9c00fa85c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\00. Header\func">
+      <UniqueIdentifier>{b4105d7d-8614-471e-b0f5-ce8ad2966fbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -147,14 +174,8 @@
     <ClInclude Include="CResMgr.h">
       <Filter>Engine\03. Manager\05. ResMgr</Filter>
     </ClInclude>
-    <ClInclude Include="func.h">
-      <Filter>Engine\00. Header</Filter>
-    </ClInclude>
     <ClInclude Include="CConstBuffer.h">
       <Filter>Engine\02. Device\01. Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="CGraphicsShader.h">
-      <Filter>Engine\07. Resource\03. Shader\GraphicsShader</Filter>
     </ClInclude>
     <ClInclude Include="CComponent.h">
       <Filter>Engine\06. Component</Filter>
@@ -210,6 +231,48 @@
     <ClInclude Include="CCameraScript.h">
       <Filter>Engine\08. Scripts\Module</Filter>
     </ClInclude>
+    <ClInclude Include="CGraphicsShader.h">
+      <Filter>Engine\07. Resource\03. Shader\GraphicsShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CRenderMgr.h">
+      <Filter>Engine\03. Manager\06. RenderMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CEventMgr.h">
+      <Filter>Engine\03. Manager\07. EventMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadNode.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="CDrag.h">
+      <Filter>Engine\05. GameObject\Drag</Filter>
+    </ClInclude>
+    <ClInclude Include="CDragScript.h">
+      <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="CPrefab.h">
+      <Filter>Engine\03. Manager\08. Prefab</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript.h">
+      <Filter>Engine\08. Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionMgr.h">
+      <Filter>Engine\03. Manager\09. CollisionMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollider2D.h">
+      <Filter>Engine\06. Component\05. Collider2D</Filter>
+    </ClInclude>
+    <ClInclude Include="func.h">
+      <Filter>Engine\00. Header\func</Filter>
+    </ClInclude>
+    <ClInclude Include="CGrid2DScript.h">
+      <Filter>Engine\08. Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -253,9 +316,6 @@
     </ClCompile>
     <ClCompile Include="CResMgr.cpp">
       <Filter>Engine\03. Manager\05. ResMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="func.cpp">
-      <Filter>Engine\00. Header</Filter>
     </ClCompile>
     <ClCompile Include="CConstBuffer.cpp">
       <Filter>Engine\02. Device\01. Buffer</Filter>
@@ -302,6 +362,45 @@
     <ClCompile Include="CCameraScript.cpp">
       <Filter>Engine\08. Scripts\Module</Filter>
     </ClCompile>
+    <ClCompile Include="CRenderMgr.cpp">
+      <Filter>Engine\03. Manager\06. RenderMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CEventMgr.cpp">
+      <Filter>Engine\03. Manager\07. EventMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadNode.cpp">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClCompile>
+    <ClCompile Include="CDrag.cpp">
+      <Filter>Engine\05. GameObject\Drag</Filter>
+    </ClCompile>
+    <ClCompile Include="CDragScript.cpp">
+      <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="CPrefab.cpp">
+      <Filter>Engine\03. Manager\08. Prefab</Filter>
+    </ClCompile>
+    <ClCompile Include="CResMgr_init.cpp">
+      <Filter>Engine\03. Manager\05. ResMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript.cpp">
+      <Filter>Engine\08. Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionMgr.cpp">
+      <Filter>Engine\03. Manager\09. CollisionMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollider2D.cpp">
+      <Filter>Engine\06. Component\05. Collider2D</Filter>
+    </ClCompile>
+    <ClCompile Include="func.cpp">
+      <Filter>Engine\00. Header\func</Filter>
+    </ClCompile>
+    <ClCompile Include="CGrid2DScript.cpp">
+      <Filter>Engine\08. Scripts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -316,6 +415,15 @@
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="std2d.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="editor.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="DragEffect.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="debugdraw.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
   </ItemGroup>

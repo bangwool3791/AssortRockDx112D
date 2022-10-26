@@ -3,6 +3,14 @@
 
 #include "pch.h"
 #include "Client.h"
+#include "CEditor.h"
+#include <Engine/CDevice.h>
+
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
 
 HINSTANCE g_hInst = nullptr;
 HWND    g_hWnd = nullptr;
@@ -19,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
  {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-    //_CrtSetBreakAlloc(506);
+   // _CrtSetBreakAlloc(622);
     g_hInst = hInstance;
     // 전역 문자열을 초기화합니다.
     MyRegisterClass(hInstance);
@@ -40,6 +48,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         MessageBox(nullptr, L"엔진 초기화 실패", L"에러", MB_OK);
         return 0;
     }
+
+    CEditor::GetInst()->init();
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -57,6 +67,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             CEngine::GetInst()->progress();
+
+            CEditor::GetInst()->progress();
+
+            // Present(SwapChain)
+            CDevice::GetInst()->Present();
         }
     }
    

@@ -6,8 +6,9 @@
 #include "CKeyMgr.h"
 #include "CResMgr.h"
 #include "CLevelMgr.h"
-
+#include "CRenderMgr.h"
 #include "CDevice.h"
+#include "CEventMgr.h"
 
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
@@ -63,8 +64,10 @@ void CEngine::tick()
 	// Manager 업데이트
 	CTimeMgr::GetInst()->tick();
 	CKeyMgr::GetInst()->tick();
+	CRenderMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->tick();
+
 }
 
 void CEngine::finaltick()
@@ -78,7 +81,16 @@ void CEngine::render()
 
 	CTimeMgr::GetInst()->render();
 
-	CLevelMgr::GetInst()->render();
+	CRenderMgr::GetInst()->render();
 
-	CDevice::GetInst()->Present();
+	/*
+	* 1 Tick
+	* Present
+	* 백버퍼 프론트 버퍼 전환이 일어난다.
+	* [클라이언트] 그리드를 그린다.
+	* 2 Tick
+	* Target 클리어가 일어난다.
+	*/
+
+	CEventMgr::GetInst()->tick();
 }

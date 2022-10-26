@@ -24,8 +24,10 @@ public :
 	GET_OTHER_COMPONENT(MeshRender);
 	GET_OTHER_COMPONENT(Camera);
 
+	virtual CComponent* Clone() = 0;
 public :
 	CComponent(COMPONENT_TYPE _eType);
+	CComponent(const CComponent& rhs);
 	virtual ~CComponent();
 
 	friend class CGameObject;

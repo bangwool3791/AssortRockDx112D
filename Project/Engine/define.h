@@ -25,7 +25,21 @@ typedef Vector4 Vec4;
 #define KEY_RELEASE(key)	CKeyMgr::GetInst()->GetKeyState(key) == KEY_STATE::RELEASE
 #define KEY_DIR	            CKeyMgr::GetInst()->GetMouseDir(key)
 
+#define CLONE(type) public : type* Clone(){return new type(*this);}
+#define CLONE_DUMMY(type) public : type* Clone(){return nullptr;}
+#define CLONE_ASSERT(type) public : type* Clone(){assert(false); return nullptr;}
+
 #define MAX_LAYER 32
+
+#define ALPHABLEND_Z_POS 0.9f
+
+enum class SHADER_DOMAIN
+{
+	DOMAIN_OPAQUE,		// 불투명 단계
+	DOMAIN_MASK,		// 출력, 비출력
+	DOMAIN_TRANSPARENT, // 반투명
+	NONE,
+};
 
 enum class SAMPLER_TYPE
 {
@@ -81,13 +95,6 @@ enum PIPELINE_STAGE
 	ALL_STAGE = VS | HS | DS | GS | PS,
 };
 
-enum class SHADER_DOMAIN
-{
-	DOMAIN_OPAQUE,		//불투명 단계
-	//셰이더에서 눕기따기
-	DOMAIN_MASK,		//출력, 비출력
-	DOMAIN_TRANSPARENT, //반투명
-};
 enum class RES_TYPE
 {
 	MESH,
@@ -105,6 +112,10 @@ enum COMPONENT_TYPE
 {
 	TRANSFORM,
 	CAMERA,
+	COLLIDER2D,
+	COLLIDER3D,
+	ANIMATOR2D,
+	ANIMATOR3D,
 
 	// render
 	MESHRENDER,
@@ -175,4 +186,29 @@ enum class DIR
 	UP,
 	FRONT,
 	END,
+};
+
+enum class EVENT_TYPE
+{
+	CREATE_OBJECT,
+	DELETE_OBJECT,
+	CHANGE_LEVEL,
+
+	END,
+};
+
+enum class DEBUG_SHAPE
+{
+	RECT,
+	CIRCLE,
+
+	CUBE,
+	SPHERE,
+	END,
+};
+
+enum class COLLIDER2D_TYPE
+{
+	COLLIDER2D_RECT,
+	COLLIDER2D_CIRCLE,
 };

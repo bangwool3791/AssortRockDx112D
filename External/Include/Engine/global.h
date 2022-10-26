@@ -10,6 +10,9 @@
 #include <array>
 #include <iterator>
 #include <algorithm>
+#include <queue>
+#include <iostream>
+#include <stdlib.h>
 
 using std::vector;
 using std::list;
@@ -21,12 +24,17 @@ using std::string;
 using std::wstring;
 
 using std::array;
+using std::queue;
 
 using std::begin;
 using std::cbegin;
 
 using std::end;
 using std::cend;
+
+using std::cin;
+using std::cout;
+using std::endl;
 
 #include <typeinfo>
 

@@ -45,6 +45,11 @@ public:
     template<typename T>
     friend class Ptr;
 
+    /*
+    * 추상 함수는 자식만 상속 받으면 됨.
+    */
+public:
+    virtual CRes* Clone() = 0;
 public:
     CRes(RES_TYPE _eResType);
     ~CRes();

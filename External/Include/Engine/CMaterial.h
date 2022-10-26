@@ -19,21 +19,22 @@ public :
 	{ 
 		m_pShader = _pShader; 
 	}
+
+	Ptr<CGraphicsShader> GetShader()
+	{
+		return m_pShader;
+	}
+
 	void SetTexParam(TEX_PARAM _eTex, Ptr<CTexture> _pTex);
 
 	void UpdateData();
+	static void Clear();
 
 	virtual int Load(const wstring& _strFilePath) { return S_OK; }
 
+	CLONE(CMaterial)
 public :
 	CMaterial();
-	CMaterial(const CMaterial& _other)
-		: CRes(RES_TYPE::MATERIAL)
-		, m_tConst(_other.m_tConst)
-		, m_pShader(_other.m_pShader)
-	{
-		m_pMasterMtrl = const_cast<CMaterial*>(&_other);
-	}
-
+	CMaterial(const CMaterial& _other);
 	~CMaterial();
 };

@@ -29,7 +29,7 @@ public:
 
 	Ptr<CMaterial> GetCurMaterial() 
 	{
-		return m_pCurMtrl; 
+ 		return m_pCurMtrl; 
 	}
 	Ptr<CMaterial> GetDynamicMaterial();
 public:

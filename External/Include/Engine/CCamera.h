@@ -6,6 +6,7 @@ enum PROJ_TYPE
     PERSPECTIVE,
     ORTHOGRAHPICS,
 };
+
 class CCamera :
     public CComponent
 {
@@ -19,6 +20,20 @@ private:
     float       m_fFar;
     float       m_fScale;
 
+    UINT                    m_iLayerMask;
+
+    vector<CGameObject*>    m_vecQpaque;
+    vector<CGameObject*>    m_vecMask;
+    vector<CGameObject*>    m_vecTransparent;
+
+private :
+    void SortObject();
+    void render_opaque();
+    void render_mask();
+    void render_transparent();
+public :
+    virtual void finaltick();
+    void         render();
 public :
     float        GetOrthographicScale() { return m_fScale; }
     float&       GetOrthographicScale_() { return m_fScale; }
@@ -27,10 +42,10 @@ public :
     void        SetProjType(PROJ_TYPE _eType) { m_eProjType = _eType; }
     PROJ_TYPE   GetProjType() { return m_eProjType; }
 
-    void SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
+    void  SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
     float GetAspectRatio() { return m_fAspectRatio; }
 
-    void SetFar(float _fFar) { m_fFar = _fFar; }
+    void  SetFar(float _fFar) { m_fFar = _fFar; }
     float GetFar() { return m_fFar; }
 
     /*
@@ -39,9 +54,13 @@ public :
     const Matrix& GetViewMat() { return m_matView; }
     const Matrix& GetProjMat() { return m_matProj; }
 
-public :
-    virtual void finaltick();
+    void SetLayerMask(const wstring& _strLayerName);
+    void SetLayerMask(int _iLayerIdx);
+    void SetLayerMaskAll() { m_iLayerMask = 0xffffffff; }
+    void SetLayerMaskZero() { m_iLayerMask = 0; }
 
+public :
+    CLONE(CCamera);
 public :
     CCamera();
     ~CCamera();

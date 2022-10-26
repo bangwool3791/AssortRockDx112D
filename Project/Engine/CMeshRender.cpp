@@ -34,5 +34,7 @@ void CMeshRender::render()
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render();
+
+	CMaterial::Clear();
 }
 
