@@ -34,9 +34,18 @@ void CLayer::tick()
 
 void CLayer::finaltick()
 {
-	for (auto iter{ m_vecParent.begin() }; iter != m_vecParent.end(); ++iter)
+	for (auto iter{ m_vecParent.begin() }; iter != m_vecParent.end();)
 	{
 		(*iter)->finaltick();
+
+		if ((*iter)->IsDead())
+		{
+			iter = m_vecParent.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
 	}
 }
 

@@ -15,29 +15,24 @@ class CCollider2D;
 class CGameObject
 	:public CEntity
 {
+private:
+	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
+	vector<CScript*>							  m_vecScripts;
+	CRenderComponent* m_pRenderComponent{};
 protected:
 	//부모 오브젝트
 	CGameObject*								  m_pParent;
 	vector<CGameObject*>						  m_vecChild;
 	int											  m_iLayerIdx;
-public :
-	CGameObject* Get_Parent()
-	{
-		return m_pParent;
-	}
-	vector<CGameObject*>& GetChilds()
-	{
-		return m_vecChild;
-	}
+	bool										  m_bDead;
+public:
+	CGameObject* Get_Parent(){return m_pParent;}
+	const vector<CGameObject*>& GetChilds() const {return m_vecChild;}
+	const vector<CScript*>& GetScripts() const {return m_vecScripts;}
+	int GetLayerIndex(){return m_iLayerIdx;}
 
-	int GetLayerIndex()
-	{
-		return m_iLayerIdx;
-	}
-private:
-	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
-	vector<CScript*>							  m_vecScripts;
-	CRenderComponent*							  m_pRenderComponent{};
+	bool IsDead() { return m_bDead; }
+	void SetDead(bool _bChecked) { m_bDead = _bChecked; }
 public :
 	virtual void begin();
 	virtual void tick();
@@ -56,6 +51,7 @@ public :
 		m_vecChild.push_back(_pGameObejct);
 	}
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
+
 	GET_COMPONENT(Transform,  TRANSFORM);
 	GET_COMPONENT(MeshRender, MESHRENDER);
 	GET_COMPONENT(Camera,	  CAMERA);

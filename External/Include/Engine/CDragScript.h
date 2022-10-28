@@ -8,6 +8,10 @@ public:
     virtual void begin();
     virtual void tick();
 
+    virtual void BeginOverlap(CCollider2D* _pOther);
+    virtual void Overlap(CCollider2D* _pOther);
+    virtual void EndOverlap(CCollider2D* _pOther);
+
     CLONE(CDragScript);
 
 private:
@@ -18,5 +22,6 @@ public:
     CDragScript();
     CDragScript(const CDragScript& rhs);
     ~CDragScript();
+
 };
 

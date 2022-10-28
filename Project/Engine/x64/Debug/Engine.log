@@ -26,7 +26,6 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   CComponent.cpp
   CConstBuffer.cpp
   CDevice.cpp
-  CDrag.cpp
   CDragScript.cpp
   CEngine.cpp
   CEntity.cpp
@@ -39,9 +38,9 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   CLevel.cpp
   CLevelMgr.cpp
   CMaterial.cpp
+  CMesh.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
-  CMesh.cpp
   CMeshRender.cpp
   CMissileScript.cpp
   CMonsterScript.cpp
@@ -54,18 +53,21 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   CResMgr.cpp
   CResMgr_init.cpp
   CScript.cpp
+  CSelectUnitScript.cpp
   CShader.cpp
   CTexture.cpp
   CTimeMgr.cpp
   CTransform.cpp
+  CUIMgr.cpp
   Engine.cpp
   func.cpp
-  QuadNode.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  QuadNode.cpp
   QuadTree.cpp
   코드를 생성하고 있습니다...
 CLevel.obj : warning LNK4006: "void __cdecl Instantiate(class CGameObject *,struct DirectX::SimpleMath::Vector3,int)" (?Instantiate@@YAXPEAVCGameObject@@UVector3@SimpleMath@DirectX@@H@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
+CLevel.obj : warning LNK4006: "void __cdecl Instantiate(class CGameObject *,struct DirectX::SimpleMath::Matrix const &)" (?Instantiate@@YAXPEAVCGameObject@@AEBUMatrix@SimpleMath@DirectX@@@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
 CLevel.obj : warning LNK4006: "void __cdecl DebugDrawRect(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,float)" (?DebugDrawRect@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@11M@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
 CLevel.obj : warning LNK4006: "void __cdecl DebugDrawCircle(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,float,float)" (?DebugDrawCircle@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@MM@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
   Engine.vcxproj -> C:\Development\MyEngine\DirectX11\External\Library\Engine\Engine_debug.lib

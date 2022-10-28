@@ -9,6 +9,8 @@
 #include "CRenderMgr.h"
 #include "CDevice.h"
 #include "CEventMgr.h"
+#include "CCollisionMgr.h"
+
 
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
@@ -67,6 +69,7 @@ void CEngine::tick()
 	CRenderMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->tick();
+	CCollisionMgr::GetInst()->tick();
 
 }
 

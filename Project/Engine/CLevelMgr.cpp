@@ -5,13 +5,15 @@
 
 #include "CLevel.h"
 #include "CGameObject.h"
-#include "CDrag.h"
+
 #include "GlobalComponent.h"
 #include "CGrid2DScript.h"
 #include "CPlayerScript.h"
 #include "CMonsterScript.h"
 #include "CCameraScript.h"
 #include "CDragScript.h"
+
+#include "CCollisionMgr.h"
 
 CLevelMgr::CLevelMgr()
 	: m_pCurLevel(nullptr)
@@ -70,28 +72,36 @@ void CLevelMgr::init()
 	
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
 	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 0.f));
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_CIRCLE);
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
-	m_pCurLevel->AddGameObject(pObject, 0);
+	m_pCurLevel->AddGameObject(pObject, 1);
 	/*
 	* Drag Function Object
 	*/
-	pObject = new CDrag;
+	pObject = new CGameObject;
 	pObject->SetName(L"Drag");
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CDragScript);
+	pObject->AddComponent(new CCollider2D);
+
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
 
-	m_pCurLevel->AddGameObject(pObject, 0);
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+
+	m_pCurLevel->AddGameObject(pObject, 2);
+
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 
 	m_pCurLevel->begin();
 }

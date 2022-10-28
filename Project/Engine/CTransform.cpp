@@ -40,7 +40,7 @@ void CTransform::finaltick()
 	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3{ 0.f, 1.f, 0.f }, matRot);
 	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3{ 0.f, 0.f, 1.f }, matRot);
 
-	m_matWorld = matScail * matPos * matRot;
+	m_matWorld = matScail * matRot * matPos ;
 
 	if (GetOwner()->Get_Parent())
 	{

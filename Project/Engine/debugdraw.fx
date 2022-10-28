@@ -31,11 +31,4 @@ float4 PS_DebugDraw(float4 _vPosition : SV_Position) : SV_Target
     return vOutColor;
 }
 
-
-
-
-
-
-
-
 #endif

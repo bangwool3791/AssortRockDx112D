@@ -118,6 +118,17 @@ void CGameObject::finaltick()
 			(*Iter)->finaltick();
 	}
 
+	for (auto iter{ m_vecChild.begin() }; iter != m_vecChild.end();)
+	{
+		if ((*iter)->IsDead())
+		{
+			iter = m_vecChild.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
 	auto pLevel = CLevelMgr::GetInst()->GetCurLevel(); 
 	auto pLayer = pLevel->GetLayer(m_iLayerIdx);
 	pLayer->RegisterObject(this);

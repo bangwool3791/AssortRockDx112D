@@ -7,7 +7,8 @@ class CEventMgr :
 	public CSingletone<CEventMgr>
 {
 private:
-	vector<tEvent> m_vecEvent;
+	vector<tEvent>			m_vecEvent;
+	vector<CGameObject*>	m_vecGarbage;
 public :
 	void tick();
 public:

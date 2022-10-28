@@ -111,7 +111,7 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	}
 	else
 	{
-		pDebugObj->Transform()->SetRelativeScale(Vec3{ _info.fRadius,_info.fRadius ,_info.fRadius });
+		pDebugObj->Transform()->SetRelativeScale(_info.vScale);
 	}
 
 	pDebugObj->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, &_info.vColor);

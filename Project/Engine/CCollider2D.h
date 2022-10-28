@@ -15,9 +15,12 @@ private:
 
     COLLIDER2D_TYPE m_eType;
     bool            m_bIgnorObjectScale;
+    int             m_iOverlapCount;
 
-
-
+public:
+    void BeginOverlap(CCollider2D* _pOther);
+    void Overlap(CCollider2D* _pOther);
+    void EndOverlap(CCollider2D* _pOther);
 public:
     void SetOffsetPos(Vec2 _vOffset) { m_vOffsetPos = _vOffset; }
     void SetScale(Vec2 _vScale) { m_vScale = _vScale; }
@@ -37,6 +40,7 @@ public:
     Vec2 GetScale() { return m_vScale; }
 
     Vec2 GetFinalPos() { return m_vFinalPos; }
+    const Matrix& GetWorldMat() { return m_matWorld; }
 
     void SetIgnoreObjectScale(bool _bSet) { m_bIgnorObjectScale = _bSet; }
 

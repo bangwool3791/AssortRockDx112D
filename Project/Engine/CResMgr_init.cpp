@@ -5,7 +5,7 @@
 #include "CMeshRender.h"
 
 #include "CMissileScript.h"
-
+#include "CSelectUnitScript.h"
 
 void CResMgr::init()
 {
@@ -68,8 +68,10 @@ void CResMgr::CreateDefaultMesh()
 	*iterIdx = 1;
 	*iterIdx = 2;
 	*iterIdx = 3;
+	*iterIdx = 0;
 
 	pMesh = new CMesh;
+	pMesh->SetName(L"RectMesh_Debug");
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"RectMesh_Debug", pMesh);
 	vecVtx.clear();
@@ -206,23 +208,48 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddRes<CGraphicsShader>(L"DebugDrawShader", pShader);
+
+	pShader = new CGraphicsShader();
+	pShader->CreateVertexShader(L"shader\\debugdraw.fx", "VS_DebugDraw");
+	pShader->CreatePixelShader(L"shader\\debugdraw.fx", "PS_DebugDraw");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+
+	AddRes<CGraphicsShader>(L"UnitSelectedShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
 {
-	CGameObject* pObejct = new CGameObject;
+	CGameObject* pObject = new CGameObject;
 
-	pObejct->AddComponent(new CTransform);
-	pObejct->AddComponent(new CMeshRender);
-	pObejct->AddComponent(new CMissileScript);
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CMissileScript);
 
-	pObejct->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
+	pObject->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
-	pObejct->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObejct->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	pObejct->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Plane"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Plane"));
 
-	AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObejct));
+	AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject));
+
+	pObject = new CGameObject;
+	pObject->SetName(L"UnitSelected");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CSelectUnitScript);
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectedMaterial"));
+
+	AddRes<CPrefab>(L"UnitSelectedPrefab", new CPrefab(pObject));
 }
 
 void CResMgr::CreateDefaultMaterial()
@@ -252,6 +279,9 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
 	AddRes(L"DebugMaterial", pMaterial);
 
+	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UnitSelectedShader"));
+	AddRes(L"UnitSelectedMaterial", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

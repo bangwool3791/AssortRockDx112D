@@ -30,7 +30,36 @@ void CEventMgr::tick()
 			level->AddGameObject(pGameObeject, iLayer);
 		}
 			break;
+		case EVENT_TYPE::CREATE_CHILD_OBJECT:
+		{
+			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
+			vector<CGameObject*> vecChilds = pGameObeject->GetChilds();
+			vecChilds.push_back(pGameObeject);
+		}
+			break;
 		case EVENT_TYPE::DELETE_OBJECT:
+		{
+			static queue<CGameObject*> que;
+
+			que.push((CGameObject*)iter->wParam);
+
+			if (!iter->wParam)
+			{
+				while (!que.empty())
+				{
+					CGameObject* pObj = (CGameObject*)que.front();
+					que.pop();
+					vector<CGameObject*> vecChild = pObj->GetChilds();
+
+					for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
+					{
+						que.push(*iter);
+					}
+
+					pObj->SetDead(true);
+				}
+			}
+		}
 			break;
 		case EVENT_TYPE::CHANGE_LEVEL:
 			break;

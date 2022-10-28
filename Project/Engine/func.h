@@ -78,7 +78,7 @@ void clear_function(T& container)
 
 #include "CGameObject.h"
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
-
+void Instantiate(CGameObject* _pNewObj, const Matrix& _matrix);
 #ifdef _DEBUG
 void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
 void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);

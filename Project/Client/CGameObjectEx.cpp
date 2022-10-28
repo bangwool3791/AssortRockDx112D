@@ -23,7 +23,7 @@ void CGameObjectEx::finaltick()
 			GetComponent((COMPONENT_TYPE)i)->finaltick();
 	}
 
-	const vector<CGameObject*> m_vecGameObject = GetChilds();
+	vector<CGameObject*> m_vecGameObject = GetChilds();
 
 	for(auto iter{m_vecGameObject.begin()}; iter != m_vecGameObject.end(); ++iter)
 	{

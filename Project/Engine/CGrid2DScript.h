@@ -16,6 +16,9 @@ private:
 public :
 	virtual void begin() override;
 	virtual void tick() override;
+	virtual void BeginOverlap(CCollider2D* _pOther) {};
+	virtual void Overlap(CCollider2D* _pOther) {};
+	virtual void EndOverlap(CCollider2D* _pOther) {};
 
 public :
 	void SetMainCam(CCamera* _pCam) { m_pMainCam = _pCam; }

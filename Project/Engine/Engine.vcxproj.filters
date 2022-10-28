@@ -100,9 +100,6 @@
     <Filter Include="Engine\09. Optimize">
       <UniqueIdentifier>{7605838f-b108-45c4-928a-9f840da18433}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. GameObject\Drag">
-      <UniqueIdentifier>{dd55ee78-4a56-4f8e-8f49-9ebe8479b490}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\08. Scripts\08_1. Mouse">
       <UniqueIdentifier>{c1d20873-2aba-4115-b200-3de8486fd5cf}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,12 @@
     </Filter>
     <Filter Include="Engine\00. Header\func">
       <UniqueIdentifier>{b4105d7d-8614-471e-b0f5-ce8ad2966fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\08_2. UI">
+      <UniqueIdentifier>{c7cd23dc-7f25-4419-b0a8-63f646333850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Manager\10. UIMgr">
+      <UniqueIdentifier>{16e54b4a-6a0d-4673-9c81-b9a372ee6edc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +252,6 @@
     <ClInclude Include="AABB.h">
       <Filter>Engine\09. Optimize</Filter>
     </ClInclude>
-    <ClInclude Include="CDrag.h">
-      <Filter>Engine\05. GameObject\Drag</Filter>
-    </ClInclude>
     <ClInclude Include="CDragScript.h">
       <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
     </ClInclude>
@@ -272,6 +272,12 @@
     </ClInclude>
     <ClInclude Include="CGrid2DScript.h">
       <Filter>Engine\08. Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CUIMgr.h">
+      <Filter>Engine\03. Manager\10. UIMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CSelectUnitScript.h">
+      <Filter>Engine\08. Scripts\08_2. UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -374,9 +380,6 @@
     <ClCompile Include="QuadTree.cpp">
       <Filter>Engine\09. Optimize</Filter>
     </ClCompile>
-    <ClCompile Include="CDrag.cpp">
-      <Filter>Engine\05. GameObject\Drag</Filter>
-    </ClCompile>
     <ClCompile Include="CDragScript.cpp">
       <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
     </ClCompile>
@@ -400,6 +403,10 @@
     </ClCompile>
     <ClCompile Include="CGrid2DScript.cpp">
       <Filter>Engine\08. Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIMgr.cpp" />
+    <ClCompile Include="CSelectUnitScript.cpp">
+      <Filter>Engine\08. Scripts\08_2. UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
