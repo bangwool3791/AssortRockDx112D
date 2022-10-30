@@ -2,30 +2,19 @@
 #include "CDragScript.h"
 
 #include "CDevice.h"
-
-#include "CTimeMgr.h"
 #include "CKeyMgr.h"
-
-#include "CSelectUnitScript.h"
-
 #include "CTransform.h"
-#include "CMaterial.h"
-#include "CMeshRender.h"
 
 
 CDragScript::CDragScript()
 	:bClicked{false}
-{
-}
-
-CDragScript::CDragScript(const CDragScript& rhs)
-	:bClicked{ rhs.bClicked }
 {
 
 }
 
 CDragScript::~CDragScript()
 {
+
 }
 
 
@@ -40,8 +29,14 @@ void CDragScript::tick()
 	Vec3 vPos = Transform()->GetRelativePos();
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
+	/*
+	* 마우스 처음 눌림 상태
+	*/
 	if (KEY_PRESSED(KEY::LBTN) && !bClicked)
 	{
+		/*
+		* -해상도.폭, +해상도.높이
+		*/
 		StartPos = Vec2{ vMousePos.x - vRenderResolution.x /2.f, -vMousePos.y + vRenderResolution.y / 2.f };
 		bClicked = true;
 	}
@@ -51,21 +46,19 @@ void CDragScript::tick()
 	Vec2 SumPos = StartPos + EndPos;
 
 	SumPos /= 2.f;
-	vPos = Vec3{ SumPos.x,SumPos.y, ALPHABLEND_Z_POS };
+	vPos = Vec3{ SumPos.x,SumPos.y, 0.f };
 
-	Vec3 vScale = Vec3{ std::fabsf(StartPos.x - EndPos.x), std::fabsf(StartPos.y - EndPos.y), ALPHABLEND_Z_POS };
+	Vec3 vScale = Vec3{ std::fabsf(EndPos.x - StartPos.x), std::fabsf(EndPos.y - StartPos.y), 0.f };
 
 	if (KEY_PRESSED(KEY::LBTN) && bClicked)
 	{
 		Transform()->SetRelativePos(vPos);
 		Transform()->SetRelativeScale(vScale);
-
 	}
 
 	if(KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
 		bClicked = false;
-
 		Transform()->SetRelativePos(vPos);
 		Transform()->SetRelativeScale(vScale);
 	}
@@ -73,9 +66,6 @@ void CDragScript::tick()
 
 void CDragScript::BeginOverlap(CCollider2D* _pOther)
 {
-	CGameObject* pObj = _pOther->GetOwner();
-	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectedPrefab");
-	Instantiate(pUIPrefab->Instantiate(), pObj->Transform()->GetWorldMat());
 }
 
 void CDragScript::Overlap(CCollider2D* _pOther)

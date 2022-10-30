@@ -62,5 +62,5 @@ using namespace DirectX::SimpleMath;
 #include "define.h"
 #include "struct.h"
 #include "func.h"
-#include "d3dUtil.h"
+
 #include "singleton.h"

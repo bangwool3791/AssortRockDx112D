@@ -9,11 +9,7 @@ CLayer::CLayer()
 
 CLayer::~CLayer()
 {
-	for (auto iter{ m_vecParent.begin() }; iter != m_vecParent.end(); ++iter)
-	{
-		Safe_Delete(*iter);
-	}
-
+	Safe_Del_Vec(m_vecParent);
 }
 
 void CLayer::begin()

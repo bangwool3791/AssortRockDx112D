@@ -23,10 +23,18 @@ void CGameObjectEx::finaltick()
 			GetComponent((COMPONENT_TYPE)i)->finaltick();
 	}
 
-	vector<CGameObject*> m_vecGameObject = GetChilds();
-
-	for(auto iter{m_vecGameObject.begin()}; iter != m_vecGameObject.end(); ++iter)
+	vector<CGameObject*>::iterator iter = m_vecChild.begin();
+	for (; iter != m_vecChild.end();)
 	{
 		(*iter)->finaltick();
+
+		if ((*iter)->IsDead())
+		{
+			iter = m_vecChild.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
 	}
 }

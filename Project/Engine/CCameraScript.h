@@ -20,7 +20,7 @@ public :
     CLONE(CCameraScript);
 public:
     CCameraScript();
-    ~CCameraScript();
+    virtual ~CCameraScript();
 
 };
 

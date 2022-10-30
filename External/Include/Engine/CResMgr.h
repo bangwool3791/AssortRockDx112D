@@ -8,8 +8,6 @@
 #include "CMaterial.h"
 #include "CPrefab.h"
 
-#include "CGameObject.h"
-
 class CResMgr
 	:public CSingletone<CResMgr>
 {
@@ -20,7 +18,7 @@ private:
 
 public:
 	template<typename T>
-	inline void AddRes(const wstring& _strKey, Ptr<T> _pRes);
+	inline void AddRes(const wstring& _strKey, T* _pRes);
 	template<typename T>
 	Ptr<T> Load(const wstring& _strKey, const wstring& _strRelativePath);
 	template<typename T>
@@ -62,7 +60,7 @@ RES_TYPE GetType()
 }
 
 template<typename T>
-inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T> _pRes)
+inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 {
 	RES_TYPE eResType = ::GetType<T>();
 	
@@ -70,7 +68,7 @@ inline void CResMgr::AddRes(const wstring& _strKey, Ptr<T> _pRes)
 
 	assert(!pRes);
 	
-	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes.Get()));
+	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
 }
 
 template<typename T>

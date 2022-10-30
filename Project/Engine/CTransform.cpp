@@ -10,6 +10,7 @@
 
 CTransform::CTransform()
 	:CComponent{COMPONENT_TYPE::TRANSFORM}
+	, m_vRelativeScale{1.f,1.f,1.f}
 {
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3{ 1.0f, 0.0f, 0.0f };
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3{ 0.0f, 1.0f, 0.0f };
@@ -29,6 +30,7 @@ void CTransform::finaltick()
 {
 	m_matWorld = XMMatrixIdentity();
 	Matrix		matScail = XMMatrixScaling(m_vRelativeScale.x, m_vRelativeScale.y, m_vRelativeScale.z);
+
 	Matrix		matPos = XMMatrixTranslation(m_vRelativePos.x, m_vRelativePos.y, m_vRelativePos.z);
 	//Degree 단위로 저장 된 회전 x,y,z 정보를 행렬에 담는다.
 	Matrix		matRot = XMMatrixRotationX(m_vRelativeRotation.x);
@@ -86,7 +88,7 @@ void CTransform::finaltick()
 void CTransform::UpdateData()
 {
 	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);
-
+	
 	g_transform.matWorld = m_matWorld;
 	g_transform.matWV	 = g_transform.matWorld * g_transform.matView;
 	g_transform.matWVP	 = g_transform.matWV * g_transform.matProj;

@@ -8,6 +8,8 @@
 #include "CLevelMgr.h"
 
 #include "CGameObject.h"
+#include "CEventMgr.h"
+
 #include "CComponent.h"
 #include "CRenderComponent.h"
 #include "CMeshRender.h"
@@ -32,15 +34,20 @@ CGameObject::CGameObject()
 
 CGameObject::CGameObject(const CGameObject& rhs)
 	:CEntity(rhs)
-	,m_iLayerIdx{-1}
-	, m_pParent{nullptr}
-	, m_pRenderComponent{nullptr}
+	, m_pParent(nullptr)
+	, m_arrCom{}
+	, m_pRenderComponent(nullptr)
+	, m_iLayerIdx(-1)
 {
 	for (size_t i{ 0 }; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		if (rhs.m_arrCom[i] == nullptr)
 			continue;
 
+		if (i == MESHRENDER)
+		{
+			int a = 0;
+		}
 		AddComponent(rhs.m_arrCom[i]->Clone());
 	}
 
@@ -53,12 +60,30 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	{
 		AddChild(rhs.m_vecChild[i]->Clone());
 	}
+
+	begin();
 }
 
 CGameObject::~CGameObject()
 {
-	Safe_Del_Array(m_arrCom.begin(), m_arrCom.end());
-	Safe_Del_Array(m_vecScripts.begin(), m_vecScripts.end());
+	if (!lstrcmp(L"Player", GetName().c_str()))
+	{
+		int a = 0;
+	}
+	for (int i{ 0 }; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		delete m_arrCom[i];
+		m_arrCom[i] = nullptr;
+	}
+	
+	for (auto iter{ m_vecScripts.begin() }; iter != m_vecScripts.end(); ++iter)
+	{
+		delete* iter;
+		*iter = nullptr;
+	}
+
+	delete m_arrCom[MESHRENDER];
+
 	Safe_Del_Vec(m_vecChild);
 }
 
@@ -129,8 +154,8 @@ void CGameObject::finaltick()
 			++iter;
 		}
 	}
-	auto pLevel = CLevelMgr::GetInst()->GetCurLevel(); 
-	auto pLayer = pLevel->GetLayer(m_iLayerIdx);
+	CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel(); 
+	CLayer* pLayer = pLevel->GetLayer(m_iLayerIdx);
 	pLayer->RegisterObject(this);
 }
 
@@ -176,4 +201,25 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 CComponent* CGameObject::GetComponent(COMPONENT_TYPE _eComType)
 {
 	return m_arrCom[(UINT)_eComType];
+}
+
+void CGameObject::SetDead()
+{
+	tEvent eve{};
+	eve.eType = EVENT_TYPE::DELETE_OBJECT;
+	eve.wParam = (DWORD_PTR)this;
+
+	CEventMgr::GetInst()->AddEvent(eve);
+}
+
+CGameObject* CGameObject::GetChild(const wstring& _key)
+{
+	for (auto iter{ m_vecChild.begin() }; iter != m_vecChild.end(); ++iter)
+	{
+		if (!lstrcmp(_key.c_str(), (*iter)->GetName().c_str()))
+		{
+			return (*iter);
+		}
+	}
+	return nullptr;
 }

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "CCollider2D.h"
-
 #include "CTransform.h"
 #include "CScript.h"
 
@@ -44,13 +43,17 @@ void CCollider2D::finaltick()
 
 	// DebugDraw ฟไรป
 #ifdef _DEBUG
+	Vec4 Color = { 0.f, 1.f, 0.f, 1.f };
+	if(0 < m_iOverlapCount)
+		Color = Vec4{ 1.f, 0.f, 0.f, 1.f };
+
 	if (COLLIDER2D_TYPE::COLLIDER2D_RECT == m_eType)
 	{
-		DebugDrawRect(Vec4(0.f, 1.f, 0.f, 1.f), Vec3(m_vFinalPos.x, m_vFinalPos.y, 0.f), Vec3(m_vFinalScale.x, m_vFinalScale.y, 1.f), m_vRot);
+		DebugDrawRect(Color, Vec3(m_vFinalPos.x, m_vFinalPos.y, 0.f), Vec3(m_vFinalScale.x, m_vFinalScale.y, 1.f), m_vRot);
 	}
 	else
 	{
-		DebugDrawCircle(Vec4(0.f, 1.f, 0.f, 1.f), Vec3(m_vFinalPos.x, m_vFinalPos.y, 0.f), m_vFinalScale.x);
+		DebugDrawCircle(Color, Vec3(m_vFinalPos.x, m_vFinalPos.y, 0.f), m_vFinalScale.x);
 	}
 #endif
 }

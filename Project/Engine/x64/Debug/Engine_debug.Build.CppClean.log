@@ -22,8 +22,6 @@ c:\development\myengine\directx11\project\engine\x64\debug\ccollisionmgr.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ccollider2d.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ccamerascript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ccamera.obj
-c:\development\myengine\directx11\project\engine\x64\debug\func.obj
-c:\development\myengine\directx11\project\engine\x64\debug\engine.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cuimgr.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ctransform.obj
 c:\development\myengine\directx11\project\engine\x64\debug\ctimemgr.obj
@@ -39,11 +37,15 @@ c:\development\myengine\directx11\project\engine\x64\debug\crendercomponent.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cprefab.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cplayerscript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cpathmgr.obj
+c:\development\myengine\directx11\project\engine\x64\debug\cmousescript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmonsterscript.obj
+c:\development\myengine\directx11\project\engine\x64\debug\cmissilescript2.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmissilescript.obj
 c:\development\myengine\directx11\project\engine\x64\debug\cmeshrender.obj
 c:\development\myengine\directx11\project\engine\x64\debug\quadtree.obj
 c:\development\myengine\directx11\project\engine\x64\debug\quadnode.obj
+c:\development\myengine\directx11\project\engine\x64\debug\func.obj
+c:\development\myengine\directx11\project\engine\x64\debug\engine.obj
 c:\development\myengine\directx11\external\library\engine\debugdraw.cso
 c:\development\myengine\directx11\external\library\engine\drageffect.cso
 c:\development\myengine\directx11\external\library\engine\editor.cso

@@ -7,8 +7,21 @@ CRenderComponent::CRenderComponent(COMPONENT_TYPE _eComponentType)
 
 }
 
-CRenderComponent::~CRenderComponent()
+CRenderComponent::CRenderComponent(const CRenderComponent& _origin)
+	: CComponent(_origin)
+	, m_pMesh(_origin.m_pMesh)
+	, m_pSharedMtrl(_origin.m_pSharedMtrl)
+	, m_pDynamicMtrl(nullptr)
+	, m_pCurMtrl(nullptr)
 {
+	if (_origin.m_pCurMtrl == _origin.m_pSharedMtrl)
+	{
+		m_pCurMtrl = m_pSharedMtrl;
+	}
+	else if (_origin.m_pCurMtrl == _origin.m_pDynamicMtrl)
+	{
+		GetDynamicMaterial();
+	}
 }
 
 Ptr<CMaterial> CRenderComponent::GetSharedMaterial()
@@ -30,7 +43,7 @@ Ptr<CMaterial> CRenderComponent::GetDynamicMaterial()
 		return m_pDynamicMtrl;
 	}
 
-	m_pDynamicMtrl = new CMaterial(*m_pSharedMtrl.Get());
+	m_pDynamicMtrl = m_pSharedMtrl->Clone();
 	m_pDynamicMtrl->SetName(m_pSharedMtrl->GetName() + L"Clone");
 	m_pCurMtrl = m_pDynamicMtrl;
 

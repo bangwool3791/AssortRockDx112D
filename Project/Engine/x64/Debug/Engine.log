@@ -30,6 +30,7 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   CEngine.cpp
   CEntity.cpp
   CEventMgr.cpp
+C:\Development\MyEngine\DirectX11\Project\Engine\CEventMgr.cpp(40,36): warning C4244: '인수': 'DWORD_PTR'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   CGameObject.cpp
   CGraphicsShader.cpp
   CGrid2DScript.cpp
@@ -43,7 +44,10 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   컴파일하고 있습니다...
   CMeshRender.cpp
   CMissileScript.cpp
+  CMissileScript2.cpp
   CMonsterScript.cpp
+  CMouseScript.cpp
+C:\Development\MyEngine\DirectX11\Project\Engine\CMouseScript.cpp(157,8): warning C4804: '<': 연산에 'bool' 형식을 사용하는 것은 안전하지 않습니다.
   CPathMgr.cpp
   CPlayerScript.cpp
   CPrefab.cpp
@@ -59,15 +63,11 @@ FXC : warning X4717: Effects deprecated for D3DCompiler_47
   CTimeMgr.cpp
   CTransform.cpp
   CUIMgr.cpp
-  Engine.cpp
-  func.cpp
   코드를 생성하고 있습니다...
   컴파일하고 있습니다...
+  Engine.cpp
+  func.cpp
   QuadNode.cpp
   QuadTree.cpp
   코드를 생성하고 있습니다...
-CLevel.obj : warning LNK4006: "void __cdecl Instantiate(class CGameObject *,struct DirectX::SimpleMath::Vector3,int)" (?Instantiate@@YAXPEAVCGameObject@@UVector3@SimpleMath@DirectX@@H@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
-CLevel.obj : warning LNK4006: "void __cdecl Instantiate(class CGameObject *,struct DirectX::SimpleMath::Matrix const &)" (?Instantiate@@YAXPEAVCGameObject@@AEBUMatrix@SimpleMath@DirectX@@@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
-CLevel.obj : warning LNK4006: "void __cdecl DebugDrawRect(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,struct DirectX::SimpleMath::Vector3,float)" (?DebugDrawRect@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@11M@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
-CLevel.obj : warning LNK4006: "void __cdecl DebugDrawCircle(struct DirectX::SimpleMath::Vector4,struct DirectX::SimpleMath::Vector3,float,float)" (?DebugDrawCircle@@YAXUVector4@SimpleMath@DirectX@@UVector3@23@MM@Z)이(가) func.obj에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
   Engine.vcxproj -> C:\Development\MyEngine\DirectX11\External\Library\Engine\Engine_debug.lib

@@ -12,6 +12,7 @@ struct tEvent
 	EVENT_TYPE eType;
 	DWORD_PTR  wParam;
 	DWORD_PTR  lParam;
+	DWORD_PTR  oParam;
 };
 
 struct tDebugShapeInfo

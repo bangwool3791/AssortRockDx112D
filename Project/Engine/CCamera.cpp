@@ -141,13 +141,13 @@ void CCamera::SortObject()
 	{
 		if (m_iLayerMask & (1 << i))
 		{
-			auto pLayer = pLevel->GetLayer(i);
+			CLayer* pLayer = pLevel->GetLayer(i);
 
 			const vector<CGameObject*>& vecGameObject = pLayer->GetObjects();
 
 			for (size_t j{ 0 }; j < (size_t)vecGameObject.size(); ++j)
 			{
-				auto RenderCompoent = vecGameObject[j]->GetRenderComponent();
+				CRenderComponent* RenderCompoent = vecGameObject[j]->GetRenderComponent();
 
 				if (RenderCompoent == nullptr ||
 					RenderCompoent->GetCurMaterial() == nullptr ||
@@ -157,13 +157,11 @@ void CCamera::SortObject()
 					continue;
 				}
 
-				wstring str = vecGameObject[j]->GetName();
+				Ptr<CGraphicsShader> GraphicsShader = RenderCompoent->GetCurMaterial()->GetShader();
 
-				auto GraphicsShader = RenderCompoent->GetCurMaterial()->GetShader().Get();
+				SHADER_DOMAIN eDomain = GraphicsShader->GetDomain();
 
-				CRenderComponent*  render = vecGameObject[j]->GetRenderComponent();
-
-				switch (GraphicsShader->GetDomain())
+				switch (eDomain)
 				{
 				case SHADER_DOMAIN::DOMAIN_OPAQUE:
 					m_vecQpaque.push_back(vecGameObject[j]);

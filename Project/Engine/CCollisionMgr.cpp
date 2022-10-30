@@ -37,8 +37,8 @@ void CCollisionMgr::tick()
 
 void CCollisionMgr::CollisionBtwLayer(CLevel* _pCurScene, int _iLeft, int _iRight)
 {
-	const vector<CGameObject*> vecLeft = _pCurScene->GetLayer(_iLeft)->GetObjects();
-	const vector<CGameObject*> vecRight = _pCurScene->GetLayer(_iRight)->GetObjects();
+	const vector<CGameObject*>& vecLeft = _pCurScene->GetLayer(_iLeft)->GetObjects();
+	const vector<CGameObject*>& vecRight = _pCurScene->GetLayer(_iRight)->GetObjects();
 
 	for (int i{ 0 }; i < vecLeft.size(); ++i)
 	{
@@ -124,14 +124,30 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 	{
 		Vec3{-0.5f,  0.5f, 0.f},
 		Vec3{ 0.5f,  0.5f, 0.f},
-		Vec3{-0.5f, -0.5f, 0.f},
 		Vec3{ 0.5f, -0.5f, 0.f},
+		Vec3{ -0.5f, -0.5f, 0.f},
 	};
 
 	Vec3 vAxis[4]{};
 
 	const Matrix& matLeft	= _pLeft->GetWorldMat();
 	const Matrix& matRight	= _pRight->GetWorldMat();
+
+	/*
+	* 마우스 드래그의 경우 월드 행렬 스케일이 없지만, 초기 위치가 플레이어 위치와 동일하여
+	* 충돌 판정이라고 코드가 판단 하므로 예외 처리 조건 추가
+	*/
+	Vec3 vecRight = matLeft.Right();
+	Vec3 vecUp = matLeft.Up();
+	
+	if (!vecRight.Length() && !vecUp.Length())
+		return false;
+
+	vecRight = matRight.Right();
+	vecUp = matRight.Up();
+
+	if (!vecRight.Length() && !vecUp.Length())
+		return false;
 
 	vAxis[0] = XMVector3TransformCoord(arrLocalPos[1], matLeft) - XMVector3TransformCoord(arrLocalPos[0], matLeft);
 	vAxis[1] = XMVector3TransformCoord(arrLocalPos[3], matLeft) - XMVector3TransformCoord(arrLocalPos[0], matLeft);
@@ -142,18 +158,21 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 	for (int i{ 0 }; i < 4; ++i)
 		vAxis[i].z = 0.f;
 
-	Vec2 vC = _pRight->GetFinalPos() - _pLeft->GetFinalPos();
+	Vec2 vC = _pLeft->GetFinalPos() - _pRight->GetFinalPos() ;
 	Vec3 vCenterDir = Vec3{ vC.x,vC.y, 0.f };
 	
+	float fSum{ 0.f };
+
 	for (int i{ 0 }; i < 4; ++i)
 	{
-		Vec3 vA = vAxis[i].Normalize();
+		Vec3 vA = vAxis[i];
+		vA.Normalize();
 
 		float fProjDist{ 0.f };
 
 		for (int j{ 0 }; j < 4; ++j)
 		{
-			fProjDist += fabsf(vAxis[i].Dot(vA)) /2;
+			fProjDist += fabsf(vAxis[j].Dot(vA)) /2.f;
 		}
 
 		if (fProjDist < fabsf(vCenterDir.Dot(vA)))
@@ -161,19 +180,6 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 			return false;
 		}
 	}
-//#elsif
-//	Vec2 v2Scale = _pLeft->GetScale() + _pRight->GetScale();
-//	Vec3 v3Scale = Vec3{ v2Scale.x/2.f,v2Scale.y/2.f ,0.f };
-//
-//	Vec2 vC = _pLeft->GetFinalPos() - _pRight->GetFinalPos();
-//	Vec3 vCenter{ vC.x, vC.y, 0.f };
-//
-//	if (fabsf(v3Scale.x) < vCenter.Length())
-//	{
-//		return false;
-//	}
-	
-//#endif
 	return true;
 }
 

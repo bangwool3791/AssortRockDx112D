@@ -43,7 +43,7 @@ public:
     const Matrix& GetWorldMat() { return m_matWorld; }
 
     void SetIgnoreObjectScale(bool _bSet) { m_bIgnorObjectScale = _bSet; }
-
+    int GetOverlapCount() { return m_iOverlapCount; }
 public:
     virtual void finaltick() override;
 

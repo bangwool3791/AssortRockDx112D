@@ -20,8 +20,7 @@ private:
     Vec2 EndPos;
 public:
     CDragScript();
-    CDragScript(const CDragScript& rhs);
-    ~CDragScript();
+    virtual ~CDragScript();
 
 };
 

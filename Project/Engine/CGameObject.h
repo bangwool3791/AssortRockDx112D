@@ -18,7 +18,7 @@ class CGameObject
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
 	vector<CScript*>							  m_vecScripts;
-	CRenderComponent* m_pRenderComponent{};
+	CRenderComponent*							  m_pRenderComponent{};
 protected:
 	//부모 오브젝트
 	CGameObject*								  m_pParent;
@@ -30,9 +30,11 @@ public:
 	const vector<CGameObject*>& GetChilds() const {return m_vecChild;}
 	const vector<CScript*>& GetScripts() const {return m_vecScripts;}
 	int GetLayerIndex(){return m_iLayerIdx;}
+	void SetLayerIndex(int _iLayerIndex) { m_iLayerIdx = _iLayerIndex; }
 
+	CGameObject* GetChild(const wstring& _key);
 	bool IsDead() { return m_bDead; }
-	void SetDead(bool _bChecked) { m_bDead = _bChecked; }
+	void SetDead();
 public :
 	virtual void begin();
 	virtual void tick();
@@ -43,6 +45,7 @@ public :
 
 public :
 	friend class CLayer;
+	friend class CEventMgr;
 public :
 	void AddComponent(CComponent* _pComponent);
 	void AddChild(CGameObject* _pGameObejct)

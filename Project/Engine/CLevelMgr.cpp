@@ -57,51 +57,42 @@ void CLevelMgr::init()
 	*/
 	pCamObj->Camera()->SetLayerMaskAll();
 	pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+
 	m_pCurLevel->AddGameObject(pCamObj, 0);
 	
 	// GameObject ÃÊ±âÈ­
 	CGameObject* pObject = nullptr;
 
-	pObject = new CGameObject;
-	pObject->SetName(L"Player");
+	for (float i{ -800.f }; i < 800.f; i += 50)
+	{
+		pObject = new CGameObject;
+		pObject->SetName(L"Player");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CPlayerScript);
-	
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 500.f));
-	pObject->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 0.f));
-	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+		pObject->AddComponent(new CTransform);
+		pObject->AddComponent(new CMeshRender);
+		pObject->AddComponent(new CCollider2D);
+		pObject->AddComponent(new CPlayerScript);
 
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
+		pObject->Transform()->SetRelativeScale(Vec3(40.f, 40.f, 0.f));
+		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
-	m_pCurLevel->AddGameObject(pObject, 1);
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+
+		m_pCurLevel->AddGameObject(pObject, 1);
+	}
 	/*
-	* Drag Function Object
+	* Mouse
 	*/
-	pObject = new CGameObject;
-	pObject->SetName(L"Drag");
+	Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
+	Instantiate(pPrefab->Instantiate());
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CDragScript);
-	pObject->AddComponent(new CCollider2D);
-
-	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
-
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-
-	m_pCurLevel->AddGameObject(pObject, 2);
-
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(0, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 
 	m_pCurLevel->begin();
 }

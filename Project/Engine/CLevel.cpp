@@ -1,7 +1,5 @@
 #include "pch.h"
 #include "CLevel.h"
-#include "func.cpp"
-
 
 CLevel::CLevel()
 {

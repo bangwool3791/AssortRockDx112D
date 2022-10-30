@@ -17,11 +17,13 @@ CEditor::CEditor()
 CEditor::~CEditor()
 {
 	Safe_Del_Vec(m_vecEditorObj);
-	Safe_Del_Array(m_DebugDrawObject.begin(), m_DebugDrawObject.end());
+	Safe_Del_Array(m_DebugDrawObject);
 }
 
 void CEditor::init()
 {
+	CreateDebugDrawObject();
+
 	CGameObjectEx* pGridObj = new CGameObjectEx;
 	pGridObj->SetName(L"Grid Object");
 
@@ -37,8 +39,6 @@ void CEditor::init()
 	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
 	m_vecEditorObj.push_back(pGridObj);
-
-	CreateDebugDrawObject();
 }
 
 void CEditor::progress()

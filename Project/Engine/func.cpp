@@ -5,6 +5,17 @@
 #include "CEventMgr.h"
 #include "CRenderMgr.h"
 
+void Instantiate(CGameObject* _pNewObj, int _iLayerIdx)
+{
+	tEvent evn{};
+
+	evn.eType = EVENT_TYPE::CREATE_OBJECT;
+	evn.wParam = (DWORD_PTR)_pNewObj;
+	evn.lParam = (DWORD_PTR)_iLayerIdx;
+
+	CEventMgr::GetInst()->AddEvent(evn);
+}
+
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx)
 {
 	_pNewObj->Transform()->SetRelativePos(_vWorldPos);
@@ -16,23 +27,16 @@ void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx)
 	evn.lParam = (DWORD_PTR)_iLayerIdx;
 
 	CEventMgr::GetInst()->AddEvent(evn);
-
 }
 
-void Instantiate(CGameObject* _pNewObj, const Matrix& _matrix)
+void Instantiate(CGameObject* _pNewObj, CGameObject* _pOwner, int _iLayerIdx)
 {
-	_pNewObj->Transform()->SetRelativePos(Vec3{ _matrix.m[3][0],_matrix.m[3][1],_matrix.m[3][2] });
-	
-	Vec3 Right	= Vec3{ _matrix.m[0][0],_matrix.m[0][1],_matrix.m[0][2] };
-	Vec3 Up		= Vec3{ _matrix.m[1][0],_matrix.m[1][1],_matrix.m[1][2] };
-	Vec3 Look	= Vec3{ _matrix.m[2][0],_matrix.m[2][1],_matrix.m[2][2] };
-
-	_pNewObj->Transform()->SetRelativeScale(Right.Length(), Right.Length(), 0.f);
-	
 	tEvent evn{};
 
 	evn.eType = EVENT_TYPE::CREATE_CHILD_OBJECT;
 	evn.wParam = (DWORD_PTR)_pNewObj;
+	evn.lParam = (DWORD_PTR)_iLayerIdx;
+	evn.oParam = (DWORD_PTR)_pOwner;
 
 	CEventMgr::GetInst()->AddEvent(evn);
 }

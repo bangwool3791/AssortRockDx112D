@@ -11,6 +11,10 @@ class CScript :
 {
 private :
     int m_iCriptType;
+protected:
+    Vec3  m_vTarget;
+public :
+    void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
 public :
     virtual void tick() = 0;
     virtual void finaltick() final {};
@@ -18,7 +22,7 @@ public :
     virtual CScript* Clone() = 0;
 public :
     CScript();
-    ~CScript();
+    virtual ~CScript();
 
 public:
     virtual void BeginOverlap(CCollider2D* _pOther) = 0;

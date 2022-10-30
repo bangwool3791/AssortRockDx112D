@@ -4,8 +4,7 @@
 #include "CTransform.h"
 #include "CMeshRender.h"
 
-#include "CMissileScript.h"
-#include "CSelectUnitScript.h"
+#include "GlobalScript.h"
 
 void CResMgr::init()
 {
@@ -153,8 +152,8 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetDSType(DS_TYPE::NO_WRITE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 
 	/*
@@ -216,9 +215,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 
-	AddRes<CGraphicsShader>(L"UnitSelectedShader", pShader);
+	AddRes<CGraphicsShader>(L"UnitSelectUIShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
@@ -230,7 +229,7 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->AddComponent(new CMissileScript);
 
 	pObject->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
-	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
@@ -239,23 +238,48 @@ void CResMgr::CreateDefaultPrefab()
 	AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject));
 
 	pObject = new CGameObject;
-	pObject->SetName(L"UnitSelected");
+	pObject->SetName(L"UnitSelectUI");
 
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CSelectUnitScript);
-	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectedMaterial"));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectUIMaterial"));
 
-	AddRes<CPrefab>(L"UnitSelectedPrefab", new CPrefab(pObject));
+	AddRes<CPrefab>(L"UnitSelectUIPrefab", new CPrefab(pObject));
+
+	/*
+	* MouseDragPrefab
+	*/
+	pObject = new CGameObject;
+	pObject->SetName(L"MouseDrag");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CDragScript);
+	pObject->AddComponent(new CCollider2D);
+
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
+	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject));
+
+	pObject = new CGameObject;
+	pObject->SetName(L"MouseObject");
+	/*
+	* 충돌체, 메쉬 랜더 추가 필요
+	*/
+	pObject->AddComponent(new CMouseScript);
+	AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
 }
 
 void CResMgr::CreateDefaultMaterial()
 {
-	Ptr<CMaterial> pMaterial{};
-	pMaterial = new CMaterial();
+
+	CMaterial* pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TestShader"));
 	AddRes(L"TestMtrl", pMaterial);
 
@@ -280,8 +304,8 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes(L"DebugMaterial", pMaterial);
 
 	pMaterial = new CMaterial();
-	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UnitSelectedShader"));
-	AddRes(L"UnitSelectedMaterial", pMaterial);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UnitSelectUIShader"));
+	AddRes(L"UnitSelectUIMaterial", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

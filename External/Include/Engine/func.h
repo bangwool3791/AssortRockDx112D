@@ -19,26 +19,41 @@ void Safe_Del_Map(map<T1, T2>& _map)
 	{
 			iter->second = nullptr;
 	}
-	//_map.clear();
+	_map.clear();
 }
 
-template<typename InputIter>
-void Safe_Del_Array(InputIter begin, InputIter end)
+template<typename T, int SIZE>
+void Safe_Del_Array(T* (&_arr)[SIZE])
 {
-	for (auto Iter{ begin }; Iter != end; ++Iter)
+	for (int i = 0; i < SIZE; ++i)
 	{
-		delete* Iter;
+		if (nullptr != _arr[i])
+			delete _arr[i];
 	}
 }
 
 template<typename T>
-void Safe_Del_Vec(T vec)
+void Safe_Del_Array(T& arr)
 {
-	for (auto Iter{ vec.begin()}; Iter != vec.end(); ++Iter)
+	for (auto Iter{ arr.begin()}; Iter != arr.end(); ++Iter)
 	{
 		delete* Iter;
+		(*Iter) = nullptr;
 	}
 }
+
+template<typename T>
+void Safe_Del_Vec(vector<T*>& _vec)
+{
+	typename vector<T*>::iterator iter = _vec.begin();
+	for (; iter != _vec.end(); ++iter)
+	{
+		if (nullptr != (*iter))
+			delete (*iter);
+	}
+	_vec.clear();
+}
+
 
 template<typename T>
 void tick_function(T& container)
@@ -76,9 +91,10 @@ void clear_function(T& container)
 	}
 }
 
-#include "CGameObject.h"
+class CGameObject;
+void Instantiate(CGameObject* _pNewObj, int _iLayerIdx = 0);
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
-void Instantiate(CGameObject* _pNewObj, const Matrix& _matrix);
+void Instantiate(CGameObject* _pNewObj, CGameObject* _pOwner, int _iLayerIdx = 0);
 #ifdef _DEBUG
 void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
 void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);

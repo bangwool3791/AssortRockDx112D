@@ -8,6 +8,12 @@ CMeshRender::CMeshRender()
 
 }
 
+CMeshRender::CMeshRender(const CMeshRender& rhs)
+	:CRenderComponent{ rhs }
+{
+
+}
+
 CMeshRender::~CMeshRender()
 {
 

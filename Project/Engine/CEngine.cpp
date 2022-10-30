@@ -48,9 +48,6 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CTimeMgr::GetInst()->init();
 	CResMgr::GetInst()->init();
 	CLevelMgr::GetInst()->init();
-
-
-
 	return S_OK;
 }
 
@@ -69,13 +66,12 @@ void CEngine::tick()
 	CRenderMgr::GetInst()->tick();
 
 	CLevelMgr::GetInst()->tick();
-	CCollisionMgr::GetInst()->tick();
-
 }
 
 void CEngine::finaltick()
 {
 	CLevelMgr::GetInst()->finaltick();
+	CCollisionMgr::GetInst()->tick();
 }
 
 void CEngine::render()

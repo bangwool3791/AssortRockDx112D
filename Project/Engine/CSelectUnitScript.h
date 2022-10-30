@@ -18,7 +18,7 @@ public:
     CLONE(CSelectUnitScript);
 public:
     CSelectUnitScript();
-    ~CSelectUnitScript();
+    virtual ~CSelectUnitScript();
 
 };
 

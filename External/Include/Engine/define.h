@@ -25,7 +25,7 @@ typedef Vector4 Vec4;
 #define KEY_RELEASE(key)	CKeyMgr::GetInst()->GetKeyState(key) == KEY_STATE::RELEASE
 #define KEY_DIR	            CKeyMgr::GetInst()->GetMouseDir(key)
 
-#define CLONE(type) public : type* Clone(){return new type(*this);}
+#define CLONE(type) public: type* Clone() { return new type(*this); }
 #define CLONE_DUMMY(type) public : type* Clone(){return nullptr;}
 #define CLONE_ASSERT(type) public : type* Clone(){assert(false); return nullptr;}
 
@@ -214,7 +214,9 @@ enum class COLLIDER2D_TYPE
 	COLLIDER2D_CIRCLE,
 };
 
-enum class CHILD_TYPE
+enum class UI_TYPE
 {
-	
+	CLICK,
+	DRAG,
+	END,
 };

@@ -7,6 +7,13 @@ CRes::CRes(RES_TYPE _eResType)
 {
 }
 
+CRes::CRes(const CRes& _other)
+	: CEntity(_other)
+	, m_eResType(_other.m_eResType)
+	, m_iRefCount(0)
+{
+}
+
 CRes::~CRes()
 {
 }

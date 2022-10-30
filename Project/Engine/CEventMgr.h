@@ -1,7 +1,7 @@
 #pragma once
 #include "singleton.h"
 
-#include "global.h"
+class CGameObject;
 
 class CEventMgr :
 	public CSingletone<CEventMgr>

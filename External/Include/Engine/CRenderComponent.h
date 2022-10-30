@@ -9,7 +9,11 @@ class CRenderComponent
 {
 public:
 	CRenderComponent(COMPONENT_TYPE _eComponentType);
-	virtual ~CRenderComponent();
+	CRenderComponent(const CRenderComponent& rhs);
+	virtual ~CRenderComponent()
+	{
+		m_pDynamicMtrl = nullptr;
+	}
 private:
 	Ptr<CMesh>				m_pMesh;
 	Ptr<CMaterial>			m_pSharedMtrl;

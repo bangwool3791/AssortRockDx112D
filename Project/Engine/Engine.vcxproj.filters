@@ -180,9 +180,6 @@
     <ClInclude Include="CConstBuffer.h">
       <Filter>Engine\02. Device\01. Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="CComponent.h">
-      <Filter>Engine\06. Component</Filter>
-    </ClInclude>
     <ClInclude Include="CGameObject.h">
       <Filter>Engine\05. GameObject</Filter>
     </ClInclude>
@@ -278,6 +275,18 @@
     </ClInclude>
     <ClInclude Include="CSelectUnitScript.h">
       <Filter>Engine\08. Scripts\08_2. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CMouseScript.h">
+      <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalScript.h">
+      <Filter>Engine\00. Header</Filter>
+    </ClInclude>
+    <ClInclude Include="CComponent.h">
+      <Filter>Engine\06. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript2.h">
+      <Filter>Engine\08. Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -404,9 +413,17 @@
     <ClCompile Include="CGrid2DScript.cpp">
       <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="CUIMgr.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp">
       <Filter>Engine\08. Scripts\08_2. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CMouseScript.cpp">
+      <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="CUIMgr.cpp">
+      <Filter>Engine\03. Manager\10. UIMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript2.cpp">
+      <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

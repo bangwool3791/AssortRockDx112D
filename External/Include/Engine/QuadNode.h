@@ -1,8 +1,6 @@
 #pragma once
 #include "AABB.h"
 
-#include "pch.h"
-
 class QuadNode
 {
 private:

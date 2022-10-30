@@ -18,6 +18,8 @@ CEventMgr::~CEventMgr()
 
 void CEventMgr::tick()
 {
+	Safe_Del_Vec(m_vecGarbage);
+
 	for (auto iter{ m_vecEvent.begin()}; iter != m_vecEvent.end(); ++iter)
 	{
 		switch (iter->eType)
@@ -33,30 +35,36 @@ void CEventMgr::tick()
 		case EVENT_TYPE::CREATE_CHILD_OBJECT:
 		{
 			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
-			vector<CGameObject*> vecChilds = pGameObeject->GetChilds();
-			vecChilds.push_back(pGameObeject);
+			CGameObject* pOwner      =	(CGameObject*)iter->oParam;
+			pOwner->AddChild(pGameObeject);
+			pGameObeject->SetLayerIndex(iter->lParam);
 		}
 			break;
 		case EVENT_TYPE::DELETE_OBJECT:
 		{
 			static queue<CGameObject*> que;
-
-			que.push((CGameObject*)iter->wParam);
-
-			if (!iter->wParam)
+			CGameObject* pGameObj = (CGameObject*)iter->wParam;
+			if (!pGameObj->IsDead())
 			{
-				while (!que.empty())
+				que.push(pGameObj);
+
+				if (iter->wParam)
 				{
-					CGameObject* pObj = (CGameObject*)que.front();
-					que.pop();
-					vector<CGameObject*> vecChild = pObj->GetChilds();
-
-					for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
+					while (!que.empty())
 					{
-						que.push(*iter);
-					}
+						CGameObject* pObj = (CGameObject*)que.front();
+						que.pop();
+						m_vecGarbage.push_back(pObj);
 
-					pObj->SetDead(true);
+						vector<CGameObject*> vecChild = pObj->GetChilds();
+
+						for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
+						{
+							que.push(*iter);
+						}
+
+						pObj->m_bDead = true;
+					}
 				}
 			}
 		}
