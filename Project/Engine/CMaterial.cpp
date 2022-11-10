@@ -87,14 +87,8 @@ void CMaterial::SetTexParam(TEX_PARAM _eTex, Ptr<CTexture> _pTex)
 
 void CMaterial::Clear()
 {
-	ID3D11ShaderResourceView* pSRV = nullptr;
-
 	for (UINT i{ 0 }; i < (UINT)TEX_END; ++i)
 	{
-		CONTEXT->VSSetShaderResources(i, 1, &pSRV);
-		CONTEXT->HSSetShaderResources(i, 1, &pSRV);
-		CONTEXT->DSSetShaderResources(i, 1, &pSRV);
-		CONTEXT->GSSetShaderResources(i, 1, &pSRV);
-		CONTEXT->PSSetShaderResources(i, 1, &pSRV);
+		CTexture::Clear(i);
 	}
 }

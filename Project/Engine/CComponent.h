@@ -20,9 +20,11 @@ public :
 	COMPONENT_TYPE GetType() { return m_eType; }
 	CGameObject* GetOwner() { return m_pOwnerObject; }
 
+	void Destroy() { GetOwner()->Destroy(); }
 	GET_OTHER_COMPONENT(Transform);
 	GET_OTHER_COMPONENT(MeshRender);
 	GET_OTHER_COMPONENT(Camera);
+	GET_OTHER_COMPONENT(Animator2D);
 
 	virtual CComponent* Clone() = 0;
 public :

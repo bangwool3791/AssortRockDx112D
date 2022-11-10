@@ -18,7 +18,7 @@ class CCollisionMgr
 	:public CSingletone<CCollisionMgr>
 {
 private:
-	WORD m_matrix[MAX_LAYER ];
+	UINT m_matrix[MAX_LAYER ];
 	map<ULONGLONG, bool> m_mapColInfo;
 
 public :

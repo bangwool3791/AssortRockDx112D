@@ -37,7 +37,7 @@ void CEventMgr::tick()
 			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
 			CGameObject* pOwner      =	(CGameObject*)iter->oParam;
 			pOwner->AddChild(pGameObeject);
-			pGameObeject->SetLayerIndex(iter->lParam);
+			pGameObeject->SetLayerIndex((UINT)iter->lParam);
 		}
 			break;
 		case EVENT_TYPE::DELETE_OBJECT:
@@ -48,23 +48,24 @@ void CEventMgr::tick()
 			{
 				que.push(pGameObj);
 
-				if (iter->wParam)
+				if (!lstrcmp(L"UnitSelectUI", pGameObj->GetName().c_str()))
 				{
-					while (!que.empty())
+					int a = 0;
+				}
+				while (!que.empty())
+				{
+					CGameObject* pObj = (CGameObject*)que.front();
+					que.pop();
+					m_vecGarbage.push_back(pObj);
+
+					vector<CGameObject*> vecChild = pObj->GetChilds();
+
+					for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
 					{
-						CGameObject* pObj = (CGameObject*)que.front();
-						que.pop();
-						m_vecGarbage.push_back(pObj);
-
-						vector<CGameObject*> vecChild = pObj->GetChilds();
-
-						for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
-						{
-							que.push(*iter);
-						}
-
-						pObj->m_bDead = true;
+						que.push(*iter);
 					}
+
+					pObj->m_bDead = true;
 				}
 			}
 		}

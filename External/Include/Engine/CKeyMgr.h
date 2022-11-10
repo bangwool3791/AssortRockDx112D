@@ -118,6 +118,7 @@ public:
 	}
 
 	Vec2  GetMousePos() { return m_vMousePos; }
+	Vec2&  GetMousePos_() { return m_vMousePos; }
 	Vec2  GetMouseDir() { return m_vMouseDir; }
 	Vec2& GetMouseDir_() { return m_vMouseDir; }
 	CKeyMgr();

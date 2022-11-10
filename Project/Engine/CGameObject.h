@@ -1,9 +1,11 @@
 #pragma once
 #include "CEntity.h"
-
+#include "smallobjallocator.h"
 class CComponent;
 class CCamera;
+class CAnimator2D;
 class CTransform;
+class CLight2D;
 class CRenderComponent;
 class CMeshRender;
 class CScript;
@@ -14,6 +16,7 @@ class CCollider2D;
 
 class CGameObject
 	:public CEntity
+	,public SmallObjAllocator<CGameObject, 100>
 {
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
@@ -34,7 +37,7 @@ public:
 
 	CGameObject* GetChild(const wstring& _key);
 	bool IsDead() { return m_bDead; }
-	void SetDead();
+	void Destroy();
 public :
 	virtual void begin();
 	virtual void tick();
@@ -48,6 +51,7 @@ public :
 	friend class CEventMgr;
 public :
 	void AddComponent(CComponent* _pComponent);
+	void DestroyComponent(COMPONENT_TYPE _eComType);
 	void AddChild(CGameObject* _pGameObejct)
 	{
 		_pGameObejct->m_pParent = this;
@@ -59,6 +63,8 @@ public :
 	GET_COMPONENT(MeshRender, MESHRENDER);
 	GET_COMPONENT(Camera,	  CAMERA);
 	GET_COMPONENT(Collider2D, COLLIDER2D);
+	GET_COMPONENT(Animator2D, ANIMATOR2D);
+	GET_COMPONENT(Light2D,	  LIGHT2D);
 	template<typename T>
 	T* GetScript();
 

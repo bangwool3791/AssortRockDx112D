@@ -33,6 +33,12 @@ typedef Vector4 Vec4;
 
 #define ALPHABLEND_Z_POS 0.9f
 
+#define TILEX 100
+#define TILEY 30
+
+#define TILECX 80.f
+#define TILECY 80.f
+
 enum class SHADER_DOMAIN
 {
 	DOMAIN_OPAQUE,		// 불투명 단계
@@ -51,9 +57,10 @@ enum class SAMPLER_TYPE
 
 enum class CB_TYPE
 {
-	TRANSFORM,	// b0
-	MATERIAL,	// b1
-
+	TRANSFORM,	 // b0
+	MATERIAL,	 // b1
+	GLOBAL,	     // b2
+	ANIMATION2D, // b3
 	END,
 };
 
@@ -97,14 +104,15 @@ enum PIPELINE_STAGE
 
 enum class RES_TYPE
 {
-	MESH,
-	TEXTURE,
-	MATERIAL,
-	SOUND,
 	PREFAB,
 	MESHDATA,
-	GRAPHICS_SHADER,
 	COMPUTE_SHADER,
+
+	MATERIAL,
+	MESH,
+	TEXTURE,
+	SOUND,
+	GRAPHICS_SHADER,
 	END,
 };
 
@@ -116,6 +124,8 @@ enum COMPONENT_TYPE
 	COLLIDER3D,
 	ANIMATOR2D,
 	ANIMATOR3D,
+	LIGHT2D,
+	LIGHT3D,
 
 	// render
 	MESHRENDER,
@@ -214,9 +224,21 @@ enum class COLLIDER2D_TYPE
 	COLLIDER2D_CIRCLE,
 };
 
+enum class SB_TYPE
+{
+	NONE,
+};
+
+enum class LIGHT_TYPE
+{
+	DIRECTIONAL,
+	POINT,
+	SPOT,
+};
 enum class UI_TYPE
 {
-	CLICK,
+	GAMEOBJECT,
 	DRAG,
+	UNIT_UI,
 	END,
 };

@@ -6,6 +6,7 @@
 #include "CTexture.h"
 #include "CGraphicsShader.h"
 #include "CMaterial.h"
+#include "CComputeShader.h"
 #include "CPrefab.h"
 
 class CResMgr
@@ -29,17 +30,23 @@ public :
 
 	const vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutInfo() { return m_vecLayoutInfo; }
 
+	Ptr<CTexture> CreateTexture(const wstring& _strKey
+		, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat, UINT _iBindFlag);
+	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 private:
 	void CreateDefaultMesh();
 	void CreateDefaultTexture();
 	void CreateDefaultGraphicsShader();
 	void CreateDefaultMaterial();
 	void CreateDefaultPrefab();
+	void CreateDefaultComputeShader();
 	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName);
 
 public :
 	CResMgr();
 	~CResMgr();
+
+
 };
 
 template<typename T>
@@ -47,12 +54,19 @@ RES_TYPE GetType()
 {
 	if (typeid(T).hash_code() == typeid(CMesh).hash_code())
 		return RES_TYPE::MESH;
+
 	if (typeid(T).hash_code() == typeid(CGraphicsShader).hash_code())
 		return RES_TYPE::GRAPHICS_SHADER;
+
 	if (typeid(T).hash_code() == typeid(CMaterial).hash_code())
 		return RES_TYPE::MATERIAL;
+
+	if (typeid(T).hash_code() == typeid(CComputeShader).hash_code())
+		return RES_TYPE::COMPUTE_SHADER;
+
 	if (typeid(T).hash_code() == typeid(CTexture).hash_code())
 		return RES_TYPE::TEXTURE;
+
 	if (typeid(T).hash_code() == typeid(CPrefab).hash_code())
 		return RES_TYPE::PREFAB;
 	else

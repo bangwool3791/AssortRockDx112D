@@ -29,7 +29,6 @@ CGameObject::CGameObject()
 	, m_pParent{ nullptr }
 	, m_pRenderComponent{ nullptr }
 {
-
 }
 
 CGameObject::CGameObject(const CGameObject& rhs)
@@ -82,13 +81,12 @@ CGameObject::~CGameObject()
 		*iter = nullptr;
 	}
 
-	delete m_arrCom[MESHRENDER];
-
 	Safe_Del_Vec(m_vecChild);
 }
 
 void CGameObject::begin()
 {
+
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		if (nullptr != m_arrCom[i])
@@ -110,6 +108,12 @@ void CGameObject::begin()
 
 void CGameObject::tick()
 {
+	if (!lstrcmp(GetName().c_str(), L"SpotLight"))
+	{
+		int a{};
+
+	}
+
 	for (auto Iter{ m_arrCom.begin() }; Iter != m_arrCom.end(); ++Iter)
 	{
 		if((*Iter))
@@ -131,7 +135,19 @@ void CGameObject::tick()
 
 void CGameObject::finaltick()
 {
+	if (!lstrcmp(GetName().c_str(), L"SpotLight"))
+	{
+		int a{};
+
+	}
+
 	for (auto Iter{ m_arrCom.begin() }; Iter != m_arrCom.end(); ++Iter)
+	{
+		if ((*Iter))
+			(*Iter)->finaltick();
+	}
+
+	for (auto Iter{ m_vecScripts.begin() }; Iter != m_vecScripts.end(); ++Iter)
 	{
 		if ((*Iter))
 			(*Iter)->finaltick();
@@ -198,12 +214,22 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 	}
 }
 
+void CGameObject::DestroyComponent(COMPONENT_TYPE _eComType)
+{
+	if (m_arrCom[(UINT)_eComType])
+	{
+		delete m_arrCom[(UINT)_eComType];
+		m_arrCom[(UINT)_eComType] = nullptr;
+	}
+
+}
+
 CComponent* CGameObject::GetComponent(COMPONENT_TYPE _eComType)
 {
 	return m_arrCom[(UINT)_eComType];
 }
 
-void CGameObject::SetDead()
+void CGameObject::Destroy()
 {
 	tEvent eve{};
 	eve.eType = EVENT_TYPE::DELETE_OBJECT;

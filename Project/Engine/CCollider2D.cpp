@@ -8,6 +8,7 @@ CCollider2D::CCollider2D()
 	, m_vScale(Vec2(1.f, 1.f))
 	, m_eType(COLLIDER2D_TYPE::COLLIDER2D_RECT)
 	, m_bIgnorObjectScale(false)
+	, m_bPause{false}
 {
 }
 
@@ -32,6 +33,7 @@ void CCollider2D::finaltick()
 
 	Matrix matScale = XMMatrixScaling(m_vFinalScale.x, m_vFinalScale.y, 1.f);
 
+	m_vRot *= GetOwner()->Transform()->GetRelativeRotation();
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
 	matRot *= XMMatrixRotationZ(m_vRot.z);

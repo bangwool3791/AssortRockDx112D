@@ -54,7 +54,7 @@ void CMonsterScript::tick()
 	//}
 
 	// 플레이어 위치에 미사일 생성
-	GetOwner()->SetDead();
+	GetOwner()->Destroy();
 	//GetOwner()->GetChildObject()[0]->SetDead();
 
 }
@@ -92,6 +92,6 @@ void CMonsterScript::EndOverlap(CCollider2D* _pOther)
 {
 	if (!lstrcmp(L"MouseDrag", _pOther->GetOwner()->GetName().c_str()))
 	{
-		GetOwner()->GetChild(L"UnitSelectUI")->SetDead();
+		GetOwner()->GetChild(L"UnitSelectUI")->Destroy();
 	}
 }

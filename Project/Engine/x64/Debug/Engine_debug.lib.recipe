@@ -3,6 +3,9 @@
   <ProjectOutputs />
   <ContentFiles>
     <ContentFile>
+      <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\compute.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\debugdraw.cso</FullPath>
     </ContentFile>
     <ContentFile>
@@ -12,13 +15,22 @@
       <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\editor.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\func.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\register.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\std2d.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\struct.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\test.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Development\MyEngine\DirectX11\External\Library\Engine\tile.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

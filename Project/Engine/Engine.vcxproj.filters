@@ -121,6 +121,21 @@
     <Filter Include="Engine\03. Manager\10. UIMgr">
       <UniqueIdentifier>{16e54b4a-6a0d-4673-9c81-b9a372ee6edc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\06. Component\06. Animation2D">
+      <UniqueIdentifier>{0790efe1-b1df-4d87-8317-1da5a4ca36b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\07. Light2D">
+      <UniqueIdentifier>{0bdac1f2-cf7b-4f5b-a0bb-6e9bad1e208c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Header">
+      <UniqueIdentifier>{dbe9fe6e-9190-4369-ad3a-47c3b4da84d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute">
+      <UniqueIdentifier>{0e4d52e1-c515-48b2-9d66-75c9fd6c191c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\PaintShader">
+      <UniqueIdentifier>{9a48f7c0-df0a-4e91-ae7c-572f40371337}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -288,6 +303,36 @@
     <ClInclude Include="CMissileScript2.h">
       <Filter>Engine\08. Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="CAnimation2D.h">
+      <Filter>Engine\06. Component\06. Animation2D</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimator2D.h">
+      <Filter>Engine\06. Component\06. Animation2D</Filter>
+    </ClInclude>
+    <ClInclude Include="CStructuredBuffer.h">
+      <Filter>Engine\02. Device\01. Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight2D.h">
+      <Filter>Engine\06. Component\07. Light2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Memorypool.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="chunk.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="chunkgroup.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="smallobjallocator.h">
+      <Filter>Engine\09. Optimize</Filter>
+    </ClInclude>
+    <ClInclude Include="CComputeShader.h">
+      <Filter>Engine\07. Resource\03. Shader\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CPaintShader.h">
+      <Filter>HLSL\Compute\PaintShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -425,6 +470,24 @@
     <ClCompile Include="CMissileScript2.cpp">
       <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
+    <ClCompile Include="CAnimation2D.cpp">
+      <Filter>Engine\06. Component\06. Animation2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimator2D.cpp">
+      <Filter>Engine\06. Component\06. Animation2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CStructuredBuffer.cpp">
+      <Filter>Engine\02. Device\01. Buffer</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight2D.cpp">
+      <Filter>Engine\06. Component\07. Light2D</Filter>
+    </ClCompile>
+    <ClCompile Include="CComputeShader.cpp">
+      <Filter>Engine\07. Resource\03. Shader\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="CPaintShader.cpp">
+      <Filter>HLSL\Compute\PaintShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -433,9 +496,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="test.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="register.fx">
       <Filter>HLSL</Filter>
     </FxCompile>
     <FxCompile Include="std2d.fx">
@@ -449,6 +509,21 @@
     </FxCompile>
     <FxCompile Include="debugdraw.fx">
       <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="register.fx">
+      <Filter>HLSL\Header</Filter>
+    </FxCompile>
+    <FxCompile Include="struct.fx">
+      <Filter>HLSL\Header</Filter>
+    </FxCompile>
+    <FxCompile Include="func.fx">
+      <Filter>HLSL\Header</Filter>
+    </FxCompile>
+    <FxCompile Include="tile.fx">
+      <Filter>HLSL</Filter>
+    </FxCompile>
+    <FxCompile Include="compute.fx">
+      <Filter>HLSL\Compute\PaintShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

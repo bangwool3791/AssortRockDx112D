@@ -2,6 +2,9 @@
 #pragma once
 
 class CCamera;
+class CStructuredBuffer;
+
+#include "CLight2D.h"
 
 class CRenderMgr
 	: public CSingletone<CRenderMgr>
@@ -11,10 +14,14 @@ public:
 	virtual ~CRenderMgr();
 
 private:
-	vector<CCamera*>		m_vecCam;	// 현재 레벨에 있는 모든 카메라
+	vector<CCamera*>		m_vecCam;			// 현재 레벨에 있는 모든 카메라
+	vector<tLightInfo>		m_vecLight2D;		// 현재 레벨에 있는 모든 2D 광원
+	CStructuredBuffer*		m_pLight2DBuffer;
+	
 	vector<tDebugShapeInfo>	m_DebugDrawInfo;	// 현재 레벨에 있는 모든 카메라
 public:
 	void RegisterCamera(auto _pCam) { m_vecCam.push_back(_pCam); }
+	void RegisterLight2D(auto _pLight) { m_vecLight2D.push_back(_pLight->GetLightInfo()); }
 
 	CCamera* GetMainCam()
 	{
@@ -32,6 +39,9 @@ public:
 	}
 
 	vector<tDebugShapeInfo>& GetDebugDrawInfo() { return m_DebugDrawInfo; }
+
+private:
+	void UpdateLight2D();
 public:
 	void init();
 	void tick();

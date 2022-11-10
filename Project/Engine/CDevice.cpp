@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CDevice.h"
 
+#include "CResMgr.h"
 #include "CConstBuffer.h"
 
 CDevice::CDevice()
@@ -8,9 +9,7 @@ CDevice::CDevice()
 	, m_pDevice(nullptr)
 	, m_pDeviceContext(nullptr)
 	, m_pRenderTargetTex(nullptr)
-	, m_pRenderTargetView(nullptr)
 	, m_pDepthStencilTex(nullptr)
-	, m_pDepthStencilView(nullptr)
 	, m_pSwapChain(nullptr)
 	, m_tViewPort{}
 	, m_arrCB{}
@@ -59,7 +58,8 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 	}
 
 	// 출력용 렌더 타겟 및 깊이 타겟 지정
-	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
+	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetTex.Get()->GetRTV().GetAddressOf(),
+		m_pRenderTargetTex.Get()->GetDSV().Get());
 
 
 	// ViewPort
@@ -158,36 +158,19 @@ int CDevice::CreateTarget()
 {
 	HRESULT hr = S_OK;
 	// RenderTargetTexture 를 스왚체인으로부터 참조하기
-	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)m_pRenderTargetTex.GetAddressOf());
+	ComPtr<ID3D11Texture2D> tex2D;
+	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)tex2D.GetAddressOf());
 
-	// RenderTargetView 만들기
-	hr = m_pDevice->CreateRenderTargetView(m_pRenderTargetTex.Get(), nullptr, m_pRenderTargetView.GetAddressOf());
-
+	m_pRenderTargetTex = CResMgr::GetInst()->CreateTexture(L"RenderTargetTex", tex2D);
 
 	// DepthStencilTexture
-	D3D11_TEXTURE2D_DESC texdesc = {};
+	D3D11_TEXTURE2D_DESC m_Desc = {};
+	
+	tex2D->GetDesc(&m_Desc);
 
-	texdesc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_DEPTH_STENCIL;
-
-	texdesc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
-	texdesc.CPUAccessFlags = 0;
-
-	texdesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	texdesc.Width = (UINT)m_vRenderResolution.x;
-	texdesc.Height = (UINT)m_vRenderResolution.y;
-	texdesc.ArraySize = 1;
-
-	texdesc.SampleDesc.Count = 1;
-	texdesc.SampleDesc.Quality = 0;
-
-	texdesc.MipLevels = 0;
-	texdesc.MiscFlags = 0;
-
-	hr = m_pDevice->CreateTexture2D(&texdesc, nullptr, m_pDepthStencilTex.GetAddressOf());
-
-	// DepthStencilView 제작
-	hr = m_pDevice->CreateDepthStencilView(m_pDepthStencilTex.Get(), nullptr, m_pDepthStencilView.GetAddressOf());
-
+	m_pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencillTex"
+		, (UINT)m_vRenderResolution.x, (UINT)m_vRenderResolution.y
+		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL);
 	return hr;
 }
 
@@ -199,6 +182,12 @@ int CDevice::CreateConstBuffer()
 
 	m_arrCB[(UINT)CB_TYPE::MATERIAL] = new CConstBuffer(CB_TYPE::MATERIAL);
 	m_arrCB[(UINT)CB_TYPE::MATERIAL]->Create(sizeof(tMtrlConst));
+
+	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
+	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tLightInfo));
+
+	m_arrCB[(UINT)CB_TYPE::ANIMATION2D] = new CConstBuffer(CB_TYPE::ANIMATION2D);
+	m_arrCB[(UINT)CB_TYPE::ANIMATION2D]->Create(sizeof(tAnim2DInfo));
 
 	return 0;
 }
@@ -359,8 +348,8 @@ int CDevice::CreateDepthStencilState()
 void CDevice::TargetClear()
 {
 	float arrColor[4] = { 0.f, 0.f, 0.f, 1.f };
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), arrColor);
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetTex.Get()->GetRTV().Get(), arrColor);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilTex.Get()->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 
 

@@ -64,6 +64,10 @@ void CDragScript::tick()
 	}
 }
 
+void CDragScript::finaltick()
+{
+}
+
 void CDragScript::BeginOverlap(CCollider2D* _pOther)
 {
 }

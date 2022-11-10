@@ -27,6 +27,9 @@ void CCollisionMgr::tick()
 	{
 		for (int iCol{iRow}; iCol < MAX_LAYER; ++iCol)
 		{
+			/*
+			* iRow 1, iCol 1ÀÌ¸י m_matrix[1] = 2
+			*/
 			if (m_matrix[iRow] & (1 << iCol))
 			{
 				CollisionBtwLayer(pCurLevel, iRow, iCol);
@@ -55,7 +58,10 @@ void CCollisionMgr::CollisionBtwLayer(CLevel* _pCurScene, int _iLeft, int _iRigh
 			if (nullptr == vecRight[j]->Collider2D())
 				continue;
 
-			CollisionBtwCollider(vecLeft[i]->Collider2D(), vecRight[j]->Collider2D());
+			if (vecLeft[i]->Collider2D()->IsPause() || vecRight[j]->Collider2D()->IsPause())
+				continue;
+
+				CollisionBtwCollider(vecLeft[i]->Collider2D(), vecRight[j]->Collider2D());
 		}
 	}
 }

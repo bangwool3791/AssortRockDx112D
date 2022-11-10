@@ -21,7 +21,7 @@ public:
 
     // _iPipelineStage : PIPELINE_STAGE, register binding
     void UpdateData(UINT _iPipelineStage);
-
+    void UpdateData_CS();
     /*
     * ConstBuffer는 장치에 한개씩 할당
     * 다수 객체에서 접근

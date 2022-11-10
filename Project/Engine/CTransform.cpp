@@ -11,6 +11,7 @@
 CTransform::CTransform()
 	:CComponent{COMPONENT_TYPE::TRANSFORM}
 	, m_vRelativeScale{1.f,1.f,1.f}
+	, m_blgnParentScale(false)
 {
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3{ 1.0f, 0.0f, 0.0f };
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3{ 0.0f, 1.0f, 0.0f };
@@ -38,9 +39,9 @@ void CTransform::finaltick()
 	matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
 
 	//행렬에 담긴 x,y,z축에 대한 회전 정보(Vector3)를 담는다.
-	m_vRelativeDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3{ 1.f, 0.f, 0.f }, matRot);
-	m_vRelativeDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3{ 0.f, 1.f, 0.f }, matRot);
-	m_vRelativeDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3{ 0.f, 0.f, 1.f }, matRot);
+	m_vRelativeDir[(UINT)DIR::RIGHT] = m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3{1.f, 0.f, 0.f}, matRot);
+	m_vRelativeDir[(UINT)DIR::UP] = m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3{ 0.f, 1.f, 0.f }, matRot);
+	m_vRelativeDir[(UINT)DIR::FRONT] = m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3{ 0.f, 0.f, 1.f }, matRot);
 
 	m_matWorld = matScail * matRot * matPos ;
 
@@ -82,6 +83,21 @@ void CTransform::finaltick()
 		{
 			m_matWorld = m_matWorld * GetOwner()->Get_Parent()->Transform()->GetWorldMat();
 		}
+
+		if (!lstrcmp(L"SpotLight", GetOwner()->GetName().c_str()))
+		{
+			int a{};
+
+		}
+		//부모가 있을 경우, 스케일이 포함 된 월드의 right, up, look이 방향 벡터이므로, 노멀라이즈한다.
+		m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3(1.f, 0.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3(0.f, 1.f, 0.f), m_matWorld);
+		m_vWorldDir[(UINT)DIR::FRONT] = XMVector3TransformNormal(Vec3(0.f, 0.f, 1.f), m_matWorld);
+
+		// 회전, 크기 변환이 이루어졌기 때문에 변경된 크기를 초기화 하기 위해 Normalize 해준다.
+		m_vWorldDir[(UINT)DIR::RIGHT].Normalize();
+		m_vWorldDir[(UINT)DIR::UP].Normalize();
+		m_vWorldDir[(UINT)DIR::FRONT].Normalize();
 	}
 }
 
@@ -94,7 +110,7 @@ void CTransform::UpdateData()
 	g_transform.matWVP	 = g_transform.matWV * g_transform.matProj;
 
 	pCB->SetData(&g_transform);
-	pCB->UpdateData(PIPELINE_STAGE::VS);
+	pCB->UpdateData(PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 }
 
 

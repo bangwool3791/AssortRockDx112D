@@ -17,7 +17,7 @@ public :
     void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
 public :
     virtual void tick() = 0;
-    virtual void finaltick() final {};
+    virtual void finaltick() {};
 
     virtual CScript* Clone() = 0;
 public :

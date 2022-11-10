@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine/CGameObject.h>
-
+#include <Engine/smallobjallocator.h>
 class CGameObjectEx
 	:public CGameObject
 {

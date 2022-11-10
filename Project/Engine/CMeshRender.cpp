@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CMeshRender.h"
 #include "CTransform.h"
+#include "CAnimator2D.h"
 
 CMeshRender::CMeshRender()
 	:CRenderComponent{ COMPONENT_TYPE::MESHRENDER }
@@ -39,8 +40,16 @@ void CMeshRender::render()
 
 	GetCurMaterial()->UpdateData();
 
+	if (Animator2D())
+	{
+		Animator2D()->UpdateData();
+
+	}
 	GetMesh()->render();
 
 	CMaterial::Clear();
+
+	if (Animator2D())
+		Animator2D()->Clear();
 }
 

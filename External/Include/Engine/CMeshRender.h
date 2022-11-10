@@ -2,8 +2,10 @@
 #include "CRenderComponent.h"
 #include "CMesh.h"
 #include "CMaterial.h"
+
 class CMeshRender
 	:public CRenderComponent
+//	,public SmallObjAllocator<CMeshRender, 1000>
 {
 public:
 	virtual void tick() override;

@@ -5,9 +5,7 @@ class CPlayerScript :
 {
 private:
     float m_fSpeed;
-    bool m_bDrag;
 public:
-    bool IsDrag() { return m_bDrag; }
 public :
     virtual void begin();
     virtual void tick();

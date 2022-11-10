@@ -3,6 +3,7 @@
 
 class CCollider2D :
     public CComponent
+ //   , public SmallObjAllocator<CCollider2D, 1000>
 {
 private:
     Vec2            m_vOffsetPos;
@@ -15,8 +16,13 @@ private:
 
     COLLIDER2D_TYPE m_eType;
     bool            m_bIgnorObjectScale;
+    bool            m_bPause;
     int             m_iOverlapCount;
 
+public :
+    bool IsPause() {return m_bPause;}
+    void SetPause() { m_bPause = true; }
+    void ReleasePause() { m_bPause = false; }
 public:
     void BeginOverlap(CCollider2D* _pOther);
     void Overlap(CCollider2D* _pOther);
@@ -44,6 +50,7 @@ public:
 
     void SetIgnoreObjectScale(bool _bSet) { m_bIgnorObjectScale = _bSet; }
     int GetOverlapCount() { return m_iOverlapCount; }
+    void ResetOverlapCount() { m_iOverlapCount = 0; }
 public:
     virtual void finaltick() override;
 

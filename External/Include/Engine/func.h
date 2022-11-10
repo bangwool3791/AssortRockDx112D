@@ -11,16 +11,30 @@ void Safe_Delete(T& p)
 }
 
 template<typename T1, typename T2>
+void Safe_Del_Map(map<T1, T2*>& _map)
+{
+	typename map<T1, T2*>::iterator iter = _map.begin();
+
+	for (; iter != _map.end(); ++iter)
+	{
+		if (nullptr != iter->second)
+			delete iter->second;
+	}
+	_map.clear();
+}
+
+template<typename T1, typename T2>
 void Safe_Del_Map(map<T1, T2>& _map)
 {
 	typename map<T1, T2>::iterator iter = _map.begin();
 
 	for (; iter != _map.end(); ++iter)
 	{
-			iter->second = nullptr;
+		iter->second = nullptr;
 	}
 	_map.clear();
 }
+
 
 template<typename T, int SIZE>
 void Safe_Del_Array(T* (&_arr)[SIZE])
@@ -91,6 +105,14 @@ void clear_function(T& container)
 	}
 }
 
+class CEntity;
+inline bool IsValid(CEntity* _pCom)
+{
+	if (nullptr == _pCom)
+		return false;
+	else
+		return true;
+}
 class CGameObject;
 void Instantiate(CGameObject* _pNewObj, int _iLayerIdx = 0);
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);

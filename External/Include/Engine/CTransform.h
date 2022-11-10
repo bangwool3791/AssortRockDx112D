@@ -1,9 +1,9 @@
 #pragma once
 
 #include "CComponent.h"
-
 class CTransform
 	: public CComponent 
+//	, public SmallObjAllocator<CTransform, 1000>
 {
 public:
 	CTransform();
@@ -16,6 +16,7 @@ private :
 	Vec3		m_vRelativeRotation;
 	
 	Vec3		m_vRelativeDir[(UINT)DIR::END];
+	Vec3		m_vWorldDir[(UINT)DIR::END];
 	Matrix		m_matWorld;
 
 	//부모 행렬의 영향을 받을지 않받을지 결정하는 bool 변수
@@ -38,6 +39,7 @@ public :
 	Vec3& GetRelativeDir_(DIR _eType) { return m_vRelativeDir[(UINT)_eType]; }
 
 	Vec3 GetWorldPos() { return m_matWorld.Translation(); }
+	Vec3 GetWorldDir(DIR _eType) { return m_vWorldDir[(UINT)_eType]; }
 	Vec3 GetWorldScale();
 
 	void SetIgnoreParentScale(bool _blgn) { m_blgnParentScale = _blgn; }

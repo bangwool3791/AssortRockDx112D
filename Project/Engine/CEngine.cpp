@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CEngine.h"
 
+#include "smallobjallocator.h"
+
 #include "CPathMgr.h"
 #include "CTimeMgr.h"
 #include "CKeyMgr.h"
@@ -12,6 +14,8 @@
 #include "CCollisionMgr.h"
 
 
+extern ChunkGroup* pool;
+
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
 {
@@ -20,7 +24,7 @@ CEngine::CEngine()
 
 CEngine::~CEngine()
 {
-
+	delete pool;
 }
 
 int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)

@@ -9,18 +9,23 @@ class CUIMgr
 	:public CSingletone<CUIMgr>
 {
 private:
-	array<CGameObject*, (UINT)UI_TYPE::END> m_arrUi;
-	vector<CGameObject*>					m_vecUnitSelectUI;
+	array<vector<CGameObject*>, (UINT)UI_TYPE::END> m_arrUi;
 public:
-	void AddUnitSelectUI(CGameObject* _pObj);
-	void Clear_UnitSelectUI();
 	void AddUI(CGameObject* _pObj, UI_TYPE _eType);
 	void DeleteUI(UI_TYPE _eType);
-	CGameObject* Get_Ui_Object(UI_TYPE _eType);
 public:
-	const vector<CGameObject*>& Get_UnitSelectUIObjects() {
-		return m_vecUnitSelectUI;
+	void Clear_Objects(UI_TYPE _eType)
+	{
+		m_arrUi[(UINT)_eType].clear();
 	}
+	const vector<CGameObject*>& Get_Objects(UI_TYPE _eType) {
+		return m_arrUi[(UINT)_eType];
+	}
+
+	CGameObject* Get_Object(UI_TYPE _eType) {
+		return m_arrUi[(UINT)_eType].front();
+	}
+
 public:
 	CUIMgr();
 	~CUIMgr();

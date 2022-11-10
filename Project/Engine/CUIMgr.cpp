@@ -11,52 +11,21 @@ CUIMgr::CUIMgr()
 CUIMgr::~CUIMgr()
 {
 
-	for (auto iter{ m_arrUi.begin() }; iter != m_arrUi.end(); ++iter)
-	{
-		//delete* iter;
-		//(*iter) = nullptr;
-	}
-	for (auto iter{ m_vecUnitSelectUI.begin() }; iter != m_vecUnitSelectUI.end(); ++iter)
-	{
-		(*iter) = nullptr;
-	}
-
-	m_vecUnitSelectUI.clear();
 }
 
 
 void CUIMgr::AddUI(CGameObject* _pObj, UI_TYPE _eType)
 {
-	assert(!m_arrUi[(UINT)_eType]);
-	m_arrUi[(UINT)(_eType)] = _pObj;
+	m_arrUi[(UINT)(_eType)].push_back(_pObj);
 }
 
 void CUIMgr::DeleteUI(UI_TYPE _eType)
 {
-	m_arrUi[(UINT)_eType]->SetDead();
-	m_arrUi[(UINT)_eType] = nullptr;
-}
-
-
-CGameObject* CUIMgr::Get_Ui_Object(UI_TYPE _eType)
-{
-	if (!m_arrUi[(UINT)_eType])
-		return nullptr;
-
-	return m_arrUi[(UINT)_eType];
-}
-
-void CUIMgr::AddUnitSelectUI(CGameObject* _pObj)
-{
-	m_vecUnitSelectUI.push_back(_pObj);
-}
-
-void CUIMgr::Clear_UnitSelectUI()
-{
-	for (auto iter{ m_vecUnitSelectUI.begin() }; iter != m_vecUnitSelectUI.end(); ++iter)
+	const vector<CGameObject*>& GameObjects = m_arrUi[(UINT)_eType];
+	for (auto iter{ GameObjects.begin() }; iter != GameObjects.end(); ++iter)
 	{
-		CGameObject* pChild = (*iter)->GetChild(L"UnitSelectUI");
-		pChild->SetDead();
+		(*iter)->Destroy();
 	}
-	m_vecUnitSelectUI.clear();
+	m_arrUi[(UINT)_eType].clear();
 }
+

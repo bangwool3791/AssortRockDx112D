@@ -11,7 +11,6 @@ CGameObjectEx::CGameObjectEx()
 CGameObjectEx::~CGameObjectEx()
 {
 }
-
 /*
 * Engine Level에서 Render 기능을 빼기위해 부모의 finaltick과 별도 구현
 */

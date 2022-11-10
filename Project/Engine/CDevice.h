@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Ptr.h"
+#include "CTexture.h"
+
 class CConstBuffer;
 
 class CDevice
@@ -14,11 +17,8 @@ private:
 	ComPtr<ID3D11Device>			m_pDevice;				// GPU 메모리 관리
 	ComPtr<ID3D11DeviceContext>		m_pDeviceContext;		// GPU Rendering
 
-	ComPtr<ID3D11Texture2D>			m_pRenderTargetTex;		// Render Target
-	ComPtr<ID3D11RenderTargetView>	m_pRenderTargetView;	// RenderTarget 을 설명
-
-	ComPtr<ID3D11Texture2D>			m_pDepthStencilTex;		// 깊이 저장 타겟
-	ComPtr<ID3D11DepthStencilView>	m_pDepthStencilView;	// DSTex 를 설명	
+	Ptr<CTexture>					m_pRenderTargetTex;		// Render Target
+	Ptr<CTexture>					m_pDepthStencilTex;		// 깊이 저장 타겟
 
 	ComPtr<IDXGISwapChain>			m_pSwapChain;			// RenderTarget(FrontBuffer, BackBuffer) 를 관리 및 역할 교체 지시
 	D3D11_VIEWPORT					m_tViewPort;			// 백버퍼를 윈도우에 그릴 영역(위치, 크기) 지정
@@ -27,7 +27,7 @@ private:
 
 	ComPtr<ID3D11SamplerState>		m_arrSampler[(UINT)SAMPLER_TYPE::END];
 
-	CConstBuffer* m_arrCB[(UINT)CB_TYPE::END];
+	CConstBuffer*					m_arrCB[(UINT)CB_TYPE::END];
 	ComPtr<ID3D11RasterizerState>   m_arrRS[(UINT)RS_TYPE::END];
 	ComPtr<ID3D11BlendState>		m_arrBS[(UINT)RS_TYPE::END];
 	ComPtr<ID3D11DepthStencilState> m_arrDS[(UINT)DS_TYPE::END];

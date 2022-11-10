@@ -12,19 +12,21 @@
 #include "CUIMgr.h"
 #include "CTimeMgr.h"
 #include "CKeyMgr.h"
+#include "CCollisionMgr.h"
 
 /*
 * Script
+* 
 */
-
+#include "CScript.h"
+#include "CPlayerScript.h"
 /*
 * Component
 */
+#include "CCollider2D.h"
 #include "CTransform.h"
 #include "CMaterial.h"
 #include "CMeshRender.h"
-#include "CScript.h"
-#include "CPlayerScript.h"
 CMouseScript::CMouseScript()
 	:bClicked{ false }
 {
@@ -37,91 +39,62 @@ CMouseScript::~CMouseScript()
 
 void CMouseScript::begin()
 {
-
+	GetOwner()->Transform()->SetRelativeScale(Vec3{ 3.f, 5.f, 0.f });
 }
-
-//if ((vTarget - vPos).Length() > 0.5)
-//{
-//	auto vMove = vTarget - vPos;
-//	vPos += vMove * DT;
-//	Transform()->SetRelativePos(vPos);
-//}
-
-//if (KEY_PRESSED(KEY::RBTN) == PRESS)
-//{
-//	/*
-//	* y좌표는 DirectX 좌표계에서, 아래로 갈 수록 음수이다.
-//	* 좌상단을 기준으로 마우스의 좌표를 계산했다.
-//	*/
-//	vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), vPos.z };
-//	
-//	auto vMove = vTarget - vPos ;
-//	vPos += vMove * DT;
-//	Transform()->SetRelativePos(vPos);
-//}
-
-//if (KEY_PRESSED(KEY::SPACE) == PRESS)
-//{
-//	Vec3 vPos = Transform()->GetRelativePos();
-//	vPos.y += Transform()->GetRelativeScale().y / 2;
-//	
-//	Ptr<CPrefab> pMissilePrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MissilePrefab");
-//	Instantiate(pMissilePrefab->Instantiate(), vPos);
-//}
 
 void CMouseScript::tick()
 {
 	static Vec3 vTarget;
-	Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
-	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	static Vec2& vMousePos = CKeyMgr::GetInst()->GetMousePos_();
+	const static Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+
+	vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), 1.f };
+	GetOwner()->Transform()->SetRelativePos(Vec3{ vTarget.x, vTarget.y, 1.f });
+}
+
+void CMouseScript::finaltick()
+{
+	static Vec3 vTarget;
+	static Vec2& vMousePos = CKeyMgr::GetInst()->GetMousePos_();
+	const static Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
 	if (KEY_PRESSED(KEY::RBTN))
 	{
 		vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), 1.f };
 
-		CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1);
-
-		const vector<CGameObject*>& objects = pLayer->GetParentObjects();
-
+		const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
+		//cout << "센터 [x] [y] " << vCenter.x << " " << vCenter.y << endl;
 		for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
 		{
-			if (!lstrcmp(L"SelectUnit", (*iter)->GetName().c_str()))
-			{
-				(*iter)->GetScript<CPlayerScript>()->Set_Target(vTarget);
-			}
+			(*iter)->GetScript<CPlayerScript>()->Set_Target(vTarget);
 		}
+	}
+
+	if (bClicked)
+	{
+		GetOwner()->Collider2D()->SetPause();
 	}
 
 	if (KEY_PRESSED(KEY::LBTN) && !bClicked)
 	{
+		//GetOwner()->AddComponent(new CCollider2D);
 		/*
 		* child로 변경해서, Layer 별로 가져 와 볼 것.
 		*/
-		CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1);
-
-		const vector<CGameObject*>& objects2 = pLayer->GetParentObjects();
-
-		for (auto iter{ objects2.begin() }; iter != objects2.end(); ++iter)
-		{
-			if (!lstrcmp(L"SelectUnit", (*iter)->GetName().c_str()))
-			{
-				(*iter)->SetName(L"Player");
-			}
-
-			const vector<CGameObject*>& childs = (*iter)->GetChilds();
-
-			for (auto iter2{ childs.begin() }; iter2 != childs.end(); ++iter2)
-			{
-				if (!lstrcmp(L"UnitSelectUI", (*iter2)->GetName().c_str()))
-				{
-					(*iter2)->SetDead();
-					break;
-				}
-			}
-		}
+		/*
+		* 드래그 UNIT CLEAR
+		*/
+		CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
+		CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
 
 		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MouseDragPrefab");
-		Instantiate(pPrefab->Instantiate(), Vec3{ 0.f, 0.f, 0.f });
+		CGameObject* pDrag = pPrefab->Instantiate();
+		Instantiate(pDrag, Vec3{ 0.f, 0.f, 0.f }, 31);
+
+		CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
+		//마우스 클릭 충돌 활성화
+		GetOwner()->Collider2D()->ReleasePause();
+
 		bClicked = true;
 	}
 
@@ -132,40 +105,22 @@ void CMouseScript::tick()
 	if (KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
 		bClicked = false;
-
-		CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(0);
-
-		const vector<CGameObject*>& objects = pLayer->GetParentObjects();
-
-		for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
-		{
-			if (!lstrcmp(L"MouseDrag", (*iter)->GetName().c_str()))
-			{
-				(*iter)->SetDead();
-				break;
-			}
-		}
-
-		pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1);
-		/*
-		* 게임 오브젝트 상태 컴포넌트 추가
-		* 상태 읽어와서, UI 벡터에 추가.
-		*/
-		const vector<CGameObject*>& objects2 = pLayer->GetParentObjects();
-		for (auto iter{ objects2.begin() }; iter != objects2.end(); ++iter)
-		{
-			if (0 < (*iter)->GetScript<CPlayerScript>()->IsDrag())
-			{
-				(*iter)->SetName(L"SelectUnit");
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
-				Instantiate(pUIPrefab->Instantiate(), *iter, 0);
-			}
-		}
+		//CCollisionMgr::GetInst()->CollisionLayerRelease(1, 30);
+		CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
 }
 
 void CMouseScript::BeginOverlap(CCollider2D* _pOther)
 {
+	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
+	CGameObject* pUnit_UI = pUIPrefab->Instantiate();
+	Instantiate(pUnit_UI, _pOther->GetOwner(), 0);
+
+	CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
+	CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
+
+	CUIMgr::GetInst()->AddUI(_pOther->GetOwner(), UI_TYPE::GAMEOBJECT);
+	CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
 }
 
 void CMouseScript::Overlap(CCollider2D* _pOther)
@@ -175,5 +130,9 @@ void CMouseScript::Overlap(CCollider2D* _pOther)
 
 void CMouseScript::EndOverlap(CCollider2D* _pOther)
 {
-
+	//if (!lstrcmp(L"Player", _pOther->GetName().c_str()))
+	//{
+	//	_pOther->ResetOverlapCount();
+	//}
+	//CCollisionMgr::GetInst()->CollisionLayerRelease(1, 30);
 }

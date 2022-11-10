@@ -61,10 +61,6 @@ void CMesh::UpdateData()
 
 void CMesh::render()
 {
-	if (!lstrcmp(GetName().c_str(), L"RectMesh_Debug"))
-	{
-		int a = 0;
-	}
 	UpdateData();
 	CONTEXT->DrawIndexed(m_iIdxCount, 0, 0);
 }

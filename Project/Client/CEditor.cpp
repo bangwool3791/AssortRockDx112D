@@ -16,7 +16,13 @@ CEditor::CEditor()
 
 CEditor::~CEditor()
 {
-	Safe_Del_Vec(m_vecEditorObj);
+
+	for (UINT i{ 0 }; i < m_vecEditorObj.size(); ++i)
+	{
+		delete m_vecEditorObj[i];
+	}
+
+	//Safe_Del_Vec(m_vecEditorObj);
 	Safe_Del_Array(m_DebugDrawObject);
 }
 
@@ -24,21 +30,44 @@ void CEditor::init()
 {
 	CreateDebugDrawObject();
 
-	CGameObjectEx* pGridObj = new CGameObjectEx;
-	pGridObj->SetName(L"Grid Object");
+	////CGameObjectEx* pGridObj = new CGameObjectEx;
+	////pGridObj->SetName(L"Grid Object");
 
-	pGridObj->AddComponent(new CTransform);
-	pGridObj->AddComponent(new CMeshRender);
-	pGridObj->AddComponent(new CGrid2DScript);
+	////pGridObj->AddComponent(new CTransform);
+	////pGridObj->AddComponent(new CMeshRender);
+	////pGridObj->AddComponent(new CGrid2DScript);
 
-	pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	////pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	////pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
 
-	pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	////pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	////pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
+	////pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
-	m_vecEditorObj.push_back(pGridObj);
+
+	//CGameObjectEx* pTile{};
+	//Vec4 vColor = Vec4{ 0.f, 1.f, 0.f, 1.f };
+	//for (int i = 0; i < TILEY; ++i)
+	//{
+	//	for (int j = 0; j < TILEX; ++j)
+	//	{
+	//		pTile = new CGameObjectEx;
+	//		pTile->SetName(L"Tile");
+	//		//pTile->AddComponent(new CTransform);
+	//		//pTile->AddComponent(new CMeshRender);
+
+	//		//pTile->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
+	//		//pTile->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugMaterial"));
+	//		//pTile->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, &vColor);
+
+	//		float fX = (TILECX * j) + ((TILECX / 2.f) * (i % 2));
+	//		float fY = (TILECY / 2.f) * i;
+
+	//		//pTile->Transform()->SetRelativePos(fX -800.f, fY - 450.f, 1.f);
+	//		//pTile->Transform()->SetRelativeScale(TILECX, TILECY, 0.f);
+	//		m_vecEditorObj.push_back(pTile);
+	//	}
+	//}
 }
 
 void CEditor::progress()

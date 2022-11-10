@@ -1,6 +1,7 @@
 #ifndef _REGISTER
 #define _REGISTER
 
+#include "struct.fx"
 // 상수 레지스터
 cbuffer TRANSFORM : register(b0)
 {
@@ -41,8 +42,26 @@ cbuffer MATERIAL : register(b1)
     row_major matrix g_mat_3;
 };
 
+cbuffer GLOBAL : register(b2)
+{
+    float2  g_vRenderResolution;
+    int     g_iLight2DCount;
+    int     g_iLight3DCount;
 
+    float   g_fAccTime;
+    float   g_fDT;
+    int2    pad;
+}
+cbuffer ANIM2DINFO : register(b3)
+{
+    float2  g_vLeftTop;
+    float2  g_vSlice;
+    float2  g_vOffset;
+    float2  g_vFullSize;
 
+    int     g_iAnim2DUse;
+    int3    iPadding;
+}
 
 
 // 텍스쳐 레지스터
@@ -61,6 +80,12 @@ TextureCube g_texcube_1 : register(t9);
 Texture2DArray g_texarr_0 : register(t10);
 Texture2DArray g_texarr_1 : register(t11);
 
+// Animation2D Atlas 
+Texture2D g_Atals : register(t12);
+
+//Light Buffer
+StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t13);
+StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
 
 // 샘플러 레지스터
 SamplerState g_sam_0 : register(s0); // anisotropic sampler

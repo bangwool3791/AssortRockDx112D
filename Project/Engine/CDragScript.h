@@ -3,10 +3,12 @@
 
 class CDragScript :
     public CScript
+    //, public SmallObjAllocator<CDragScript, 1>
 {
 public:
     virtual void begin();
     virtual void tick();
+    virtual void finaltick();
 
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
