@@ -1,8 +1,0 @@
-﻿  CMeshRender.cpp
-C:\Development\MyEngine\DirectX11\Project\Engine\chunk.h(1,13): warning C4081: 'newline'이(가) 있어야 하는데 ';'이(가) 있습니다.
-C:\Development\MyEngine\DirectX11\Project\Engine\chunk.h(86,1): warning C4267: '=': 'size_t'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  CResMgr_init.cpp
-C:\Development\MyEngine\DirectX11\Project\Engine\chunk.h(1,13): warning C4081: 'newline'이(가) 있어야 하는데 ';'이(가) 있습니다.
-C:\Development\MyEngine\DirectX11\Project\Engine\chunk.h(86,1): warning C4267: '=': 'size_t'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-  Engine.vcxproj -> C:\Development\MyEngine\DirectX11\External\Library\Engine\Engine_debug.lib
