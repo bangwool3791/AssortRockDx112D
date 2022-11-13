@@ -184,7 +184,7 @@ int CDevice::CreateConstBuffer()
 	m_arrCB[(UINT)CB_TYPE::MATERIAL]->Create(sizeof(tMtrlConst));
 
 	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
-	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tLightInfo));
+	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tGlobalData));
 
 	m_arrCB[(UINT)CB_TYPE::ANIMATION2D] = new CConstBuffer(CB_TYPE::ANIMATION2D);
 	m_arrCB[(UINT)CB_TYPE::ANIMATION2D]->Create(sizeof(tAnim2DInfo));

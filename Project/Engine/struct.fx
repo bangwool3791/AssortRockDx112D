@@ -20,4 +20,18 @@ struct tLightInfo
 	float		fAngle;
 	int			pad;
 };
+
+/*
+* Particle System Texture 버퍼 사용 구조체
+*/
+struct tParticle
+{
+	float4 vRelativePos;
+	float4 vDir;
+
+	float fMaxTime;
+	float fCurTime;
+	float fSpeed;
+	uint  iActive;
+};
 #endif

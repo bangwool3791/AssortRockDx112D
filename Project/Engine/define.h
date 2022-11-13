@@ -226,7 +226,8 @@ enum class COLLIDER2D_TYPE
 
 enum class SB_TYPE
 {
-	NONE,
+	SRV_ONLY,
+	UAV_INC,
 };
 
 enum class LIGHT_TYPE

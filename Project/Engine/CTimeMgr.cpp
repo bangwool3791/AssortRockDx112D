@@ -42,6 +42,9 @@ void CTimeMgr::tick()
 	{
 		m_fDeltaTime = (1.f / 60.f);
 	}
+
+	g_global.fDT = m_fDeltaTime;
+	g_global.fAccTime += m_fDeltaTime;
 }
 
 void CTimeMgr::render()

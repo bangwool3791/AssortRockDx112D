@@ -207,6 +207,8 @@
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMouseScript.h" />
     <ClInclude Include="CPaintShader.h" />
+    <ClInclude Include="CParticleSystem.h" />
+    <ClInclude Include="CParticleUpdateShader.h" />
     <ClInclude Include="CPathMgr.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CPrefab.h" />
@@ -271,6 +273,8 @@
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMouseScript.cpp" />
     <ClCompile Include="CPaintShader.cpp" />
+    <ClCompile Include="CParticleSystem.cpp" />
+    <ClCompile Include="CParticleUpdateShader.cpp" />
     <ClCompile Include="CPathMgr.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CPrefab.cpp" />
@@ -307,6 +311,8 @@
     <FxCompile Include="DragEffect.fx" />
     <FxCompile Include="editor.fx" />
     <FxCompile Include="func.fx" />
+    <FxCompile Include="particlerender.fx" />
+    <FxCompile Include="particleupdate.fx" />
     <FxCompile Include="register.fx" />
     <FxCompile Include="std2d.fx" />
     <FxCompile Include="struct.fx" />

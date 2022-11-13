@@ -108,7 +108,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
             tSRVDesc.Texture2D.MipLevels = 1;
             tSRVDesc.Texture2D.MostDetailedMip = 0;
             tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
-            hr = DEVICE->CreateShaderResourceView(m_Tex2D.Get(), nullptr, m_SRV.GetAddressOf());
+            hr = DEVICE->CreateShaderResourceView(m_Tex2D.Get(), &tSRVDesc, m_SRV.GetAddressOf());
             assert(!FAILED(hr));
         }
 

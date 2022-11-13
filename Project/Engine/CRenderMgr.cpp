@@ -11,7 +11,7 @@ CRenderMgr::CRenderMgr()
 	:m_pLight2DBuffer{}
 {
 	m_pLight2DBuffer = new CStructuredBuffer;
-	m_pLight2DBuffer->Create(sizeof(tLightInfo), 2, SB_TYPE::NONE, nullptr);
+	m_pLight2DBuffer->Create(sizeof(tLightInfo), 2, SB_TYPE::SRV_ONLY, nullptr);
 }
 
 CRenderMgr::~CRenderMgr()
@@ -37,6 +37,7 @@ void CRenderMgr::render()
 	static CConstBuffer* pGlobalCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::GLOBAL);
 	pGlobalCB->SetData(&g_global);
 	pGlobalCB->UpdateData(PIPELINE_STAGE::ALL_STAGE);
+	pGlobalCB->UpdateData_CS();
 	for (auto elem{ m_vecCam.begin() }; elem != m_vecCam.end(); ++elem)
 	{
 		(*elem)->render();
@@ -53,7 +54,7 @@ void CRenderMgr::UpdateLight2D()
 	*/
 	if (m_pLight2DBuffer->GetElementsCount() <= m_vecLight2D.size())
 	{
-		m_pLight2DBuffer->Create(m_pLight2DBuffer->GetElementsSize(), m_vecLight2D.size(), SB_TYPE::NONE, nullptr);
+		m_pLight2DBuffer->Create(m_pLight2DBuffer->GetElementsSize(), m_vecLight2D.size(), SB_TYPE::SRV_ONLY, nullptr);
 	}
 		
 	/*

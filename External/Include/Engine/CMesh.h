@@ -17,7 +17,7 @@ public :
     int Create(void* _pVtxSysmem, size_t _iVtxCount, void* _pIdxSysmem, size_t _iIdxCount);
     void UpdateData();
     void render();
-
+    void render_particle(UINT _iCount);
     CLONE_ASSERT(CMesh);
 
 virtual int Load(const wstring& _strFilePath) override

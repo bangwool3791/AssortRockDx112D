@@ -6,6 +6,7 @@ class CCamera;
 class CAnimator2D;
 class CTransform;
 class CLight2D;
+class CParticleSystem;
 class CRenderComponent;
 class CMeshRender;
 class CScript;
@@ -65,6 +66,8 @@ public :
 	GET_COMPONENT(Collider2D, COLLIDER2D);
 	GET_COMPONENT(Animator2D, ANIMATOR2D);
 	GET_COMPONENT(Light2D,	  LIGHT2D);
+	GET_COMPONENT(ParticleSystem, PARTICLESYSTEM);
+
 	template<typename T>
 	T* GetScript();
 

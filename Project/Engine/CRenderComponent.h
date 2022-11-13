@@ -4,6 +4,10 @@
 #include "CMesh.h"
 #include "CMaterial.h"
 
+/*
+* 매쉬
+* 재질
+*/
 class CRenderComponent
 	:public CComponent
 {
@@ -36,6 +40,8 @@ public:
  		return m_pCurMtrl; 
 	}
 	Ptr<CMaterial> GetDynamicMaterial();
+public:
+	virtual CRenderComponent* Clone() = 0;
 public:
 	virtual void render() = 0;
 

@@ -20,6 +20,11 @@ CMaterial::CMaterial(const CMaterial& _other)
 	, m_tConst(_other.m_tConst)
 	, m_pShader(_other.m_pShader)
 {
+	for (UINT i = 0; i < (UINT)TEX_PARAM::TEX_END; ++i)
+	{
+		m_arrTex[i] = _other.m_arrTex[i];
+	}
+
 	m_pMasterMtrl = const_cast<CMaterial*>(&_other);
 }
 

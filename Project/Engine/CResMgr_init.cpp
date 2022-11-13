@@ -18,11 +18,12 @@ void CResMgr::init()
 
 	CreateDefaultGraphicsShader();
 
+	CreateDefaultComputeShader();
+
 	CreateDefaultMaterial();
 
 	CreateDefaultPrefab();
 
-	CreateDefaultComputeShader();
 }
 
 Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat, UINT _iBindFlag)
@@ -156,41 +157,60 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	v.vPos = Vec3(1.0f, 0.0f, 1.f);
+	v.vPos = Vec3(-1.0f, 0.0f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(0.f, 1.f);
 	*iterVtx = v;
 	v.vPos = Vec3(0.0f, -1.0f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV = Vec2(1.f, 1.f);
 	*iterVtx = v;
-	v.vPos = Vec3(-1.0f, 0.0f, 1.f);
+	v.vPos = Vec3(1.0f, 0.0f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV = Vec2(1.f, 0.f);
 	*iterVtx = v;
 	v.vPos = Vec3(0.0f, 1.0f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV = Vec2(0.f, 0.f);
 	*iterVtx = v;
 
 	*iterIdx = 0;
 	*iterIdx = 1;
 	*iterIdx = 2;
+	
+	*iterIdx = 0;
+	*iterIdx = 2;
 	*iterIdx = 3;
-
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"Tile", pMesh);
 	vecVtx.clear();
 	vecIdx.clear();
+
+	/*정점 메쉬
+	*/
+	v.vPos = Vec3(0.f, 0.f, 0.f);
+	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
+	v.vUV = Vec2(0.f, 0.f);
+	
+	UINT idx = 0;
+
+	pMesh = new CMesh;
+	pMesh->Create(&v, 1, &idx, 1);
+	AddRes<CMesh>(L"PointMesh", pMesh);
 }
 
 void CResMgr::CreateDefaultTexture()
 {
-	CResMgr::GetInst()->Load<CTexture>(L"Plane", L"texture\\Player.bmp");
-	CResMgr::GetInst()->Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
-	CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
-	CResMgr::GetInst()->Load<CTexture>(L"Link", L"texture\\link.png");
+	Load<CTexture>(L"Plane", L"texture\\Player.bmp");
+	Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
+	Load<CTexture>(L"Character", L"texture\\Character.png");
+	Load<CTexture>(L"Link", L"texture\\link.png");
+
+	Load<CTexture>(L"DeadCellColor", L"texture\\beheaded.png");
+	Load<CTexture>(L"DeadCellNormal", L"texture\\beheaded_n.png");
+
+	Load<CTexture>(L"SmokeParticle", L"texture\\particle\\smokeparticle.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -216,8 +236,8 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreateVertexShader(L"shader\\std2d.fx", "VS_Std2D");
 	pShader->CreatePixelShader(L"shader\\std2d.fx", "PS_Std2D");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	//pShader->SetDSType(DS_TYPE::LESS);
-	//pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 
 	/*
@@ -292,8 +312,19 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	AddRes<CGraphicsShader>(L"TileShader", pShader);
 	
-	//pShader = new CGraphicsShader;
-	//pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
+	// ParticleRenderShader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
+	pShader->CreateGeometryShader(L"shader\\particlerender.fx", "GS_ParticleRender");
+	pShader->CreatePixelShader(L"shader\\particlerender.fx", "PS_ParticleRender");
+
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
@@ -343,24 +374,30 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
 	AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject));
 
-	//pObject = new CGameObject;
-	//pObject->SetName(L"MouseObject");
-	///*
-	//* 충돌체, 메쉬 랜더 추가 필요
-	//*/
-	//pObject->AddComponent(new CTransform);
-	//pObject->AddComponent(new CCollider2D);
-	//pObject->AddComponent(new CMouseScript);
-	//AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
+	pObject = new CGameObject;
+	pObject->SetName(L"MouseObject");
+	/*
+	* 충돌체, 메쉬 랜더 추가 필요
+	*/
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CMouseScript);
+	AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
 }
 
 #include "CComputeShader.h"
+#include "CParticleUpdateShader.h"
+
 void CResMgr::CreateDefaultComputeShader()
 {
 	CComputeShader* pShader = nullptr;
 	pShader = new CPaintShader;
 	pShader->CreateComputeShader(L"shader\\compute.fx", "CS_Paint");
 	AddRes<CComputeShader>(L"PaintShader", pShader);
+
+	pShader = new CParticleUpdateShader;
+	pShader->CreateComputeShader(L"shader\\particleupdate.fx", "CS_ParticleUpdate");
+	AddRes<CComputeShader>(L"ParticleUpdateShader", pShader);
 }
 
 void CResMgr::CreateDefaultMaterial()
@@ -397,6 +434,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileShader"));
 	AddRes(L"TileMaterial", pMaterial);
+
+	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
+	AddRes(L"ParticleRenderMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

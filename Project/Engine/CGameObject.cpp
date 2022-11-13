@@ -180,6 +180,10 @@ void CGameObject::render()
 	if (nullptr == m_pRenderComponent)
 		return;
 
+	if (!lstrcmp(GetName().c_str(), L"Shadow"))
+	{
+		int a{};
+	}
 	m_pRenderComponent->render();
 }
 

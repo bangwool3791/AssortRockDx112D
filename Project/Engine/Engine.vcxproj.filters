@@ -136,6 +136,21 @@
     <Filter Include="HLSL\Compute\PaintShader">
       <UniqueIdentifier>{9a48f7c0-df0a-4e91-ae7c-572f40371337}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\Compute\ParticleUpdateShader">
+      <UniqueIdentifier>{33875787-ea16-4e48-9a22-c04f1070c89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\09. Optimize\01. Collision">
+      <UniqueIdentifier>{2ad695fd-b734-4230-a876-d1e2c1ac1162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\09. Optimize\02. Memory">
+      <UniqueIdentifier>{fe0c8997-df6c-4a3e-8113-43f7aa64ef00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem">
+      <UniqueIdentifier>{03b337d4-1a68-4a3a-8995-429cb13cec5c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Render">
+      <UniqueIdentifier>{feb4ef34-e4b3-4e9a-83df-32fc52898dae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -255,15 +270,6 @@
     <ClInclude Include="CEventMgr.h">
       <Filter>Engine\03. Manager\07. EventMgr</Filter>
     </ClInclude>
-    <ClInclude Include="QuadTree.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
-    <ClInclude Include="QuadNode.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
-    <ClInclude Include="AABB.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
     <ClInclude Include="CDragScript.h">
       <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
     </ClInclude>
@@ -315,23 +321,38 @@
     <ClInclude Include="CLight2D.h">
       <Filter>Engine\06. Component\07. Light2D</Filter>
     </ClInclude>
-    <ClInclude Include="Memorypool.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
-    <ClInclude Include="chunk.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
-    <ClInclude Include="chunkgroup.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
-    <ClInclude Include="smallobjallocator.h">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClInclude>
     <ClInclude Include="CComputeShader.h">
       <Filter>Engine\07. Resource\03. Shader\ComputeShader</Filter>
     </ClInclude>
     <ClInclude Include="CPaintShader.h">
       <Filter>HLSL\Compute\PaintShader</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleUpdateShader.h">
+      <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>Engine\09. Optimize\01. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadNode.h">
+      <Filter>Engine\09. Optimize\01. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadTree.h">
+      <Filter>Engine\09. Optimize\01. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="chunk.h">
+      <Filter>Engine\09. Optimize\02. Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="chunkgroup.h">
+      <Filter>Engine\09. Optimize\02. Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Memorypool.h">
+      <Filter>Engine\09. Optimize\02. Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="smallobjallocator.h">
+      <Filter>Engine\09. Optimize\02. Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleSystem.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,12 +449,6 @@
     <ClCompile Include="CEventMgr.cpp">
       <Filter>Engine\03. Manager\07. EventMgr</Filter>
     </ClCompile>
-    <ClCompile Include="QuadNode.cpp">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClCompile>
-    <ClCompile Include="QuadTree.cpp">
-      <Filter>Engine\09. Optimize</Filter>
-    </ClCompile>
     <ClCompile Include="CDragScript.cpp">
       <Filter>Engine\08. Scripts\08_1. Mouse</Filter>
     </ClCompile>
@@ -488,6 +503,18 @@
     <ClCompile Include="CPaintShader.cpp">
       <Filter>HLSL\Compute\PaintShader</Filter>
     </ClCompile>
+    <ClCompile Include="CParticleUpdateShader.cpp">
+      <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadNode.cpp">
+      <Filter>Engine\09. Optimize\01. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadTree.cpp">
+      <Filter>Engine\09. Optimize\01. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleSystem.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -495,21 +522,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="test.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="std2d.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="editor.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="DragEffect.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
-    <FxCompile Include="debugdraw.fx">
-      <Filter>HLSL</Filter>
-    </FxCompile>
     <FxCompile Include="register.fx">
       <Filter>HLSL\Header</Filter>
     </FxCompile>
@@ -524,6 +536,27 @@
     </FxCompile>
     <FxCompile Include="compute.fx">
       <Filter>HLSL\Compute\PaintShader</Filter>
+    </FxCompile>
+    <FxCompile Include="debugdraw.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="DragEffect.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="editor.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="std2d.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="test.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="particlerender.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="particleupdate.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,14 @@
-﻿  CEditor.cpp
-C:\Development\MyEngine\DirectX11\External\Include\Engine\chunk.h(1,13): warning C4081: 'newline'이(가) 있어야 하는데 ';'이(가) 있습니다.
-C:\Development\MyEngine\DirectX11\External\Include\Engine\chunk.h(86,1): warning C4267: '=': 'size_t'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿  LINK : C:\Development\MyEngine\DirectX11\x64\Debug\Client.pdb 프로그램 데이터베이스가 없습니다. 전체 링크를 수행하고 있습니다.
+DirectXTex_debug.lib(DirectXTexImage.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexImage.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexDDS.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexDDS.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexTGA.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexTGA.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexWIC.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexWIC.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexD3D11.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexD3D11.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexUtil.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexUtil.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexConvert.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexConvert.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(DirectXTexCompress.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexCompress.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTex_debug.lib(DirectXTexMipMaps.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(DirectXTexMipMaps.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(BC.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(BC.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(BC4BC5.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(BC4BC5.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTex_debug.lib(BC6HBC7.obj) : warning LNK4099: 'DirectXTex.pdb' PDB를 'DirectXTex_debug.lib(BC6HBC7.obj)' 또는 'C:\Development\MyEngine\DirectX11\x64\Debug\DirectXTex.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   Client.vcxproj -> C:\Development\MyEngine\DirectX11\x64\Debug\Client.exe

@@ -16,7 +16,7 @@ CCamera::CCamera()
 	, m_matView{}
 	, m_matProj{}
 	, m_fAspectRatio{1.f}
-	, m_fFar{1000.f}
+	, m_fFar{100000.f}
 	, m_fScale{1.f}
 	, m_iLayerMask(0)
 {

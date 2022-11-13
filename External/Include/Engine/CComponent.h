@@ -9,8 +9,9 @@ class CComponent
 	:public CEntity
 {
 private:
-	CGameObject* m_pOwnerObject;
-	const COMPONENT_TYPE m_eType;
+	CGameObject*			m_pOwnerObject;
+	const COMPONENT_TYPE	m_eType;
+	bool                    m_bActive;
 public:
 	virtual void begin() {}
 	virtual void tick() {};
@@ -20,11 +21,17 @@ public :
 	COMPONENT_TYPE GetType() { return m_eType; }
 	CGameObject* GetOwner() { return m_pOwnerObject; }
 
+	void Activate() { m_bActive = true; }
+	void Deactivate() { m_bActive = false; }
+	bool IsActive() { return m_bActive; }
+
 	void Destroy() { GetOwner()->Destroy(); }
 	GET_OTHER_COMPONENT(Transform);
 	GET_OTHER_COMPONENT(MeshRender);
 	GET_OTHER_COMPONENT(Camera);
 	GET_OTHER_COMPONENT(Animator2D);
+	GET_OTHER_COMPONENT(Light2D);
+	GET_OTHER_COMPONENT(ParticleSystem);
 
 	virtual CComponent* Clone() = 0;
 public :

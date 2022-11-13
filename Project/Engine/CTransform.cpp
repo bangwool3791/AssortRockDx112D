@@ -110,7 +110,7 @@ void CTransform::UpdateData()
 	g_transform.matWVP	 = g_transform.matWV * g_transform.matProj;
 
 	pCB->SetData(&g_transform);
-	pCB->UpdateData(PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+	pCB->UpdateData(ALL_STAGE);
 }
 
 

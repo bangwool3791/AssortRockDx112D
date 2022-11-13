@@ -31,7 +31,7 @@ public :
 
     //void CreateHullShader(const wstring& _strRelativePath, const string& _strFuncName);
     //void CreateDomainShader(const wstring& _strRelativePath, const string& _strFuncName);
-    //void CreateGeometryShader(const wstring& _strRelativePath, const string& _strFuncName);
+    void CreateGeometryShader(const wstring& _strRelativePath, const string& _strFuncName);
 
     void CreatePixelShader(const wstring& _strRelativePath, const string& _strFuncName);
 

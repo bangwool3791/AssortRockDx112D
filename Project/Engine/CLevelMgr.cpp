@@ -61,7 +61,7 @@ void CLevelMgr::init()
 	*/
 	pCamObj->Camera()->SetLayerMaskAll();
 	pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
-
+	pCamObj->Transform()->SetRelativePos(Vec3{ 0.f, 0.f, -500.f });
 	m_pCurLevel->AddGameObject(pCamObj, 0);
 	
 	// Directional Light 추가
@@ -71,7 +71,7 @@ void CLevelMgr::init()
 	pDirLight->AddComponent(new CTransform);
 	pDirLight->AddComponent(new CLight2D);
 
-	pDirLight->Light2D()->SetLightColor(Vec3(0.f, 0.f, 0.f));
+	pDirLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 
 	m_pCurLevel->AddGameObject(pDirLight, 0);
@@ -94,19 +94,19 @@ void CLevelMgr::init()
 	//m_pCurLevel->AddGameObject(pPointLight, 0);
 
 	// SpotLight 추가
-	pPointLight = new CGameObject;
-	pPointLight->SetName(L"SpotLight");
+	//pPointLight = new CGameObject;
+	//pPointLight->SetName(L"SpotLight");
 
-	pPointLight->AddComponent(new CTransform);
-	pPointLight->AddComponent(new CLight2D);
+	//pPointLight->AddComponent(new CTransform);
+	//pPointLight->AddComponent(new CLight2D);
 
-	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	//pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 
-	pPointLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
-	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
-	pPointLight->Light2D()->SetRadius(500.f);
-	pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
-	m_pCurLevel->AddGameObject(pPointLight, 0);
+	//pPointLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	//pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	//pPointLight->Light2D()->SetRadius(500.f);
+	//pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
+	//m_pCurLevel->AddGameObject(pPointLight, 0);
 	// GameObject 초기화
 	CGameObject* pObject = nullptr;
 
@@ -122,7 +122,6 @@ void CLevelMgr::init()
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
 	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
 	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
@@ -134,34 +133,67 @@ void CLevelMgr::init()
 
 	m_pCurLevel->AddGameObject(pObject, 1);
 
-	Ptr<CPaintShader> pComputeShader = (CPaintShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"PaintShader").Get();
-	pComputeShader->SetTexture(CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
-	pComputeShader->SetColor(Vec4(0.f, 0.f, 1.f, 1.f));
-	pComputeShader->Excute();
 
-	CGameObject* pChild = new CGameObject;
-	pChild->SetName(L"Child");
+	CGameObject* pShadow = new CGameObject;
+	pShadow->SetName(L"Shadow");
 
-	pChild->AddComponent(new CTransform);
-	pChild->AddComponent(new CMeshRender);
-	pChild->AddComponent(new CCollider2D);
+	pShadow->AddComponent(new CTransform);
+	pShadow->AddComponent(new CMeshRender);
+	pShadow->AddComponent(new CAnimator2D);
 
-	pChild->Transform()->SetIgnoreParentScale(true);
-	pChild->Transform()->SetRelativePos(Vec3(512.f, 0.f, 100.f));
-	pChild->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 1.f));
+	pShadow->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
+	pShadow->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
+	pShadow->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
+	pShadow->Transform()->SetIgnoreParentScale(false);
+	pShadow->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
+	pShadow->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
-	pChild->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pChild->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	pChild->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
+	pShadow->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	pShadow->Animator2D()->Play(L"LeftWalk", true);
+
+	pShadow->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+	pShadow->SetLayerIndex(1);
+	pObject->AddChild(pShadow);
+	//Compute Shader Test
+	//Ptr<CPaintShader> pComputeShader = (CPaintShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"PaintShader").Get();
+	//pComputeShader->SetTexture(CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
+	//pComputeShader->SetColor(Vec4(0.f, 0.f, 1.f, 1.f));
+	//pComputeShader->Excute();
+
+	//CGameObject* pChild = new CGameObject;
+	//pChild->SetName(L"Child");
+
+	//pChild->AddComponent(new CTransform);
+	//pChild->AddComponent(new CMeshRender);
+	//pChild->AddComponent(new CCollider2D);
+
+	//pChild->Transform()->SetIgnoreParentScale(true);
+	//pChild->Transform()->SetRelativePos(Vec3(512.f, 0.f, 100.f));
+	//pChild->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 1.f));
+
+	//pChild->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pChild->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+	//pChild->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
+
+	//m_pCurLevel->AddGameObject(pChild, 0);
 	/*
 	* Mouse
 	*/
-	//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
-	//Instantiate(pPrefab->Instantiate(), 31);
+	Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
+	Instantiate(pPrefab->Instantiate(), 31);
 
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
-	m_pCurLevel->AddGameObject(pChild, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
+	//m_pCurLevel->AddGameObject(pChild, 1);
+
+		// Particle Object
+	CGameObject* pParticle = new CGameObject;
+	pParticle->AddComponent(new CTransform);
+	pParticle->AddComponent(new CParticleSystem);
+
+	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+
+	m_pCurLevel->AddGameObject(pParticle, 0);
 	m_pCurLevel->begin();
 }
 

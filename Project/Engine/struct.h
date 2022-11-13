@@ -98,4 +98,14 @@ struct tGlobalData
 	int		ipad[2];
 };
 
+struct tParticle
+{
+	Vec4 vRelativePos;
+	Vec4 vDir;
+	
+	float fMaxTime;
+	float fCurTime;
+	float fSpeed;
+	UINT iActive;
+};
 extern tGlobalData g_global;
