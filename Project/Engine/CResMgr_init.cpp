@@ -325,12 +325,23 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\objectrenderer.fx", "VS_ObjectRender");
+	pShader->CreatePixelShader(L"shader\\objectrenderer.fx", "PS_ObjectRender");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ONE_ONE);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+
+	AddRes<CGraphicsShader>(L"ObjectRenderShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
 {
 	CGameObject* pObject = new CGameObject;
-
+	pObject->SetName(L"Missile");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CMissileScript);
@@ -438,6 +449,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes(L"ParticleRenderMtrl", pMaterial);
+
+	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ObjectRenderShader"));
+	AddRes(L"ObjectMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

@@ -65,14 +65,13 @@ void CAnimation2D::UpdateData()
 
 	static CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::ANIMATION2D);
 
-	tAnim2DInfo info{};
-	info.iAnim2DUse		= 1;
-	info.vLeftTop		= m_vecFrm[m_iCurIdx].vLeftTop;
-	info.vSlice			= m_vecFrm[m_iCurIdx].vSlice;
-	info.vOffset		= m_vecFrm[m_iCurIdx].vOffset;
-	info.vFullSize		= m_vecFrm[m_iCurIdx].vFullSize;
+	m_info.iAnim2DUse		= 1;
+	m_info.vLeftTop			= m_vecFrm[m_iCurIdx].vLeftTop;
+	m_info.vSlice			= m_vecFrm[m_iCurIdx].vSlice;
+	m_info.vOffset			= m_vecFrm[m_iCurIdx].vOffset;
+	m_info.vFullSize		= m_vecFrm[m_iCurIdx].vFullSize;
 	
-	pCB->SetData(&info);
+	pCB->SetData(&m_info);
 	pCB->UpdateData(PIPELINE_STAGE::PS);
 }
 
@@ -82,10 +81,9 @@ void CAnimation2D::Clear()
 
 	static CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::ANIMATION2D);
 
-	tAnim2DInfo info = {};
-	info.iAnim2DUse = 0;
+	memset(&m_info, 0, sizeof(tAnim2DInfo));
 
-	pCB->SetData(&info);
+	pCB->SetData(&m_info);
 	pCB->UpdateData(PIPELINE_STAGE::PS);
 }
 

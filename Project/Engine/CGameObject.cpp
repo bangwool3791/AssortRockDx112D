@@ -65,10 +65,6 @@ CGameObject::CGameObject(const CGameObject& rhs)
 
 CGameObject::~CGameObject()
 {
-	if (!lstrcmp(L"Player", GetName().c_str()))
-	{
-		int a = 0;
-	}
 	for (int i{ 0 }; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		delete m_arrCom[i];
@@ -108,11 +104,6 @@ void CGameObject::begin()
 
 void CGameObject::tick()
 {
-	if (!lstrcmp(GetName().c_str(), L"SpotLight"))
-	{
-		int a{};
-
-	}
 
 	for (auto Iter{ m_arrCom.begin() }; Iter != m_arrCom.end(); ++Iter)
 	{
@@ -135,11 +126,6 @@ void CGameObject::tick()
 
 void CGameObject::finaltick()
 {
-	if (!lstrcmp(GetName().c_str(), L"SpotLight"))
-	{
-		int a{};
-
-	}
 
 	for (auto Iter{ m_arrCom.begin() }; Iter != m_arrCom.end(); ++Iter)
 	{
@@ -180,10 +166,6 @@ void CGameObject::render()
 	if (nullptr == m_pRenderComponent)
 		return;
 
-	if (!lstrcmp(GetName().c_str(), L"Shadow"))
-	{
-		int a{};
-	}
 	m_pRenderComponent->render();
 }
 

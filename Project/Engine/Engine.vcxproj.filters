@@ -558,5 +558,8 @@
     <FxCompile Include="particleupdate.fx">
       <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
     </FxCompile>
+    <FxCompile Include="objectrenderer.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

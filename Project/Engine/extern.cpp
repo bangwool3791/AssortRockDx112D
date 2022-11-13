@@ -3,7 +3,9 @@
 #include "global.h"
 
 tTransform g_transform = {};
+tObjectRender g_objectInfo = {};
 tGlobalData g_global = {};
+ChunkGroup* pool;
 
 const Vector3 Vector3::Zero{ 0.f, 0.f, 0.f };
 const Vector3 Vector3::One{ 1.f, 1.f, 1.f };

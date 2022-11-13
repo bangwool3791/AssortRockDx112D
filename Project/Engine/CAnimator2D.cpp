@@ -85,3 +85,8 @@ void CAnimator2D::Clear()
     m_pCurAnim->Clear();
 }
 
+const tAnim2DInfo& CAnimator2D::GetAniInfo()
+{
+    return m_pCurAnim->GetAniInfo();
+}
+

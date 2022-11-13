@@ -19,7 +19,11 @@ public:
 		m_pDynamicMtrl = nullptr;
 	}
 private:
+	/*
+	* static 변수로 변경 예정
+	*/
 	Ptr<CMesh>				m_pMesh;
+	//
 	Ptr<CMaterial>			m_pSharedMtrl;
 	Ptr<CMaterial>			m_pDynamicMtrl;
 	Ptr<CMaterial>			m_pCurMtrl;

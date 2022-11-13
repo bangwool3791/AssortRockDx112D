@@ -13,6 +13,7 @@ private:
 
 	Ptr<CMaterial>					m_pMasterMtrl;
 public :
+	const tMtrlConst& GetMaterial() { return m_tConst; }
 	void SetScalarParam(SCALAR_PARAM _eScalarType, void* _pData);
 	void SetShader(Ptr<CGraphicsShader> _pShader) 
 	{ 

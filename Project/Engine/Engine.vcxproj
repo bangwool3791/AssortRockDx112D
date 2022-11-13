@@ -314,6 +314,7 @@
     <FxCompile Include="particlerender.fx" />
     <FxCompile Include="particleupdate.fx" />
     <FxCompile Include="register.fx" />
+    <FxCompile Include="objectrenderer.fx" />
     <FxCompile Include="std2d.fx" />
     <FxCompile Include="struct.fx" />
     <FxCompile Include="test.fx" />

@@ -20,9 +20,11 @@ private:
 	float				m_fAccTime;
 	bool				m_bFinish;
 
+	tAnim2DInfo			m_info;
 public :
 	void finaltick();
-
+public:
+	const tAnim2DInfo& GetAniInfo() { return m_info; }
 public :
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
 	void Reset()

@@ -73,6 +73,15 @@ struct tMtrlConst
 	Matrix matArr[4];
 };
 
+struct tObjectRender
+{
+	tTransform transform;
+	tMtrlConst mtrl;
+	tAnim2DInfo animation;
+};
+
+extern tObjectRender g_objectInfo;
+
 struct tLightInfo
 {
 	Vec4		vDiff;

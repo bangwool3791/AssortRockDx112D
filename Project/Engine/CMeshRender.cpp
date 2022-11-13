@@ -58,23 +58,31 @@ void CMeshRender::render()
 	* CRenderMgr::UpdateLight2D() 참고
 	* 싱글 톤 또는 static vector 처리
 	*/
+	//삭제 예정
 	Transform()->UpdateData();
-	
+	memset(&g_objectInfo, 0, sizeof(tObjectRender));
+	g_objectInfo.transform = g_transform;
+
+	//삭제 예정
 	GetCurMaterial()->UpdateData();
+
+	g_objectInfo.mtrl = GetCurMaterial()->GetMaterial();
 
 	if (Animator2D())
 	{
+		//삭제 예정
 		Animator2D()->UpdateData();
+		g_objectInfo.animation = Animator2D()->GetAniInfo();
 	}
 
 	/*
 	* 함수 밖으로 뺀다.
 	*/
-	GetMesh()->render();
+	//GetMesh()->render_particle(1);
 
-	CMaterial::Clear();
+	//CMaterial::Clear();
 
-	if (Animator2D())
-		Animator2D()->Clear();
+	//if (Animator2D())
+	//	Animator2D()->Clear();
 }
 

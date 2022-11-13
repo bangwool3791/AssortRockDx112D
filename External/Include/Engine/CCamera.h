@@ -1,6 +1,7 @@
 #pragma once
 #include "CComponent.h"
 
+class CStructuredBuffer;
 enum PROJ_TYPE
 {
     PERSPECTIVE,
@@ -11,26 +12,28 @@ class CCamera :
     public CComponent
 {
 private:
-    Matrix      m_matView;
-    Matrix      m_matProj;
+    Matrix                  m_matView;
+    Matrix                  m_matProj;
 
-    PROJ_TYPE   m_eProjType;
-    float       m_fAspectRatio;
+    PROJ_TYPE               m_eProjType;
+    float                   m_fAspectRatio;
 
-    float       m_fFar;
-    float       m_fScale;
+    float                   m_fFar;
+    float                   m_fScale;
 
     UINT                    m_iLayerMask;
 
-    vector<CGameObject*>    m_vecQpaque;
-    vector<CGameObject*>    m_vecMask;
-    vector<CGameObject*>    m_vecTransparent;
-
+    map<const wstring, vector<CGameObject*>> m_mapOpaqueVec;
+    map<const wstring, vector<CGameObject*>> m_mapMaskVec;
+    map<const wstring, vector<CGameObject*>> m_mapTransparentVec;
+    vector<tObjectRender>		             m_vecInfoObject;		//
+    CStructuredBuffer*                       m_pObjectRenderBuffer;
 private :
     void SortObject();
     void render_opaque();
     void render_mask();
     void render_transparent();
+    //void update_render(Ptr<CMesh> p);
 public :
     virtual void finaltick();
     void         render();
@@ -58,7 +61,6 @@ public :
     void SetLayerMask(int _iLayerIdx);
     void SetLayerMaskAll() { m_iLayerMask = 0xffffffff; }
     void SetLayerMaskZero() { m_iLayerMask = 0; }
-
 public :
     CLONE(CCamera);
 public :

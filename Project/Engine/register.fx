@@ -87,6 +87,8 @@ Texture2D g_Atals : register(t12);
 StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t13);
 StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
 
+StructuredBuffer<tRenderInfo> g_RenderInfo   : register(t16);
+
 // 샘플러 레지스터
 SamplerState g_sam_0 : register(s0); // anisotropic sampler
 SamplerState g_sam_1 : register(s1); // point sampler

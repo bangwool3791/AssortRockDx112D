@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "CCamera.h"
 
+#include "CMesh.h"
 #include "CRenderMgr.h"
+#include "CStructuredBuffer.h"
 
 #include "CLevel.h"
 #include "CLevelMgr.h"
@@ -22,10 +24,14 @@ CCamera::CCamera()
 {
 	Vec2 vRenderResolution	= CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio			= vRenderResolution.x / vRenderResolution.y;
+
+	m_pObjectRenderBuffer = new CStructuredBuffer;
+	m_pObjectRenderBuffer->Create(sizeof(tObjectRender), 2, SB_TYPE::SRV_ONLY, nullptr);
 }
 
 CCamera::~CCamera()
 {
+	Safe_Delete(m_pObjectRenderBuffer);
 }
 
 void CCamera::finaltick()
@@ -82,29 +88,90 @@ void CCamera::render()
 	render_transparent();
 }
 
+/*
+* 상수 버퍼 불러와서, 오브젝트 -> 텍스쳐 업데이트
+* 맵 -> 벡터 -> 오브젝트1 -> 업데이트
+* 맵 -> 벡터 -> 오브젝트2 -> 업데이트
+*/
 
+/*
+* 랜더가 아닌 벡터안에 정보를 집어 넣는 과정 후 Shader 돌리는 코드가 들어가야한다.
+*/
 void CCamera::render_opaque()
 {
-	for (auto elem{ m_vecQpaque.begin() }; elem != m_vecQpaque.end(); ++elem)
+	Ptr<CMesh> p{};
+
+	for (auto elem{ m_mapOpaqueVec.begin() }; elem != m_mapOpaqueVec.end(); ++elem)
 	{
-		CRenderComponent* p = (*elem)->GetRenderComponent();
-		(*elem)->render();
+		//for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
+		//{
+		//	/*
+		//	* 1회 첫 매쉬를 얻어온다.
+		//	*/
+		//	if (!p.Get())
+		//		p = (*elem2)->GetRenderComponent()->GetMesh();
+
+		//	(*elem2)->render();
+		//	m_vecInfoObject.push_back(g_objectInfo);
+		//	memset(&g_objectInfo, 0, sizeof(tObjectRender));
+		//}
+		//m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
+		//m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		//p->render_particle(m_vecInfoObject.size());
+		////CMaterial::Clear();
+		//m_pObjectRenderBuffer->Clear();
+		//p = nullptr;
 	}
 }
 
 void CCamera::render_mask()
 {
-	for (auto elem{ m_vecMask.begin() }; elem != m_vecMask.end(); ++elem)
+	Ptr<CMesh> p{};
+
+	for (auto elem{ m_mapMaskVec.begin() }; elem != m_mapMaskVec.end(); ++elem)
 	{
-		(*elem)->render();
+		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
+		{
+			if (!p.Get())
+				p = (*elem2)->GetRenderComponent()->GetMesh();
+
+			(*elem2)->render();
+			m_vecInfoObject.push_back(g_objectInfo);
+			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+		}
+		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
+		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		p->render_particle(m_vecInfoObject.size());
+		CMaterial::Clear();
+		m_pObjectRenderBuffer->Clear();
+		m_vecInfoObject.clear();
+		p = nullptr;
 	}
 }
 
 void CCamera::render_transparent()
 {
-	for (auto elem{ m_vecTransparent.begin() }; elem != m_vecTransparent.end(); ++elem)
+	Ptr<CMesh> p{};
+
+	for (auto elem{ m_mapTransparentVec.begin() }; elem != m_mapTransparentVec.end(); ++elem)
 	{
-		(*elem)->render();
+		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
+		{
+			if (!p.Get())
+				p = (*elem2)->GetRenderComponent()->GetMesh();
+
+			(*elem2)->render();
+			m_vecInfoObject.push_back(g_objectInfo);
+			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+		}
+		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
+		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		if(p.Get())
+			p->render_particle(m_vecInfoObject.size());
+		CMaterial::Clear();
+		m_pObjectRenderBuffer->Clear();
+		m_vecInfoObject.clear();
+		p = nullptr;
 	}
 }
 
@@ -131,9 +198,9 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 
 void CCamera::SortObject()
 {
-	m_vecQpaque.clear();
-	m_vecMask.clear();
-	m_vecTransparent.clear();
+	Clear_VecOfMap(m_mapOpaqueVec);
+	Clear_VecOfMap(m_mapMaskVec);
+	Clear_VecOfMap(m_mapTransparentVec);
 
 	auto pLevel = CLevelMgr::GetInst()->GetCurLevel();
 
@@ -164,16 +231,25 @@ void CCamera::SortObject()
 				switch (eDomain)
 				{
 				case SHADER_DOMAIN::DOMAIN_OPAQUE:
-					m_vecQpaque.push_back(vecGameObject[j]);
+					m_mapOpaqueVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					break;
 				case SHADER_DOMAIN::DOMAIN_MASK:
-					m_vecMask.push_back(vecGameObject[j]);
+					m_mapMaskVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					break;
 				case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
-					m_vecTransparent.push_back(vecGameObject[j]);
+					m_mapTransparentVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					break;
 				}
 			}
 		}
 	}
 }
+
+//void CCamera::update_render(Ptr<CMesh> p)
+//{
+//	m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
+//	m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+//	p->render_particle(m_vecInfoObject.size());
+//	m_pObjectRenderBuffer->Clear();
+//	p = nullptr;
+//}
