@@ -14,17 +14,30 @@
 #define COLOR g_vec4_0
 // ========================================================
 
-float4 VS_DebugDraw(float3 _vPos : POSITION) : SV_Position
+struct VS_IN
 {
-    float4 vPosition = (float4) 0.f;
+    float3 vPos     : POSITION;
+    uint iInstance  : SV_InstanceID;
+};
 
-    vPosition = mul(float4(_vPos, 1.f), g_matWVP);
+struct VS_OUT
+{
+    float4 vPos      : SV_Position;
+    float4 vWorldPos : POSITION;
+    uint iInstance   : SV_InstanceID;
+};
 
-    return vPosition;
+VS_OUT VS_DebugDraw(VS_IN _in)
+{
+    VS_OUT output = (VS_OUT) 0.f;
+
+    output.vPos = mul(float4(_in.vPos, 1.f), b[_in.iInstance].matWVP);
+
+    return output;
 }
 
 
-float4 PS_DebugDraw(float4 _vPosition : SV_Position) : SV_Target
+float4 PS_DebugDraw(VS_OUT _in) : SV_Target
 {
     float4 vOutColor = COLOR;
 

@@ -331,7 +331,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreatePixelShader(L"shader\\objectrenderer.fx", "PS_ObjectRender");
 
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ONE_ONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 

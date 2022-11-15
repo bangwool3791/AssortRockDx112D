@@ -4,7 +4,6 @@
 #include "register.fx"
 #include "func.fx"
 
-#define b g_RenderInfo
 // ======================
 // Object Render Shader
 // RS_TYPE : CULL_NONE
@@ -23,7 +22,7 @@ struct VS_OUT
 {
     float4 vPos      : SV_Position;
     float2 vUV       : TEXCOORD;
-    float3 vWorldPos : POSITION;
+    float4 vWorldPos : POSITION;
     uint iInstance   : SV_InstanceID;
 };
 

@@ -103,24 +103,23 @@ void CCamera::render_opaque()
 
 	for (auto elem{ m_mapOpaqueVec.begin() }; elem != m_mapOpaqueVec.end(); ++elem)
 	{
-		//for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
-		//{
-		//	/*
-		//	* 1회 첫 매쉬를 얻어온다.
-		//	*/
-		//	if (!p.Get())
-		//		p = (*elem2)->GetRenderComponent()->GetMesh();
+		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
+		{
+			if (!p.Get())
+				p = (*elem2)->GetRenderComponent()->GetMesh();
 
-		//	(*elem2)->render();
-		//	m_vecInfoObject.push_back(g_objectInfo);
-		//	memset(&g_objectInfo, 0, sizeof(tObjectRender));
-		//}
-		//m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
-		//m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
-		//p->render_particle(m_vecInfoObject.size());
-		////CMaterial::Clear();
-		//m_pObjectRenderBuffer->Clear();
-		//p = nullptr;
+			(*elem2)->render();
+			m_vecInfoObject.push_back(g_objectInfo);
+			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+		}
+		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
+		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		if(p.Get())
+			p->render_particle(m_vecInfoObject.size());
+		CMaterial::Clear();
+		m_pObjectRenderBuffer->Clear();
+		m_vecInfoObject.clear();
+		p = nullptr;
 	}
 }
 
@@ -141,7 +140,8 @@ void CCamera::render_mask()
 		}
 		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
 		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
-		p->render_particle(m_vecInfoObject.size());
+		if (p.Get())
+			p->render_particle(m_vecInfoObject.size());
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
 		m_vecInfoObject.clear();
@@ -157,6 +157,10 @@ void CCamera::render_transparent()
 	{
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
+			if (!lstrcmp((*elem2)->GetName().c_str(), L"MouseDrag"))
+			{
+				int a = 0;
+			}
 			if (!p.Get())
 				p = (*elem2)->GetRenderComponent()->GetMesh();
 
@@ -166,8 +170,10 @@ void CCamera::render_transparent()
 		}
 		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), m_vecInfoObject.size());
 		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+
 		if(p.Get())
 			p->render_particle(m_vecInfoObject.size());
+
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
 		m_vecInfoObject.clear();

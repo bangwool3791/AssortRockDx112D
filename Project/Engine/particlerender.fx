@@ -10,7 +10,7 @@
 // BS_TYPE : ALPHABLEND
 // DS_TYPE : NO_WRITE
 // DOMAIN : Transparent
-StructuredBuffer<tParticle> ParticleBuffer : register(t15);
+StructuredBuffer<tParticle> ParticleBuffer : register(t17);
 #define ParticleIndex g_int_0
 // ======================
 

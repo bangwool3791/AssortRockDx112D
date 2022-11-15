@@ -39,7 +39,25 @@ void CalcLight2D(inout tLightColor _LightColor, float3 _vWorldPos, int iLightIdx
     }
 }
 
+static float GaussianFilter[5][5] =
+{
+    0.003f  , 0.0133f, 0.0219f, 0.0133f, 0.003f,
+    0.0133f , 0.0596f, 0.0983f, 0.0596f, 0.0133f,
+    0.0219f , 0.0983f, 0.1621f, 0.0983f, 0.0219f,
+    0.0133f , 0.0596f, 0.0983f, 0.0596f, 0.0133f,
+    0.003f  , 0.0133f, 0.0219f, 0.0133f, 0.003f,
+};
 
+float4 GaussianSample(float2 _vUV)
+{
+    float4 vOutColor = (float4) 0.f;
+
+    if (1.f < _vUX.x)
+    {
+
+    }
+    else if (_vUV.x < 0.f)
+}
 #endif
 
 

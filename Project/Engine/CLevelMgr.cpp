@@ -71,7 +71,7 @@ void CLevelMgr::init()
 	pDirLight->AddComponent(new CTransform);
 	pDirLight->AddComponent(new CLight2D);
 
-	pDirLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pDirLight->Light2D()->SetLightColor(Vec3(0.f, 0.f, 0.f));
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 
 	m_pCurLevel->AddGameObject(pDirLight, 0);
@@ -94,23 +94,23 @@ void CLevelMgr::init()
 	//m_pCurLevel->AddGameObject(pPointLight, 0);
 
 	// SpotLight 추가
-	//pPointLight = new CGameObject;
-	//pPointLight->SetName(L"SpotLight");
+	pPointLight = new CGameObject;
+	pPointLight->SetName(L"SpotLight");
 
-	//pPointLight->AddComponent(new CTransform);
-	//pPointLight->AddComponent(new CLight2D);
+	pPointLight->AddComponent(new CTransform);
+	pPointLight->AddComponent(new CLight2D);
 
-	//pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 
-	//pPointLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
-	//pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
-	//pPointLight->Light2D()->SetRadius(500.f);
-	//pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
-	//m_pCurLevel->AddGameObject(pPointLight, 0);
+	pPointLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	pPointLight->Light2D()->SetRadius(500.f);
+	pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
+	m_pCurLevel->AddGameObject(pPointLight, 0);
 	// GameObject 초기화
 	CGameObject* pObject = nullptr;
 
-	for (int i{ -800 }; i < 800; i+=10)
+	for (float i{-500.f}; i < 500.f; i+=100.f)
 	{
 		pObject = new CGameObject;
 		pObject->SetName(L"Player");
@@ -122,7 +122,7 @@ void CLevelMgr::init()
 		pObject->AddComponent(new CAnimator2D);
 
 		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
-		pObject->Transform()->SetRelativeScale(Vec3(10.f, 10.f, 0.f));
+		pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
 		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
@@ -164,6 +164,7 @@ void CLevelMgr::init()
 	//pComputeShader->Excute();
 
 	//CGameObject* pChild = new CGameObject;
+	CGameObject* pChild;
 	//pChild->SetName(L"Child");
 
 	//pChild->AddComponent(new CTransform);
@@ -182,12 +183,12 @@ void CLevelMgr::init()
 	/*
 	* Mouse
 	*/
-	//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
-	//Instantiate(pPrefab->Instantiate(), 31);
+	Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
+	Instantiate(pPrefab->Instantiate(), 31);
 
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
-	////m_pCurLevel->AddGameObject(pChild, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
+	//m_pCurLevel->AddGameObject(pChild, 1);
 
 	//	// Particle Object
 	//CGameObject* pParticle = new CGameObject;

@@ -8,9 +8,14 @@ class CParticleUpdateShader :
 {
 public :
 	CStructuredBuffer* m_ParticleBuffer;
-
+	/*
+	* 셰이더 공유 데이터
+	* alive count
+	*/
+	CStructuredBuffer* m_ParticleShare;
 public:
 	void SetParticleBuffer(CStructuredBuffer* _Buffer);
+	void SetParticleShareData(CStructuredBuffer* _Buffer) { assert(_Buffer); m_ParticleShare = _Buffer; }
 
 public :
 	virtual void UpdateData()override;

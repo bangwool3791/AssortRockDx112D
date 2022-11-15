@@ -23,8 +23,10 @@ CStructuredBuffer::~CStructuredBuffer()
 
 }
 
-
-int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, void* _pInitial)
+/*
+* CPU Access Flag가 true이면 텍스쳐 버퍼에, 쓰기용,읽기용 텍스쳐 버퍼를 생성한다.
+*/
+int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, void* _pInitial, bool _CPUAccess)
 {
 	m_SB = nullptr;
 	m_SRV = nullptr;
@@ -38,17 +40,18 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 	m_tDesc.StructureByteStride = _iElementSize;
 
 	m_tDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+	m_tDesc.Usage = D3D11_USAGE_DEFAULT;
+	/*
+	* A resource that requires read and write access by the GPU. This is likely to be the most common usage choice.
+	*/
+	m_tDesc.CPUAccessFlags = 0;
 
 	if (SB_TYPE::SRV_ONLY == m_eType)
 	{
-		m_tDesc.Usage = D3D11_USAGE_DYNAMIC;
-		m_tDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		m_tDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		m_tDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;// Texture Register Binding		
 	}
 	else if (SB_TYPE::UAV_INC == m_eType)
 	{
-		m_tDesc.Usage = D3D11_USAGE_DEFAULT;
-		m_tDesc.CPUAccessFlags = 0;
 		m_tDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
 	}
 
@@ -92,6 +95,32 @@ int CStructuredBuffer::Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _
 			return E_FAIL;
 		}
 	}
+
+	if (_CPUAccess)
+	{
+		m_tDesc.ByteWidth = _iElementSize * _iElementCount;	// 버퍼 전체 크기
+		m_tDesc.StructureByteStride = _iElementSize;		// 버퍼 요소 크기			
+		m_tDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED; // 구조화 버퍼 추가 플래그 설정
+		m_tDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;	// Texture Register Binding	
+
+		m_tDesc.Usage = D3D11_USAGE_DYNAMIC;
+		m_tDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+		if (FAILED(DEVICE->CreateBuffer(&m_tDesc, nullptr, m_WriteBuffer.GetAddressOf())))
+		{
+			assert(nullptr);
+			return E_FAIL;
+		}
+
+		m_tDesc.Usage = D3D11_USAGE_DEFAULT;
+		m_tDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+
+		if (FAILED(DEVICE->CreateBuffer(&m_tDesc, nullptr, m_ReadBuffer.GetAddressOf())))
+		{
+			assert(nullptr);
+			return E_FAIL;
+		}
+	}
 	return hr;
 }
 
@@ -103,11 +132,42 @@ void CStructuredBuffer::SetData(void* _pSrc, UINT _iElementCount)
 	}
 	else
 	{
+		/*
+		* Disable graphics processing unit (GPU) access to the data that you want to change and get a pointer to the memory that contains the data. To get this pointer, 
+		pass D3D11_MAP_WRITE_DISCARD to the MapType parameter when you call ID3D11DeviceContext::Map. 
+		Set this pointer to the address of the D3D11_MAPPED_SUBRESOURCE variable from the previous step.
+		*/
 		D3D11_MAPPED_SUBRESOURCE tMapSub{};
-		CONTEXT->Map(m_SB.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tMapSub);
+		CONTEXT->Map(m_WriteBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &tMapSub);
 		memcpy(tMapSub.pData, _pSrc, m_iElementSize * _iElementCount);
-		CONTEXT->Unmap(m_SB.Get(), 0);
+		CONTEXT->Unmap(m_WriteBuffer.Get(), 0);
+		/*
+		* 쓰기 버퍼 -> 메인 버퍼
+		*/
+		CONTEXT->CopyResource(m_SB.Get(), m_WriteBuffer.Get());
 	}
+}
+
+void CStructuredBuffer::GetData(void* _pDst, UINT _iSizeByte)
+{
+	assert((_iSizeByte != 0) && _iSizeByte < m_iElementCount * m_iElementSize);
+
+	CONTEXT->CopyResource(m_ReadBuffer.Get(), m_SB.Get());
+
+	D3D11_MAPPED_SUBRESOURCE tMapSub{};
+
+	CONTEXT->Map(m_ReadBuffer.Get(), 0, D3D11_MAP_READ, 0, &tMapSub);
+
+	if (_iSizeByte == 0)
+	{
+		memcpy(_pDst, &tMapSub, m_iElementCount * m_iElementSize);
+	}
+	else
+	{
+		memcpy(_pDst, &tMapSub, _iSizeByte);
+	}
+
+	CONTEXT->Unmap(m_ReadBuffer.Get(), 0);
 }
 
 void CStructuredBuffer::UpdateData(UINT _iRegisterNum, UINT _PipelineStage)

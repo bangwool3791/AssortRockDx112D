@@ -117,4 +117,10 @@ struct tParticle
 	float fSpeed;
 	UINT iActive;
 };
+
+struct tParticleShare
+{
+	UINT iAliveCount;
+	UINT iPadding[3];
+};
 extern tGlobalData g_global;

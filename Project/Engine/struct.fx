@@ -35,6 +35,12 @@ struct tParticle
 	uint  iActive;
 };
 
+struct tParticleShare
+{
+    uint    iAliveCount;
+    uint3   iPadding;
+};
+
 struct tRenderInfo
 {
     /*

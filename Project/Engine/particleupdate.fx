@@ -4,6 +4,7 @@
 #include "register.fx"
 
 RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
+RWStructuredBuffer<tParticleShare> ParticleShare : register(u1);
 #define PARTICLE_MAX g_int_0
 
 [numthreads(128, 1, 1)]
