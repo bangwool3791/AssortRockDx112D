@@ -25,6 +25,7 @@ void CCollider2D::finaltick()
 	// 행렬 연산
 	// 크 회 이
 	m_vFinalScale = Vec2(m_vScale.x, m_vScale.y);
+
 	if (!m_bIgnorObjectScale)
 	{
 		Vec3 vWorldScale = Transform()->GetWorldScale();
@@ -33,7 +34,7 @@ void CCollider2D::finaltick()
 
 	Matrix matScale = XMMatrixScaling(m_vFinalScale.x, m_vFinalScale.y, 1.f);
 
-	m_vRot *= GetOwner()->Transform()->GetRelativeRotation();
+	m_vRot *= Transform()->GetRelativeRotation();
 	Matrix matRot = XMMatrixRotationX(m_vRot.x);
 	matRot *= XMMatrixRotationY(m_vRot.y);
 	matRot *= XMMatrixRotationZ(m_vRot.z);
@@ -59,7 +60,6 @@ void CCollider2D::finaltick()
 	}
 #endif
 }
-
 
 void CCollider2D::BeginOverlap(CCollider2D* _pOther)
 {
@@ -89,3 +89,17 @@ void CCollider2D::EndOverlap(CCollider2D* _pOther)
 		(*iter)->EndOverlap(_pOther);
 	}
 }
+
+void CCollider2D::SetRotationX(float _fDegree) 
+{ 
+	Transform()->SetRelativeRotationX(_fDegree);
+}
+void CCollider2D::SetRotationY(float _fDegree)
+{
+	Transform()->SetRelativeRotationY(_fDegree);
+}
+void CCollider2D::SetRotationZ(float _fDegree)
+{ 
+	Transform()->SetRelativeRotationZ(_fDegree);
+}
+

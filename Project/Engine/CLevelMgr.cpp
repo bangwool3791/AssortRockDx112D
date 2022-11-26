@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "CLevelMgr.h"
 
+#include "CLevelMgr.h"
 #include "CResMgr.h"
 
 #include "CLevel.h"
@@ -15,7 +15,6 @@
 #include "CDragScript.h"
 
 #include "CPaintShader.h"
-
 #include "CCollisionMgr.h"
 
 CLevelMgr::CLevelMgr()
@@ -48,7 +47,6 @@ void CLevelMgr::init()
 	Ptr<CTexture> pSmokeTex = CResMgr::GetInst()->Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
 	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
 
-
 	// Camera Object Ãß°¡
 	CGameObject* pCamObj = new CGameObject;
 	pCamObj->SetName(L"MainCamera");
@@ -71,7 +69,7 @@ void CLevelMgr::init()
 	pDirLight->AddComponent(new CTransform);
 	pDirLight->AddComponent(new CLight2D);
 
-	pDirLight->Light2D()->SetLightColor(Vec3(0.f, 0.f, 0.f));
+	pDirLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 
 	m_pCurLevel->AddGameObject(pDirLight, 0);
@@ -102,7 +100,7 @@ void CLevelMgr::init()
 
 	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 
-	pPointLight->Light2D()->SetLightColor(Vec3(1.f, 1.f, 1.f));
+	pPointLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
 	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
 	pPointLight->Light2D()->SetRadius(500.f);
 	pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
@@ -134,52 +132,29 @@ void CLevelMgr::init()
 		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
 		m_pCurLevel->AddGameObject(pObject, 1);
+
+		CGameObject* pShadow = new CGameObject;
+		pShadow->SetName(L"Shadow");
+
+		pShadow->AddComponent(new CTransform);
+		pShadow->AddComponent(new CMeshRender);
+		pShadow->AddComponent(new CAnimator2D);
+
+		pShadow->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
+		pShadow->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
+		pShadow->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
+		pShadow->Transform()->SetIgnoreParentScale(false);
+		pShadow->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
+		pShadow->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+
+		pShadow->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+		pShadow->Animator2D()->Play(L"LeftWalk", true);
+
+		pShadow->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+		pShadow->SetLayerIndex(1);
+		pObject->AddChild(pShadow);
 	}
 
-
-	//CGameObject* pShadow = new CGameObject;
-	//pShadow->SetName(L"Shadow");
-
-	//pShadow->AddComponent(new CTransform);
-	//pShadow->AddComponent(new CMeshRender);
-	//pShadow->AddComponent(new CAnimator2D);
-
-	//pShadow->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
-	//pShadow->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-	//pShadow->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
-	//pShadow->Transform()->SetIgnoreParentScale(false);
-	//pShadow->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
-	//pShadow->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-
-	//pShadow->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-	//pShadow->Animator2D()->Play(L"LeftWalk", true);
-
-	//pShadow->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
-	//pShadow->SetLayerIndex(1);
-	//pObject->AddChild(pShadow);
-	//Compute Shader Test
-	//Ptr<CPaintShader> pComputeShader = (CPaintShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"PaintShader").Get();
-	//pComputeShader->SetTexture(CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
-	//pComputeShader->SetColor(Vec4(0.f, 0.f, 1.f, 1.f));
-	//pComputeShader->Excute();
-
-	//CGameObject* pChild = new CGameObject;
-	CGameObject* pChild;
-	//pChild->SetName(L"Child");
-
-	//pChild->AddComponent(new CTransform);
-	//pChild->AddComponent(new CMeshRender);
-	//pChild->AddComponent(new CCollider2D);
-
-	//pChild->Transform()->SetIgnoreParentScale(true);
-	//pChild->Transform()->SetRelativePos(Vec3(512.f, 0.f, 100.f));
-	//pChild->Transform()->SetRelativeScale(Vec3(256.f, 256.f, 1.f));
-
-	//pChild->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pChild->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	//pChild->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"UAVTex"));
-
-	//m_pCurLevel->AddGameObject(pChild, 0);
 	/*
 	* Mouse
 	*/
@@ -188,17 +163,36 @@ void CLevelMgr::init()
 
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
-	//m_pCurLevel->AddGameObject(pChild, 1);
 
-	//	// Particle Object
-	//CGameObject* pParticle = new CGameObject;
-	//pParticle->SetName(L"Particle");
-	//pParticle->AddComponent(new CTransform);
-	//pParticle->AddComponent(new CParticleSystem);
+	// Particle Object
+	CGameObject* pParticle = new CGameObject;
+	pParticle->SetName(L"Particle");
+	pParticle->AddComponent(new CTransform);
+	pParticle->AddComponent(new CParticleExplosion);
 
-	//pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	m_pCurLevel->AddGameObject(pParticle, 0);
 
-	//m_pCurLevel->AddGameObject(pParticle, 0);
+	pParticle = new CGameObject;
+	pParticle->SetName(L"ParticleWood");
+	pParticle->AddComponent(new CTransform);
+	pParticle->AddComponent(new CParticleWood);
+
+	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	m_pCurLevel->AddGameObject(pParticle, 0);
+
+		// PostProcess Object
+	//CGameObject* pPostProcess = new CGameObject;
+	//pPostProcess->AddComponent(new CTransform);
+	//pPostProcess->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+
+	//pPostProcess->Transform()->SetRelativeScale(Vec3(200.f, 200.f, 1.f));
+	//pPostProcess->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+
+	//pPostProcess->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pPostProcess->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PostProcessMtrl"));
+
+	//m_pCurLevel->AddGameObject(pPostProcess, 0);
 	m_pCurLevel->begin();
 }
 
@@ -215,4 +209,14 @@ void CLevelMgr::finaltick()
 void CLevelMgr::render()
 {
 	m_pCurLevel->render();
+}
+
+CGameObject* CLevelMgr::FindObjectByName(const wstring& _strName)
+{
+	return m_pCurLevel->FindObjectByName(_strName);
+}
+
+CGameObject* CLevelMgr::FindSelectedObject(const wstring& _strName)
+{
+	return m_pCurLevel->FindSelectedObject(_strName);
 }

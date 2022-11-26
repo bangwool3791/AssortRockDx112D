@@ -145,6 +145,10 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Development\MyEngine\DirectX11\Project\Engine;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -189,6 +193,7 @@
     <ClInclude Include="CEngine.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEventMgr.h" />
+    <ClInclude Include="CParticleExplosion.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGraphicsShader.h" />
     <ClInclude Include="CGrid2DScript.h" />
@@ -206,6 +211,8 @@
     <ClInclude Include="CMissileScript2.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMouseScript.h" />
+    <ClInclude Include="CParticleDefault.h" />
+    <ClInclude Include="CParticleWood.h" />
     <ClInclude Include="CPaintShader.h" />
     <ClInclude Include="CParticleSystem.h" />
     <ClInclude Include="CParticleUpdateShader.h" />
@@ -257,6 +264,7 @@
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
+    <ClCompile Include="CParticleExplosion.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGraphicsShader.cpp" />
     <ClCompile Include="CGrid2DScript.cpp" />
@@ -272,6 +280,8 @@
     <ClCompile Include="CMissileScript2.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMouseScript.cpp" />
+    <ClCompile Include="CParticleDefault.cpp" />
+    <ClCompile Include="CParticleWood.cpp" />
     <ClCompile Include="CPaintShader.cpp" />
     <ClCompile Include="CParticleSystem.cpp" />
     <ClCompile Include="CParticleUpdateShader.cpp" />
@@ -313,12 +323,16 @@
     <FxCompile Include="func.fx" />
     <FxCompile Include="particlerender.fx" />
     <FxCompile Include="particleupdate.fx" />
+    <FxCompile Include="particleupdatewood.fx" />
+    <FxCompile Include="postprocess.fx" />
     <FxCompile Include="register.fx" />
     <FxCompile Include="objectrenderer.fx" />
+    <FxCompile Include="selectedunit.fx" />
     <FxCompile Include="std2d.fx" />
     <FxCompile Include="struct.fx" />
     <FxCompile Include="test.fx" />
     <FxCompile Include="tile.fx" />
+    <FxCompile Include="wave.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

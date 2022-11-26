@@ -26,7 +26,9 @@ CGrid2DScript::~CGrid2DScript()
 
 void CGrid2DScript::begin()
 {
+
 }
+
 void CGrid2DScript::tick()
 {
 	m_pMainCam = CRenderMgr::GetInst()->GetMainCam();

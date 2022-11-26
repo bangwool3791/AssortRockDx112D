@@ -7,6 +7,7 @@ class CStructuredBuffer :
 	public CEntity
 {
 private:
+	bool								m_bCPU = false;
 	ComPtr<ID3D11Buffer>				m_SB;
 	ComPtr<ID3D11ShaderResourceView>	m_SRV;
 	ComPtr<ID3D11UnorderedAccessView>   m_UAV;
@@ -42,5 +43,5 @@ public :
 public :
 	CStructuredBuffer();
 	CStructuredBuffer(const CStructuredBuffer& _origin);
-	~CStructuredBuffer();
+	virtual ~CStructuredBuffer();
 };

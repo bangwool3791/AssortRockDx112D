@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include <assert.h>
 #include "pch.h"
@@ -83,7 +83,7 @@ public:
 
 		// 실제로 해제하는 작업은 없다. 단지 단방향 링크드 리스트 재구성만 할뿐
 		*to_release = first_useable_block;
-		first_useable_block = (to_release - prough_data_) / block_size;
+		first_useable_block = (unsigned char)((to_release - prough_data_) / block_size);
 		++useable_block_count;
 
 		/*  모든 에러를 잡아 주지 않는다.

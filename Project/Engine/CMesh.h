@@ -27,5 +27,5 @@ virtual int Load(const wstring& _strFilePath) override
 
 public:
     CMesh();
-    ~CMesh();
+    virtual ~CMesh();
 };

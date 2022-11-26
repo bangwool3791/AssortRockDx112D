@@ -151,6 +151,21 @@
     <Filter Include="HLSL\Render">
       <UniqueIdentifier>{feb4ef34-e4b3-4e9a-83df-32fc52898dae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="cyclone">
+      <UniqueIdentifier>{7c50793c-8c5f-4603-9cbe-9e4ee9ea5715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\01. Explosion">
+      <UniqueIdentifier>{2ec775c7-678e-4ba3-b611-5810148009f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\02. Default">
+      <UniqueIdentifier>{b04c5c09-30d7-4ea7-9fe0-024cb5616b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\03. Wood">
+      <UniqueIdentifier>{dae56b5e-9dc4-4ad6-80ae-0c1f942373d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\Compute\ParticleUpdateShader\01. WoodShader">
+      <UniqueIdentifier>{a4745f6d-a69a-43f7-a0f1-67deb728286a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -354,6 +369,15 @@
     <ClInclude Include="CParticleSystem.h">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem</Filter>
     </ClInclude>
+    <ClInclude Include="CParticleExplosion.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\01. Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleDefault.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\02. Default</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleWood.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\03. Wood</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -515,6 +539,15 @@
     <ClCompile Include="CParticleSystem.cpp">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem</Filter>
     </ClCompile>
+    <ClCompile Include="CParticleExplosion.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\01. Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleDefault.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\02. Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleWood.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\03. Wood</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -559,6 +592,18 @@
       <Filter>HLSL\Compute\ParticleUpdateShader</Filter>
     </FxCompile>
     <FxCompile Include="objectrenderer.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="postprocess.fx">
+      <Filter>HLSL\Render</Filter>
+    </FxCompile>
+    <FxCompile Include="wave.fx">
+      <Filter>HLSL\Header</Filter>
+    </FxCompile>
+    <FxCompile Include="particleupdatewood.fx">
+      <Filter>HLSL\Compute\ParticleUpdateShader\01. WoodShader</Filter>
+    </FxCompile>
+    <FxCompile Include="selectedunit.fx">
       <Filter>HLSL\Render</Filter>
     </FxCompile>
   </ItemGroup>

@@ -24,7 +24,7 @@ int CConstBuffer::Create(size_t _iBufferSize)
 	m_tDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	HRESULT hr = DEVICE->CreateBuffer(&m_tDesc, nullptr, m_CB.GetAddressOf());
-
+	//m_CB->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CConstBuffer::m_CB") - 1, "CConstBuffer::m_CB");
 	return hr;
 }
 

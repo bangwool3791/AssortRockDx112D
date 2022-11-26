@@ -40,12 +40,10 @@ void CComputeShader::CreateComputeShader(const wstring& _strRelativePath, const 
 
 	hr = DEVICE->CreateComputeShader(m_CSBlob->GetBufferPointer(), m_CSBlob->GetBufferSize()
 		, nullptr, m_CS.GetAddressOf());
-
+	//m_CS->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CComputeShader::m_CS") - 1, "CComputeShader::m_CS");
 	assert(!FAILED(hr));
 }
-/*
-* 
-*/
+
 void CComputeShader::Excute()
 {
 	/*

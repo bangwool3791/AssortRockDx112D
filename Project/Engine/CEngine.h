@@ -1,9 +1,9 @@
 #pragma once
 
-
 class CEngine
+	: public CSingleton<CEngine>
 {
-	SINGLE(CEngine);
+
 private:
 	HWND		m_hMainWnd;
 	Vec2		m_vResolution;	// 윈도우 해상도
@@ -18,6 +18,9 @@ private:
 	void finaltick();
 	void render();
 
+public:
+	CEngine();
+	virtual ~CEngine();
 public:
 	HWND GetMainHwnd() { return m_hMainWnd; }
 };

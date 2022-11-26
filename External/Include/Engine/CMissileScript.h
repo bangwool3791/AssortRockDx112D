@@ -15,6 +15,6 @@ public:
     CLONE(CMissileScript);
 public:
     CMissileScript();
-    ~CMissileScript();
+    virtual ~CMissileScript();
 };
 

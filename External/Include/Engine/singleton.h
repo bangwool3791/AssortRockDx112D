@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename T>
-class CSingletone
+class CSingleton
 {
 private :
 	static T* g_Mgr;
@@ -27,14 +27,14 @@ public :
 		}
 	}
 protected:
-	CSingletone()
+	CSingleton()
 	{
 	}
 
-	~CSingletone()
+	~CSingleton()
 	{
 	}
 };
 
 template<typename T>
-T* CSingletone<T>::g_Mgr = nullptr;
+T* CSingleton<T>::g_Mgr = nullptr;

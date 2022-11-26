@@ -13,5 +13,5 @@ public:
 	CLONE_ASSERT(CShader);
 public:
 	CShader(RES_TYPE _eResType);
-	~CShader();
+	virtual ~CShader();
 };

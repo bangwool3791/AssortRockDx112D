@@ -1,7 +1,7 @@
 #pragma once
 
 class CPathMgr
-	:public CSingletone<CPathMgr>
+	:public CSingleton<CPathMgr>
 {
 private:
 	wchar_t		m_szContentPath[256];
@@ -12,6 +12,6 @@ public:
 	const wchar_t* GetContentPath() { return m_szContentPath; }
 	
 	CPathMgr();
-	~CPathMgr();
+	virtual ~CPathMgr();
 };
 

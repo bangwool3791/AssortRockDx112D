@@ -45,12 +45,12 @@ cbuffer MATERIAL : register(b1)
 cbuffer GLOBAL : register(b2)
 {
     float2  g_vRenderResolution;
+    float2  g_vNoiseResolution;
     int     g_iLight2DCount;
     int     g_iLight3DCount;
 
     float   g_fAccTime;
     float   g_fDT;
-    int2    pad;
 }
 cbuffer ANIM2DINFO : register(b3)
 {
@@ -86,6 +86,12 @@ Texture2D g_Atals : register(t12);
 //Light Buffer
 StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t13);
 StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
+
+// Noise Texture
+Texture2D g_Noise : register(t15);
+
+// RenderTarget CopyTex
+Texture2D g_RTCopyTex : register(t60);
 
 StructuredBuffer<tRenderInfo> g_RenderInfo   : register(t16);
 #define b g_RenderInfo

@@ -70,14 +70,8 @@ void CMouseScript::finaltick()
 		}
 	}
 
-	if (bClicked)
-	{
-		GetOwner()->Collider2D()->SetPause();
-	}
-
 	if (KEY_PRESSED(KEY::LBTN) && !bClicked)
 	{
-		//GetOwner()->AddComponent(new CCollider2D);
 		/*
 		* child로 변경해서, Layer 별로 가져 와 볼 것.
 		*/
@@ -94,45 +88,33 @@ void CMouseScript::finaltick()
 		CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
 		//마우스 클릭 충돌 활성화
 		GetOwner()->Collider2D()->ReleasePause();
-
 		bClicked = true;
-	}
-
-	if (KEY_PRESSED(KEY::LBTN) && bClicked)
-	{
 	}
 
 	if (KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
 		bClicked = false;
-		//CCollisionMgr::GetInst()->CollisionLayerRelease(1, 30);
 		CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
 }
 
 void CMouseScript::BeginOverlap(CCollider2D* _pOther)
 {
+	CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
+	CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
+}
+
+void CMouseScript::Overlap(CCollider2D* _pOther)
+{
 	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
 	CGameObject* pUnit_UI = pUIPrefab->Instantiate();
 	Instantiate(pUnit_UI, _pOther->GetOwner(), 0);
-
-	CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
-	CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
 
 	CUIMgr::GetInst()->AddUI(_pOther->GetOwner(), UI_TYPE::GAMEOBJECT);
 	CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
 }
 
-void CMouseScript::Overlap(CCollider2D* _pOther)
-{
-
-}
-
 void CMouseScript::EndOverlap(CCollider2D* _pOther)
 {
-	//if (!lstrcmp(L"Player", _pOther->GetName().c_str()))
-	//{
-	//	_pOther->ResetOverlapCount();
-	//}
-	//CCollisionMgr::GetInst()->CollisionLayerRelease(1, 30);
+	GetOwner()->Collider2D()->SetPause();
 }

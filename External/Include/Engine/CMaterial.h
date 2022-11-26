@@ -36,5 +36,5 @@ public :
 public :
 	CMaterial();
 	CMaterial(const CMaterial& _other);
-	~CMaterial();
+	virtual ~CMaterial();
 };

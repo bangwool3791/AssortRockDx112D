@@ -10,6 +10,7 @@ enum PROJ_TYPE
 
 class CCamera :
     public CComponent
+
 {
 private:
     Matrix                  m_matView;
@@ -26,6 +27,8 @@ private:
     map<const wstring, vector<CGameObject*>> m_mapOpaqueVec;
     map<const wstring, vector<CGameObject*>> m_mapMaskVec;
     map<const wstring, vector<CGameObject*>> m_mapTransparentVec;
+    vector<CGameObject* >                    m_vecPostProcess;
+
     vector<tObjectRender>		             m_vecInfoObject;		//
     CStructuredBuffer*                       m_pObjectRenderBuffer;
 private :
@@ -33,6 +36,7 @@ private :
     void render_opaque();
     void render_mask();
     void render_transparent();
+    void render_postprocess();
     //void update_render(Ptr<CMesh> p);
 public :
     virtual void finaltick();
@@ -65,6 +69,6 @@ public :
     CLONE(CCamera);
 public :
     CCamera();
-    ~CCamera();
+    virtual ~CCamera();
 };
 

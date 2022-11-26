@@ -1,28 +1,23 @@
 #include "pch.h"
 #include "CEditor.h"
-#include <Engine/CResMgr.h>
-#include <Engine/CRenderMgr.h>
 
-#include <Engine/GlobalComponent.h>
-#include <Engine/CGameObject.h>
-#include <Engine/CGrid2DScript.h>
+#include "imgui.h"
 #include "CGameObjectEx.h"
+#include <Engine\Ctransform.h>
+#include <Engine\CMeshRender.h>
+#include <Engine\CGrid2DScript.h>
+#include <Engine\CCamera.h>
+
+#include <Engine\CRenderMgr.h>
 
 CEditor::CEditor()
-	:m_vecEditorObj{}
-	, m_DebugDrawObject{}
 {
+
 }
 
 CEditor::~CEditor()
 {
-
-	for (UINT i{ 0 }; i < m_vecEditorObj.size(); ++i)
-	{
-		delete m_vecEditorObj[i];
-	}
-
-	//Safe_Del_Vec(m_vecEditorObj);
+	Safe_Del_Vec(m_vecEditorObj);
 	Safe_Del_Array(m_DebugDrawObject);
 }
 
@@ -30,44 +25,23 @@ void CEditor::init()
 {
 	CreateDebugDrawObject();
 
-	////CGameObjectEx* pGridObj = new CGameObjectEx;
-	////pGridObj->SetName(L"Grid Object");
+	// Editor 용도 Grid Object 추가
+	CGameObjectEx* pGridObj = new CGameObjectEx;
+	pGridObj->SetName(L"Grid Object");
 
-	////pGridObj->AddComponent(new CTransform);
-	////pGridObj->AddComponent(new CMeshRender);
-	////pGridObj->AddComponent(new CGrid2DScript);
+	pGridObj->AddComponent(new CTransform);
+	pGridObj->AddComponent(new CMeshRender);
+	pGridObj->AddComponent(new CGrid2DScript);
 
-	////pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	////pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
 
-	////pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	////pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	////pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
+	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
-
-	//CGameObjectEx* pTile{};
-	//Vec4 vColor = Vec4{ 0.f, 1.f, 0.f, 1.f };
-	//for (int i = 0; i < TILEY; ++i)
-	//{
-	//	for (int j = 0; j < TILEX; ++j)
-	//	{
-	//		pTile = new CGameObjectEx;
-	//		pTile->SetName(L"Tile");
-	//		//pTile->AddComponent(new CTransform);
-	//		//pTile->AddComponent(new CMeshRender);
-
-	//		//pTile->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
-	//		//pTile->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugMaterial"));
-	//		//pTile->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, &vColor);
-
-	//		float fX = (TILECX * j) + ((TILECX / 2.f) * (i % 2));
-	//		float fY = (TILECY / 2.f) * i;
-
-	//		//pTile->Transform()->SetRelativePos(fX -800.f, fY - 450.f, 1.f);
-	//		//pTile->Transform()->SetRelativeScale(TILECX, TILECY, 0.f);
-	//		m_vecEditorObj.push_back(pTile);
-	//	}
-	//}
+	pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	m_vecEditorObj.push_back(pGridObj);
 }
 
 void CEditor::progress()
@@ -79,51 +53,84 @@ void CEditor::progress()
 
 void CEditor::tick()
 {
-	for (auto iter{ m_vecEditorObj.begin() }; iter != m_vecEditorObj.end(); ++iter)
+	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
 	{
-		(*iter)->tick();
+		m_vecEditorObj[i]->tick();
 	}
 
-	for (auto iter{ m_vecEditorObj.begin() }; iter != m_vecEditorObj.end(); ++iter)
+	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
 	{
-		(*iter)->finaltick();
+		m_vecEditorObj[i]->finaltick();
 	}
 }
 
 void CEditor::render()
 {
-	for (auto iter{ m_vecEditorObj.begin() }; iter != m_vecEditorObj.end(); ++iter)
+
+	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
 	{
-		(*iter)->render();
+		m_vecEditorObj[i]->render();
 	}
 
+
+	// DebugDrawRender
+	// 일정 시간동안 렌더링 되는 Shape 
+	list<tDebugShapeInfo>::iterator iter = m_DebugDrawList.begin();
+	for (; iter != m_DebugDrawList.end(); )
+	{
+		iter->fCurTime += DT;
+		if (iter->fDuration < iter->fCurTime)
+		{
+			iter = m_DebugDrawList.erase(iter);
+		}
+		else
+		{
+			DebugDraw(*iter);
+			++iter;
+		}
+	}
+
+	// 새로 추가된 DebugShape 확인
 	vector<tDebugShapeInfo>& vecInfo = CRenderMgr::GetInst()->GetDebugDrawInfo();
 
-	for (auto iter{ vecInfo.begin() }; iter != vecInfo.end(); ++iter)
+	for (size_t i = 0; i < vecInfo.size(); ++i)
 	{
-		DebugDraw((*iter));
+		DebugDraw(vecInfo[i]);
+
+		if (0.f < vecInfo[i].fDuration)
+		{
+			m_DebugDrawList.push_back(vecInfo[i]);
+		}
 	}
 	vecInfo.clear();
+
+
 }
 
 void CEditor::CreateDebugDrawObject()
 {
-	auto pDebugObj = new CGameObjectEx();
+	CGameObjectEx* pDebugObj = nullptr;
+
+	// DEBUG_SHAPE::RECT
+	pDebugObj = new CGameObjectEx;
 
 	pDebugObj->AddComponent(new CTransform);
 	pDebugObj->AddComponent(new CMeshRender);
-	
+
 	pDebugObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh_Debug"));
-	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugMaterial"));
+	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugDrawMtrl"));
+
 	m_DebugDrawObject[(UINT)DEBUG_SHAPE::RECT] = pDebugObj;
 
-	pDebugObj = new CGameObjectEx();
+	// DEBUG_SHAPE::CIRCLE
+	pDebugObj = new CGameObjectEx;
 
 	pDebugObj->AddComponent(new CTransform);
 	pDebugObj->AddComponent(new CMeshRender);
 
 	pDebugObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
-	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugMaterial"));
+	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugDrawMtrl"));
+
 	m_DebugDrawObject[(UINT)DEBUG_SHAPE::CIRCLE] = pDebugObj;
 }
 
@@ -134,9 +141,9 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	pDebugObj->Transform()->SetRelativePos(_info.vPosition);
 	pDebugObj->Transform()->SetRelativeRotation(_info.vRot);
 
-	if (_info.eShape == DEBUG_SHAPE::CIRCLE || _info.eShape == DEBUG_SHAPE::CUBE)
+	if (DEBUG_SHAPE::CIRCLE == _info.eShape || DEBUG_SHAPE::SPHERE == _info.eShape)
 	{
-		pDebugObj->Transform()->SetRelativeScale(Vec3{ _info.fRadius,_info.fRadius ,_info.fRadius });
+		pDebugObj->Transform()->SetRelativeScale(Vec3(_info.fRadius, _info.fRadius, _info.fRadius));
 	}
 	else
 	{
@@ -145,17 +152,32 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 
 	pDebugObj->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, &_info.vColor);
 
-	auto pCamera = CRenderMgr::GetInst()->GetMainCam();
+
+	CCamera* pMainCam = CRenderMgr::GetInst()->GetMainCam();
 
 	pDebugObj->Transform()->finaltick();
 
 	g_transform.matWorld = pDebugObj->Transform()->GetWorldMat();
-	/*
-	* 주석 처리하고 테스트 필요
-	*/
-	g_transform.matView = pCamera->GetViewMat();
-	g_transform.matProj= pCamera->GetProjMat();
+	g_transform.matView = pMainCam->GetViewMat();
+	g_transform.matProj = pMainCam->GetProjMat();
 
+	pDebugObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 	pDebugObj->render();
 }
 
+
+void Vector3::ToRadian()
+{
+	x = (x / 180.f) * XM_PI;
+	y = (y / 180.f) * XM_PI;
+	z = (z / 180.f) * XM_PI;
+}
+
+void Vector3::ToDegree()
+{
+	x = (x / XM_PI) * 180.f;
+	y = (y / XM_PI) * 180.f;
+	z = (z / XM_PI) * 180.f;
+}
+
+Vec2::operator ImVec2() const { return ImVec2(x, y); }

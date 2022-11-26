@@ -10,7 +10,7 @@
 #include "CPrefab.h"
 
 class CResMgr
-	:public CSingletone<CResMgr>
+	:public CSingleton<CResMgr>
 {
 private:
 	map<wstring, Ptr<CRes>>				m_arrRes[(UINT)RES_TYPE::END];
@@ -33,6 +33,12 @@ public :
 	Ptr<CTexture> CreateTexture(const wstring& _strKey
 		, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat, UINT _iBindFlag);
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
+
+	const map<wstring, Ptr<CRes>>& GetResource(RES_TYPE _eResType)
+	{
+		return m_arrRes[(UINT)_eResType];
+	}
+
 private:
 	void CreateDefaultMesh();
 	void CreateDefaultTexture();
@@ -44,7 +50,7 @@ private:
 
 public :
 	CResMgr();
-	~CResMgr();
+	virtual  ~CResMgr();
 
 
 };
@@ -81,7 +87,8 @@ inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 	CRes* pRes = FindRes<T>(_strKey).Get();
 
 	assert(!pRes);
-	
+
+	_pRes->SetKey(_strKey);
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
 }
 

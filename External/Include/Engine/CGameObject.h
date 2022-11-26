@@ -17,7 +17,7 @@ class CCollider2D;
 
 class CGameObject
 	:public CEntity
-	,public SmallObjAllocator<CGameObject, 100>
+	,public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE>
 {
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;

@@ -65,3 +65,37 @@ void CLevel::AddGameObject(CGameObject* _pObject, const wstring& _strLayerName)
 	Layer->AddGameObject(_pObject);
 }
 
+#include "CGameObject.h"
+
+CGameObject* CLevel::FindObjectByName(const wstring& _Name)
+{
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObjects = m_arrLayer[i].GetObjects();
+
+		for (size_t j = 0; j < vecObjects.size(); ++j)
+		{
+			if (_Name == vecObjects[j]->GetName())
+				return vecObjects[j];
+		}
+	}
+
+	return nullptr;
+}
+
+#include "CUIMgr.h"
+
+CGameObject* CLevel::FindSelectedObject(const wstring& _Name)
+{
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObjects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
+
+		for (size_t j = 0; j < vecObjects.size(); ++j)
+		{
+			if (_Name == vecObjects[j]->GetName())
+				return vecObjects[j];
+		}
+	}
+	return nullptr;
+}

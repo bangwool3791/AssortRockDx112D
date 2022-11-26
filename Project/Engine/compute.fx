@@ -5,7 +5,7 @@
 
 RWTexture2D<float4> tex : register(u0);
 
-#define Color	g_vec4_0
+#define Color	    g_vec4_0
 #define Resolution	g_vec2_0
 
 // SV_GroupID           : 스레드가 속한 그룹의 좌표

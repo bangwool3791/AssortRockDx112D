@@ -30,7 +30,7 @@ public:
     CLONE_ASSERT(CConstBuffer);
 public:
     CConstBuffer(CB_TYPE _CBType);
-    ~CConstBuffer();
+    virtual ~CConstBuffer();
 
     friend class CDevice;
 };

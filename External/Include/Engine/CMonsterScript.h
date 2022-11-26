@@ -14,6 +14,6 @@ public:
     CLONE(CMonsterScript);
 public:
     CMonsterScript();
-    ~CMonsterScript();
+    virtual ~CMonsterScript();
 };
 

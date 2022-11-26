@@ -28,6 +28,7 @@ int CMesh::Create(void* _pVtxSysmem, size_t _iVtxCount, void* _pIdxSysmem, size_
 	tSubData.pSysMem = _pVtxSysmem;
 
 	HRESULT hr = DEVICE->CreateBuffer(&m_tVBDesc, &tSubData, m_VB.GetAddressOf());
+	//m_VB->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CComputeShader::m_VB") - 1, "CComputeShader::m_VB");
 
 	if (FAILED(hr))
 	{
@@ -46,7 +47,7 @@ int CMesh::Create(void* _pVtxSysmem, size_t _iVtxCount, void* _pIdxSysmem, size_
 	tSubData.pSysMem = _pIdxSysmem;
 
 	hr = DEVICE->CreateBuffer(&m_tIBDesc, &tSubData, &m_IB);
-
+	//m_IB->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CComputeShader::m_IB") - 1, "CComputeShader::m_IB");
 	return hr;
 }
 

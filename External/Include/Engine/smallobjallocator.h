@@ -1,6 +1,9 @@
 #pragma once
 
 #include "chunkgroup.h"
+/*
+* 템플릿 클래스의 static 변수 사용
+*/
 extern ChunkGroup* pool;
 /*
 * inline으로 선언 가능
@@ -10,7 +13,7 @@ extern ChunkGroup* pool;
 */
 /*  이것보다 더 좋은 싱글턴은 많이 있다.
 	상황에 맞는 좋은 싱글턴을 사용하길 바란다. */
-template <size_t OBJ_SIZE, unsigned char MAX_OBJ_NUM>
+template <size_t OBJ_SIZE, int MAX_OBJ_NUM>
 ChunkGroup* ChunkGroupInstance()
 {
 	if (!pool)

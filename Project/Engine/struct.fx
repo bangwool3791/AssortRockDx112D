@@ -33,7 +33,7 @@ struct tParticle
 	float fCurTime;
 	float fSpeed;
 	uint  iActive;
-};
+}; 
 
 struct tParticleShare
 {

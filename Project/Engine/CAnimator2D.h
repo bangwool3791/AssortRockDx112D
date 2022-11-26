@@ -5,6 +5,7 @@
 
 class CAnimator2D :
     public CComponent
+
 {
 private:
     std::map<wstring, CAnimation2D*> m_mapAnim;

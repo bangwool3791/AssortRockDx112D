@@ -5,4 +5,10 @@
 #include "CCollider2D.h"
 #include "CAnimator2D.h"
 #include "CLight2D.h"
+/*
+* Particle
+*/
 #include "CParticleSystem.h"
+#include "CParticleDefault.h"
+#include "CParticleWood.h"
+#include "CParticleExplosion.h"

@@ -19,3 +19,39 @@ const Vector3 Vector3::Left{ -1.f, 0.f, 0.f };
 const Vector3 Vector3::Forward;
 const Vector3 Vector3::Front{ 0.f, 0.f, -1.f };
 const Vector3 Vector3::Backward{ 0.f, 0.f, 1.f };
+
+extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END] =
+{
+	"TRANSFORM",
+	"CAMERA",
+	"COLLIDER2D",
+	"COLLIDER3D",
+	"ANIMATOR2D",
+	"ANIMATOR3D",
+	"LIGHT2D",
+	"LIGHT3D",
+	"MESHRENDER",
+	"TILEMAP",
+	"PARTICLESYSTEM",
+	"SKYBOX",
+	"DECAL",
+	"LANDSCAPE"
+};
+
+extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END] =
+{
+	L"TRANSFORM",
+	L"CAMERA",
+	L"COLLIDER2D",
+	L"COLLIDER3D",
+	L"ANIMATOR2D",
+	L"ANIMATOR3D",
+	L"LIGHT2D",
+	L"LIGHT3D",
+	L"MESHRENDER",
+	L"TILEMAP",
+	L"PARTICLESYSTEM",
+	L"SKYBOX",
+	L"DECAL",
+	L"LANDSCAPE",
+};

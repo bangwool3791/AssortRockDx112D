@@ -50,3 +50,13 @@ void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDura
 {
 	CRenderMgr::GetInst()->DebugDraw(DEBUG_SHAPE::CIRCLE, _vColor, _vPosition, Vec3::Zero, Vec3::Zero, _fRadius, _fDuration);
 }
+
+const char* ToString(COMPONENT_TYPE _type)
+{
+	return COMPONENT_TYPE_CHAR[(UINT)_type];
+}
+
+const wchar_t* ToWString(COMPONENT_TYPE _type)
+{
+	return COMPONENT_TYPE_WCHAR[(UINT)_type];
+}

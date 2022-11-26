@@ -83,7 +83,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
         - Anti Aliasing이 일어나는건 결국 테두리이다. 그래서 테두리를 잡고 보정을한다.
         단점 : 이것도 비용이 쎄다. 사용자가 이 기능을 킬 수 있게 옵션을 넣어 줄 수 있다.
     */
-    m_Desc.MipLevels = 0;
+    m_Desc.MipLevels = 1;
     m_Desc.MiscFlags = 0;
     HRESULT hr = DEVICE->CreateTexture2D(&m_Desc, nullptr, m_Tex2D.GetAddressOf());
     assert(!FAILED(hr));
@@ -92,6 +92,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
     if (_iBindFlag & D3D11_BIND_DEPTH_STENCIL)
     {
         hr = DEVICE->CreateDepthStencilView(m_Tex2D.Get(), nullptr, m_DSV.GetAddressOf());
+      //  m_DSV->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CTexture::m_DSV") - 1, "CTexture::m_DSV");
     }
     else
     {
@@ -99,6 +100,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
         {
             hr = DEVICE->CreateRenderTargetView(m_Tex2D.Get(), nullptr, m_RTV.GetAddressOf());
             assert(!FAILED(hr));
+         //   m_RTV->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CTexture::m_RTV") - 1, "CTexture::m_RTV");
         }
 
         if (_iBindFlag & D3D11_BIND_SHADER_RESOURCE)
@@ -109,6 +111,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
             tSRVDesc.Texture2D.MostDetailedMip = 0;
             tSRVDesc.ViewDimension = D3D11_SRV_DIMENSION::D3D11_SRV_DIMENSION_TEXTURE2D;
             hr = DEVICE->CreateShaderResourceView(m_Tex2D.Get(), &tSRVDesc, m_SRV.GetAddressOf());
+         //   m_SRV->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CTexture::m_SRV") - 1, "CTexture::m_SRV");
             assert(!FAILED(hr));
         }
 
@@ -119,6 +122,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
             tUAVDesc.Texture2D.MipSlice = 0;
             tUAVDesc.ViewDimension = D3D11_UAV_DIMENSION::D3D11_UAV_DIMENSION_TEXTURE2D;
             hr = DEVICE->CreateUnorderedAccessView(m_Tex2D.Get(), &tUAVDesc, m_UAV.GetAddressOf());
+        //    m_UAV->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CTexture::m_UAV") - 1, "CTexture::m_UAV");
             assert(!FAILED(hr));
         }
     }
@@ -127,6 +131,7 @@ void CTexture::Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iB
 void CTexture::Create(ComPtr<ID3D11Texture2D> _Tex2D)
 {
     m_Tex2D = _Tex2D;
+   // m_Tex2D->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CTexture::m_Tex2D") - 1, "CTexture::m_Tex2D");
     m_Tex2D->GetDesc(&m_Desc);
 
     HRESULT hr = S_OK;
@@ -184,10 +189,17 @@ void CTexture::UpdateData(UINT _iRegisterNum, UINT _iPipelineStage)
         CONTEXT->PSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
 }
 
-void CTexture::UpdateData_CS(UINT _iRegisterNum)
+void CTexture::UpdateData_CS(UINT _iRegisterNum, bool _bShaderRes)
 {
-    UINT i = -1;
-    CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, m_UAV.GetAddressOf(), &i);
+    if (_bShaderRes)
+    {
+        CONTEXT->CSSetShaderResources(_iRegisterNum, 1, m_SRV.GetAddressOf());
+    }
+    else
+    {
+        UINT i = -1;
+        CONTEXT->CSSetUnorderedAccessViews(_iRegisterNum, 1, m_UAV.GetAddressOf(), &i);
+    }
 }
 
 void CTexture::Clear(UINT _iRegisterNum)

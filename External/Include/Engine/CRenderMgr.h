@@ -5,9 +5,10 @@ class CCamera;
 class CStructuredBuffer;
 
 #include "CLight2D.h"
+#include "CTexture.h"
 
 class CRenderMgr
-	: public CSingletone<CRenderMgr>
+	: public CSingleton<CRenderMgr>
 {
 public:
 	CRenderMgr();
@@ -18,9 +19,12 @@ private:
 	vector<tLightInfo>			m_vecLight2D;		// 현재 레벨에 있는 모든 2D 광원
 	CStructuredBuffer*			m_pLight2DBuffer;
 	vector<tDebugShapeInfo>		m_DebugDrawInfo;	// 현재 레벨에 있는 모든 카메라
+	Ptr<CTexture>				m_RTCopyTex;
 public:
 	void RegisterCamera(auto _pCam) { m_vecCam.push_back(_pCam); }
 	void RegisterLight2D(auto _pLight) { m_vecLight2D.push_back(_pLight->GetLightInfo()); }
+	// 렌더타겟을 카피텍스쳐로 복사
+	void CopyRenderTarget();
 
 	CCamera* GetMainCam()
 	{
@@ -40,6 +44,7 @@ public:
 	vector<tDebugShapeInfo>& GetDebugDrawInfo() { return m_DebugDrawInfo; }
 
 private:
+	void UpdateNoiseTexture();
 	void UpdateLight2D();
 public:
 	void init();

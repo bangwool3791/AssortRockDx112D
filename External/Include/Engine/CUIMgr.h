@@ -1,12 +1,10 @@
 #pragma once
 #include "pch.h"
 
-#include "singleton.h"
-
 class CGameObject;
 
 class CUIMgr
-	:public CSingletone<CUIMgr>
+	:public CSingleton<CUIMgr>
 {
 private:
 	array<vector<CGameObject*>, (UINT)UI_TYPE::END> m_arrUi;
@@ -28,5 +26,5 @@ public:
 
 public:
 	CUIMgr();
-	~CUIMgr();
+	virtual ~CUIMgr();
 };

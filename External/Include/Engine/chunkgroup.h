@@ -23,7 +23,7 @@ public:
 		chunks_.clear();
 	}
 
-	ChunkGroup(std::size_t block_size, unsigned char block_num)
+	ChunkGroup(std::size_t block_size, int block_num)
 	{
 		block_size_ = block_size;
 		block_num_ = block_num;

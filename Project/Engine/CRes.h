@@ -53,6 +53,6 @@ public:
 public:
     CRes(RES_TYPE _eResType);
     CRes(const CRes& _other);
-    ~CRes();
+    virtual ~CRes();
 };
 

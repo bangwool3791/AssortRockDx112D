@@ -99,7 +99,7 @@ struct tKeyInfo
 
 
 class CKeyMgr
-	:public CSingletone<CKeyMgr>
+	:public CSingleton<CKeyMgr>
 {
 private:
 	vector<tKeyInfo>	m_vecKey;
@@ -122,6 +122,6 @@ public:
 	Vec2  GetMouseDir() { return m_vMouseDir; }
 	Vec2& GetMouseDir_() { return m_vMouseDir; }
 	CKeyMgr();
-	~CKeyMgr();
+	virtual ~CKeyMgr();
 };
 

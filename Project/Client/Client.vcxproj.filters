@@ -16,11 +16,41 @@
     <Filter Include="Default">
       <UniqueIdentifier>{287072a8-17a9-4883-abc9-9060d654c9de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor">
+    <Filter Include="02. ImGui">
+      <UniqueIdentifier>{6444d56d-641f-4f41-9e75-fa3954336805}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Editor">
       <UniqueIdentifier>{b981dd30-bda9-48ba-a3a5-8b111fd3d797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor\CGameObjectEx">
+    <Filter Include="01. Editor\CGameObjectEx">
       <UniqueIdentifier>{25d6f4f9-b330-4257-9eb2-82564b4947d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. ImGui\ImGui">
+      <UniqueIdentifier>{fc83f200-5f89-4e3d-918d-c9da2cb91760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI">
+      <UniqueIdentifier>{7d61682f-c113-422c-962d-2a0731c8bcc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector">
+      <UniqueIdentifier>{d3bc33fe-a5ea-46cb-919f-61ea54a9953a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI">
+      <UniqueIdentifier>{e82d67a8-9750-4762-8246-fc903a1c5c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI\MeshRenderUI">
+      <UniqueIdentifier>{a14ef549-e527-4f8c-a579-16271ec2bb3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI\TransformUI">
+      <UniqueIdentifier>{24b4dab9-77cc-4276-b311-b9bb349824d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModuleUI">
+      <UniqueIdentifier>{cf426afd-158b-4f4a-bf29-3e14555c6d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModuleUI\ListUI">
+      <UniqueIdentifier>{33748bae-baff-46a9-b7d7-235a760f5866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI\Collider2DUI">
+      <UniqueIdentifier>{9d284d60-7f88-431c-850c-3359e3b3185c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,10 +70,58 @@
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="CEditor.h">
-      <Filter>Editor</Filter>
+      <Filter>01. Editor</Filter>
     </ClInclude>
     <ClInclude Include="CGameObjectEx.h">
-      <Filter>Editor\CGameObjectEx</Filter>
+      <Filter>01. Editor\CGameObjectEx</Filter>
+    </ClInclude>
+    <ClInclude Include="CImGuiMgr.h">
+      <Filter>02. ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_dx11.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_impl_win32.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_internal.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_rectpack.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_textedit.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="imstb_truetype.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentUI.h">
+      <Filter>03. UI\Inspector\ComponentUI</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshRenderUI.h">
+      <Filter>03. UI\Inspector\ComponentUI\MeshRenderUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformUI.h">
+      <Filter>03. UI\Inspector\ComponentUI\TransformUI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>03. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ListUI.h">
+      <Filter>ModuleUI\ListUI</Filter>
+    </ClInclude>
+    <ClInclude Include="imconfig.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="InspectorUI.h">
+      <Filter>03. UI\Inspector</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider2DUI.h">
+      <Filter>03. UI\Inspector\ComponentUI\Collider2DUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -54,10 +132,55 @@
       <Filter>Default</Filter>
     </ClCompile>
     <ClCompile Include="CEditor.cpp">
-      <Filter>Editor</Filter>
+      <Filter>01. Editor</Filter>
     </ClCompile>
     <ClCompile Include="CGameObjectEx.cpp">
-      <Filter>Editor\CGameObjectEx</Filter>
+      <Filter>01. Editor\CGameObjectEx</Filter>
+    </ClCompile>
+    <ClCompile Include="CImGuiMgr.cpp">
+      <Filter>02. ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_demo.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_draw.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_dx11.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_impl_win32.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_tables.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_widgets.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshRenderUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI\MeshRenderUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI\TransformUI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>03. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ListUI.cpp">
+      <Filter>ModuleUI\ListUI</Filter>
+    </ClCompile>
+    <ClCompile Include="InspectorUI.cpp">
+      <Filter>03. UI\Inspector</Filter>
+    </ClCompile>
+    <ClCompile Include="Collider2DUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI\Collider2DUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

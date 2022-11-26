@@ -26,5 +26,5 @@ public :
 
 public:
 	CPaintShader();
-	~CPaintShader();
+	virtual ~CPaintShader();
 };

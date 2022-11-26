@@ -52,11 +52,37 @@ float4 GaussianSample(float2 _vUV)
 {
     float4 vOutColor = (float4) 0.f;
 
-    if (1.f < _vUX.x)
+    if (1.f < _vUV.x)
     {
-
+        _vUV.x = frac(_vUV.x);
     }
     else if (_vUV.x < 0.f)
+    {
+        _vUV.x = 1 + frac(_vUV.x);
+    }
+
+    if (1.f < _vUV.y)
+    {
+        _vUV.y = frac(_vUV.y);
+    }
+    else if (_vUV.y < 0.f)
+    {
+        _vUV.y = 1 + frac(_vUV.y);
+    }
+
+    int2 iUV = _vUV * g_vNoiseResolution;
+    iUV += int2(-2, -2);
+    
+    for (int j = 0; j < 5; ++j)
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            int2 idx = int2(iUV.y + i, iUV.x + j);
+            vOutColor += g_Noise[idx] * GaussianFilter[j][i];
+        }
+    }
+
+    return vOutColor;
 }
 #endif
 

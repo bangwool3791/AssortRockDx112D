@@ -6,11 +6,11 @@
 class CConstBuffer;
 
 class CDevice
-	:public CSingletone<CDevice>
+	:public CSingleton<CDevice>
 {
 public:
 	CDevice();
-	~CDevice();
+	virtual ~CDevice();
 private:
 	HWND							m_hWnd;
 

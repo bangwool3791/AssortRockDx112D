@@ -26,6 +26,7 @@ void CParticleUpdateShader::SetParticleBuffer(CStructuredBuffer* _Buffer)
 void CParticleUpdateShader::UpdateData()
 {
 	assert(m_ParticleBuffer);
+	assert(m_ParticleShare);
 
 	m_ParticleBuffer->UpdateData_CS(0, false);
 	m_ParticleShare->UpdateData_CS(1, false);

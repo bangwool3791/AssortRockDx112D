@@ -5,8 +5,11 @@
 
 class CMeshRender
 	:public CRenderComponent
-//	,public SmallObjAllocator<CMeshRender, 1000>
 {
+private:
+	INSTANCING_TYPE m_eInsType;
+public :
+	void SetInstancingType(INSTANCING_TYPE _eType) { m_eInsType = _eType; }
 public:
 	virtual void tick() override;
 	virtual void finaltick() override;
@@ -15,6 +18,7 @@ public:
 	CLONE(CMeshRender);
 public :
 	CMeshRender();
+	CMeshRender(INSTANCING_TYPE _eInsType);
 	CMeshRender(const CMeshRender& rhs);
 	virtual ~CMeshRender();
 };

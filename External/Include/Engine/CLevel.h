@@ -17,7 +17,8 @@ public :
 public:
 	CLayer* GetLayer(UINT _iIdx) { return &m_arrLayer[_iIdx]; }
 	CLayer* GetLayer(const wstring& _strLayerName);
-
+	CGameObject* FindObjectByName(const wstring& _Name);
+	CGameObject* FindSelectedObject(const wstring& _Name);
 	void AddGameObject(CGameObject* _pObject, UINT _iLayerIdx);
 	void AddGameObject(CGameObject* _pObject, const wstring& _strLayerName);
 

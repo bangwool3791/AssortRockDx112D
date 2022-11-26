@@ -8,6 +8,7 @@ class CComputeShader :
 private:
 	ComPtr<ID3DBlob>			m_CSBlob;
 	ComPtr<ID3D11ComputeShader> m_CS;
+
 protected:
 	tMtrlConst					m_Param;
 
@@ -28,5 +29,5 @@ public :
 
 public :
 	CComputeShader(UINT _iGroupPerX, UINT _iGroupPerY, UINT _iGroupPerZ);
-	~CComputeShader();
+	virtual ~CComputeShader();
 };

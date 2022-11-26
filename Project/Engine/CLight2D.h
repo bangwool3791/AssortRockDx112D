@@ -26,5 +26,5 @@ public :
 
 public:
     CLight2D();
-    ~CLight2D();
+    virtual ~CLight2D();
 };

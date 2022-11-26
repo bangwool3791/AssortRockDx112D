@@ -211,6 +211,14 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"DeadCellNormal", L"texture\\beheaded_n.png");
 
 	Load<CTexture>(L"SmokeParticle", L"texture\\particle\\smokeparticle.png");
+	Load<CTexture>(L"CartoonSmoke", L"texture\\particle\\CartoonSmoke.png");
+	Load<CTexture>(L"Bubbles50px", L"texture\\particle\\Bubbles50px.png");
+	// NoiseTexture
+	Load<CTexture>(L"Noise_01", L"texture\\noise\\noise_01.png");
+	Load<CTexture>(L"Noise_02", L"texture\\noise\\noise_02.png");
+	Load<CTexture>(L"Noise_03", L"texture\\noise\\noise_03.jpg");
+
+	Load<CTexture>(L"Sparks", L"texture\\particle\\Sparks.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -293,8 +301,8 @@ void CResMgr::CreateDefaultGraphicsShader()
 	AddRes<CGraphicsShader>(L"DebugDrawShader", pShader);
 
 	pShader = new CGraphicsShader();
-	pShader->CreateVertexShader(L"shader\\debugdraw.fx", "VS_DebugDraw");
-	pShader->CreatePixelShader(L"shader\\debugdraw.fx", "PS_DebugDraw");
+	pShader->CreateVertexShader(L"shader\\selectedunit.fx", "VS_DebugDraw");
+	pShader->CreatePixelShader(L"shader\\selectedunit.fx", "PS_DebugDraw");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
@@ -336,6 +344,16 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 
 	AddRes<CGraphicsShader>(L"ObjectRenderShader", pShader);
+
+	// PostProcess Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_PostProcess");
+	pShader->CreatePixelShader(L"shader\\postprocess.fx", "PS_PostProcess");
+
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POST_PROCESS);
+
+	AddRes<CGraphicsShader>(L"PostProcessShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
@@ -409,6 +427,10 @@ void CResMgr::CreateDefaultComputeShader()
 	pShader = new CParticleUpdateShader;
 	pShader->CreateComputeShader(L"shader\\particleupdate.fx", "CS_ParticleUpdate");
 	AddRes<CComputeShader>(L"ParticleUpdateShader", pShader);
+
+	pShader = new CParticleUpdateShader;
+	pShader->CreateComputeShader(L"shader\\particleupdatewood.fx", "CS_ParticleUpdate");
+	AddRes<CComputeShader>(L"ParticleUpdateWoodShader", pShader);
 }
 
 void CResMgr::CreateDefaultMaterial()
@@ -435,10 +457,6 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes(L"EditMaterial", pMaterial);
 
 	pMaterial = new CMaterial();
-	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
-	AddRes(L"DebugMaterial", pMaterial);
-
-	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UnitSelectUIShader"));
 	AddRes(L"UnitSelectUIMaterial", pMaterial);
 
@@ -451,8 +469,20 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes(L"ParticleRenderMtrl", pMaterial);
 
 	pMaterial = new CMaterial();
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
+	AddRes(L"ParticleRenderWoodMtrl", pMaterial);
+
+	pMaterial = new CMaterial();
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ObjectRenderShader"));
 	AddRes(L"ObjectMtrl", pMaterial);
+
+	pMaterial = new CMaterial;
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
+	AddRes<CMaterial>(L"PostProcessMtrl", pMaterial);
+
+	pMaterial = new CMaterial;
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
+	AddRes<CMaterial>(L"DebugDrawMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

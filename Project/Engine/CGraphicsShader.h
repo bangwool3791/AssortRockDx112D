@@ -47,5 +47,5 @@ public :
     SHADER_DOMAIN GetDomain()              { return m_eDomain; }
 public :
     CGraphicsShader();
-    ~CGraphicsShader();
+    virtual ~CGraphicsShader();
 };

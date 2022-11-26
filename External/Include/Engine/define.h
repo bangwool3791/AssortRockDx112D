@@ -39,11 +39,13 @@ typedef Vector4 Vec4;
 #define TILECX 80.f
 #define TILECY 80.f
 
+#define OBJECTPOOL_SIZE 1000
 enum class SHADER_DOMAIN
 {
-	DOMAIN_OPAQUE,		// 불투명 단계
-	DOMAIN_MASK,		// 출력, 비출력
-	DOMAIN_TRANSPARENT, // 반투명
+	DOMAIN_OPAQUE,		 // 불투명 단계
+	DOMAIN_MASK,		 // 출력, 비출력
+	DOMAIN_TRANSPARENT,  // 반투명
+	DOMAIN_POST_PROCESS, // 후처리	    
 	NONE,
 };
 
@@ -243,3 +245,12 @@ enum class UI_TYPE
 	UNIT_UI,
 	END,
 };
+
+enum class INSTANCING_TYPE
+{
+	NONE,
+	USED,
+};
+
+extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END];
+extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END];

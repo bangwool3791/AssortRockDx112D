@@ -3,7 +3,7 @@
 class CLevel;
 
 class CLevelMgr
-	:public CSingletone<CLevelMgr>
+	:public CSingleton<CLevelMgr>
 {
 private:
 	CLevel*			m_pCurLevel;
@@ -13,6 +13,8 @@ public:
 	{
 		return m_pCurLevel;
 	}
+	CGameObject* FindObjectByName(const wstring& _strName);
+	CGameObject* FindSelectedObject(const wstring& _strName);
 public:
 	void init();
 	void tick();
@@ -20,6 +22,6 @@ public:
 	void render();
 
 	CLevelMgr();
-	~CLevelMgr();
+	virtual ~CLevelMgr();
 };
 

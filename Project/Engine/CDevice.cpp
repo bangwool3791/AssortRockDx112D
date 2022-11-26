@@ -4,17 +4,15 @@
 #include "CResMgr.h"
 #include "CConstBuffer.h"
 
+
 CDevice::CDevice()
 	: m_hWnd(nullptr)
-	, m_pDevice(nullptr)
-	, m_pDeviceContext(nullptr)
-	, m_pRenderTargetTex(nullptr)
-	, m_pDepthStencilTex(nullptr)
-	, m_pSwapChain(nullptr)
 	, m_tViewPort{}
 	, m_arrCB{}
+	, m_arrRS{}
+	, m_arrDS{}
+	, m_arrBS{}
 {
-
 }
 
 CDevice::~CDevice()
@@ -30,18 +28,40 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 {
 	m_hWnd = _hWnd;
 	m_vRenderResolution = _vResolution;
+	g_global.vRenderResolution = m_vRenderResolution;
 
 	UINT iDeviceFlag = D3D11_CREATE_DEVICE_DEBUG;
-	D3D_FEATURE_LEVEL FeatureLevel = (D3D_FEATURE_LEVEL)0;
-
+#if defined(_DEBUG)
+	// If the project is in a debug build, enable the debug layer.
+	iDeviceFlag |= D3D11_CREATE_DEVICE_DEBUG;
+#endif
+	// Define the ordering of feature levels that Direct3D attempts to create.
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_1,
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3,
+		D3D_FEATURE_LEVEL_9_1
+	};
 
 	ID3D11Device* pDevice = nullptr;
-	HRESULT hr = D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr
-		, iDeviceFlag, nullptr, 0
+	HRESULT hr = D3D11CreateDevice(
+		nullptr, 
+		D3D_DRIVER_TYPE_HARDWARE
+		, nullptr
+
+		, iDeviceFlag
+		, featureLevels
+		, ARRAYSIZE(featureLevels)
 		, D3D11_SDK_VERSION
 		, m_pDevice.GetAddressOf()
-		, &FeatureLevel
+		, nullptr
 		, m_pDeviceContext.GetAddressOf());
+
+	UINT iQuality = 0;
+	DEVICE->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &iQuality);
 
 
 	// 스왚체인 만들기
@@ -55,11 +75,8 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 	if (FAILED(CreateTarget()))
 	{
 		MessageBox(nullptr, L"타겟 생성 실패", L"Device 초기화 실패", MB_OK);
+		return E_FAIL;
 	}
-
-	// 출력용 렌더 타겟 및 깊이 타겟 지정
-	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetTex.Get()->GetRTV().GetAddressOf(),
-		m_pRenderTargetTex.Get()->GetDSV().Get());
 
 
 	// ViewPort
@@ -67,15 +84,19 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 	m_tViewPort.TopLeftY = 0;
 	m_tViewPort.Width = _vResolution.x;
 	m_tViewPort.Height = _vResolution.y;
-	m_tViewPort.MinDepth = 0;
-	m_tViewPort.MaxDepth = 1;
-	m_pDeviceContext->RSSetViewports(1, &m_tViewPort);
+	m_tViewPort.MinDepth = 0.f;
+	m_tViewPort.MaxDepth = 1.f;
 
+	m_pDeviceContext->RSSetViewports(1, &m_tViewPort);
+	
+
+	// 샘플러 생성 및 바인딩
 	if (FAILED(CreateSampler()))
 	{
 		MessageBox(nullptr, L"샘플러 생성 실패", L"Device 초기화 실패", MB_OK);
 		return E_FAIL;
 	}
+
 
 	// 상수버퍼 생성
 	if (FAILED(CreateConstBuffer()))
@@ -84,23 +105,28 @@ int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 		return E_FAIL;
 	}
 
+	// 레스터라이저 스테이트 생성
 	if (FAILED(CreateRasterizerState()))
 	{
-		MessageBox(nullptr, L"레스터라이저 초기화 실패", L"Device 초기화 실패", MB_OK);
+		MessageBox(nullptr, L"레스터라이저 스테이트 생성 실패", L"Device 초기화 실패", MB_OK);
 		return E_FAIL;
 	}
 
-	if (FAILED(CreateBlendState()))
-	{
-		MessageBox(nullptr, L"블랜드 상태 초기화 실패", L"Device 초기화 실패", MB_OK);
-		return E_FAIL;
-	}
-
+	// DepthStencil 스테이트 생성
 	if (FAILED(CreateDepthStencilState()))
 	{
-		MessageBox(nullptr, L"깊이 버퍼 생성 실패", L"Device 초기화 실패", MB_OK);
+		MessageBox(nullptr, L"뎊스 스텐실 스테이트 생성 실패", L"Device 초기화 실패", MB_OK);
 		return E_FAIL;
 	}
+
+
+	// 블렌드 스테이트 생성
+	if (FAILED(CreateBlendState()))
+	{
+		MessageBox(nullptr, L"블렌드 스테이트 생성 실패", L"Device 초기화 실패", MB_OK);
+		return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -150,7 +176,10 @@ int CDevice::CreateSwapchain()
 	{
 		return E_FAIL;
 	}
-
+	//pDXGIDevice->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CDevice::pDXGIDevice") - 1, "CDevice::pDXGIDevice");
+	//pAdapter->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CDevice::pAdapter") - 1, "CDevice::pAdapter");
+	//pFactory->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CDevice::pFactory") - 1, "CDevice::pFactory");
+	//m_pSwapChain->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CDevice::m_pSwapChain") - 1, "CDevice::m_pSwapChain");
 	return S_OK;
 }
 
@@ -161,35 +190,16 @@ int CDevice::CreateTarget()
 	ComPtr<ID3D11Texture2D> tex2D;
 	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)tex2D.GetAddressOf());
 
+	// RenderTargetTexture 등록
 	m_pRenderTargetTex = CResMgr::GetInst()->CreateTexture(L"RenderTargetTex", tex2D);
 
-	// DepthStencilTexture
-	D3D11_TEXTURE2D_DESC m_Desc = {};
-	
-	tex2D->GetDesc(&m_Desc);
-
-	m_pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencillTex"
+	// DepthStencilTexture 생성
+	m_pDepthStencilTex = CResMgr::GetInst()->CreateTexture(L"DepthStencilTex"
 		, (UINT)m_vRenderResolution.x, (UINT)m_vRenderResolution.y
 		, DXGI_FORMAT_D24_UNORM_S8_UINT, D3D11_BIND_DEPTH_STENCIL);
+	
+	//tex2D->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CDevice::tex2D") - 1, "CDevice::tex2D");
 	return hr;
-}
-
-int CDevice::CreateConstBuffer()
-{
-	m_arrCB[(UINT)CB_TYPE::TRANSFORM] = new CConstBuffer(CB_TYPE::TRANSFORM);
-	m_arrCB[(UINT)CB_TYPE::TRANSFORM]->Create(sizeof(tTransform));
-
-
-	m_arrCB[(UINT)CB_TYPE::MATERIAL] = new CConstBuffer(CB_TYPE::MATERIAL);
-	m_arrCB[(UINT)CB_TYPE::MATERIAL]->Create(sizeof(tMtrlConst));
-
-	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
-	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tGlobalData));
-
-	m_arrCB[(UINT)CB_TYPE::ANIMATION2D] = new CConstBuffer(CB_TYPE::ANIMATION2D);
-	m_arrCB[(UINT)CB_TYPE::ANIMATION2D]->Create(sizeof(tAnim2DInfo));
-
-	return 0;
 }
 
 int CDevice::CreateSampler()
@@ -212,7 +222,6 @@ int CDevice::CreateSampler()
 
 
 	// 샘플러 바인딩
-	//
 	CONTEXT->VSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
 	CONTEXT->HSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
 	CONTEXT->DSSetSamplers((UINT)SAMPLER_TYPE::ANISOTROPIC, 1, m_arrSampler[(UINT)SAMPLER_TYPE::ANISOTROPIC].GetAddressOf());
@@ -230,6 +239,23 @@ int CDevice::CreateSampler()
 	return hr;
 }
 
+int CDevice::CreateConstBuffer()
+{
+	m_arrCB[(UINT)CB_TYPE::TRANSFORM] = new CConstBuffer(CB_TYPE::TRANSFORM);
+	m_arrCB[(UINT)CB_TYPE::TRANSFORM]->Create(sizeof(tTransform));
+
+	m_arrCB[(UINT)CB_TYPE::MATERIAL] = new CConstBuffer(CB_TYPE::MATERIAL);
+	m_arrCB[(UINT)CB_TYPE::MATERIAL]->Create(sizeof(tMtrlConst));
+
+	m_arrCB[(UINT)CB_TYPE::GLOBAL] = new CConstBuffer(CB_TYPE::GLOBAL);
+	m_arrCB[(UINT)CB_TYPE::GLOBAL]->Create(sizeof(tGlobalData));
+
+	m_arrCB[(UINT)CB_TYPE::ANIMATION2D] = new CConstBuffer(CB_TYPE::ANIMATION2D);
+	m_arrCB[(UINT)CB_TYPE::ANIMATION2D]->Create(sizeof(tAnim2DInfo));
+
+	return S_OK;
+}
+
 int CDevice::CreateRasterizerState()
 {
 	HRESULT hr = S_OK;
@@ -237,12 +263,14 @@ int CDevice::CreateRasterizerState()
 	m_arrRS[(UINT)RS_TYPE::CULL_BACK] = nullptr;
 
 
-	D3D11_RASTERIZER_DESC desc{};
+	D3D11_RASTERIZER_DESC desc = {};
 
+	// Cull Front Mode
 	desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_FRONT;
 	desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
 
-	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::CULL_BACK].GetAddressOf());
+	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::CULL_FRONT].GetAddressOf());
+
 
 	// Cull None Mode
 	desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
@@ -250,10 +278,50 @@ int CDevice::CreateRasterizerState()
 
 	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::CULL_NONE].GetAddressOf());
 
+
+	// WireFrame Mode
 	desc.CullMode = D3D11_CULL_MODE::D3D11_CULL_NONE;
 	desc.FillMode = D3D11_FILL_MODE::D3D11_FILL_WIREFRAME;
 
 	hr = DEVICE->CreateRasterizerState(&desc, m_arrRS[(UINT)RS_TYPE::WIRE_FRAME].GetAddressOf());
+
+
+	return hr;
+}
+
+int CDevice::CreateDepthStencilState()
+{
+	HRESULT hr = S_OK;
+
+	// Less
+	m_arrDS[(UINT)DS_TYPE::LESS] = nullptr;
+
+
+	D3D11_DEPTH_STENCIL_DESC desc = {};
+
+	// Greater
+	desc.DepthEnable = true;
+	desc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	desc.StencilEnable = false;
+
+	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::GREATER].GetAddressOf());
+
+	// NO_WRITE
+	desc.DepthEnable = true;
+	desc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+
+	desc.StencilEnable = false;
+
+	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::NO_WRITE].GetAddressOf());
+
+	// NO_TEST_NO_WRITE
+	desc.DepthEnable = false;
+	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	desc.StencilEnable = false;
+
+	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::NO_TEST_NO_WRITE].GetAddressOf());
 
 	return hr;
 }
@@ -303,53 +371,15 @@ int CDevice::CreateBlendState()
 
 	DEVICE->CreateBlendState(&desc, m_arrBS[(UINT)BS_TYPE::ONE_ONE].GetAddressOf());
 
-	return hr;
-}
-
-int CDevice::CreateDepthStencilState()
-{
-	HRESULT hr = S_OK;
-
-	// Less
-	//가까운 것이 깊이 테스트를 통과한다.
-	m_arrDS[(UINT)DS_TYPE::LESS] = nullptr;
-
-
-	D3D11_DEPTH_STENCIL_DESC desc = {};
-
-	// Greater
-	//먼 것이 깊이 테스트를 통과한다.
-	desc.DepthEnable = true;
-	desc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_GREATER;
-	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	desc.StencilEnable = false;
-
-	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::GREATER].GetAddressOf());
-
-	// NO_WRITE
-	//알파 블랜드 사용
-	desc.DepthEnable = true;
-	desc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS;
-	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	desc.StencilEnable = false;
-
-	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::NO_WRITE].GetAddressOf());
-
-	// NO_TEST_NO_WRITE
-	desc.DepthEnable = false;
-	desc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	desc.StencilEnable = false;
-
-	DEVICE->CreateDepthStencilState(&desc, m_arrDS[(UINT)DS_TYPE::NO_TEST_NO_WRITE].GetAddressOf());
 
 	return hr;
 }
 
 void CDevice::TargetClear()
 {
-	float arrColor[4] = { 0.f, 0.f, 0.f, 1.f };
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetTex.Get()->GetRTV().Get(), arrColor);
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilTex.Get()->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+	float arrColor[4] = { 0.2f, 0.2f, 0.2f, 1.f };
+	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetTex->GetRTV().Get(), arrColor);
+	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilTex->GetDSV().Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 }
 
 

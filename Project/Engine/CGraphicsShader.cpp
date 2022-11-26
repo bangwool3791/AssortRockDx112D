@@ -104,9 +104,12 @@ void CGraphicsShader::UpdateData()
 
 	// 블렌드 스테이트 설정
 	ComPtr<ID3D11BlendState> BSState = CDevice::GetInst()->GetBlendState(m_eBSType);
-	CONTEXT->OMSetBlendState(BSState.Get(), nullptr, 0xffffff);
-
+	CONTEXT->OMSetBlendState(BSState.Get(), nullptr, 0xffffffff);
 
 	CONTEXT->IASetInputLayout(m_Layout.Get());
 	CONTEXT->IASetPrimitiveTopology(m_eTopology);
+
+	//RSState->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CGraphicsShader::RSState") - 1, "CGraphicsShader::RSState");
+	//DSState->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CGraphicsShader::DSState") - 1, "CGraphicsShader::DSState");
+	//BSState->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CGraphicsShader::BSState") - 1, "CGraphicsShader::BSState");
 }

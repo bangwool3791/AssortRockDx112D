@@ -1,7 +1,7 @@
 #pragma once
 
 class CTimeMgr : 
-	public CSingletone< CTimeMgr>
+	public CSingleton< CTimeMgr>
 {
 private:
 	LARGE_INTEGER	m_llFrequence;
@@ -20,6 +20,6 @@ public:
 	float GetDeltaTime() { return m_fDeltaTime; }
 
 	CTimeMgr();
-	~CTimeMgr();
+	virtual ~CTimeMgr();
 };
 

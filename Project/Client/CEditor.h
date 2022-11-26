@@ -4,12 +4,12 @@ class CGameObjectEx;
 class MemPool;
 
 class CEditor
-	: public CSingletone<CEditor>
+	: public CSingleton<CEditor>
 {
 private:
 	vector<CGameObjectEx*>							m_vecEditorObj;
+	list<tDebugShapeInfo>	m_DebugDrawList;
 	array<CGameObjectEx*, (UINT)DEBUG_SHAPE::END>	m_DebugDrawObject;
-	CGameObjectEx* m_Arr[TILEX * TILEY];
 public:
 	void init();
 	void progress();
@@ -23,5 +23,5 @@ private:
 
 public:
 	CEditor();
-	~CEditor();
+	virtual ~CEditor();
 };

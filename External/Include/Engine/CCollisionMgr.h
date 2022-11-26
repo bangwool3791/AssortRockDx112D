@@ -1,7 +1,5 @@
 #pragma once
 
-#include "singleton.h"
-
 union COLLIDER_ID
 {
 	struct {
@@ -15,7 +13,7 @@ class CLevel;
 class CCollider2D;
 
 class CCollisionMgr
-	:public CSingletone<CCollisionMgr>
+	:public CSingleton<CCollisionMgr>
 {
 private:
 	UINT m_matrix[MAX_LAYER ];
@@ -41,5 +39,5 @@ public :
 
 public:
 	CCollisionMgr();
-	~CCollisionMgr();
+	virtual ~CCollisionMgr();
 };

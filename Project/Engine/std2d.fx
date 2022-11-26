@@ -67,6 +67,7 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     {
         CalcLight2D(color, _in.vWorldPos, i);
     }
+
     vOutColor *= color.vDiff;
     return vOutColor;
 }

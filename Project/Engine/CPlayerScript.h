@@ -15,6 +15,6 @@ public :
     CLONE(CPlayerScript);
 public:
     CPlayerScript();
-    ~CPlayerScript();
+    virtual ~CPlayerScript();
 };
 

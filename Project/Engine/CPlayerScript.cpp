@@ -34,8 +34,6 @@ void CPlayerScript::tick()
 	vPos.z = 1.f;
 	//static Vec3 vTarget;
 
-	float a = (m_vTarget - vPos).Length();
-
 	if ((m_vTarget - vPos).Length() > 1.f)
 	{
 		auto vMove = m_vTarget - vPos;
@@ -73,8 +71,13 @@ void CPlayerScript::BeginOverlap(CCollider2D* _pOther)
 	{
 		Vec3 vSource = GetOwner()->Transform()->GetRelativePos();
 		Vec3 vTarget = _pOther->GetOwner()->Transform()->GetRelativePos();
+		Vec3 vDiff = vTarget - vSource;
+		vDiff.Normalize();
 		vSource += (vTarget - vSource) * -DT * 20.f;
 		GetOwner()->Transform()->SetRelativePos(vSource);
+		GetOwner()->Transform()->SetRelativeRotationX(vDiff.x);
+		GetOwner()->Transform()->SetRelativeRotationY(vDiff.y);
+		GetOwner()->Transform()->SetRelativeRotationZ(vDiff.z);
 	}
 }
 
@@ -84,8 +87,13 @@ void CPlayerScript::Overlap(CCollider2D* _pOther)
 	{
 		Vec3 vSource = GetOwner()->Transform()->GetRelativePos();
 		Vec3 vTarget = _pOther->GetOwner()->Transform()->GetRelativePos();
+		Vec3 vDiff = vTarget - vSource;
+		vDiff.Normalize();
 		vSource += (vTarget - vSource) * -DT * 20.f;
 		GetOwner()->Transform()->SetRelativePos(vSource);
+		GetOwner()->Transform()->SetRelativeRotationX(vDiff.x);
+		GetOwner()->Transform()->SetRelativeRotationY(vDiff.y);
+		GetOwner()->Transform()->SetRelativeRotationZ(vDiff.z);
 	}
 }
 

@@ -82,6 +82,7 @@ struct tObjectRender
 
 extern tObjectRender g_objectInfo;
 
+
 struct tLightInfo
 {
 	Vec4		vDiff;
@@ -99,12 +100,12 @@ struct tLightInfo
 struct tGlobalData
 {
 	Vec2	vRenderResolution;
+	Vec2	vNoiseResolution;
 	int		iLight2DCount;
 	int		iLight3DCount;
 
 	float	fAccTime;
 	float	fDT;
-	int		ipad[2];
 };
 
 struct tParticle
@@ -117,4 +118,11 @@ struct tParticle
 	float fSpeed;
 	UINT iActive;
 };
+
+struct tParticleShare
+{
+	UINT iAliveCount;
+	UINT iPadding[3];
+};
+
 extern tGlobalData g_global;
