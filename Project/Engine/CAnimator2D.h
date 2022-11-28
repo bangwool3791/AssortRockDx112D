@@ -12,6 +12,7 @@ private:
     CAnimation2D*                    m_pCurAnim;
 
     bool                             m_bRepeat;
+    wstring                          m_strKey;
 
 public:
     virtual void finaltick() override;
@@ -31,6 +32,7 @@ public:
 
 public:
     CAnimator2D();
+    CAnimator2D(const CAnimator2D& _rhs);
     virtual ~CAnimator2D();
 };
 

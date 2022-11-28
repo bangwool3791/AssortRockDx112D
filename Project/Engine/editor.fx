@@ -74,8 +74,8 @@ float4 PS_Grid(VTX_OUT _in) : SV_Target
     uint iWorldY = (int)_in.vWorldPos.y;
     uint iResetY = (iWorldY + (uint)fThick / 2) % (uint)GridInterval;
 
-    if (0 <= iResetX && iResetX <= fThick
-        || 0 <= iResetY && iResetY <= fThick)
+    if (0.f <= iResetX && iResetX <= (uint)fThick
+        || 0.f <= iResetY && iResetY <= (uint)fThick)
     {
         return GridColor;
     }

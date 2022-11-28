@@ -132,6 +132,9 @@ void Instantiate(CGameObject* _pNewObj, CGameObject* _pOwner, int _iLayerIdx = 0
 const char* ToString(COMPONENT_TYPE);
 const wchar_t* ToWString(COMPONENT_TYPE);
 
+const char* ToObjectString(OBJECT_TYPE);
+const wchar_t* ToWObjectString(OBJECT_TYPE);
+
 #ifdef _DEBUG
 void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
 void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);

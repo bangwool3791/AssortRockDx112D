@@ -10,7 +10,26 @@ CAnimator2D::CAnimator2D()
     :CComponent(COMPONENT_TYPE::ANIMATOR2D)
     , m_bRepeat(false)
     , m_mapAnim{}
+    , m_strKey{}
 {
+}
+
+CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
+    :CComponent(COMPONENT_TYPE::ANIMATOR2D)
+    , m_bRepeat(_rhs.m_bRepeat)
+    , m_mapAnim{}
+    , m_strKey{_rhs.m_strKey}
+{
+    CAnimation2D* pAnimation2D{};
+
+    for (auto iter = _rhs.m_mapAnim.begin(); iter != _rhs.m_mapAnim.end(); ++iter)
+    {
+        pAnimation2D = nullptr;
+        m_mapAnim.insert(make_pair(iter->first, pAnimation2D = iter->second->Clone()));
+        pAnimation2D->SetOwner(this);
+    }
+
+    Play(m_strKey, m_bRepeat);
 }
 
 CAnimator2D::~CAnimator2D()
@@ -57,6 +76,7 @@ CAnimation2D* CAnimator2D::FindAnimation(const wstring& _strKey)
 
 void CAnimator2D::Play(const wstring& _strKey, bool _bRepeat)
 {
+    m_strKey = _strKey;
     CAnimation2D* pAnimation = FindAnimation(_strKey);
 
     assert(pAnimation);

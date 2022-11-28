@@ -92,4 +92,14 @@ struct tRenderInfo
     int     iAnim2DUse;
     int3    iPadding;
 };
+
+struct tTile
+{
+    float3		vPos;
+    float2		vSlice;
+    float2		vLeftTop; // UV
+    int		    iIndex;
+    int		    iParentIndex;
+    int         ibyOption;
+};
 #endif

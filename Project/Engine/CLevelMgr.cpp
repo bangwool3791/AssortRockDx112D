@@ -8,11 +8,7 @@
 #include "CAnimator2D.h"
 
 #include "GlobalComponent.h"
-#include "CGrid2DScript.h"
-#include "CPlayerScript.h"
-#include "CMonsterScript.h"
-#include "CCameraScript.h"
-#include "CDragScript.h"
+#include "GlobalScript.h"
 
 #include "CPaintShader.h"
 #include "CCollisionMgr.h"
@@ -97,14 +93,18 @@ void CLevelMgr::init()
 
 	pPointLight->AddComponent(new CTransform);
 	pPointLight->AddComponent(new CLight2D);
+	pPointLight->AddComponent(new CCollider2D);
+	pPointLight->AddComponent(new CPlayerScript);
 
 	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pPointLight->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
 
 	pPointLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
 	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
 	pPointLight->Light2D()->SetRadius(500.f);
 	pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
-	m_pCurLevel->AddGameObject(pPointLight, 0);
+	pPointLight->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	m_pCurLevel->AddGameObject(pPointLight, 1);
 	// GameObject ÃÊ±âÈ­
 	CGameObject* pObject = nullptr;
 
@@ -131,37 +131,18 @@ void CLevelMgr::init()
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
 		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
+		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
+		Instantiate(pPrefab->Instantiate(), pObject, 1);
+
 		m_pCurLevel->AddGameObject(pObject, 1);
-
-		CGameObject* pShadow = new CGameObject;
-		pShadow->SetName(L"Shadow");
-
-		pShadow->AddComponent(new CTransform);
-		pShadow->AddComponent(new CMeshRender);
-		pShadow->AddComponent(new CAnimator2D);
-
-		pShadow->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
-		pShadow->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-		pShadow->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
-		pShadow->Transform()->SetIgnoreParentScale(false);
-		pShadow->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
-		pShadow->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
-
-		pShadow->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-		pShadow->Animator2D()->Play(L"LeftWalk", true);
-
-		pShadow->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
-		pShadow->SetLayerIndex(1);
-		pObject->AddChild(pShadow);
 	}
-
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
 	* Mouse
 	*/
 	Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
 	Instantiate(pPrefab->Instantiate(), 31);
 
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
 
 	// Particle Object
@@ -192,7 +173,19 @@ void CLevelMgr::init()
 	//pPostProcess->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	//pPostProcess->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PostProcessMtrl"));
 
-	//m_pCurLevel->AddGameObject(pPostProcess, 0);
+	// TileMap Object
+	CGameObject* pTileMapObj = new CGameObject;
+	pTileMapObj->AddComponent(new CTransform);
+	pTileMapObj->AddComponent(new CTileMap);
+
+	pTileMapObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 1000.f));
+	pTileMapObj->Transform()->SetRelativeScale(Vec3(1000.f, 800.f, 1.f));
+
+	pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(L"TileTex"));
+	pTileMapObj->TileMap()->SetTileCount(10, 10);
+
+	m_pCurLevel->AddGameObject(pTileMapObj, 0);
+
 	m_pCurLevel->begin();
 }
 

@@ -36,7 +36,9 @@ public :
 
 	void UpdateData();
 	void Clear();
-
+	void SetOwner(CAnimator2D* _pOwner) {
+		m_pOwner = _pOwner;
+	}
 	CLONE(CAnimation2D);
 
 public:

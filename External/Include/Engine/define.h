@@ -33,11 +33,11 @@ typedef Vector4 Vec4;
 
 #define ALPHABLEND_Z_POS 0.9f
 
-#define TILEX 100
-#define TILEY 30
+#define TILEX 10
+#define TILEY 10
 
-#define TILECX 80.f
-#define TILECY 80.f
+#define TILECX 64.f
+#define TILECY 64.f
 
 #define OBJECTPOOL_SIZE 1000
 enum class SHADER_DOMAIN
@@ -118,7 +118,7 @@ enum class RES_TYPE
 	END,
 };
 
-enum COMPONENT_TYPE
+enum class COMPONENT_TYPE
 {
 	TRANSFORM,
 	CAMERA,
@@ -137,12 +137,16 @@ enum COMPONENT_TYPE
 	DECAL,
 	LANDSCAPE,
 
-
-	END,
-
 	SCRIPT,
+	END,
 };
 
+enum class OBJECT_TYPE
+{
+	LIGHT2D,
+	LIGHT3D,
+	END,
+};
 
 enum SCALAR_PARAM
 {
@@ -254,3 +258,6 @@ enum class INSTANCING_TYPE
 
 extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END];
 extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END];
+
+extern const char* OBJECT_TYPE_CHAR[(UINT)OBJECT_TYPE::END];
+extern const wchar_t* OBJECT_TYPE_WCHAR[(UINT)OBJECT_TYPE::END];

@@ -4,7 +4,7 @@
 #include "register.fx"
 #include "func.fx"
 
-RWStructuredBuffer<tParticle> ParticleBuffer : register(u0);
+RWStructuredBuffer<tParticle>      ParticleBuffer : register(u0);
 RWStructuredBuffer<tParticleShare> ParticleShare : register(u1);
 
 /*

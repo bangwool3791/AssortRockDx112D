@@ -48,6 +48,17 @@ void CConstBuffer::SetData(void* _pSrc)
 	CONTEXT->Unmap(m_CB.Get(), 0);
 }
 
+void* CConstBuffer::GetData()
+{
+	D3D11_MAPPED_SUBRESOURCE tSub = {};
+	void* _pSrc{};
+
+	CONTEXT->Map(m_CB.Get(), 0, D3D11_MAP::D3D11_MAP_WRITE_DISCARD, 0, &tSub);
+	memcpy(_pSrc, tSub.pData, m_tDesc.ByteWidth);
+	CONTEXT->Unmap(m_CB.Get(), 0);
+	return _pSrc;
+}
+
 void CConstBuffer::UpdateData(UINT _iPipelineStage)
 {
 	if ((UINT)PIPELINE_STAGE::VS & _iPipelineStage)

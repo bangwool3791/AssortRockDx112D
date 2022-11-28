@@ -94,6 +94,7 @@ Texture2D g_Noise : register(t15);
 Texture2D g_RTCopyTex : register(t60);
 
 StructuredBuffer<tRenderInfo> g_RenderInfo   : register(t16);
+StructuredBuffer<tTile>       TileBuffer     : register(t18);
 #define b g_RenderInfo
 // 샘플러 레지스터
 SamplerState g_sam_0 : register(s0); // anisotropic sampler

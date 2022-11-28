@@ -181,3 +181,11 @@ void Vector3::ToDegree()
 }
 
 Vec2::operator ImVec2() const { return ImVec2(x, y); }
+Vector4& Vector4::operator=(const ImVec4& _v)
+{
+	x = _v.x;
+	y = _v.y;
+	z = _v.z;
+	w = _v.w;
+	return *this;
+}

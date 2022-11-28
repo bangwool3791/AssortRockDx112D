@@ -81,7 +81,3 @@ void CDragScript::EndOverlap(CCollider2D* _pOther)
 {
 
 }
-
-//cout << "¸¶¿ì½º À§Ä¡ {x} " << vMousePos.x << "{y} " << vMousePos.y << endl;
-//cout << "¶¼Áü {x} " << EndPos.x << " {y} " << EndPos.y << endl;
-//cout << "°á°ú {x} " << SumPos.x << " {y} " << SumPos.y << endl;

@@ -34,6 +34,7 @@ void Collider2DUI::render_update()
 	ImGui::Text("OffsetPos"); ImGui::SameLine(); ImGui::InputFloat2("##OffsetPos", m_vOffsetPos);
 	ImGui::Text("Scale   "); ImGui::SameLine(); ImGui::InputFloat3("##Scale", m_vScale);
 
+
 	m_vRot.ToDegree();
 	ImGui::Text("Rotation"); ImGui::SameLine(); ImGui::InputFloat3("##Rotation", m_vRot);
 
@@ -45,10 +46,6 @@ void Collider2DUI::render_update()
 		GetTarget()->Collider2D()->SetScale(m_vScale);
 
 		m_vRot.ToRadian();
-		//GetTarget()->Collider2D()->SetRotationX(m_vRot.x);
-		//GetTarget()->Collider2D()->SetRotationY(m_vRot.y);
-		//GetTarget()->Collider2D()->SetRotationZ(m_vRot.z);
-
 		GetTarget()->Collider2D()->SetIgnoreObjectScale(m_bIgnorObjectScale);
 	}
 }

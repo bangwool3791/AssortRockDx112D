@@ -52,6 +52,15 @@
     <Filter Include="03. UI\Inspector\ComponentUI\Collider2DUI">
       <UniqueIdentifier>{9d284d60-7f88-431c-850c-3359e3b3185c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI\ShadowUI">
+      <UniqueIdentifier>{f0677cbd-fe0c-46b6-a33b-85ba80da7ecc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. ImGui\ImFunc">
+      <UniqueIdentifier>{23e917fe-a6e1-4f33-a654-98fb45f22d41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\Inspector\ComponentUI\Light2DUI">
+      <UniqueIdentifier>{ecdde8b2-25f8-46b8-90cc-7517c7db5741}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -123,6 +132,15 @@
     <ClInclude Include="Collider2DUI.h">
       <Filter>03. UI\Inspector\ComponentUI\Collider2DUI</Filter>
     </ClInclude>
+    <ClInclude Include="ShadowUI.h">
+      <Filter>03. UI\Inspector\ComponentUI\ShadowUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Func.h">
+      <Filter>02. ImGui\ImFunc</Filter>
+    </ClInclude>
+    <ClInclude Include="Light2DUI.h">
+      <Filter>03. UI\Inspector\ComponentUI\Light2DUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -181,6 +199,12 @@
     </ClCompile>
     <ClCompile Include="Collider2DUI.cpp">
       <Filter>03. UI\Inspector\ComponentUI\Collider2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI\ShadowUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Light2DUI.cpp">
+      <Filter>03. UI\Inspector\ComponentUI\Light2DUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -63,7 +63,6 @@ void CMouseScript::finaltick()
 		vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), 1.f };
 
 		const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
-		//cout << "¼¾ÅÍ [x] [y] " << vCenter.x << " " << vCenter.y << endl;
 		for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
 		{
 			(*iter)->GetScript<CPlayerScript>()->Set_Target(vTarget);

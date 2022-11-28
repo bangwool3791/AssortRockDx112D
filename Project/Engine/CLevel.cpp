@@ -93,6 +93,10 @@ CGameObject* CLevel::FindSelectedObject(const wstring& _Name)
 
 		for (size_t j = 0; j < vecObjects.size(); ++j)
 		{
+			if (vecObjects[j]->GetName() == L"SpotLight")
+			{
+				int a = 0;
+			}
 			if (_Name == vecObjects[j]->GetName())
 				return vecObjects[j];
 		}

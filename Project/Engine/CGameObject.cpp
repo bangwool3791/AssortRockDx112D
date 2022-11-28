@@ -43,10 +43,6 @@ CGameObject::CGameObject(const CGameObject& rhs)
 		if (rhs.m_arrCom[i] == nullptr)
 			continue;
 
-		if (i == MESHRENDER)
-		{
-			int a = 0;
-		}
 		AddComponent(rhs.m_arrCom[i]->Clone());
 	}
 
@@ -67,10 +63,12 @@ CGameObject::~CGameObject()
 {
 	for (int i{ 0 }; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
-		delete m_arrCom[i];
+		if (m_arrCom[i])
+			delete m_arrCom[i];
+
 		m_arrCom[i] = nullptr;
 	}
-	
+
 	for (auto iter{ m_vecScripts.begin() }; iter != m_vecScripts.end(); ++iter)
 	{
 		delete* iter;
@@ -107,7 +105,7 @@ void CGameObject::tick()
 
 	for (auto Iter{ m_arrCom.begin() }; Iter != m_arrCom.end(); ++Iter)
 	{
-		if((*Iter))
+		if ((*Iter))
 			(*Iter)->tick();
 	}
 
@@ -156,7 +154,7 @@ void CGameObject::finaltick()
 			++iter;
 		}
 	}
-	CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel(); 
+	CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
 	CLayer* pLayer = pLevel->GetLayer(m_iLayerIdx);
 	pLayer->RegisterObject(this);
 }
@@ -174,7 +172,7 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 
 	auto eComType = _pComponent->GetType();
 
-	if(eComType != SCRIPT)
+	if (eComType != COMPONENT_TYPE::SCRIPT)
 		assert(!m_arrCom[(UINT)eComType]);
 
 
@@ -183,7 +181,7 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 	//[220930] 아래 코드 없을 때, m_arrCom에서 포인터 못찾음
 	switch (eComType)
 	{
-	case SCRIPT:
+	case COMPONENT_TYPE::SCRIPT:
 		m_vecScripts.push_back((CScript*)_pComponent);
 		break;
 	default:
@@ -198,6 +196,18 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 		m_arrCom[(UINT)eComType] = _pComponent;
 		break;
 	}
+}
+
+CGameObject* CGameObject::GetChild(const wstring& _name)
+{
+	for (auto iter{ m_vecChild.begin() }; iter != m_vecChild.end(); ++iter)
+	{
+		if (!lstrcmp(_name.c_str(), (*iter)->GetName().c_str()))
+		{
+			return (*iter);
+		}
+	}
+	return nullptr;
 }
 
 void CGameObject::DestroyComponent(COMPONENT_TYPE _eComType)
@@ -222,16 +232,4 @@ void CGameObject::Destroy()
 	eve.wParam = (DWORD_PTR)this;
 
 	CEventMgr::GetInst()->AddEvent(eve);
-}
-
-CGameObject* CGameObject::GetChild(const wstring& _key)
-{
-	for (auto iter{ m_vecChild.begin() }; iter != m_vecChild.end(); ++iter)
-	{
-		if (!lstrcmp(_key.c_str(), (*iter)->GetName().c_str()))
-		{
-			return (*iter);
-		}
-	}
-	return nullptr;
 }

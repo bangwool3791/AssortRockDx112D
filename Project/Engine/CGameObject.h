@@ -6,6 +6,7 @@ class CCamera;
 class CAnimator2D;
 class CTransform;
 class CLight2D;
+class CTileMap;
 class CParticleSystem;
 class CRenderComponent;
 class CMeshRender;
@@ -17,40 +18,40 @@ class CCollider2D;
 
 class CGameObject
 	:public CEntity
-	,public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE>
+	, public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE>
 {
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
 	vector<CScript*>							  m_vecScripts;
-	CRenderComponent*							  m_pRenderComponent{};
+	CRenderComponent* m_pRenderComponent{};
 protected:
 	//부모 오브젝트
-	CGameObject*								  m_pParent;
+	CGameObject* m_pParent;
 	vector<CGameObject*>						  m_vecChild;
 	int											  m_iLayerIdx;
 	bool										  m_bDead;
 public:
-	CGameObject* Get_Parent(){return m_pParent;}
-	const vector<CGameObject*>& GetChilds() const {return m_vecChild;}
-	const vector<CScript*>& GetScripts() const {return m_vecScripts;}
-	int GetLayerIndex(){return m_iLayerIdx;}
+	CGameObject* Get_Parent() { return m_pParent; }
+	const vector<CGameObject*>& GetChilds() const { return m_vecChild; }
+	const vector<CScript*>& GetScripts() const { return m_vecScripts; }
+	int GetLayerIndex() { return m_iLayerIdx; }
 	void SetLayerIndex(int _iLayerIndex) { m_iLayerIdx = _iLayerIndex; }
 
 	CGameObject* GetChild(const wstring& _key);
 	bool IsDead() { return m_bDead; }
 	void Destroy();
-public :
+public:
 	virtual void begin();
 	virtual void tick();
 	virtual void finaltick();
 	virtual void render();
-public :
-	CRenderComponent* GetRenderComponent() {return m_pRenderComponent;}
+public:
+	CRenderComponent* GetRenderComponent() { return m_pRenderComponent; }
 
-public :
+public:
 	friend class CLayer;
 	friend class CEventMgr;
-public :
+public:
 	void AddComponent(CComponent* _pComponent);
 	void DestroyComponent(COMPONENT_TYPE _eComType);
 	void AddChild(CGameObject* _pGameObejct)
@@ -58,21 +59,25 @@ public :
 		_pGameObejct->m_pParent = this;
 		m_vecChild.push_back(_pGameObejct);
 	}
+
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
 
-	GET_COMPONENT(Transform,  TRANSFORM);
+	GET_COMPONENT(Transform, TRANSFORM);
 	GET_COMPONENT(MeshRender, MESHRENDER);
-	GET_COMPONENT(Camera,	  CAMERA);
+	GET_COMPONENT(Camera, CAMERA);
 	GET_COMPONENT(Collider2D, COLLIDER2D);
 	GET_COMPONENT(Animator2D, ANIMATOR2D);
-	GET_COMPONENT(Light2D,	  LIGHT2D);
+	GET_COMPONENT(Light2D, LIGHT2D);
 	GET_COMPONENT(ParticleSystem, PARTICLESYSTEM);
+	GET_COMPONENT(TileMap, TILEMAP);
 
 	template<typename T>
 	T* GetScript();
+	template<typename T>
+	T* GetScript(const wstring& _name);
 
 	CLONE(CGameObject);
-public :
+public:
 	CGameObject();
 	CGameObject(const CGameObject& rhs);
 	virtual ~CGameObject();
@@ -86,6 +91,24 @@ T* CGameObject::GetScript()
 		T* pScript = dynamic_cast<T*>(m_vecScripts[i]);
 		if (nullptr != pScript)
 			return pScript;
+	}
+	return nullptr;
+}
+
+template<typename T>
+T* CGameObject::GetScript(const wstring& _name)
+{
+	for (size_t i{ 0 }; i < m_vecScripts.size(); ++i)
+	{
+		T* pScript = dynamic_cast<T*>(m_vecScripts[i]);
+
+		if (!pScript)
+			return nullptr;
+
+		if (!lstrcmp(_name.c_str(), pScript->GetName().c_str()))
+		{
+			return pScript;
+		}
 	}
 	return nullptr;
 }

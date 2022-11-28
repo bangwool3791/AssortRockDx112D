@@ -35,7 +35,8 @@ extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END] =
 	"PARTICLESYSTEM",
 	"SKYBOX",
 	"DECAL",
-	"LANDSCAPE"
+	"LANDSCAPE",
+	"SCRIPT"
 };
 
 extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END] =
@@ -54,4 +55,17 @@ extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END] =
 	L"SKYBOX",
 	L"DECAL",
 	L"LANDSCAPE",
+	L"SCRIPT"
+};
+
+extern const char* OBJECT_TYPE_CHAR[(UINT)OBJECT_TYPE::END] =
+{
+	"LIGHT2D",
+	"LIGHT3D",
+};
+
+extern const wchar_t* OBJECT_TYPE_WCHAR[(UINT)OBJECT_TYPE::END] =
+{
+	L"LIGHT2D",
+	L"LIGHT3D",
 };

@@ -81,7 +81,7 @@ void CMaterial::UpdateData()
 	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::MATERIAL);
 	pCB->SetData(&m_tConst);
 	pCB->UpdateData(PIPELINE_STAGE::ALL_STAGE);
-
+	
 	m_pShader->UpdateData();
 }
 

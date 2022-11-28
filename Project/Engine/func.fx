@@ -29,11 +29,11 @@ void CalcLight2D(inout tLightColor _LightColor, float3 _vWorldPos, int iLightIdx
     // Spot Light
     else if (2 == g_Light2DBuffer[iLightIdx].iLightType)
     {
-        float3 _vDir = _vWorldPos - g_Light2DBuffer[iLightIdx].vWorldPos;
+        float3 _vDir = _vWorldPos - g_Light2DBuffer[iLightIdx].vWorldPos.xyz;
 
         float fDistance = distance(_vWorldPos.xy, g_Light2DBuffer[iLightIdx].vWorldPos.xy);
 
-        float fRatio = clamp(exp(2 * (dot(g_Light2DBuffer[iLightIdx].vWorldDir, _vDir / fDistance) - cos(g_Light2DBuffer[iLightIdx].fAngle * 0.5))), 0, 1);
+        float fRatio = clamp(exp(2 * (dot(g_Light2DBuffer[iLightIdx].vWorldDir, _vDir / fDistance) - cos(g_Light2DBuffer[iLightIdx].fAngle * 0.5))), 0, 10);
         _LightColor.vDiff += g_Light2DBuffer[iLightIdx].color.vDiff * fRatio;
 
     }

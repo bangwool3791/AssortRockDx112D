@@ -17,8 +17,14 @@ public :
 
     Vec3 GetLightColor() { return m_Info.vDiff; }
     LIGHT_TYPE GetLightType(LIGHT_TYPE _eType) { return m_Info.iLightType; }
-    float GetRadius(float _fRadius) { return m_Info.fRadius; }
-    float GetAngle(float _fAngle) { return m_Info.fAngle; }
+    float GetRadius()
+    { 
+        return m_Info.fRadius;
+    }
+    float GetAngle()
+    { 
+        return m_Info.fAngle; 
+    }
 
 public :
     virtual void finaltick() override;

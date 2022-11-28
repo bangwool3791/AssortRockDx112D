@@ -18,7 +18,7 @@ public:
 
     // SysMem -> GPU
     void SetData(void* _pSrc);
-
+    void* GetData();
     // _iPipelineStage : PIPELINE_STAGE, register binding
     void UpdateData(UINT _iPipelineStage);
     void UpdateData_CS();

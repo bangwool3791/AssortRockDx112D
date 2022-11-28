@@ -193,6 +193,7 @@
     <ClInclude Include="CEngine.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEventMgr.h" />
+    <ClInclude Include="CLightScript.h" />
     <ClInclude Include="CParticleExplosion.h" />
     <ClInclude Include="CGameObject.h" />
     <ClInclude Include="CGraphicsShader.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMouseScript.h" />
     <ClInclude Include="CParticleDefault.h" />
+    <ClInclude Include="CParticlePhycis.h" />
     <ClInclude Include="CParticleWood.h" />
     <ClInclude Include="CPaintShader.h" />
     <ClInclude Include="CParticleSystem.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="CScript.h" />
     <ClInclude Include="CSelectUnitScript.h" />
     <ClInclude Include="CShader.h" />
+    <ClInclude Include="CShadowScript.h" />
     <ClInclude Include="CStructuredBuffer.h" />
     <ClInclude Include="CUIMgr.h" />
     <ClInclude Include="d3dUtil.h" />
@@ -248,6 +251,7 @@
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="smallobjallocator.h" />
     <ClInclude Include="struct.h" />
+    <ClInclude Include="CTileMap.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAnimation2D.cpp" />
@@ -264,6 +268,7 @@
     <ClCompile Include="CEngine.cpp" />
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
+    <ClCompile Include="CLightScript.cpp" />
     <ClCompile Include="CParticleExplosion.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGraphicsShader.cpp" />
@@ -281,6 +286,7 @@
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMouseScript.cpp" />
     <ClCompile Include="CParticleDefault.cpp" />
+    <ClCompile Include="CParticlePhycis.cpp" />
     <ClCompile Include="CParticleWood.cpp" />
     <ClCompile Include="CPaintShader.cpp" />
     <ClCompile Include="CParticleSystem.cpp" />
@@ -296,8 +302,10 @@
     <ClCompile Include="CScript.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp" />
     <ClCompile Include="CShader.cpp" />
+    <ClCompile Include="CShadowScript.cpp" />
     <ClCompile Include="CStructuredBuffer.cpp" />
     <ClCompile Include="CTexture.cpp" />
+    <ClCompile Include="CTileMap.cpp" />
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="CUIMgr.cpp" />
@@ -328,10 +336,12 @@
     <FxCompile Include="register.fx" />
     <FxCompile Include="objectrenderer.fx" />
     <FxCompile Include="selectedunit.fx" />
+    <FxCompile Include="shadowrenderer.fx" />
     <FxCompile Include="std2d.fx" />
     <FxCompile Include="struct.fx" />
     <FxCompile Include="test.fx" />
     <FxCompile Include="tile.fx" />
+    <FxCompile Include="tilemap.fx" />
     <FxCompile Include="wave.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

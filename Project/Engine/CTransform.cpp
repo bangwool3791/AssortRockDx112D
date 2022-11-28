@@ -38,13 +38,6 @@ void CTransform::finaltick()
 	matRot *= XMMatrixRotationY(m_vRelativeRotation.y);
 	matRot *= XMMatrixRotationZ(m_vRelativeRotation.z);
 
-	static float Tick = DT;
-	Tick += DT;
-	if (Tick > 1.f)
-	{
-		cout << m_vRelativeRotation.z << endl;
-		Tick = 0.f;
-	}
 	//행렬에 담긴 x,y,z축에 대한 회전 정보(Vector3)를 담는다.
 	m_vRelativeDir[(UINT)DIR::RIGHT] = m_vWorldDir[(UINT)DIR::RIGHT] = XMVector3TransformNormal(Vec3{1.f, 0.f, 0.f}, matRot);
 	m_vRelativeDir[(UINT)DIR::UP] = m_vWorldDir[(UINT)DIR::UP] = XMVector3TransformNormal(Vec3{ 0.f, 1.f, 0.f }, matRot);

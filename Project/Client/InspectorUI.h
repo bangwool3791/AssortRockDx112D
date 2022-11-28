@@ -10,9 +10,10 @@ class InspectorUI :
 private:
     CGameObject*    m_TargetObj;
     ComponentUI*    m_arrComUI[(UINT)COMPONENT_TYPE::END];
-
+    ComponentUI*    m_arrObjUI[(UINT)OBJECT_TYPE::END];
 public:
     void SetTarget(CGameObject* _Target);
+    void SetLight(CGameObject* _Light);
 
 
 private:

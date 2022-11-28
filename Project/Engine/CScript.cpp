@@ -2,7 +2,7 @@
 #include "CScript.h"
 
 CScript::CScript()
-	:CComponent(SCRIPT)
+	:CComponent(COMPONENT_TYPE::SCRIPT)
 {
 }
 

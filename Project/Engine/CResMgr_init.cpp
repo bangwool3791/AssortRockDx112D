@@ -157,30 +157,31 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	v.vPos = Vec3(-1.0f, 0.0f, 1.f);
+	v.vPos = Vec3(-0.5f, 0.f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 1.f);
+	v.vUV = Vec2(0.f, 0.5f);
 	*iterVtx = v;
-	v.vPos = Vec3(0.0f, -1.0f, 1.f);
+	v.vPos = Vec3(0.f, 0.5f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(1.f, 1.f);
+	v.vUV = Vec2(0.5f, 0.f);
 	*iterVtx = v;
-	v.vPos = Vec3(1.0f, 0.0f, 1.f);
+	v.vPos = Vec3(0.5f, 0.f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(1.f, 0.f);
+	v.vUV = Vec2(1.f, 0.5f);
 	*iterVtx = v;
-	v.vPos = Vec3(0.0f, 1.0f, 1.f);
+	v.vPos = Vec3(0.f, -0.5f, 1.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f, 0.f);
+	v.vUV = Vec2(0.5f, 1.f);
 	*iterVtx = v;
 
 	*iterIdx = 0;
 	*iterIdx = 1;
 	*iterIdx = 2;
-	
+
 	*iterIdx = 0;
 	*iterIdx = 2;
 	*iterIdx = 3;
+
 	pMesh = new CMesh;
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"Tile", pMesh);
@@ -219,7 +220,8 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"Noise_03", L"texture\\noise\\noise_03.jpg");
 
 	Load<CTexture>(L"Sparks", L"texture\\particle\\Sparks.png");
-
+	Load<CTexture>(L"TileTex", L"texture\\TILE.bmp");
+	Load<CTexture>(L"Tile31", L"texture\\Tile31.png");
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
 }
@@ -334,6 +336,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	AddRes<CGraphicsShader>(L"ParticleRenderShader", pShader);
 
+	// Instancing Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\objectrenderer.fx", "VS_ObjectRender");
 	pShader->CreatePixelShader(L"shader\\objectrenderer.fx", "PS_ObjectRender");
@@ -345,6 +348,18 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	AddRes<CGraphicsShader>(L"ObjectRenderShader", pShader);
 
+	// Instancing Shadow Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\shadowrenderer.fx", "VS_ShadowRender");
+	pShader->CreatePixelShader(L"shader\\shadowrenderer.fx", "PS_ShadowRender");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+
+	AddRes<CGraphicsShader>(L"ShadowRenderShader", pShader);
+
 	// PostProcess Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\postprocess.fx", "VS_PostProcess");
@@ -354,6 +369,20 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_POST_PROCESS);
 
 	AddRes<CGraphicsShader>(L"PostProcessShader", pShader);
+
+	// TileMap Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
+	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
+	/*
+	* 투명한 타일이 있을 경우
+	*/
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	/*
+	* 알파블랜드는 타일은 생각하기 힘들다
+	*/
+	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
@@ -365,8 +394,6 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->AddComponent(new CMissileScript);
 
 	pObject->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
-	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Plane"));
@@ -379,7 +406,6 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CMeshRender);
 	pObject->AddComponent(new CSelectUnitScript);
-	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectUIMaterial"));
@@ -399,19 +425,39 @@ void CResMgr::CreateDefaultPrefab()
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
-	//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
 	AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject));
 
 	pObject = new CGameObject;
 	pObject->SetName(L"MouseObject");
-	/*
-	* 충돌체, 메쉬 랜더 추가 필요
-	*/
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CMouseScript);
 	AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
+
+
+	pObject = new CGameObject;
+	pObject->SetName(L"Shadow");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CAnimator2D);
+	pObject->AddComponent(new CShadowScript);
+
+	pObject->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
+	pObject->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
+	pObject->Transform()->SetIgnoreParentScale(false);
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ShadowMtrl"));
+
+	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	pObject->Animator2D()->Play(L"LeftWalk", true);
+
+	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
+
+	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+	AddRes<CPrefab>(L"ShadowPrefab", new CPrefab(pObject));
 }
 
 #include "CComputeShader.h"
@@ -483,6 +529,14 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial;
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
 	AddRes<CMaterial>(L"DebugDrawMtrl", pMaterial);
+
+	pMaterial = new CMaterial;
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ShadowRenderShader"));
+	AddRes<CMaterial>(L"ShadowMtrl", pMaterial);
+
+	pMaterial = new CMaterial;
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
+	AddRes<CMaterial>(L"TileMapMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

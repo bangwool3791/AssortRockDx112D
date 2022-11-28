@@ -7,8 +7,8 @@ class ComponentUI :
 {
 private:
     CGameObject*    m_TargetObj;
-    COMPONENT_TYPE  m_eType;
-
+    COMPONENT_TYPE  m_eType = (COMPONENT_TYPE)- 1;
+    OBJECT_TYPE     m_eObjType = (OBJECT_TYPE)-1;
 public:
     void SetTarget(CGameObject* _pTarget) { m_TargetObj = _pTarget; }
     CGameObject* GetTarget() { return m_TargetObj; }
@@ -18,6 +18,7 @@ public:
 
 public:
     ComponentUI(const string& _UIName, COMPONENT_TYPE _eType);
+    ComponentUI(const string& _UIName, OBJECT_TYPE _eType);
     ~ComponentUI();
 };
 

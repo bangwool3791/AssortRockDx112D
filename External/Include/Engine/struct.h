@@ -1,6 +1,6 @@
 #pragma once
 
-struct Vtx 
+struct Vtx
 {
 	Vec3 vPos;
 	Vec4 vColor;
@@ -13,6 +13,19 @@ struct tEvent
 	DWORD_PTR  wParam;
 	DWORD_PTR  lParam;
 	DWORD_PTR  oParam;
+};
+
+// ==============
+// TileMap 구조체
+// ==============
+struct tTile
+{
+	Vec3		vPos;
+	Vec2		vLeftTop; // UV
+	Vec2		vSlice;
+	UINT		iIndex;
+	UINT		iParentIndex;
+	UINT		ibyOption;	// 수업 중에는 타일 옵션을 통해 장애물 판정을 할 예정
 };
 
 struct tAnim2DFrm
@@ -112,7 +125,7 @@ struct tParticle
 {
 	Vec4 vRelativePos;
 	Vec4 vDir;
-	
+
 	float fMaxTime;
 	float fCurTime;
 	float fSpeed;

@@ -60,3 +60,13 @@ const wchar_t* ToWString(COMPONENT_TYPE _type)
 {
 	return COMPONENT_TYPE_WCHAR[(UINT)_type];
 }
+
+const char* ToObjectString(OBJECT_TYPE _type)
+{
+	return OBJECT_TYPE_CHAR[(UINT)_type];
+}
+
+const wchar_t* ToWObjectString(OBJECT_TYPE _type)
+{
+	return OBJECT_TYPE_WCHAR[(UINT)_type];
+}
