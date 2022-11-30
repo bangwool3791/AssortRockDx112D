@@ -40,32 +40,35 @@ CMouseScript::~CMouseScript()
 void CMouseScript::begin()
 {
 	GetOwner()->Transform()->SetRelativeScale(Vec3{ 3.f, 5.f, 0.f });
+	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
 }
 
 void CMouseScript::tick()
 {
-	static Vec3 vTarget;
-	static Vec2& vMousePos = CKeyMgr::GetInst()->GetMousePos_();
-	const static Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	if (m_pCamera)
+	{
+		m_fCameraScale = m_pCamera->Camera()->GetOrthographicScale();
+		m_vCameraPos   = m_pCamera->Transform()->GetRelativePos();
+	}
 
-	vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), 1.f };
-	GetOwner()->Transform()->SetRelativePos(Vec3{ vTarget.x, vTarget.y, 1.f });
+	m_vMousePos = CKeyMgr::GetInst()->GetMousePos();
+	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+
+	m_vTarget = Vec3{ m_vMousePos.x - (m_vRenderResolution.x / 2) , -m_vMousePos.y + (m_vRenderResolution.y / 2), 1.f };
+	m_vTarget *= m_fCameraScale;
+	m_vTarget += m_vCameraPos;
+	GetOwner()->Transform()->SetRelativePos(Vec3{ m_vTarget.x, m_vTarget.y, 1.f });
 }
 
 void CMouseScript::finaltick()
 {
-	static Vec3 vTarget;
-	static Vec2& vMousePos = CKeyMgr::GetInst()->GetMousePos_();
-	const static Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
-
 	if (KEY_PRESSED(KEY::RBTN))
 	{
-		vTarget = Vec3{ vMousePos.x - (vRenderResolution.x / 2) , -vMousePos.y + (vRenderResolution.y / 2), 1.f };
-
 		const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
 		for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
 		{
-			(*iter)->GetScript<CPlayerScript>()->Set_Target(vTarget);
+			if((*iter)->GetScript<CPlayerScript>())
+				(*iter)->GetScript<CPlayerScript>()->Set_Target(m_vTarget);
 		}
 	}
 
@@ -93,27 +96,41 @@ void CMouseScript::finaltick()
 	if (KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
 		bClicked = false;
+		GetOwner()->Collider2D()->SetPause();
 		CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
 }
 
 void CMouseScript::BeginOverlap(CCollider2D* _pOther)
 {
-	CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
-	CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
+	if (_pOther->GetName() == L"Player")
+	{
+		CUIMgr::GetInst()->DeleteUI(UI_TYPE::UNIT_UI);
+		CUIMgr::GetInst()->Clear_Objects(UI_TYPE::GAMEOBJECT);
+	}
 }
 
 void CMouseScript::Overlap(CCollider2D* _pOther)
 {
-	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
-	CGameObject* pUnit_UI = pUIPrefab->Instantiate();
-	Instantiate(pUnit_UI, _pOther->GetOwner(), 0);
+	if (_pOther->GetName() == L"Player")
+	{
+		Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
+		CGameObject* pUnit_UI = pUIPrefab->Instantiate();
+		Instantiate(pUnit_UI, _pOther->GetOwner(), 0);
 
-	CUIMgr::GetInst()->AddUI(_pOther->GetOwner(), UI_TYPE::GAMEOBJECT);
-	CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
+		CUIMgr::GetInst()->AddUI(_pOther->GetOwner(), UI_TYPE::GAMEOBJECT);
+		CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
+	}
 }
 
 void CMouseScript::EndOverlap(CCollider2D* _pOther)
 {
-	GetOwner()->Collider2D()->SetPause();
+	//if (_pOther->GetOwner()->GetName() == L"Player")
+	//{
+		GetOwner()->Collider2D()->SetPause();
+//	}
+	//else
+	//{
+
+	//}
 }

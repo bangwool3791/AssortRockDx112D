@@ -21,8 +21,9 @@ struct tEvent
 struct tTile
 {
 	Vec3		vPos;
-	Vec2		vLeftTop; // UV
+	Vec3		vSize;
 	Vec2		vSlice;
+	Vec2		vLeftTop; // UV
 	UINT		iIndex;
 	UINT		iParentIndex;
 	UINT		ibyOption;	// 수업 중에는 타일 옵션을 통해 장애물 판정을 할 예정

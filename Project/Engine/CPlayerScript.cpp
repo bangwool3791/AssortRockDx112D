@@ -33,6 +33,9 @@ void CPlayerScript::tick()
 	Vec3 vPos = Transform()->GetRelativePos();
 	vPos.z = 1.f;
 
+	/*
+	* Occur Frame Drop
+	*/
 	if ((m_vTarget - vPos).Length() > 1.f)
 	{
 		auto vMove = m_vTarget - vPos;

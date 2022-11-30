@@ -221,7 +221,19 @@ void CResMgr::CreateDefaultTexture()
 
 	Load<CTexture>(L"Sparks", L"texture\\particle\\Sparks.png");
 	Load<CTexture>(L"TileTex", L"texture\\TILE.bmp");
-	Load<CTexture>(L"Tile31", L"texture\\Tile31.png");
+
+	for (UINT i{}; i < 32; i++)
+	{
+		wstring name = L"Tile" + std::to_wstring(i);
+		wstring str = L"texture\\Terrain\\Tile\\Tile";
+		str += std::to_wstring(i) + L".png";
+		Load<CTexture>(name, str);
+	}
+	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
+	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
+	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
+	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
+	//Load<CTexture>(L"Tile31", L"texture\\Terrain\\Tile\\Tile31.png");
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
 }
@@ -377,7 +389,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	/*
 	* 투명한 타일이 있을 경우
 	*/
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	/*
 	* 알파블랜드는 타일은 생각하기 힘들다

@@ -33,8 +33,8 @@ typedef Vector4 Vec4;
 
 #define ALPHABLEND_Z_POS 0.9f
 
-#define TILEX 10
-#define TILEY 10
+#define TILEX 100
+#define TILEY 100
 
 #define TILECX 64.f
 #define TILECY 64.f
@@ -192,6 +192,40 @@ enum TEX_PARAM
 
 	TEX_ARR_0,
 	TEX_ARR_1,
+
+	DUMMY0,
+	DUMMY1,
+	DUMMY2,
+	DUMMY3,
+	DUMMY4,
+	DUMMY5,
+	DUMMY6,
+
+	TEX_8,
+	TEX_9,
+	TEX_10,
+	TEX_11,
+	TEX_12,
+	TEX_13,
+	TEX_14,
+	TEX_15,
+	TEX_16,
+	TEX_17,
+	TEX_18,
+	TEX_19,
+	TEX_20,
+	TEX_21,
+	TEX_22,
+	TEX_23,
+	TEX_24,
+	TEX_25,
+	TEX_26,
+	TEX_27,
+	TEX_28,
+	TEX_29,
+	TEX_30,
+	TEX_31,
+	TEX_32,
 
 	TEX_END,
 };

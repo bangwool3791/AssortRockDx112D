@@ -46,7 +46,7 @@ void CCollider2D::finaltick()
 
 	// DebugDraw ฟไรป
 #ifdef _DEBUG
-	Vec4 Color = { 0.f, 1.f, 0.f, 1.f };
+	Vec4 Color = { 0.f, 0.f, 1.f, 1.f };
 	if(0 < m_iOverlapCount)
 		Color = Vec4{ 1.f, 0.f, 0.f, 1.f };
 

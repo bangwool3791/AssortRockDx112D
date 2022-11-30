@@ -3,6 +3,7 @@
 #include "CLevelMgr.h"
 #include "CResMgr.h"
 
+#include "CDevice.h"
 #include "CLevel.h"
 #include "CGameObject.h"
 #include "CAnimator2D.h"
@@ -55,7 +56,7 @@ void CLevelMgr::init()
 	*/
 	pCamObj->Camera()->SetLayerMaskAll();
 	pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
-	pCamObj->Transform()->SetRelativePos(Vec3{ 0.f, 0.f, -500.f });
+	pCamObj->Transform()->SetRelativePos(Vec3{ 0.f, 0.f, 500.f });
 	m_pCurLevel->AddGameObject(pCamObj, 0);
 	
 	// Directional Light Ãß°¡
@@ -146,21 +147,21 @@ void CLevelMgr::init()
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
 
 	// Particle Object
-	CGameObject* pParticle = new CGameObject;
-	pParticle->SetName(L"Particle");
-	pParticle->AddComponent(new CTransform);
-	pParticle->AddComponent(new CParticleExplosion);
+	//CGameObject* pParticle = new CGameObject;
+	//pParticle->SetName(L"Particle");
+	//pParticle->AddComponent(new CTransform);
+	//pParticle->AddComponent(new CParticleExplosion);
 
-	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
-	m_pCurLevel->AddGameObject(pParticle, 0);
+	//pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	//m_pCurLevel->AddGameObject(pParticle, 0);
 
-	pParticle = new CGameObject;
-	pParticle->SetName(L"ParticleWood");
-	pParticle->AddComponent(new CTransform);
-	pParticle->AddComponent(new CParticleWood);
+	//pParticle = new CGameObject;
+	//pParticle->SetName(L"ParticleWood");
+	//pParticle->AddComponent(new CTransform);
+	//pParticle->AddComponent(new CParticleWood);
 
-	pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
-	m_pCurLevel->AddGameObject(pParticle, 0);
+	//pParticle->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	//m_pCurLevel->AddGameObject(pParticle, 0);
 
 		// PostProcess Object
 	//CGameObject* pPostProcess = new CGameObject;
@@ -177,14 +178,30 @@ void CLevelMgr::init()
 	CGameObject* pTileMapObj = new CGameObject;
 	pTileMapObj->AddComponent(new CTransform);
 	pTileMapObj->AddComponent(new CTileMap);
+	pTileMapObj->AddComponent(new CTileScript);
+	pTileMapObj->AddComponent(new CCollider2D);
+	pTileMapObj->SetName(L"TileMap");
 
-	pTileMapObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, 1000.f));
-	pTileMapObj->Transform()->SetRelativeScale(Vec3(1000.f, 800.f, 1.f));
+	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
-	pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(L"TileTex"));
-	pTileMapObj->TileMap()->SetTileCount(10, 10);
+	pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
+	pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
+	pTileMapObj->Collider2D()->SetIgnoreObjectScale(true);
+	pTileMapObj->Collider2D()->SetScale(Vec2(TILECX * TILEX, TILECY * TILEY * 0.5f));
+	pTileMapObj->Collider2D()->SetOffsetPos(Vec2(TILECX * TILEX * 0.5f, TILECY * TILEY * 0.25));
 
-	m_pCurLevel->AddGameObject(pTileMapObj, 0);
+	for (UINT i{}; i < TEX_32; ++i)
+	{
+		wstring str = L"Tile";
+		str += std::to_wstring(i);
+		pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+	}
+
+	pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
+
+	m_pCurLevel->AddGameObject(pTileMapObj, 30);
+
+	CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
 
 	m_pCurLevel->begin();
 }

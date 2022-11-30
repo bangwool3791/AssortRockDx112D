@@ -230,6 +230,7 @@
     <ClInclude Include="CShader.h" />
     <ClInclude Include="CShadowScript.h" />
     <ClInclude Include="CStructuredBuffer.h" />
+    <ClInclude Include="CTileScript.h" />
     <ClInclude Include="CUIMgr.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="extern.cpp" />
@@ -306,6 +307,7 @@
     <ClCompile Include="CStructuredBuffer.cpp" />
     <ClCompile Include="CTexture.cpp" />
     <ClCompile Include="CTileMap.cpp" />
+    <ClCompile Include="CTileScript.cpp" />
     <ClCompile Include="CTimeMgr.cpp" />
     <ClCompile Include="CTransform.cpp" />
     <ClCompile Include="CUIMgr.cpp" />

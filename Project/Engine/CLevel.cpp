@@ -67,6 +67,22 @@ void CLevel::AddGameObject(CGameObject* _pObject, const wstring& _strLayerName)
 
 #include "CGameObject.h"
 
+CGameObject* CLevel::FindParentObjectByName(const wstring& _Name)
+{
+	for (UINT i = 0; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObjects = m_arrLayer[i].GetParentObjects();
+
+		for (size_t j = 0; j < vecObjects.size(); ++j)
+		{
+			if (_Name == vecObjects[j]->GetName())
+				return vecObjects[j];
+		}
+	}
+
+	return nullptr;
+}
+
 CGameObject* CLevel::FindObjectByName(const wstring& _Name)
 {
 	for (UINT i = 0; i < MAX_LAYER; ++i)

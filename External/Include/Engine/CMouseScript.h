@@ -19,6 +19,13 @@ private:
     Vec2 StartPos;
     Vec2 EndPos;
     vector<CGameObject*>    m_vecUnit;
+    CGameObject*            m_pCamera;
+    float                   m_fCameraScale;
+    Vec3                    m_vCameraPos;
+
+    Vec2                    m_vRenderResolution;
+    Vec2                    m_vMousePos;
+    Vec3                    m_vTarget;
 public:
     CMouseScript();
     virtual ~CMouseScript();

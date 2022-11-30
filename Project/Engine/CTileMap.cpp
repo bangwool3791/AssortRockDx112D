@@ -1,8 +1,13 @@
 #include "pch.h"
 #include "CTileMap.h"
 
+#include "CLevel.h"
+#include "CLevelMgr.h"
 #include "CResMgr.h"
+
 #include "CTransform.h"
+#include "CCamera.h"
+
 #include "CStructuredBuffer.h"
 
 CTileMap::CTileMap()
@@ -111,6 +116,47 @@ void CTileMap::SetTileCount(UINT _iWidth, UINT _iHeight)
 	}
 }
 
+void CTileMap::begin()
+{
+	//float fWidth = m_AtlasTex->GetWidth();
+	//float fHeight = m_AtlasTex->GetHeight();
+
+	m_vLeftTop = Vec2(64.f, 64.f);
+	m_vSlice = Vec2(64.f, 64.f);
+
+	//m_vLeftTop /= Vec2(fWidth, fHeight);
+	//m_vSlice /= Vec2(fWidth, fHeight);
+
+	tTile t{};
+	//for (size_t i = 0; i < m_vecTile.size(); ++i)
+	//{
+	//	m_vecTile[i].vLeftTop = vLeftTop;
+	//	m_vecTile[i].vSlice = vSlice;
+	//}
+
+	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
+
+	for (int i = 0; i < TILEY; ++i)
+	{
+		for (int j = 0; j < TILEX; ++j)
+		{
+			float	fX = (TILECX * j) + ((i % 2) * (TILECX / 2.f));
+			float	fY = (TILECY / 2.f) * i;
+
+			t.vLeftTop = m_vLeftTop;
+			t.vSlice = m_vSlice;
+			t.vPos = { fX, fY, 1.f };
+			t.vSize = Vec3{ (float)TILECX, (float)TILECY, 0.f };
+			t.iIndex = i * TILEX + j;
+			t.iParentIndex = 0;
+			t.ibyOption = 0;
+			m_vecTile[i * TILEX + j] = t;
+		}
+	}
+
+	m_vecTile[0].ibyOption = 1;
+}
+
 void CTileMap::finaltick()
 {
 
@@ -120,53 +166,58 @@ void CTileMap::render()
 {
 	Transform()->UpdateData();
 
-
-	float fWidth = m_AtlasTex->GetWidth();
-	float fHeight = m_AtlasTex->GetHeight();
-
-	Vec2 vLeftTop = Vec2(64.f, 64.f);
-	Vec2 vSlice = Vec2(64.f, 64.f);
-
-	vLeftTop /= Vec2(fWidth, fHeight);
-	vSlice /= Vec2(fWidth, fHeight);
-
-	tTile t{};
-	//for (size_t i = 0; i < m_vecTile.size(); ++i)
-	//{
-	//	m_vecTile[i].vLeftTop = vLeftTop;
-	//	m_vecTile[i].vSlice = vSlice;
-	//}
-	for (int i = 0; i < TILEY; ++i)
-	{
-		for (int j = 0; j < TILEX; ++j)
-		{
-			float	fX = (TILECX * j) + ((i % 2) * (TILECX / 2.f));
-			float	fY = (TILECY / 2.f) * i;
-
-			t.vLeftTop		= vLeftTop;
-			t.vSlice		= vSlice;
-			t.vPos			= { fX, fY, 0.f };
-			t.iIndex		= i * TILEX + j;
-			t.iParentIndex  = 0;
-
-			m_vecTile[i * TILEX + j] = t;
-		}
-	}
-
 	//m_vecTile[0].vLeftTop = Vec2(0.f, 0.f);
 
 	m_TileBuffer->SetData(m_vecTile.data(), (UINT)(m_vTileCount.x * m_vTileCount.y));
-	m_TileBuffer->UpdateData(18, PIPELINE_STAGE::PS);
+	m_TileBuffer->UpdateData(18, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
 
+	if (m_pCamera)
+		m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
 
-	GetCurMaterial()->SetScalarParam(VEC2_0, &vLeftTop);
-	GetCurMaterial()->SetScalarParam(VEC2_1, &vSlice);
+	GetCurMaterial()->SetScalarParam(VEC2_0, &m_vLeftTop);
+	GetCurMaterial()->SetScalarParam(VEC2_1, &m_vSlice);
 	GetCurMaterial()->SetScalarParam(VEC2_2, &m_vTileCount);
 
-	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex);
+	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vCameraPos);
+
+	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex[0]);
+	GetCurMaterial()->SetTexParam(TEX_1, m_AtlasTex[1]);
+	GetCurMaterial()->SetTexParam(TEX_2, m_AtlasTex[2]);
+	GetCurMaterial()->SetTexParam(TEX_3, m_AtlasTex[3]);
+	GetCurMaterial()->SetTexParam(TEX_4, m_AtlasTex[4]);
+	GetCurMaterial()->SetTexParam(TEX_5, m_AtlasTex[5]);
+	GetCurMaterial()->SetTexParam(TEX_6, m_AtlasTex[6]);
+	GetCurMaterial()->SetTexParam(TEX_7, m_AtlasTex[7]);
+	GetCurMaterial()->SetTexParam(TEX_8, m_AtlasTex[8]);
+	GetCurMaterial()->SetTexParam(TEX_9, m_AtlasTex[9]);
+	GetCurMaterial()->SetTexParam(TEX_10, m_AtlasTex[10]);
+	GetCurMaterial()->SetTexParam(TEX_11, m_AtlasTex[11]);
+	GetCurMaterial()->SetTexParam(TEX_12, m_AtlasTex[12]);
+	GetCurMaterial()->SetTexParam(TEX_13, m_AtlasTex[13]);
+	GetCurMaterial()->SetTexParam(TEX_14, m_AtlasTex[14]);
+	GetCurMaterial()->SetTexParam(TEX_15, m_AtlasTex[15]);
+	GetCurMaterial()->SetTexParam(TEX_16, m_AtlasTex[16]);
+	GetCurMaterial()->SetTexParam(TEX_17, m_AtlasTex[17]);
+	GetCurMaterial()->SetTexParam(TEX_18, m_AtlasTex[18]);
+	GetCurMaterial()->SetTexParam(TEX_19, m_AtlasTex[19]);
+	GetCurMaterial()->SetTexParam(TEX_20, m_AtlasTex[20]);
+	GetCurMaterial()->SetTexParam(TEX_21, m_AtlasTex[21]);
+	GetCurMaterial()->SetTexParam(TEX_22, m_AtlasTex[22]);
+	GetCurMaterial()->SetTexParam(TEX_23, m_AtlasTex[23]);
+	GetCurMaterial()->SetTexParam(TEX_24, m_AtlasTex[24]);
+	GetCurMaterial()->SetTexParam(TEX_25, m_AtlasTex[25]);
+	GetCurMaterial()->SetTexParam(TEX_26, m_AtlasTex[26]);
+	GetCurMaterial()->SetTexParam(TEX_27, m_AtlasTex[27]);
+	GetCurMaterial()->SetTexParam(TEX_28, m_AtlasTex[28]);
+	GetCurMaterial()->SetTexParam(TEX_29, m_AtlasTex[29]);
+	GetCurMaterial()->SetTexParam(TEX_30, m_AtlasTex[30]);
+	GetCurMaterial()->SetTexParam(TEX_31, m_AtlasTex[31]);
+	GetCurMaterial()->SetTexParam(TEX_32, m_AtlasTex[32]);
 
 	GetCurMaterial()->UpdateData();
 
-	GetMesh()->render();
+	GetMesh()->render_particle(m_vecTile.size());
+
+	CMaterial::Clear();
 }

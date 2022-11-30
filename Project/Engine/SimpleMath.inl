@@ -253,7 +253,7 @@ inline Vector2& DirectX::SimpleMath::Vector2::operator/=(const Vector2& V)
     assert(0.f != V.y);
 
     XMVECTOR v1 = XMLoadFloat2(this);
-    XMVECTOR X = XMVectorMultiply(v1, Vector2(1.f / V.x, 1.f / V.x) );
+    XMVECTOR X = XMVectorMultiply(v1, Vector2(1.f / V.x, 1.f / V.y) );
     XMStoreFloat2(this, X);
     return *this;
 }

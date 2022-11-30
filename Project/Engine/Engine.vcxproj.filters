@@ -187,6 +187,21 @@
     <Filter Include="Engine\06. Component\08. TileMap">
       <UniqueIdentifier>{f80f3f2b-ca66-4f5e-a6a4-4d32ec9878df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\08. Scripts\03. Object\02. CMonsterScript">
+      <UniqueIdentifier>{b640cb46-46b8-4147-8db2-1b7f1f9674b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\03. Object\01. CPlayerScript">
+      <UniqueIdentifier>{d8c47819-c6a1-4bb3-8f4e-f475342e6a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\03. Object\03. CShadowScript">
+      <UniqueIdentifier>{98949946-ce86-4be1-82e1-48e09bf196e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\03. Object\04. CMissileScript">
+      <UniqueIdentifier>{4276742e-2d97-4ad3-9dde-e1ed3c68b0cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\08. Scripts\03. Object\05. CTileScript">
+      <UniqueIdentifier>{1c661173-0771-497b-8f86-d9a62c2725ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -387,21 +402,6 @@
     <ClInclude Include="CGrid2DScript.h">
       <Filter>Engine\08. Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="CMissileScript.h">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="CMissileScript2.h">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="CMonsterScript.h">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="CPlayerScript.h">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="CShadowScript.h">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClInclude>
     <ClInclude Include="CLightScript.h">
       <Filter>Engine\08. Scripts\03. Object\06. LightScript</Filter>
     </ClInclude>
@@ -410,6 +410,24 @@
     </ClInclude>
     <ClInclude Include="CTileMap.h">
       <Filter>Engine\06. Component\08. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerScript.h">
+      <Filter>Engine\08. Scripts\03. Object\01. CPlayerScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CMonsterScript.h">
+      <Filter>Engine\08. Scripts\03. Object\02. CMonsterScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CShadowScript.h">
+      <Filter>Engine\08. Scripts\03. Object\03. CShadowScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript2.h">
+      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CMissileScript.h">
+      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileScript.h">
+      <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -569,21 +587,6 @@
     <ClCompile Include="CGrid2DScript.cpp">
       <Filter>Engine\08. Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="CMissileScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="CMissileScript2.cpp">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="CMonsterScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="CPlayerScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="CShadowScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object</Filter>
-    </ClCompile>
     <ClCompile Include="CLightScript.cpp">
       <Filter>Engine\08. Scripts\03. Object\06. LightScript</Filter>
     </ClCompile>
@@ -592,6 +595,24 @@
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
       <Filter>Engine\06. Component\08. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerScript.cpp">
+      <Filter>Engine\08. Scripts\03. Object\01. CPlayerScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CMonsterScript.cpp">
+      <Filter>Engine\08. Scripts\03. Object\02. CMonsterScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CShadowScript.cpp">
+      <Filter>Engine\08. Scripts\03. Object\03. CShadowScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript2.cpp">
+      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CMissileScript.cpp">
+      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTileScript.cpp">
+      <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

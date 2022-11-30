@@ -20,6 +20,14 @@ private:
     bool bClicked;
     Vec2 StartPos;
     Vec2 EndPos;
+
+    CGameObject*            m_pCamera;
+    float                   m_fCameraScale;
+    Vec2                    m_vCameraPos;
+    Vec2                    m_vRenderResolution;
+    Vec2                    m_vMousePos;
+    Vec3                    m_vTarget;
+    Vec3                    m_vPos;
 public:
     CDragScript();
     virtual ~CDragScript();

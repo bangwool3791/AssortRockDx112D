@@ -105,10 +105,14 @@ void CImGuiMgr::clear()
 
 #include "InspectorUI.h"
 #include "ListUI.h"
+#include "TileMapUI.h"
 
 void CImGuiMgr::CreateUI()
 {
-    InspectorUI* pUI = new InspectorUI;
+    UI* pUI = new InspectorUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new TileMapUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     ListUI* listui = new ListUI;    

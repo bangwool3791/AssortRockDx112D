@@ -168,6 +168,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ShadowUI.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TileMapUI.h" />
     <ClInclude Include="TransformUI.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
@@ -193,6 +194,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ShadowUI.cpp" />
+    <ClCompile Include="TileMapUI.cpp" />
     <ClCompile Include="TransformUI.cpp" />
     <ClCompile Include="UI.cpp" />
   </ItemGroup>

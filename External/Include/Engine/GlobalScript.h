@@ -9,3 +9,4 @@
 #include "CDragScript.h"
 #include "CShadowScript.h"
 #include "CMouseScript.h"
+#include "CTileScript.h"

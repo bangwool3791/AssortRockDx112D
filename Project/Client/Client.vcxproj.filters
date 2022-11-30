@@ -61,6 +61,9 @@
     <Filter Include="03. UI\Inspector\ComponentUI\Light2DUI">
       <UniqueIdentifier>{ecdde8b2-25f8-46b8-90cc-7517c7db5741}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\TileMap">
+      <UniqueIdentifier>{0d7bc0e2-7cf4-476d-8537-ba3cbe144c61}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -141,6 +144,9 @@
     <ClInclude Include="Light2DUI.h">
       <Filter>03. UI\Inspector\ComponentUI\Light2DUI</Filter>
     </ClInclude>
+    <ClInclude Include="TileMapUI.h">
+      <Filter>03. UI\TileMap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="Light2DUI.cpp">
       <Filter>03. UI\Inspector\ComponentUI\Light2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMapUI.cpp">
+      <Filter>03. UI\TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
