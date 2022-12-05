@@ -17,7 +17,23 @@ private:
 public:
     virtual void finaltick() override;
 public:
+    const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
     const tAnim2DInfo& GetAniInfo();
+    const tAnim2DFrm& GetAniFrame();
+    tAnim2DFrm GetAniFrameCopy();
+
+    /*
+    Vec2 vLeftTop;
+	Vec2 vSlice;
+	Vec2 vOffset;
+	Vec2 vFullSize;
+	float fDuration;
+    */
+    void SetLeftTop(Vec2 _vLeftTop, int _index);
+    void SetSlice(Vec2 _vSlice, int _index);
+    void SetOffset(Vec2 _vOffset, int _index);
+    void SetFullSize(Vec2 _vFullSize, int _index);
+    void SetDuration(float _fDuration, int _index);
 public:
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* FindAnimation(const wstring& _strKey);

@@ -106,6 +106,13 @@ void CImGuiMgr::clear()
 #include "InspectorUI.h"
 #include "ListUI.h"
 #include "TileMapUI.h"
+#include "ProgressUI.h"
+#include "OutlinerUI.h"
+#include "ContentUI.h"
+#include "DummyUI.h"
+#include "ModelUI.h"
+#include "ModelComUI.h"
+#include "ComInspector.h"
 
 void CImGuiMgr::CreateUI()
 {
@@ -113,11 +120,36 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new TileMapUI;
+    pUI->begin();
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    ListUI* listui = new ListUI;    
-    listui->SetModal(true);
-    m_mapUI.insert(make_pair(listui->GetName(), listui));
+    pUI = new OutlinerUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new ContentUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new DummyUI;
+    pUI->begin();
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new ModelUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new ListUI;    
+    pUI->SetModal(true);
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new ModelComUI;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new ComInspector;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    ProgressUI* progressui = new ProgressUI;
+    progressui->SetModal(true);
+    progressui->Close();
+    m_mapUI.insert(make_pair(progressui->GetName(), progressui));
 }
 
 UI* CImGuiMgr::FindUI(const string& _name)

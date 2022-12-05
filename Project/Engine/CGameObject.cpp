@@ -193,9 +193,43 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 			m_pRenderComponent = pRenderCom;
 		}
 
+		assert(!m_arrCom[(UINT)eComType]);
+
 		m_arrCom[(UINT)eComType] = _pComponent;
 		break;
 	}
+}
+
+void CGameObject::AddChild(CGameObject* _pChild)
+{
+	/*
+	* 최상위 부모라면
+	*/
+	if (nullptr == _pChild->Get_Parent())
+	{
+		/*
+		* 레이어 미 정의
+		*/
+		if (-1 == _pChild->m_iLayerIdx)
+		{
+			//자식의 현재 레이어 = 부모레이어
+			_pChild->m_iLayerIdx = m_iLayerIdx;
+		}
+		else
+		{
+			//현재 레이어, 자식 객체 등록 해제
+			CLayer* pLayer = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(_pChild->m_iLayerIdx);
+			pLayer->DeregisterObject(_pChild);
+		}
+	}
+	//하위 자식
+	else
+	{
+		//부모 연결 해지
+		_pChild->DisconnectFromParent();
+	}
+	_pChild->m_pParent = this;
+	m_vecChild.push_back(_pChild);
 }
 
 CGameObject* CGameObject::GetChild(const wstring& _name)
@@ -232,4 +266,21 @@ void CGameObject::Destroy()
 	eve.wParam = (DWORD_PTR)this;
 
 	CEventMgr::GetInst()->AddEvent(eve);
+}
+
+void CGameObject::DisconnectFromParent()
+{
+	vector<CGameObject*>::iterator iter = m_pParent->m_vecChild.begin();
+
+	for (; iter != m_vecChild.end(); ++iter)
+	{
+		if ((*iter) == this)
+		{
+			m_vecChild.erase(iter);
+			m_pParent = nullptr;
+			return;
+		}
+	}
+
+	assert(nullptr);
 }

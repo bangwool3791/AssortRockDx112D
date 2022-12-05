@@ -31,7 +31,7 @@ void ComponentUI::render_update()
         ImGui::Button(ToString(m_eType));
 
     if ((int)m_eObjType != -1)
-        ImGui::Button(ToObjectString(m_eObjType));
+        ImGui::Button(ToString(m_eObjType));
 
     ImGui::PopStyleColor(3);
     ImGui::PopID();

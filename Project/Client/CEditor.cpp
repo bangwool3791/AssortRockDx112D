@@ -3,11 +3,14 @@
 
 #include "imgui.h"
 #include "CGameObjectEx.h"
-#include <Engine\Ctransform.h>
-#include <Engine\CMeshRender.h>
-#include <Engine\CGrid2DScript.h>
-#include <Engine\CCamera.h>
 
+#include <Engine\CMeshRender.h>
+
+#include <Engine\CComponent.h>
+#include <Engine\GlobalComponent.h>
+
+#include <Engine\CCamera.h>
+#include <Engine\CGrid2DScript.h>
 #include <Engine\CRenderMgr.h>
 
 CEditor::CEditor()
@@ -18,7 +21,9 @@ CEditor::CEditor()
 CEditor::~CEditor()
 {
 	Safe_Del_Vec(m_vecEditorObj);
+	Safe_Del_Vec(m_vecDummyObj);
 	Safe_Del_Array(m_DebugDrawObject);
+	Safe_Del_Array(m_arrCom);
 }
 
 void CEditor::init()
@@ -26,22 +31,54 @@ void CEditor::init()
 	CreateDebugDrawObject();
 
 	// Editor 용도 Grid Object 추가
-	CGameObjectEx* pGridObj = new CGameObjectEx;
-	pGridObj->SetName(L"Grid Object");
+	//CGameObjectEx* pGridObj = new CGameObjectEx;
+	//pGridObj->SetName(L"Grid Object");
 
-	pGridObj->AddComponent(new CTransform);
-	pGridObj->AddComponent(new CMeshRender);
-	pGridObj->AddComponent(new CGrid2DScript);
+	//pGridObj->AddComponent(new CTransform);
+	//pGridObj->AddComponent(new CMeshRender);
+	//pGridObj->AddComponent(new CGrid2DScript);
 
-	pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	//pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
 
-	pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	//pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	//pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
+	//pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
-	pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
-	m_vecEditorObj.push_back(pGridObj);
+	//pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	//m_vecEditorObj.push_back(pGridObj);
+
+	CGameObjectEx* pObject = new CGameObjectEx;
+	pObject->SetName(L"Dummy Object");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	pObject->AddComponent(new CCollider2D);
+	//pObject->AddComponent(new CAnimator2D);
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
+
+	//pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	//pObject->Animator2D()->Play(L"LeftWalk", true);
+	m_vecDummyObj.push_back(pObject);
+
+	/*
+	* GameObject 입력 Component
+	*/
+	m_arrCom[(UINT)COMPONENT_TYPE::TRANSFORM]	= new CTransform();
+	m_arrCom[(UINT)COMPONENT_TYPE::TRANSFORM]->SetName(L"Transform");
+	m_arrCom[(UINT)COMPONENT_TYPE::COLLIDER2D]	= new CCollider2D();
+	m_arrCom[(UINT)COMPONENT_TYPE::COLLIDER2D]->SetName(L"Colider2D");
+	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]	= new CAnimator2D();
+	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->Play(L"LeftWalk", true);
+	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetName(L"Animator2D");
+	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]		= new CLight2D();
+	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"Light2D");
 }
 
 void CEditor::progress()
@@ -165,27 +202,41 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	pDebugObj->render();
 }
 
-
-void Vector3::ToRadian()
+CGameObjectEx* CEditor::GetDummyObject(const wstring& _name)
 {
-	x = (x / 180.f) * XM_PI;
-	y = (y / 180.f) * XM_PI;
-	z = (z / 180.f) * XM_PI;
+	for (UINT i{}; i < m_vecDummyObj.size(); ++i)
+	{
+		if (m_vecDummyObj[i]->GetName() == _name)
+		{
+			return m_vecDummyObj[i];
+		}
+	}
+	return nullptr;
 }
 
-void Vector3::ToDegree()
+void CEditor::AddEditObject(CGameObjectEx* _pGameObject)
 {
-	x = (x / XM_PI) * 180.f;
-	y = (y / XM_PI) * 180.f;
-	z = (z / XM_PI) * 180.f;
+	for (UINT i{}; i < m_vecEditorObj.size(); ++i)
+	{
+		if (m_vecEditorObj[i]->GetName() == _pGameObject->GetName())
+		{
+			/*
+			* Message Box 추가
+			*/
+			return;
+		}
+	}
+	m_vecEditorObj.push_back(_pGameObject);
 }
 
-Vec2::operator ImVec2() const { return ImVec2(x, y); }
-Vector4& Vector4::operator=(const ImVec4& _v)
+CGameObjectEx* CEditor::FindByName(const wstring& _strky)
 {
-	x = _v.x;
-	y = _v.y;
-	z = _v.z;
-	w = _v.w;
-	return *this;
+	for (UINT i{}; i < m_vecEditorObj.size(); ++i)
+	{
+		if (m_vecEditorObj[i]->GetName() == _strky)
+			return m_vecEditorObj[i];
+	}
+	return nullptr;
 }
+
+

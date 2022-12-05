@@ -6,6 +6,7 @@ UI::UI(const string& _strName)
 	, m_ParentUI(nullptr)
 	, m_bOpen(true)
 	, m_bModal(false)
+	, m_bSeperator{true}
 {
 }
 
@@ -66,7 +67,6 @@ void UI::render()
 				for (int i = 0; i < m_vecChildUI.size(); ++i)
 				{
 					m_vecChildUI[i]->render();
-					ImGui::Separator();
 				}
 
 				ImGui::End();
@@ -86,6 +86,9 @@ void UI::render()
 			}
 
 			ImGui::EndChild();
+
+			if (m_bSeperator)
+				ImGui::Separator();
 		}	
 
 		if (false == m_bOpen)

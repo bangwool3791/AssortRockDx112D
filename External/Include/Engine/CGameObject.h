@@ -54,11 +54,7 @@ public:
 public:
 	void AddComponent(CComponent* _pComponent);
 	void DestroyComponent(COMPONENT_TYPE _eComType);
-	void AddChild(CGameObject* _pGameObejct)
-	{
-		_pGameObejct->m_pParent = this;
-		m_vecChild.push_back(_pGameObejct);
-	}
+	void AddChild(CGameObject* _pGameObejct);
 
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
 
@@ -75,6 +71,7 @@ public:
 	T* GetScript();
 	template<typename T>
 	T* GetScript(const wstring& _name);
+	void DisconnectFromParent();
 
 	CLONE(CGameObject);
 public:

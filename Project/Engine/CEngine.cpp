@@ -66,6 +66,7 @@ void CEngine::progress()
 void CEngine::tick()
 {
 	// Manager 업데이트
+	CResMgr::GetInst()->tick();
 	CTimeMgr::GetInst()->tick();
 	CKeyMgr::GetInst()->tick();
 	CRenderMgr::GetInst()->tick();

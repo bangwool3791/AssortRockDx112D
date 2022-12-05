@@ -39,7 +39,6 @@ void CLevelMgr::init()
 
 
 	// 텍스쳐 로딩
-	// 텍스쳐 로딩
 	Ptr<CTexture> pTexture = CResMgr::GetInst()->Load<CTexture>(L"MagicCircle", L"texture\\Player.bmp");
 	Ptr<CTexture> pSmokeTex = CResMgr::GetInst()->Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
 	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
@@ -109,33 +108,34 @@ void CLevelMgr::init()
 	// GameObject 초기화
 	CGameObject* pObject = nullptr;
 
+	//Edit Test를 위해 주석 처리
 	for (float i{-500.f}; i < 500.f; i+=100.f)
 	{
-		pObject = new CGameObject;
-		pObject->SetName(L"Player");
+		//pObject = new CGameObject;
+		//pObject->SetName(L"Player");
 
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CMeshRender);
-		pObject->AddComponent(new CCollider2D);
-		pObject->AddComponent(new CPlayerScript);
-		pObject->AddComponent(new CAnimator2D);
+		//pObject->AddComponent(new CTransform);
+		//pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+		//pObject->AddComponent(new CCollider2D);
+		//pObject->AddComponent(new CPlayerScript);
+		//pObject->AddComponent(new CAnimator2D);
 
-		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
-		pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
-		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+		//pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
+		//pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+		//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+		//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+		//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 
-		pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-		pObject->Animator2D()->Play(L"LeftWalk", true);
+		//pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+		//pObject->Animator2D()->Play(L"LeftWalk", true);
 
-		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+		//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+		//pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
-		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
-		Instantiate(pPrefab->Instantiate(), pObject, 1);
+		//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
+		//Instantiate(pPrefab->Instantiate(), pObject, 1);
 
-		m_pCurLevel->AddGameObject(pObject, 1);
+		//m_pCurLevel->AddGameObject(pObject, 1);
 	}
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
@@ -190,7 +190,7 @@ void CLevelMgr::init()
 	pTileMapObj->Collider2D()->SetScale(Vec2(TILECX * TILEX, TILECY * TILEY * 0.5f));
 	pTileMapObj->Collider2D()->SetOffsetPos(Vec2(TILECX * TILEX * 0.5f, TILECY * TILEY * 0.25));
 
-	for (UINT i{}; i < TEX_32; ++i)
+	for (UINT i{}; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"Tile";
 		str += std::to_wstring(i);

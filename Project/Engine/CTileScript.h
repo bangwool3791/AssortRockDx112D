@@ -13,6 +13,8 @@ private:
     Vec3            m_vCameraPos;
     Vec2			m_vMousePos;
     Vec2            m_vRenderResolution;
+
+    Vec2            m_vTileSize;
 private:
     bool Picking(const Vec3& vPos, UINT& iIndex);
 public:

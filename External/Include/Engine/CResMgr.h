@@ -16,7 +16,7 @@ private:
 	map<wstring, Ptr<CRes>>				m_arrRes[(UINT)RES_TYPE::END];
 	vector<D3D11_INPUT_ELEMENT_DESC>	m_vecLayoutInfo;
 	UINT								m_iLayoutOffset;
-
+	bool								m_bChanged;
 public:
 	template<typename T>
 	inline void AddRes(const wstring& _strKey, T* _pRes);
@@ -27,6 +27,8 @@ public:
 
 public :
 	void init();
+	void tick() { m_bChanged = false; }
+	bool IsChanged() { return m_bChanged; }
 
 	const vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutInfo() { return m_vecLayoutInfo; }
 

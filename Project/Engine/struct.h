@@ -76,8 +76,6 @@ struct tTransform
 	Matrix matWVP;
 };
 
-extern tTransform g_transform;
-
 struct tMtrlConst
 {
 	int iArr[4];
@@ -93,9 +91,6 @@ struct tObjectRender
 	tMtrlConst mtrl;
 	tAnim2DInfo animation;
 };
-
-extern tObjectRender g_objectInfo;
-
 
 struct tLightInfo
 {
@@ -140,3 +135,5 @@ struct tParticleShare
 };
 
 extern tGlobalData g_global;
+extern  tTransform g_transform;
+extern  std::vector<tObjectRender>	g_vecInfoObject;

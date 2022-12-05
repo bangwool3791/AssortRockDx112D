@@ -42,23 +42,25 @@ void CTileScript::BeginOverlap(CCollider2D* _pOther)
 
 void CTileScript::Overlap(CCollider2D* _pOther)
 {
-	cout << "A " << DT << endl;
 	static Vec3 vMouse;
 
 	if (_pOther->GetOwner()->GetName() == L"MouseObject")
 	{
 		if (KEY_PRESSED(KEY::LBTN))
 		{
-			m_vMousePos = _pOther->GetOwner()->Transform()->GetRelativePos();
+			if (m_vTileSize != m_pTileMap->GetTileSize())
+				m_vTileSize = m_pTileMap->GetTileSize();
 
+			m_vMousePos = _pOther->GetOwner()->Transform()->GetRelativePos();
+			
 			vector<tTile>& tiles = m_pTileMap->GetTiles();
 
-			UINT startX = m_vMousePos.x / TILECX;
-			UINT startY = m_vMousePos.y / (TILECY * 0.5f);
+			UINT startX = m_vMousePos.x / (TILECX * m_vTileSize.x);
+			UINT startY = m_vMousePos.y / (TILECY * m_vTileSize.y  * 0.5f);
 			UINT StartIndex = startX + startY * TILEX;
 
-			UINT endX = m_vRenderResolution.x / TILECX;
-			UINT endY = m_vRenderResolution.y / (TILECY * 0.5f);
+			UINT endX = m_vRenderResolution.x / (TILECX * m_vTileSize.x);
+			UINT endY = m_vRenderResolution.y / (TILECY * m_vTileSize.y  * 0.5f);
 			UINT EndIndex = endX + endY * endX;
 
 			for (UINT i{ StartIndex }; i < StartIndex + EndIndex; ++i)
@@ -94,10 +96,10 @@ bool CTileScript::Picking(const Vec3& vPos, UINT& iIndex)
 	*/
 	Vec3	vPoint[4] = {
 
-		Vec3(tiles[iIndex].vPos.x,					tiles[iIndex].vPos.y + (TILECY / 2.f), 0.f),	// 12
-		Vec3(tiles[iIndex].vPos.x + (TILECX / 2.f),	tiles[iIndex].vPos.y, 0.f),						// 3
-		Vec3(tiles[iIndex].vPos.x,					tiles[iIndex].vPos.y - (TILECY / 2.f), 0.f),	// 6
-		Vec3(tiles[iIndex].vPos.x - (TILECX / 2.f),	tiles[iIndex].vPos.y, 0.f),						// 9
+		Vec3(tiles[iIndex].vPos.x,					tiles[iIndex].vPos.y + (TILECY * m_vTileSize.y  / 2.f), 0.f),	// 12
+		Vec3(tiles[iIndex].vPos.x + (TILECX * m_vTileSize.x / 2.f),	tiles[iIndex].vPos.y, 0.f),						// 3
+		Vec3(tiles[iIndex].vPos.x,					tiles[iIndex].vPos.y - (TILECY * m_vTileSize.y  / 2.f), 0.f),	// 6
+		Vec3(tiles[iIndex].vPos.x - (TILECX * m_vTileSize.x / 2.f),	tiles[iIndex].vPos.y, 0.f),						// 9
 
 	};
 

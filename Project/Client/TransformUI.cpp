@@ -19,6 +19,9 @@ void TransformUI::update()
 {
 	if (nullptr != GetTarget())
 	{
+		if (nullptr == GetTarget()->Transform())
+			return;
+		
 		m_vPos = GetTarget()->Transform()->GetRelativePos();
 		m_vScale = GetTarget()->Transform()->GetRelativeScale();
 		m_vRot = GetTarget()->Transform()->GetRelativeRotation();
@@ -43,6 +46,9 @@ void TransformUI::render_update()
 
 	if (GetTarget())
 	{
+		if (nullptr == GetTarget()->Transform())
+			return;
+
 		GetTarget()->Transform()->SetRelativePos(m_vPos);
 		GetTarget()->Transform()->SetRelativeScale(m_vScale);
 

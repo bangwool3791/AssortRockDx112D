@@ -49,7 +49,7 @@ public :
 protected :
 	virtual void finaltick()override;
 	virtual void render()override;
-
+	virtual void render_Instancing()override {}
 	CLONE(CParticleSystem);
 	
 public :

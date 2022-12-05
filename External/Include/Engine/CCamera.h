@@ -24,12 +24,15 @@ private:
 
     UINT                    m_iLayerMask;
 
+    vector<CGameObject* >                    m_vecOpaque;
+    vector<CGameObject* >                    m_vecMask;
+    vector<CGameObject* >                    m_vecTransparent;
+
     map<const wstring, vector<CGameObject*>> m_mapOpaqueVec;
     map<const wstring, vector<CGameObject*>> m_mapMaskVec;
     map<const wstring, vector<CGameObject*>> m_mapTransparentVec;
     vector<CGameObject* >                    m_vecPostProcess;
 
-    vector<tObjectRender>		             m_vecInfoObject;		//
     CStructuredBuffer*                       m_pObjectRenderBuffer;
 private :
     void SortObject();

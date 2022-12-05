@@ -4,6 +4,10 @@
 class CGameObject;
 class ComponentUI;
 
+#include <Engine\Ptr.h>
+#include <Engine\CRes.h>
+class ResUI;
+
 class InspectorUI :
     public UI
 {
@@ -11,8 +15,13 @@ private:
     CGameObject*    m_TargetObj;
     ComponentUI*    m_arrComUI[(UINT)COMPONENT_TYPE::END];
     ComponentUI*    m_arrObjUI[(UINT)OBJECT_TYPE::END];
+
+    Ptr<CRes>       m_TargetRes;
+    ResUI*          m_arrResUI[(UINT)RES_TYPE::END];
 public:
-    void SetTarget(CGameObject* _Target);
+
+    void SetTargetObject(CGameObject* _Target);
+    void SetTargetResource(CRes* _Resource);
     void SetLight(CGameObject* _Light);
 
 

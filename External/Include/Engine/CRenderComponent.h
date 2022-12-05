@@ -46,7 +46,12 @@ public:
 	Ptr<CMaterial> GetDynamicMaterial();
 public:
 	virtual CRenderComponent* Clone() = 0;
+protected:
+	INSTANCING_TYPE m_eInsType;
+public:
+	void SetInstancingType(INSTANCING_TYPE _eType) { m_eInsType = _eType; }
+	INSTANCING_TYPE GetInstancingType() { return m_eInsType; }
 public:
 	virtual void render() = 0;
-
+	virtual void render_Instancing() = 0;
 };

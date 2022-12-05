@@ -28,7 +28,7 @@ void Light2DUI::render_update()
 {
 	ComponentUI::render_update();
 
-	if (m_pDirectionalLight)
+	/*if (m_pDirectionalLight)
 		m_vColor = m_pDirectionalLight->Light2D()->GetLightColor();
 
 	static ImVec4 color = ImVec4(114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 200.0f / 255.0f);
@@ -79,5 +79,5 @@ void Light2DUI::render_update()
 		m_fSpotLightAngle = ConvertDegreeToRadian(m_fSpotLightAngle);
 		m_pSpotLight->Light2D()->SetAngle(m_fSpotLightAngle);
 		m_pSpotLight->Light2D()->SetLightColor(m_vSpotLightColor);
-	}
+	}*/
 }

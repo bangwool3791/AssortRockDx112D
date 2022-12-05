@@ -7,6 +7,7 @@ class CGameObjectEx
 public :
 	virtual void finaltick();
 
+	CLONE(CGameObjectEx);
 public :
 	CGameObjectEx();
 	virtual ~CGameObjectEx();

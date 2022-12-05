@@ -5,6 +5,8 @@
 #include "CRenderMgr.h"
 #include "CStructuredBuffer.h"
 
+#include "CTimeMgr.h"
+
 #include "CLevel.h"
 #include "CLevelMgr.h"
 #include "CLayer.h"
@@ -100,84 +102,106 @@ void CCamera::render()
 */
 void CCamera::render_opaque()
 {
-	Ptr<CMesh> p{};
+	for (auto iter{ m_vecOpaque.begin() }; iter != m_vecOpaque.end(); ++iter)
+	{
+		(*iter)->render();
+	}
 
 	for (auto elem{ m_mapOpaqueVec.begin() }; elem != m_mapOpaqueVec.end(); ++elem)
 	{
+		auto iterbegin = elem->second.begin();
+		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
-			if (!p.Get())
-				p = (*elem2)->GetRenderComponent()->GetMesh();
-
-			(*elem2)->render();
-			m_vecInfoObject.push_back(g_objectInfo);
-			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+			(*elem2)->GetRenderComponent()->render_Instancing();
 		}
-		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), (UINT)m_vecInfoObject.size());
-		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
-		if(p.Get())
-			p->render_particle((UINT)m_vecInfoObject.size());
+		if (!g_vecInfoObject.empty())
+		{
+			m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
+			m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+			if (pMesh.Get())
+				pMesh->render_particle((UINT)g_vecInfoObject.size());
+		}
+
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
-		m_vecInfoObject.clear();
-		p = nullptr;
+		g_vecInfoObject.clear();
 	}
 }
 
 void CCamera::render_mask()
 {
-	Ptr<CMesh> p{};
+
+	for (auto iter{ m_vecMask.begin() }; iter != m_vecMask.end(); ++iter)
+	{
+		(*iter)->render();
+	}
 
 	for (auto elem{ m_mapMaskVec.begin() }; elem != m_mapMaskVec.end(); ++elem)
 	{
+		auto iterbegin = elem->second.begin();
+
+		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
-			if (!p.Get())
-				p = (*elem2)->GetRenderComponent()->GetMesh();
-
-			(*elem2)->render();
-			m_vecInfoObject.push_back(g_objectInfo);
-			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+			(*elem2)->GetRenderComponent()->render_Instancing();
 		}
-		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), (UINT)m_vecInfoObject.size());
-		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
-		if (p.Get())
-			p->render_particle((UINT)m_vecInfoObject.size());
+		m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
+		m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+
+		if (pMesh.Get())
+			pMesh->render_particle((UINT)g_vecInfoObject.size());
+
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
-		m_vecInfoObject.clear();
+		g_vecInfoObject.clear();
+	}
 
-		p = nullptr;
+	static float tTime = DT;
+	tTime += DT;
+	if (3 < tTime)
+	{
+		tTime = 0;
+		cout << "render_mask()" << endl;
 	}
 }
 
 void CCamera::render_transparent()
 {
-	Ptr<CMesh> p{};
+	for (auto iter{ m_vecTransparent.begin() }; iter != m_vecTransparent.end(); ++iter)
+	{
+		(*iter)->render();
+	}
 
 	for (auto elem{ m_mapTransparentVec.begin() }; elem != m_mapTransparentVec.end(); ++elem)
 	{
+		auto iterbegin = elem->second.begin();
+
+		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
-			if (!p.Get())
-				p = (*elem2)->GetRenderComponent()->GetMesh();
-			/*
-			* 오브젝트 타입 분기
-			*/
-			(*elem2)->render();
-			m_vecInfoObject.push_back(g_objectInfo);
-			memset(&g_objectInfo, 0, sizeof(tObjectRender));
+			(*elem2)->GetRenderComponent()->render_Instancing();
 		}
-		m_pObjectRenderBuffer->SetData(m_vecInfoObject.data(), (UINT)m_vecInfoObject.size());
-		m_pObjectRenderBuffer->UpdateData(16, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
+		m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
-		if(p.Get())
-			p->render_particle((UINT)m_vecInfoObject.size());
+		if (pMesh.Get())
+			pMesh->render_particle((UINT)g_vecInfoObject.size());
 
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
-		m_vecInfoObject.clear();
-		p = nullptr;
+		g_vecInfoObject.clear();
+	}
+
+	static float tTime = DT;
+	tTime += DT;
+	if (3 < tTime)
+	{
+		tTime = 0;
+		cout << "render_transparent" << endl;
 	}
 }
 
@@ -211,8 +235,22 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 	}
 }
 
+/*
+* Object Render
+*/
 void CCamera::SortObject()
 {
+	static float tTime = DT;
+	tTime += DT;
+	if (3 < tTime)
+	{
+		tTime = 0;
+		cout << "SortObject()" << endl;
+	}
+
+	m_vecOpaque.clear();
+	m_vecMask.clear();
+	m_vecTransparent.clear();
 	Clear_VecOfMap(m_mapOpaqueVec);
 	Clear_VecOfMap(m_mapMaskVec);
 	Clear_VecOfMap(m_mapTransparentVec);
@@ -244,16 +282,50 @@ void CCamera::SortObject()
 
 				SHADER_DOMAIN eDomain = GraphicsShader->GetDomain();
 
+				auto Type = vecGameObject[j]->GetRenderComponent()->GetInstancingType();
+
 				switch (eDomain)
 				{
 				case SHADER_DOMAIN::DOMAIN_OPAQUE:
-					m_mapOpaqueVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+				{
+
+					if (INSTANCING_TYPE::NONE == Type)
+					{
+						m_vecOpaque.push_back(vecGameObject[j]);
+					}
+					else
+					{
+						m_mapOpaqueVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+					}
+				}
 					break;
 				case SHADER_DOMAIN::DOMAIN_MASK:
-					m_mapMaskVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+				{
+					auto Type = vecGameObject[j]->GetRenderComponent()->GetInstancingType();
+
+					if (INSTANCING_TYPE::NONE == Type)
+					{
+						m_vecMask.push_back(vecGameObject[j]);
+					}
+					else
+					{
+						m_mapMaskVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+					}
+				}
 					break;
 				case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
-					m_mapTransparentVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+				{
+					auto Type = vecGameObject[j]->GetRenderComponent()->GetInstancingType();
+
+					if (INSTANCING_TYPE::NONE == Type)
+					{
+						m_vecTransparent.push_back(vecGameObject[j]);
+					}
+					else
+					{
+						m_mapTransparentVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
+					}
+				}
 					break;
 				case SHADER_DOMAIN::DOMAIN_POST_PROCESS:
 					m_vecPostProcess.push_back(vecGameObject[j]);

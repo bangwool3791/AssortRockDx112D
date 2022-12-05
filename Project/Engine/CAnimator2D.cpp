@@ -41,10 +41,12 @@ void CAnimator2D::CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTe
 {
     assert(_AtlasTex.Get());
 
-    CAnimation2D* pAnim = FindAnimation(_strKey);
-    assert(!pAnim);
+    CAnimation2D* pAnimation2D;
 
-    CAnimation2D* pAnimation2D = new CAnimation2D;
+    pAnimation2D = FindAnimation(_strKey);
+    assert(!pAnimation2D);
+
+    pAnimation2D = new CAnimation2D;
     pAnimation2D->Create(_strKey, _AtlasTex, _vLeftTop, _vSlice, _fStep, _iMaxFrm, _FPS);
     pAnimation2D->m_pOwner = this;
     m_mapAnim[_strKey] = pAnimation2D;
@@ -94,7 +96,8 @@ void CAnimator2D::UpdateData()
     if (!IsValid(m_pCurAnim))
         return;
 
-    m_pCurAnim->UpdateData();
+    if(m_bActive)
+        m_pCurAnim->UpdateData();
 }
 
 void CAnimator2D::Clear()
@@ -110,3 +113,37 @@ const tAnim2DInfo& CAnimator2D::GetAniInfo()
     return m_pCurAnim->GetAniInfo();
 }
 
+const tAnim2DFrm& CAnimator2D::GetAniFrame()
+{
+    return m_pCurAnim->GetAniFrame();
+}
+
+tAnim2DFrm CAnimator2D::GetAniFrameCopy()
+{
+    return m_pCurAnim->GetAniFrameCopy();
+}
+
+void CAnimator2D::SetLeftTop(Vec2 _vLeftTop, int _index)
+{
+    m_pCurAnim->SetLeftTop(_vLeftTop, _index);
+}
+
+void CAnimator2D::SetSlice(Vec2 _vSlice, int _index)
+{
+    m_pCurAnim->SetSlice(_vSlice, _index);
+}
+
+void CAnimator2D::SetOffset(Vec2 _vOffset, int _index)
+{
+    m_pCurAnim->SetOffset(_vOffset, _index);
+}
+
+void CAnimator2D::SetFullSize(Vec2 _vFullSize, int _index)
+{
+    m_pCurAnim->SetFullSize(_vFullSize, _index);
+}
+
+void CAnimator2D::SetDuration(float _fDuration, int _index)
+{
+    m_pCurAnim->SetDuration(_fDuration, _index);
+}

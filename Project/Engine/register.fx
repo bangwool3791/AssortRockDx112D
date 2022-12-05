@@ -73,53 +73,55 @@ Texture2D g_tex_4 : register(t4);
 Texture2D g_tex_5 : register(t5);
 Texture2D g_tex_6 : register(t6);
 Texture2D g_tex_7 : register(t7);
-Texture2D g_tex_8 : register(t19);
-Texture2D g_tex_9 : register(t20);
-Texture2D g_tex_10 : register(t21);
-Texture2D g_tex_11 : register(t22);
-Texture2D g_tex_12 : register(t23);
-Texture2D g_tex_13 : register(t24);
-Texture2D g_tex_14 : register(t25);
-Texture2D g_tex_15 : register(t26);
-Texture2D g_tex_16 : register(t27);
-Texture2D g_tex_17 : register(t28);
-Texture2D g_tex_18 : register(t29);
-Texture2D g_tex_19 : register(t30);
-Texture2D g_tex_20 : register(t31);
-Texture2D g_tex_21 : register(t32);
-Texture2D g_tex_22 : register(t33);
-Texture2D g_tex_23 : register(t34);
-Texture2D g_tex_24 : register(t35);
-Texture2D g_tex_25 : register(t36);
-Texture2D g_tex_26 : register(t37);
-Texture2D g_tex_27 : register(t38);
-Texture2D g_tex_28 : register(t39);
-Texture2D g_tex_29 : register(t40);
-Texture2D g_tex_30 : register(t41);
-Texture2D g_tex_31 : register(t42);
-Texture2D g_tex_32 : register(t43);
-
-TextureCube g_texcube_0 : register(t8);
-TextureCube g_texcube_1 : register(t9);
-
-Texture2DArray g_texarr_0 : register(t10);
-Texture2DArray g_texarr_1 : register(t11);
-
-// Animation2D Atlas 
-Texture2D g_Atals : register(t12);
+Texture2D g_tex_8 : register(t8);
+Texture2D g_tex_9 : register(t9);
+Texture2D g_tex_10 : register(t10);
+Texture2D g_tex_11 : register(t11);
+Texture2D g_tex_12 : register(t12);
+Texture2D g_tex_13 : register(t13);
+Texture2D g_tex_14 : register(t14);
+Texture2D g_tex_15 : register(t15);
+Texture2D g_tex_16 : register(t16);
+Texture2D g_tex_17 : register(t17);
+Texture2D g_tex_18 : register(t18);
+Texture2D g_tex_19 : register(t19);
+Texture2D g_tex_20 : register(t20);
+Texture2D g_tex_21 : register(t21);
+Texture2D g_tex_22 : register(t22);
+Texture2D g_tex_23 : register(t23);
+Texture2D g_tex_24 : register(t24);
+Texture2D g_tex_25 : register(t25);
+Texture2D g_tex_26 : register(t26);
+Texture2D g_tex_27 : register(t27);
+Texture2D g_tex_28 : register(t28);
+Texture2D g_tex_29 : register(t29);
+Texture2D g_tex_30 : register(t30);
+Texture2D g_tex_31 : register(t31);
+Texture2D g_tex_32 : register(t32);
+TextureCube g_texcube_0 : register(t33);
+TextureCube g_texcube_1 : register(t34);
+Texture2DArray g_texarr_0 : register(t35);
+Texture2DArray g_texarr_1 : register(t36);
 
 //Light Buffer
-StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t13);
-StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t14);
+StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t55);
+StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t56);
 
+
+StructuredBuffer<tTile>       TileBuffer     : register(t56);
+
+/*
+* Instancing object
+*/
+StructuredBuffer<tRenderInfo> g_RenderInfo   : register(t57);
 // Noise Texture
-Texture2D g_Noise : register(t15);
+Texture2D g_Noise : register(t58);
 
+// Animation2D Atlas 
+Texture2D g_Atals : register(t59);
 // RenderTarget CopyTex
 Texture2D g_RTCopyTex : register(t60);
 
-StructuredBuffer<tRenderInfo> g_RenderInfo   : register(t16);
-StructuredBuffer<tTile>       TileBuffer     : register(t18);
 #define b g_RenderInfo
 // 샘플러 레지스터
 SamplerState g_sam_0 : register(s0); // anisotropic sampler

@@ -48,8 +48,8 @@ void CPlayerScript::BeginOverlap(CCollider2D* _pOther)
 {
 	if (!lstrcmp(L"MouseDrag", _pOther->GetOwner()->GetName().c_str()))
 	{
-		Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
-		Instantiate(pUIPrefab->Instantiate(), GetOwner());
+		//Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
+		//Instantiate(pUIPrefab->Instantiate(), GetOwner());
 	}
 	else if(!lstrcmp(L"Player", _pOther->GetOwner()->GetName().c_str()))
 	{
@@ -94,10 +94,10 @@ void CPlayerScript::EndOverlap(CCollider2D* _pOther)
 			}
 		}
 
-		Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
-		CGameObject* pUnit_UI = pUIPrefab->Instantiate();
-		Instantiate(pUnit_UI, GetOwner(), 0);
-		CUIMgr::GetInst()->AddUI(GetOwner(), UI_TYPE::GAMEOBJECT);
-		CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
+		//Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"UnitSelectUIPrefab");
+		//CGameObject* pUnit_UI = pUIPrefab->Instantiate();
+		//Instantiate(pUnit_UI, GetOwner());
+		//CUIMgr::GetInst()->AddUI(GetOwner(), UI_TYPE::GAMEOBJECT);
+		//CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
 	}
 }

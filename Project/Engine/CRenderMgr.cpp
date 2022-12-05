@@ -69,8 +69,8 @@ void CRenderMgr::UpdateNoiseTexture()
 {
 	Ptr<CTexture> NoiseTex = CResMgr::GetInst()->FindRes<CTexture>(L"Noise_02");
 
-	NoiseTex->UpdateData(15, PIPELINE_STAGE::ALL_STAGE);
-	NoiseTex->UpdateData_CS(15, true);
+	NoiseTex->UpdateData(58, PIPELINE_STAGE::ALL_STAGE);
+	NoiseTex->UpdateData_CS(58, true);
 
 	g_global.vNoiseResolution = Vec2{ NoiseTex->GetWidth(), NoiseTex->GetHeight() };
 }
@@ -93,7 +93,7 @@ void CRenderMgr::UpdateLight2D()
 	*/
 	m_pLight2DBuffer->SetData(m_vecLight2D.data(), (UINT)m_vecLight2D.size());
 
-	m_pLight2DBuffer->UpdateData(13, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+	m_pLight2DBuffer->UpdateData(55, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
 	g_global.iLight2DCount = (UINT)m_vecLight2D.size();
 }

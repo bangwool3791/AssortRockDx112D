@@ -11,6 +11,7 @@ private:
 
 	ImVec2			m_vSize;
 
+	bool			m_bSeperator;
 	bool			m_bOpen;
 	bool			m_bModal;
 
@@ -26,10 +27,12 @@ public:
 	virtual void Open() { m_bOpen = true; }
 	virtual void Close() { m_bOpen = false; }
 	void SetModal(bool _modal) { m_bModal = _modal; }
+	void ShowSeprator(bool _bShow) { m_bSeperator = _bShow; }
 
 	void ResetFocus();
 
 public:
+	virtual void begin() {};
 	virtual void update();
 	void render();
 	virtual void render_update() = 0;

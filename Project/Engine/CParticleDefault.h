@@ -15,7 +15,6 @@ class CParticleDefault :
 public:
 	virtual void finaltick()override;
 	virtual void render()override;
-
 	CLONE(CParticleDefault);
 
 public:

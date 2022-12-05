@@ -384,7 +384,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	// TileMap Shader
 	pShader = new CGraphicsShader;
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
+	pShader->CreateGeometryShader(L"shader\\tilemap.fx", "GS_TileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 	/*
 	* 투명한 타일이 있을 경우
@@ -416,7 +418,7 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->SetName(L"UnitSelectUI");
 
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
 	pObject->AddComponent(new CSelectUnitScript);
 
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
@@ -452,7 +454,7 @@ void CResMgr::CreateDefaultPrefab()
 	pObject->SetName(L"Shadow");
 
 	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
 	pObject->AddComponent(new CAnimator2D);
 	pObject->AddComponent(new CShadowScript);
 

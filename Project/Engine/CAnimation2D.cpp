@@ -61,7 +61,7 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 
 void CAnimation2D::UpdateData()
 {
-	m_AtlasTex->UpdateData(12, PIPELINE_STAGE::PS);
+	m_AtlasTex->UpdateData(59, PIPELINE_STAGE::PS);
 
 	static CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::ANIMATION2D);
 
@@ -77,7 +77,7 @@ void CAnimation2D::UpdateData()
 
 void CAnimation2D::Clear()
 {
-	CTexture::Clear(12);
+	CTexture::Clear(59);
 
 	static CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::ANIMATION2D);
 
@@ -87,3 +87,27 @@ void CAnimation2D::Clear()
 	pCB->UpdateData(PIPELINE_STAGE::PS);
 }
 
+void CAnimation2D::SetLeftTop(Vec2 _vLeftTop, int _index)
+{
+	m_vecFrm[_index].vLeftTop = _vLeftTop;
+}
+
+void CAnimation2D::SetSlice(Vec2 _vSlice, int _index)
+{
+	m_vecFrm[_index].vSlice = _vSlice;
+}
+
+void CAnimation2D::SetOffset(Vec2 _vOffset, int _index)
+{
+	m_vecFrm[_index].vOffset = _vOffset;
+}
+
+void CAnimation2D::SetFullSize(Vec2 _vFullSize, int _index)
+{
+	m_vecFrm[_index].vFullSize = _vFullSize;
+}
+
+void CAnimation2D::SetDuration(float _fDuration, int _index)
+{
+	m_vecFrm[_index].fDuration = _fDuration;
+}

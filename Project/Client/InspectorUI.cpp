@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "InspectorUI.h"
 
+#include <Engine/CRes.h>
 #include <Engine\CLevelMgr.h>
 #include <Engine\CGameObject.h>
 
@@ -10,12 +11,18 @@
 #include "ShadowUI.h"
 #include "Light2DUI.h"
 
+/*
+* Resource
+*/
+#include "ResUI.h"
+
 #include <Engine/CShadowScript.h>
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
 	, m_TargetObj(nullptr)
 	, m_arrComUI{}
+	, m_arrResUI{}
 {
 	/*
 	* 자동 조절
@@ -47,8 +54,10 @@ InspectorUI::~InspectorUI()
 
 void InspectorUI::update()
 {
-
-	SetTarget(CLevelMgr::GetInst()->FindSelectedObject(L"Player"));
+	if (!IsValid(m_TargetObj))
+	{
+		SetTargetObject(nullptr);
+	}
 
 	SetLight(nullptr);
 
@@ -60,42 +69,100 @@ void InspectorUI::render_update()
 
 }
 
-void InspectorUI::SetTarget(CGameObject* _Target)
+void InspectorUI::SetTargetObject(CGameObject* _Target)
 {
-	if (!_Target)
-		return;
+	// 리소스가 타겟인 상태였다면
+	if (nullptr != _Target)
+	{
+		SetTargetResource(nullptr);
+	}
 
 	m_TargetObj = _Target;
 
+	/*
+	* Com객체 목룍 표시
+	*/
 	for (UINT i = 0; i < (UINT)COMPONENT_TYPE::END; ++i)
 	{
 		if (nullptr != m_arrComUI[i])
 		{
-			if (nullptr == m_TargetObj->GetComponent((COMPONENT_TYPE)i))
+			/*
+			* 타겟 존재, 컴포넌트 미소유
+			*/
+			if (nullptr != m_TargetObj && nullptr == m_TargetObj->GetComponent((COMPONENT_TYPE)i))
 			{
 				m_arrComUI[i]->SetTarget(nullptr);
 				m_arrComUI[i]->Close();
 			}		
+			/*
+			* 컴포넌트 소유
+			* 타겟 존재
+			* 타겟 미 존재
+			*/
 			else
 			{
 				m_arrComUI[i]->SetTarget(_Target);
-				m_arrComUI[i]->Open();				
+
+				if (nullptr != _Target)
+				{
+					m_arrComUI[i]->Open();
+				}
+				else
+				{
+					m_arrComUI[i]->Close();
+				}
 			}
 		}		
 	}	
 
-	auto pShadow = m_TargetObj->GetChild(L"Shadow");
-	auto pShadowScript = m_TargetObj->GetChild(L"Shadow")->GetScript<CShadowScript>(L"ShadowScript");
+	//auto pShadow = m_TargetObj->GetChild(L"Shadow");
+	//auto pShadowScript = m_TargetObj->GetChild(L"Shadow")->GetScript<CShadowScript>(L"ShadowScript");
 
-	if (pShadowScript)
+	//if (pShadowScript)
+	//{
+	//	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetTarget(pShadow);
+	//	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->Open();
+	//}
+	//else
+	//{
+	//	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->Close();
+	//	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetTarget(nullptr);
+	//}
+}
+
+void InspectorUI::SetTargetResource(CRes* _Resource)
+{
+	if (nullptr != m_TargetObj)
 	{
-		m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetTarget(pShadow);
-		m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->Open();
+		SetTargetObject(nullptr);
+	}
+
+	if (nullptr != _Resource)
+	{
+		if (nullptr != m_TargetRes && nullptr != m_arrResUI[UINT(m_TargetRes->GetResType())])
+		{
+			m_arrResUI[UINT(m_TargetRes->GetResType())]->Close();
+		}
+		//새로 지정된 리소스를 담당하는 UI를 활성화
+		m_TargetRes = _Resource;
+		RES_TYPE eType = m_TargetRes->GetResType();
+
+		if (nullptr != m_arrResUI[(UINT)eType])
+		{
+			m_arrResUI[(UINT)eType]->SetTarget(m_TargetRes);
+			m_arrResUI[(UINT)eType]->Open();
+		}
 	}
 	else
 	{
-		m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->Close();
-		m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetTarget(nullptr);
+		for (UINT i{}; i < (UINT)RES_TYPE::END; ++i)
+		{
+			if (nullptr != m_arrResUI[i])
+			{
+				m_arrResUI[i]->SetTarget(nullptr);
+				m_arrResUI[i]->Close();
+			}
+		}
 	}
 }
 

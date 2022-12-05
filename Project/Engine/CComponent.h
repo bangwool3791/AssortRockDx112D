@@ -11,6 +11,7 @@ class CComponent
 private:
 	CGameObject*			m_pOwnerObject;
 	const COMPONENT_TYPE	m_eType;
+protected:
 	bool                    m_bActive;
 public:
 	virtual void begin() {}

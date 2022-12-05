@@ -34,6 +34,7 @@ public :
 public :
 	void AddGameObject(CGameObject*_pObject);
 	int	 GetLayerIndex()			{ return m_iLayerIdx; }
+	void DeregisterObject(CGameObject* _pObj);
 	friend class CLevel;
 	friend class CGameObject;
 

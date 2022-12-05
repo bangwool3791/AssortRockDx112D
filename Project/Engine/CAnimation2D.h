@@ -24,7 +24,16 @@ private:
 public :
 	void finaltick();
 public:
+	const vector<tAnim2DFrm>& GetFames() { return m_vecFrm; }
 	const tAnim2DInfo& GetAniInfo() { return m_info; }
+	const tAnim2DFrm& GetAniFrame() { return m_vecFrm[m_iCurIdx]; }
+	tAnim2DFrm&	GetAniFrameCopy() { return m_vecFrm[m_iCurIdx]; }
+
+	void SetLeftTop(Vec2 _vLeftTop, int _index);
+	void SetSlice(Vec2 _vSlice, int _index);
+	void SetOffset(Vec2 _vOffset, int _index);
+	void SetFullSize(Vec2 _vFullSize, int _index);
+	void SetDuration(float _fDuration, int _index);
 public :
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
 	void Reset()

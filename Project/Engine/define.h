@@ -186,21 +186,6 @@ enum TEX_PARAM
 	TEX_5,
 	TEX_6,
 	TEX_7,
-
-	TEX_CUBE_0,
-	TEX_CUBE_1,
-
-	TEX_ARR_0,
-	TEX_ARR_1,
-
-	DUMMY0,
-	DUMMY1,
-	DUMMY2,
-	DUMMY3,
-	DUMMY4,
-	DUMMY5,
-	DUMMY6,
-
 	TEX_8,
 	TEX_9,
 	TEX_10,
@@ -227,6 +212,11 @@ enum TEX_PARAM
 	TEX_31,
 	TEX_32,
 
+	TEX_CUBE_0,
+	TEX_CUBE_1,
+
+	TEX_ARR_0,
+	TEX_ARR_1,
 	TEX_END,
 };
 
@@ -241,7 +231,7 @@ enum class DIR
 enum class EVENT_TYPE
 {
 	CREATE_OBJECT,
-	CREATE_CHILD_OBJECT,
+	ADD_CHILD,
 	DELETE_OBJECT,
 	CHANGE_LEVEL,
 
@@ -295,3 +285,6 @@ extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END];
 
 extern const char* OBJECT_TYPE_CHAR[(UINT)OBJECT_TYPE::END];
 extern const wchar_t* OBJECT_TYPE_WCHAR[(UINT)OBJECT_TYPE::END];
+
+extern const char* RES_TYPE_CHAR[(UINT)RES_TYPE::END];
+extern const wchar_t* RES_TYPE_WCHAR[(UINT)RES_TYPE::END];

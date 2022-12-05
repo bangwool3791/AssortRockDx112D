@@ -33,10 +33,9 @@ void Instantiate(CGameObject* _pNewObj, CGameObject* _pOwner, int _iLayerIdx)
 {
 	tEvent evn{};
 
-	evn.eType = EVENT_TYPE::CREATE_CHILD_OBJECT;
+	evn.eType = EVENT_TYPE::ADD_CHILD;
 	evn.wParam = (DWORD_PTR)_pNewObj;
-	evn.lParam = (DWORD_PTR)_iLayerIdx;
-	evn.oParam = (DWORD_PTR)_pOwner;
+	evn.lParam = (DWORD_PTR)_pOwner;
 
 	CEventMgr::GetInst()->AddEvent(evn);
 }
@@ -61,12 +60,22 @@ const wchar_t* ToWString(COMPONENT_TYPE _type)
 	return COMPONENT_TYPE_WCHAR[(UINT)_type];
 }
 
-const char* ToObjectString(OBJECT_TYPE _type)
+const char* ToString(OBJECT_TYPE _type)
 {
 	return OBJECT_TYPE_CHAR[(UINT)_type];
 }
 
-const wchar_t* ToWObjectString(OBJECT_TYPE _type)
+const wchar_t* ToWString(OBJECT_TYPE _type)
 {
 	return OBJECT_TYPE_WCHAR[(UINT)_type];
+}
+
+const char* ToString(RES_TYPE _type)
+{
+	return RES_TYPE_CHAR[(UINT)_type];
+}
+
+const wchar_t* ToWString(RES_TYPE _type)
+{
+	return RES_TYPE_WCHAR[(UINT)_type];
 }

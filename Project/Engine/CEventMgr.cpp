@@ -18,7 +18,15 @@ CEventMgr::~CEventMgr()
 
 void CEventMgr::tick()
 {
-	Safe_Del_Vec(m_vecGarbage);
+	m_bLevelChanged = false;
+
+	for (UINT i{}; i < m_vecGarbage.size(); ++i)
+	{
+		delete m_vecGarbage[i];
+		m_bLevelChanged = true;
+	}
+	m_vecGarbage.clear();
+
 
 	for (auto iter{ m_vecEvent.begin()}; iter != m_vecEvent.end(); ++iter)
 	{
@@ -30,14 +38,17 @@ void CEventMgr::tick()
 			int	iLayer = (int)iter->lParam;
 			CLevel* level = CLevelMgr::GetInst()->GetCurLevel();
 			level->AddGameObject(pGameObeject, iLayer);
+			m_bLevelChanged = true;
 		}
 			break;
-		case EVENT_TYPE::CREATE_CHILD_OBJECT:
+		case EVENT_TYPE::ADD_CHILD:
 		{
-			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
-			CGameObject* pOwner      =	(CGameObject*)iter->oParam;
-			pOwner->AddChild(pGameObeject);
-			pGameObeject->SetLayerIndex((UINT)iter->lParam);
+			// wParam : Child Adress, lParam : Parent Adress
+			CGameObject* pParent = (CGameObject*)iter->lParam;
+			CGameObject* pChild = (CGameObject*)iter->wParam;
+
+			pParent->AddChild(pChild);
+			m_bLevelChanged = true;
 		}
 			break;
 		case EVENT_TYPE::DELETE_OBJECT:
@@ -48,10 +59,6 @@ void CEventMgr::tick()
 			{
 				que.push(pGameObj);
 
-				if (!lstrcmp(L"UnitSelectUI", pGameObj->GetName().c_str()))
-				{
-					int a = 0;
-				}
 				while (!que.empty())
 				{
 					CGameObject* pObj = (CGameObject*)que.front();
@@ -71,6 +78,9 @@ void CEventMgr::tick()
 		}
 			break;
 		case EVENT_TYPE::CHANGE_LEVEL:
+		{
+			m_bLevelChanged = true;
+		}
 			break;
 		}
 	}

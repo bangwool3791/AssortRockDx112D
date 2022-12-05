@@ -2,10 +2,10 @@
 
 #include "global.h"
 
-tTransform g_transform = {};
-tObjectRender g_objectInfo = {};
-tGlobalData g_global = {};
-ChunkGroup* pool;
+tTransform				g_transform = {};
+tGlobalData				g_global = {};
+ChunkGroup*				pool;
+vector<tObjectRender>	g_vecInfoObject;
 
 const Vector3 Vector3::Zero{ 0.f, 0.f, 0.f };
 const Vector3 Vector3::One{ 1.f, 1.f, 1.f };
@@ -68,4 +68,29 @@ extern const wchar_t* OBJECT_TYPE_WCHAR[(UINT)OBJECT_TYPE::END] =
 {
 	L"LIGHT2D",
 	L"LIGHT3D",
+};
+
+
+extern const char* RES_TYPE_CHAR[(UINT)RES_TYPE::END] =
+{
+	"PREFAB",
+	"MESHDATA",
+	"COMPUTE_SHADER",
+	"MATERIAL",
+	"MESH",
+	"TEXTURE",
+	"SOUND",
+	"GRAPHICS_SHADER",
+};
+
+extern const wchar_t* RES_TYPE_WCHAR[(UINT)RES_TYPE::END] =
+{
+	L"PREFAB",
+	L"MESHDATA",
+	L"COMPUTE_SHADER",
+	L"MATERIAL",
+	L"MESH",
+	L"TEXTURE",
+	L"SOUND",
+	L"GRAPHICS_SHADER",
 };

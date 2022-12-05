@@ -6,51 +6,102 @@
 
 // ===============
 // TileMap Shader
-#define AtlasTex g_tex_0
-#define LeftTop g_vec2_0
-#define Slice  g_vec2_1
-#define TileCount g_vec2_2;
-#define CameraPos g_vec4_0;
+#define AtlasTex     g_tex_0
+#define LeftTop      g_vec2_0
+#define Slice        g_vec2_1
+#define TileCount    g_vec2_2;
+#define Size         g_vec2_3
 // ===============
-
 
 struct VS_IN
 {
-    float3 vPos       : POSITION;
-    float2 vUV        : TEXCOORD;
-    uint   iInstance  : SV_InstanceID;
+    float3 vPos : POSITION;
+    uint iInstance  : SV_InstanceID;
 };
 
 struct VS_OUT
 {
-    float4 vPosition    : SV_Position;
-    float2 vUV          : TEXCOORD;
-    uint   iInstance    : SV_InstanceID;
+    float3 vLocalPos : POSITION;
+    uint   iInstance : SV_InstanceID;
+};
+
+
+struct GS_OUT
+{
+    float4  vPosition    : SV_Position;
+    float2  vUV          : TEXCOORD;
+    uint    iInstance    : SV_InstanceID;
 };
 
 VS_OUT VS_TileMap(VS_IN _in)
 {
     VS_OUT output = (VS_OUT)0.f;
-    output.vPosition     = mul(float4(_in.vPos, 1.f), g_matWorld);
-    output.vPosition     += float4(TileBuffer[_in.iInstance].vPos, 0.f);
-    output.vPosition.xyz -= g_vec4_0.xyz;
-    output.vPosition     = mul(output.vPosition, g_matView * g_matProj);
-    output.iInstance     = _in.iInstance;
-    output.vUV = _in.vUV;
-    /*
-        UV 좌표를 확대한다.
-        0,0              TileCount,0
 
-
-
-        0, TileCount     TileCount, TileCount
-    */
-
-    //output.vUV = _in.vUV * TileCount;
+    output.vLocalPos = _in.vPos;
+    output.iInstance = _in.iInstance;
     return output;
 }
 
-float4 PS_TileMap(VS_OUT _in) : SV_Target
+[maxvertexcount(6)]
+void GS_TileMap(point VS_OUT _in[1], inout TriangleStream<GS_OUT> _OutStream)
+{
+    GS_OUT output[4] = { (GS_OUT)0.f, (GS_OUT)0.f, (GS_OUT)0.f, (GS_OUT)0.f };
+
+    float4 NewPos[4] =
+    {
+        mul(float4(-0.5,  0.f,  1.f, 1.f), g_matWorld),
+        mul(float4(0.0f,  0.5, 1.f, 1.f),  g_matWorld),
+        mul(float4(0.5,  0.f,  1.f, 1.f),  g_matWorld),
+        mul(float4(0.0f, -0.5, 1.f, 1.f),  g_matWorld),
+    };
+
+    NewPos[0].xy *= Size.xy;
+    NewPos[1].xy *= Size.xy;
+    NewPos[2].xy *= Size.xy;
+    NewPos[3].xy *= Size.xy;
+
+    NewPos[0] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
+    NewPos[1] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
+    NewPos[2] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
+    NewPos[3] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
+
+    NewPos[0].xyz -= g_vec4_0.xyz;
+    NewPos[1].xyz -= g_vec4_0.xyz;
+    NewPos[2].xyz -= g_vec4_0.xyz;
+    NewPos[3].xyz -= g_vec4_0.xyz;
+
+    NewPos[0] = mul(NewPos[0], g_matView * g_matProj);
+    NewPos[1] = mul(NewPos[1], g_matView * g_matProj);
+    NewPos[2] = mul(NewPos[2], g_matView * g_matProj);
+    NewPos[3] = mul(NewPos[3], g_matView * g_matProj);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        output[i].vPosition = NewPos[i];
+        output[i].iInstance = _in[0].iInstance;
+    }
+
+    output[0].vUV = float2(0.f, 0.5f);
+    output[1].vUV = float2(0.5f, 0.f);
+    output[2].vUV = float2(1.f, 0.5f);
+    output[3].vUV = float2(0.5f, 1.f);
+
+
+    // 0 -- 1
+    // | \  |
+    // 3 -- 2
+    _OutStream.Append(output[0]);
+    _OutStream.Append(output[1]);
+    _OutStream.Append(output[2]);
+    _OutStream.RestartStrip();
+
+    _OutStream.Append(output[0]);
+    _OutStream.Append(output[2]);
+    _OutStream.Append(output[3]);
+    _OutStream.RestartStrip();
+}
+
+float4 PS_TileMap(GS_OUT _in) : SV_Target
 {
     float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
     /*
@@ -214,10 +265,11 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
         vOutColor = g_tex_32.Sample(g_sam_1, _in.vUV);
     }
 
+
     vOutColor *= color.vDiff;
 
     return vOutColor;
-}
 
+}
 
 #endif
