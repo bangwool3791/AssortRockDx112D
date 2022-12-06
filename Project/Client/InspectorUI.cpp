@@ -11,6 +11,10 @@
 #include "ShadowUI.h"
 #include "Light2DUI.h"
 
+#include "MeshUI.h"
+#include "TextureUI.h"
+#include "MaterialUI.h"
+
 /*
 * Resource
 */
@@ -46,6 +50,25 @@ InspectorUI::InspectorUI()
 	m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D] = new Light2DUI;
 	m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]->SetSize(ImVec2(0.f, 150.f));
 	AddChild(m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]);
+
+	// ResourceUI
+	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;
+	m_arrResUI[(UINT)RES_TYPE::MESH]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::MESH]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::MESH]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::MESH]);
+
+	m_arrResUI[(UINT)RES_TYPE::TEXTURE] = new TextureUI;
+	m_arrResUI[(UINT)RES_TYPE::TEXTURE]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::TEXTURE]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::TEXTURE]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::TEXTURE]);
+
+	m_arrResUI[(UINT)RES_TYPE::MATERIAL] = new MaterialUI;
+	m_arrResUI[(UINT)RES_TYPE::MATERIAL]->SetSize(ImVec2(0.f, 0.f));
+	m_arrResUI[(UINT)RES_TYPE::MATERIAL]->ShowSeperator(false);
+	m_arrResUI[(UINT)RES_TYPE::MATERIAL]->Close();
+	AddChild(m_arrResUI[(UINT)RES_TYPE::MATERIAL]);
 }
 
 InspectorUI::~InspectorUI()

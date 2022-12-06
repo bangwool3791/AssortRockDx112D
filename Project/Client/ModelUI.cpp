@@ -18,7 +18,7 @@ ModelUI::ModelUI()
 	m_Tree = new TreeUI("##ModelTree");
 	AddChild(m_Tree);
 
-	m_Tree->ShowSeprator(false);
+	m_Tree->ShowSeperator(false);
 
 	m_Tree->SetSize(ImVec2(200.f, 200.f));
 	m_Tree->AddItem(nullptr, "Model", (DWORD_PTR)nullptr);

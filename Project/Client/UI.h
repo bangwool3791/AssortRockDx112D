@@ -27,7 +27,7 @@ public:
 	virtual void Open() { m_bOpen = true; }
 	virtual void Close() { m_bOpen = false; }
 	void SetModal(bool _modal) { m_bModal = _modal; }
-	void ShowSeprator(bool _bShow) { m_bSeperator = _bShow; }
+	void ShowSeperator(bool _bShow) { m_bSeperator = _bShow; }
 
 	void ResetFocus();
 

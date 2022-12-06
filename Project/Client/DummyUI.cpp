@@ -19,7 +19,7 @@ DummyUI::DummyUI()
 	m_Tree = new TreeUI("##DummyTree");
 	AddChild(m_Tree);
 
-	m_Tree->ShowSeprator(false);
+	m_Tree->ShowSeperator(false);
 	m_Tree->SetDummyRoot(true);
 
 	//m_Tree->AddDynamic_Selected(this, (FUNC_1)&DummyUI::SetObjectToInspector);
