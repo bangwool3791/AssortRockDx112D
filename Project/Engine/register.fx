@@ -40,6 +40,49 @@ cbuffer MATERIAL : register(b1)
     row_major matrix g_mat_1;
     row_major matrix g_mat_2;
     row_major matrix g_mat_3;
+
+    int g_btex_0;
+    int g_btex_1;
+    int g_btex_2;
+    int g_btex_3;
+    int g_btex_4;
+    int g_btex_5;
+    int g_btex_6;
+    int g_btex_7;
+    int g_btex_8;
+    int g_btex_9;
+    int g_btex_10;
+    int g_btex_11;
+    int g_btex_12;
+    int g_btex_13;
+    int g_btex_14;
+    int g_btex_15;
+    int g_btex_16;
+    int g_btex_17;
+    int g_btex_18;
+    int g_btex_19;
+    int g_btex_20;
+    int g_btex_21;
+    int g_btex_22;
+    int g_btex_23;
+    int g_btex_24;
+    int g_btex_25;
+    int g_btex_26;
+    int g_btex_27;
+    int g_btex_28;
+    int g_btex_29;
+    int g_btex_30;
+    int g_btex_31;
+    int g_btex_32;
+
+    int g_btexcube_0;
+    int g_btexcube_1;
+
+    int g_btexarr_0;
+    int g_btexarr_1;
+    int g_padding_0;
+    int g_padding_1;
+    int g_padding_2;
 };
 
 cbuffer GLOBAL : register(b2)

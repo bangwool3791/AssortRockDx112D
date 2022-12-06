@@ -55,12 +55,12 @@ void CTileScript::Overlap(CCollider2D* _pOther)
 			
 			vector<tTile>& tiles = m_pTileMap->GetTiles();
 
-			UINT startX = m_vMousePos.x / (TILECX * m_vTileSize.x);
-			UINT startY = m_vMousePos.y / (TILECY * m_vTileSize.y  * 0.5f);
+			UINT startX = (UINT)(m_vMousePos.x / (TILECX * m_vTileSize.x));
+			UINT startY = (UINT)(m_vMousePos.y / (TILECY * m_vTileSize.y  * 0.5f));
 			UINT StartIndex = startX + startY * TILEX;
 
-			UINT endX = m_vRenderResolution.x / (TILECX * m_vTileSize.x);
-			UINT endY = m_vRenderResolution.y / (TILECY * m_vTileSize.y  * 0.5f);
+			UINT endX = (UINT)(m_vRenderResolution.x / (TILECX * m_vTileSize.x));
+			UINT endY = (UINT)(m_vRenderResolution.y / (TILECY * m_vTileSize.y  * 0.5f));
 			UINT EndIndex = endX + endY * endX;
 
 			for (UINT i{ StartIndex }; i < StartIndex + EndIndex; ++i)

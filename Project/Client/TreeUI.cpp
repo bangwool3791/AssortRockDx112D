@@ -51,9 +51,7 @@ void TreeNode::render_update()
 	//제목 표시 노드이면서 Leaf노드이면
 	//한칸 Shift
 	if (m_bFrame && m_vecChildNode.empty())
-	{
 		strName = "\t" + strName;
-	}
 
 	// 뒤에 식별번호 붙여서 이름(키) 이 같지 않도록 함
 	char szTag[50] = "";
@@ -81,6 +79,15 @@ void TreeNode::render_update()
 			//드래그 이벤트 끝
 			ImGui::EndDragDropSource();
 		}
+		// 클릭 체크
+		else if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseClicked(0))
+		{
+			/*
+			* 유저 선택 노드
+			* 노드 안에 있는 Resource 데이터를 인스펙터로 전달한다.
+			*/
+			m_TreeUI->SetSelectedNode(this);
+		}
 
 		// 드랍 체크(드랍 대상)
 		if (ImGui::BeginDragDropTarget())
@@ -91,16 +98,6 @@ void TreeNode::render_update()
 			m_TreeUI->SetDropTargetNode(this);
 
 			ImGui::EndDragDropTarget();
-		}
-
-		// 클릭 체크
-		if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseClicked(0))
-		{
-			/*
-			* 유저 선택 노드
-			* 노드 안에 있는 Resource 데이터를 인스펙터로 전달한다.
-			*/
-			m_TreeUI->SetSelectedNode(this);
 		}
 
 		/*

@@ -148,7 +148,7 @@ void CResMgr::CreateDefaultMesh()
 
 	for (UINT i = 0; i < (UINT)iSlice; ++i)
 	{
-			*iterIdx = i + 1;
+		*iterIdx = i + 1;
 	}
 	*iterIdx = 1;
 	pMesh = new CMesh;
@@ -193,7 +193,7 @@ void CResMgr::CreateDefaultMesh()
 	v.vPos = Vec3(0.f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 	v.vUV = Vec2(0.f, 0.f);
-	
+
 	UINT idx = 0;
 
 	pMesh = new CMesh;
@@ -262,6 +262,13 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 
+	pShader->AddScalarParam(INT_0, "Test Int");
+	pShader->AddScalarParam(FLOAT_2, "Test Float");
+	pShader->AddScalarParam(VEC2_3, "Test Vec2");
+	pShader->AddScalarParam(VEC4_2, "Test Vec4");
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+	pShader->AddTexureParam(TEX_1, "Output Texture 2");
+	pShader->AddTexureParam(TEX_2, "Output Texture 3");
 	/*
 	* 앞에는 그려지나, 언제던지 먼 사물체 그려질 수 있다.
 	*/
@@ -333,7 +340,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	AddRes<CGraphicsShader>(L"TileShader", pShader);
-	
+
 	// ParticleRenderShader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\particlerender.fx", "VS_ParticleRender");
@@ -397,6 +404,15 @@ void CResMgr::CreateDefaultGraphicsShader()
 	* 알파블랜드는 타일은 생각하기 힘들다
 	*/
 	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\ref_animation.fx", "VS_RefAni");
+	pShader->CreatePixelShader(L"shader\\ref_animation.fx", "PS_RefAni");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"RefAniShader", pShader);
 }
 
 void CResMgr::CreateDefaultPrefab()
@@ -551,6 +567,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial;
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
 	AddRes<CMaterial>(L"TileMapMtrl", pMaterial);
+
+	pMaterial = new CMaterial;
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"RefAniShader"));
+	AddRes<CMaterial>(L"RefAniMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

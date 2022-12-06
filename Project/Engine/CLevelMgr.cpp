@@ -175,32 +175,52 @@ void CLevelMgr::init()
 	//pPostProcess->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PostProcessMtrl"));
 
 	// TileMap Object
-	CGameObject* pTileMapObj = new CGameObject;
-	pTileMapObj->AddComponent(new CTransform);
-	pTileMapObj->AddComponent(new CTileMap);
-	pTileMapObj->AddComponent(new CTileScript);
-	pTileMapObj->AddComponent(new CCollider2D);
-	pTileMapObj->SetName(L"TileMap");
+	//CGameObject* pTileMapObj = new CGameObject;
+	//pTileMapObj->AddComponent(new CTransform);
+	//pTileMapObj->AddComponent(new CTileMap);
+	//pTileMapObj->AddComponent(new CTileScript);
+	//pTileMapObj->AddComponent(new CCollider2D);
+	//pTileMapObj->SetName(L"TileMap");
 
-	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	//Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
-	pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
-	pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
-	pTileMapObj->Collider2D()->SetIgnoreObjectScale(true);
-	pTileMapObj->Collider2D()->SetScale(Vec2(TILECX * TILEX, TILECY * TILEY * 0.5f));
-	pTileMapObj->Collider2D()->SetOffsetPos(Vec2(TILECX * TILEX * 0.5f, TILECY * TILEY * 0.25));
+	//pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
+	//pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
+	//pTileMapObj->Collider2D()->SetIgnoreObjectScale(true);
+	//pTileMapObj->Collider2D()->SetScale(Vec2(TILECX * TILEX, TILECY * TILEY * 0.5f));
+	//pTileMapObj->Collider2D()->SetOffsetPos(Vec2(TILECX * TILEX * 0.5f, TILECY * TILEY * 0.25));
 
-	for (UINT i{}; i < TEX_32 + 1; ++i)
-	{
-		wstring str = L"Tile";
-		str += std::to_wstring(i);
-		pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
-	}
+	//for (UINT i{}; i < TEX_32 + 1; ++i)
+	//{
+	//	wstring str = L"Tile";
+	//	str += std::to_wstring(i);
+	//	pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+	//}
 
-	pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
+	//pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
 
-	m_pCurLevel->AddGameObject(pTileMapObj, 30);
+	//m_pCurLevel->AddGameObject(pTileMapObj, 30);
 
+	//CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
+
+	pObject = new CGameObject;
+	pObject->SetName(L"RefAni");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	pObject->AddComponent(new CCollider2D);
+	pObject->AddComponent(new CRefAniScript);
+
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Link");
+	UINT width = pTex->GetWidth();
+	UINT height = pTex->GetHeight();
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3((float)width, (float)height, 10.f));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
+	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
+	m_pCurLevel->AddGameObject(pObject, 30);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
 
 	m_pCurLevel->begin();

@@ -182,41 +182,51 @@ enum TEX_PARAM
 	TEX_1,
 	TEX_2,
 	TEX_3,
+
 	TEX_4,
 	TEX_5,
 	TEX_6,
 	TEX_7,
+
 	TEX_8,
 	TEX_9,
 	TEX_10,
 	TEX_11,
+
 	TEX_12,
 	TEX_13,
 	TEX_14,
 	TEX_15,
+
 	TEX_16,
 	TEX_17,
 	TEX_18,
 	TEX_19,
+
 	TEX_20,
 	TEX_21,
 	TEX_22,
 	TEX_23,
+
 	TEX_24,
 	TEX_25,
 	TEX_26,
 	TEX_27,
+
 	TEX_28,
 	TEX_29,
 	TEX_30,
 	TEX_31,
-	TEX_32,
 
+	TEX_32,
 	TEX_CUBE_0,
 	TEX_CUBE_1,
-
 	TEX_ARR_0,
+
 	TEX_ARR_1,
+	TEX_PADDING1,
+	TEX_PADDING2,
+	TEX_PADDING3,
 	TEX_END,
 };
 
@@ -271,6 +281,7 @@ enum class UI_TYPE
 	GAMEOBJECT,
 	DRAG,
 	UNIT_UI,
+	ANIMATION_BOX,
 	END,
 };
 

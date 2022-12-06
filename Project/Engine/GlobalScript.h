@@ -10,3 +10,4 @@
 #include "CShadowScript.h"
 #include "CMouseScript.h"
 #include "CTileScript.h"
+#include "CRefAniScript.h"

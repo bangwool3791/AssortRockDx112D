@@ -100,6 +100,12 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\Animator2DUI">
       <UniqueIdentifier>{8389085f-5e6c-45bf-9bd2-34db88a05760}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ModuleUI\DialogUI">
+      <UniqueIdentifier>{337e5a8b-64b0-4bb8-98a5-e01003e0810f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModuleUI\ParamUI">
+      <UniqueIdentifier>{9b60fb54-846e-4a55-bb61-977a17fcc375}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -222,6 +228,9 @@
     <ClInclude Include="Animator2DUI.h">
       <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
     </ClInclude>
+    <ClInclude Include="ParamUI.h">
+      <Filter>ModuleUI\ParamUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -331,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="Animator2DUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="ParamUI.cpp">
+      <Filter>ModuleUI\ParamUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

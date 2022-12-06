@@ -202,6 +202,9 @@
     <Filter Include="Engine\08. Scripts\03. Object\05. CTileScript">
       <UniqueIdentifier>{1c661173-0771-497b-8f86-d9a62c2725ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\08. Scripts\02. UI\01. CRefAniScript">
+      <UniqueIdentifier>{82fb105e-7723-4223-8e1d-2e6a242c241b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -429,6 +432,9 @@
     <ClInclude Include="CTileScript.h">
       <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
     </ClInclude>
+    <ClInclude Include="CRefAniScript.h">
+      <Filter>Engine\08. Scripts\02. UI\01. CRefAniScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -614,6 +620,9 @@
     <ClCompile Include="CTileScript.cpp">
       <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
     </ClCompile>
+    <ClCompile Include="CRefAniScript.cpp">
+      <Filter>Engine\08. Scripts\02. UI\01. CRefAniScript</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleMath.inl">
@@ -677,6 +686,9 @@
     </FxCompile>
     <FxCompile Include="tilemap.fx">
       <Filter>HLSL\Render\Tile</Filter>
+    </FxCompile>
+    <FxCompile Include="ref_animation.fx">
+      <Filter>HLSL\Render\Default</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

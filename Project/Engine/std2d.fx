@@ -35,6 +35,11 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
 {
     float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
 
+    if (g_vec2_3.x == 1.f && g_vec2_3.y == 1.f)
+        discard;
+    if (g_vec4_2.y == 1.f && g_vec4_2.w == 1.f)
+        discard;
+
     if (g_iAnim2DUse)
     {
         float2 vDiff = (g_vFullSize - g_vSlice) / 2.f;
@@ -44,19 +49,23 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
             || vUV.y < g_vLeftTop.y || g_vLeftTop.y + g_vSlice.y < vUV.y)
         {
             discard;
-            //return float4(1.f, 0.f, 0.f, 1.f);
         }
-        //else
-        //{
-        //    return float4(0.f, 1.f, 0.f, 1.f);
-        //}       
+ 
         vOutColor = g_Atals.Sample(g_sam_1, vUV);
     }
     else
     {
-        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
-    }
+        if (g_btex_0)
+            vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        else
+            vOutColor = float4(1.f, 0.f, 1.f, 1.f);
 
+        if (g_btex_1)
+            vOutColor += g_tex_1.Sample(g_sam_0, _in.vUV);
+
+        if (g_btex_0)
+            vOutColor += g_tex_2.Sample(g_sam_0, _in.vUV);
+    }
 
     if (0.f == vOutColor.a)
           discard;

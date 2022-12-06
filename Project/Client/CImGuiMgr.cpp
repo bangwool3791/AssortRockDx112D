@@ -6,7 +6,7 @@
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
 #include "UI.h"
-
+#include "ParamUI.h"
 
 CImGuiMgr::CImGuiMgr()
 {
@@ -63,6 +63,7 @@ void CImGuiMgr::progress()
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
+    ParamUI::ParamCount = 0;
 
     {
         bool bTrue = true;
@@ -119,9 +120,9 @@ void CImGuiMgr::CreateUI()
     UI* pUI = new InspectorUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    pUI = new TileMapUI;
-    pUI->begin();
-    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    //pUI = new TileMapUI;
+    //pUI->begin();
+    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new OutlinerUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));

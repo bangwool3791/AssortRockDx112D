@@ -21,7 +21,10 @@ public:
 	}
 
 	CGameObject* Get_Object(UI_TYPE _eType) {
-		return m_arrUi[(UINT)_eType].front();
+		if (!m_arrUi[(UINT)_eType].empty())
+			return m_arrUi[(UINT)_eType].front();
+		else
+			return nullptr;
 	}
 
 public:

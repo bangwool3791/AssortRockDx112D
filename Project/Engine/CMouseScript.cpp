@@ -82,20 +82,20 @@ void CMouseScript::finaltick()
 		* 드래그 UNIT CLEAR
 		*/
 
-		//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MouseDragPrefab");
-		//CGameObject* pDrag = pPrefab->Instantiate();
-		//Instantiate(pDrag, Vec3{ 0.f, 0.f, 0.f }, 31);
+		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MouseDragPrefab");
+		CGameObject* pDrag = pPrefab->Instantiate();
+		Instantiate(pDrag, Vec3{ 0.f, 0.f, 0.f }, 31);
 
-		//CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
+		CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
 		////마우스 클릭 충돌 활성화
 		GetOwner()->Collider2D()->ReleasePause();
-		//bClicked = true;
+		bClicked = true;
 	}
 
 	if (KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
-		//bClicked = false;
-		//CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
+		bClicked = false;
+		CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
 }
 

@@ -64,6 +64,25 @@ struct tDebugShapeInfo
 };
 
 // ================
+// Shader Parameter
+// ================
+/*
+* Shader 생성 시, 사용 Scalar, Texture Param Setting
+* Material UI -> Material -> GetShader -> GetScalarParam, TextureParam
+*/
+struct tScalarParam
+{
+	SCALAR_PARAM eParam;
+	string		 strName;
+};
+
+struct tTextureParam
+{
+	TEX_PARAM	 eParam;
+	string		 strName;
+};
+
+// ================
 // 상수버퍼용 구조체
 // ================
 struct tTransform
@@ -83,6 +102,8 @@ struct tMtrlConst
 	Vec2 v2Arr[4];
 	Vec4 v4Arr[4];
 	Matrix matArr[4];
+
+	int HasTex[(UINT)TEX_PARAM::TEX_END];
 };
 
 struct tObjectRender
