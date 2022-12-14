@@ -23,7 +23,7 @@ void CGameObjectEx::finaltick()
 	}
 
 	vector<CGameObject*>::iterator iter = m_vecChild.begin();
-	for (; iter != m_vecChild.end();)
+	for (; iter != m_vecChild.end();) 
 	{
 		(*iter)->finaltick();
 

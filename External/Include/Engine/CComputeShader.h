@@ -1,6 +1,5 @@
 #pragma once
 #include "CShader.h"
-#include "pch.h"
 
 class CComputeShader :
 	public CShader

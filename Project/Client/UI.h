@@ -29,12 +29,12 @@ public:
 	void SetModal(bool _modal) { m_bModal = _modal; }
 	void ShowSeperator(bool _bShow) { m_bSeperator = _bShow; }
 
-	void ResetFocus();
+	static void ResetFocus();
 
 public:
 	virtual void begin() {};
 	virtual void update();
-	void render();
+	virtual void render();
 	virtual void render_update() = 0;
 
 public:

@@ -3,8 +3,6 @@
 #include "CEntity.h"
 #include "CTexture.h"
 
-#include "pch.h"
-
 class CAnimator2D;
 
 class CAnimation2D :

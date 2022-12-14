@@ -113,7 +113,6 @@ void CTransform::UpdateData()
 	pCB->UpdateData(ALL_STAGE);
 }
 
-
 Vec3 CTransform::GetWorldScale()
 {
 	Vec3 vWorldScale = m_vRelativeScale;
@@ -134,4 +133,25 @@ Vec3 CTransform::GetWorldScale()
 
 	}
 	return vWorldScale;
+}
+
+
+void CTransform::SaveToFile(FILE* _File)
+{
+	COMPONENT_TYPE eType = GetType();
+
+	fwrite(&eType, sizeof(COMPONENT_TYPE), 1, _File);
+
+	fwrite(&m_vRelativePos , sizeof(Vec3), 1, _File);
+	fwrite(&m_vRelativeScale , sizeof(Vec3), 1, _File);
+	fwrite(&m_vRelativeRotation , sizeof(Vec3), 1, _File);
+	fwrite(&m_blgnParentScale , sizeof(bool), 1, _File);
+}
+
+void CTransform::LoadFromFile(FILE* _File)
+{
+	fread(&m_vRelativePos, sizeof(Vec3), 1, _File);
+	fread(&m_vRelativeScale, sizeof(Vec3), 1, _File);
+	fread(&m_vRelativeRotation, sizeof(Vec3), 1, _File);
+	fread(&m_blgnParentScale, sizeof(bool), 1, _File);
 }

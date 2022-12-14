@@ -5,8 +5,8 @@
 #include "CGraphicsShader.h"
 #include "CConstBuffer.h"
 
-CMaterial::CMaterial()
-	: CRes(RES_TYPE::MATERIAL)
+CMaterial::CMaterial(bool _bEngineRes)
+	: CRes(RES_TYPE::MATERIAL, _bEngineRes)
 	, m_tConst{}
 	, m_arrTex{}
 {
@@ -14,7 +14,7 @@ CMaterial::CMaterial()
 }
 
 CMaterial::CMaterial(const CMaterial& _other)
-	: CRes(RES_TYPE::MATERIAL)
+	: CRes(_other)
 	, m_tConst(_other.m_tConst)
 	, m_pShader(_other.m_pShader)
 {
@@ -138,4 +138,53 @@ void CMaterial::Clear()
 	{
 		CTexture::Clear(i);
 	}
+}
+void CMaterial::Save(const wstring _strRelativePath)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	CRes::SaveKeyPath(pFile);
+
+	SaveResourceRef(m_pShader, pFile);
+
+	if (nullptr != m_pShader)
+	{
+		fwrite(&m_tConst, sizeof(tMtrlConst),1, pFile);
+
+		for (UINT i{}; i < TEX_PARAM::TEX_END; ++i)
+		{
+			SaveResourceRef(m_arrTex[i], pFile);
+		}
+	}
+
+	fclose(pFile);
+}
+
+int CMaterial::Load(const wstring& _strFilePath)
+{
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+
+	CRes::LoadKeyPath(pFile);
+
+	LoadResourceRef(m_pShader, pFile);
+
+	if (nullptr != m_pShader)
+	{
+		fread(&m_tConst, sizeof(tMtrlConst), 1, pFile);
+
+		for (UINT i{}; i < TEX_PARAM::TEX_END; ++i)
+		{
+			LoadResourceRef(m_arrTex[i], pFile);
+		}
+	}
+
+	fclose(pFile);
+
+	return  S_OK;
 }

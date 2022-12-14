@@ -55,7 +55,9 @@ public:
 public:
     virtual void finaltick() override;
 
-
+public:
+    virtual void SaveToFile(FILE* _File);
+    virtual void LoadFromFile(FILE* _File);
     CLONE(CCollider2D);
 public:
     CCollider2D();

@@ -7,14 +7,16 @@ class CLevel
 {
 private:
 	array<CLayer, MAX_LAYER>		m_arrLayer;
-
+	LEVEL_STATE						m_State;
 public :
 	void begin();
 	void tick();
 	void finaltick();
 	void render();
-
+	void ClearLayer();
 public:
+	LEVEL_STATE GetState() { return m_State; }
+	void SetState(LEVEL_STATE _state) { m_State = _state; }
 	CLayer* GetLayer(UINT _iIdx) { return &m_arrLayer[_iIdx]; }
 	CLayer* GetLayer(const wstring& _strLayerName);
 	CGameObject* FindObjectByName(const wstring& _Name);

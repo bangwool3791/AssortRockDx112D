@@ -23,8 +23,9 @@ public:
 private:
 	void clear();
 	void CreateUI();
-public:
+private:
 	CImGuiMgr();
-	~CImGuiMgr();
+	virtual ~CImGuiMgr();
+	friend class CSingleton<CImGuiMgr>;
 };
 

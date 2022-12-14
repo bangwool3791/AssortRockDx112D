@@ -82,6 +82,12 @@ void CEventMgr::tick()
 			m_bLevelChanged = true;
 		}
 			break;
+		case EVENT_TYPE::CHANGE_LEVEL_STATE:
+		{
+			m_bLevelChanged = true;
+			CLevelMgr::GetInst()->ChangeLevelState((LEVEL_STATE)iter->wParam);
+		}
+			break;
 		}
 	}
 

@@ -34,7 +34,7 @@ protected:
 	float						m_fFrequency;
 	int							m_iType;
 
-	tParticle					m_arrParticle[1000];
+	tParticle					m_arrParticle[100];
 	tParticleShare				m_share;
 	/*
 	* 복사 된 객체의 effect는 다를 수 있으므로 
@@ -52,6 +52,9 @@ protected :
 	virtual void render_Instancing()override {}
 	CLONE(CParticleSystem);
 	
+public:
+	void SaveToFile(FILE* _File);
+	void LoadFromFile(FILE* _File);
 public :
 	CParticleSystem();
 	CParticleSystem(const CParticleSystem& _Rhs);

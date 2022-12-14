@@ -11,6 +11,8 @@ private:
     const RES_TYPE  m_eResType;
     int             m_iRefCount;
 
+    bool            m_bEngineRes;
+
 public:
     void AddRef()
     {
@@ -29,9 +31,14 @@ public:
         }
     }
 public:
+    //파일로 저장
+    virtual void Save(const wstring _strRelativePath) = 0;
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath) = 0;
 
+protected: 
+    void SaveKeyPath(FILE* _pFile);
+    void LoadKeyPath(FILE* _pFile);
 
 public:
     const wstring& GetKey() { return m_strKey; }
@@ -51,7 +58,7 @@ public:
 public:
     virtual CRes* Clone() = 0;
 public:
-    CRes(RES_TYPE _eResType);
+    CRes(RES_TYPE _eResType, bool _bEngineRes = false);
     CRes(const CRes& _other);
     virtual ~CRes();
 };

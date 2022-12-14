@@ -2,6 +2,7 @@
 #include "CLevel.h"
 
 CLevel::CLevel()
+	:m_State{LEVEL_STATE::STOP}
 {
 	m_arrLayer[0].SetName(L"Default");
 
@@ -26,7 +27,6 @@ void CLevel::begin()
 
 void CLevel::tick()
 {
-	clear_function(m_arrLayer);
 	tick_function(m_arrLayer);
 }
 
@@ -38,6 +38,11 @@ void CLevel::finaltick()
 void CLevel::render()
 {
 	render_function(m_arrLayer);
+}
+
+void CLevel::ClearLayer()
+{
+	clear_function(m_arrLayer);
 }
 
 CLayer* CLevel::GetLayer(const wstring& _strLayerName)

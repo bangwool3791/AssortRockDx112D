@@ -44,6 +44,9 @@ private :
 public :
     virtual void finaltick();
     void         render();
+protected:
+    void CalcViewMat();
+    void CalcProjMat();
 public :
     float        GetOrthographicScale() { return m_fScale; }
     float&       GetOrthographicScale_() { return m_fScale; }
@@ -72,6 +75,6 @@ public :
     CLONE(CCamera);
 public :
     CCamera();
-    virtual ~CCamera();
+    ~CCamera();
 };
 

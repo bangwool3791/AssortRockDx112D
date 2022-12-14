@@ -14,6 +14,8 @@ public:
 
 	const vector<tScalarParam>& GetScalarParam() { return m_vecScalarParam; }
 	const vector<tTextureParam>& GetTextureParam() { return m_vecTexParam; }
+
+	virtual void Save(const wstring _strRelativePath) {}
 	virtual int Load(const wstring& _strFilePath) override { return S_OK; }
 
 	CLONE_ASSERT(CShader);

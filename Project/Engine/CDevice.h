@@ -8,9 +8,10 @@ class CConstBuffer;
 class CDevice
 	:public CSingleton<CDevice>
 {
-public:
+private:
 	CDevice();
 	virtual ~CDevice();
+	friend class CSingleton<CDevice>;
 private:
 	HWND							m_hWnd;
 

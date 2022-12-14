@@ -10,8 +10,9 @@ public:
 	void init();
 
 	const wchar_t* GetContentPath() { return m_szContentPath; }
-	
+private:
 	CPathMgr();
 	virtual ~CPathMgr();
+	friend class CSingleton<CPathMgr>;
 };
 

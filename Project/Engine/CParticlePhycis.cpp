@@ -76,20 +76,18 @@ void CParticlePhycis::finaltick()
 
 void CParticlePhycis::render()
 {
-	Transform()->UpdateData();
-	m_ParticleBuffer->UpdateData(17, PIPELINE_STAGE::VS | PIPELINE_STAGE::GS | PIPELINE_STAGE::PS);
-
-	GetCurMaterial()->SetScalarParam(INT_1, &m_WorldSpawn);
-	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vStartScale);
-	GetCurMaterial()->SetScalarParam(VEC4_1, &m_vEndScale);
-	GetCurMaterial()->SetScalarParam(VEC4_2, &m_vStartColor);
-	GetCurMaterial()->SetScalarParam(VEC4_3, &m_vEndColor);
-	GetCurMaterial()->UpdateData();
+	__super::render();
 
 	GetMesh()->render_particle(m_iMaxCount);
 
 	m_ParticleBuffer->Clear();
-
-	__super::render();
 }
 
+void CParticlePhycis::SaveToFile(FILE* _File)
+{
+	__super::SaveToFile(_File);
+}
+void CParticlePhycis::LoadFromFile(FILE* _File)
+{
+	__super::SaveToFile(_File);
+}

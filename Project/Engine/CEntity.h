@@ -16,6 +16,9 @@ public:
 	void SetName(const wstring& _str) { m_strName = _str; }
 
 public:
+	virtual void SaveToFile(FILE* _pFile);
+	virtual void LoadFromFile(FILE* _pFile);
+public:
 	virtual CEntity* Clone() = 0;
 
 public:

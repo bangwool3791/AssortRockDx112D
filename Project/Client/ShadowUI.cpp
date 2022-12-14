@@ -4,7 +4,7 @@
 
 #include <Engine\CTransform.h>
 #include <Engine\CGameObject.h>
-#include <Engine\CShadowScript.h>
+#include <Script\CShadowScript.h>
 #include <Engine\CMeshRender.h>
 #include "Func.h"
 

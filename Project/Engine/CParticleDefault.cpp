@@ -66,5 +66,19 @@ void CParticleDefault::finaltick()
 void CParticleDefault::render()
 {
 	__super::render();
+
+	// 렌더링
+	GetMesh()->render_particle(m_iMaxCount);
+
+	// 클리어
+	m_ParticleBuffer->Clear();
 }
 
+void CParticleDefault::SaveToFile(FILE* _File)
+{
+	__super::SaveToFile(_File);
+}
+void CParticleDefault::LoadFromFile(FILE* _File)
+{
+	__super::SaveToFile(_File);
+}

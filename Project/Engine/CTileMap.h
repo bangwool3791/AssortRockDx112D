@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 #include "CRenderComponent.h"
 
 #include "Ptr.h"
@@ -14,9 +13,7 @@ public:
     enum class TILE_MODE {INGAME, EDIT};
 private:
     Vec2                    m_vTileSize;
-    TILE_MODE               m_eTIieMode;
 public:
-    void    SetTileMode(TILE_MODE _eType) { m_eTIieMode = _eType; }
     void    SetTileSizeX(float _fSize) { m_vTileSize.x = _fSize; }
     void    SetTileSizeY(float _fSize) { m_vTileSize.y = _fSize; }
     Vec2    GetTileSize() { return m_vTileSize; }
@@ -27,9 +24,6 @@ private:
     vector<tTile>           m_vecTile;
     vector<list<tTile>>	    m_vecAdjacency;
     CStructuredBuffer*      m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
-
-    Vec2                    m_vLeftTop;
-    Vec2                    m_vSlice;
 
     CGameObject*            m_pCamera;
     Vec4                    m_vCameraPos;
@@ -45,6 +39,9 @@ public:
     virtual void finaltick() override;
     virtual void render() override;
     virtual void render_Instancing() override{}
+
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
 
     CLONE(CTileMap);
 public:

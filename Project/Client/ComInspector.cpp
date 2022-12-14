@@ -16,7 +16,7 @@
 */
 #include "ResUI.h"
 
-#include <Engine/CShadowScript.h>
+#include <Script/CShadowScript.h>
 
 ComInspector::ComInspector()
 	: UI("ComInspector")

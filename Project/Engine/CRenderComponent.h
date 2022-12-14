@@ -19,11 +19,7 @@ public:
 		m_pDynamicMtrl = nullptr;
 	}
 private:
-	/*
-	* static 변수로 변경 예정
-	*/
 	Ptr<CMesh>				m_pMesh;
-	//
 	Ptr<CMaterial>			m_pSharedMtrl;
 	Ptr<CMaterial>			m_pDynamicMtrl;
 	Ptr<CMaterial>			m_pCurMtrl;
@@ -51,6 +47,9 @@ protected:
 public:
 	void SetInstancingType(INSTANCING_TYPE _eType) { m_eInsType = _eType; }
 	INSTANCING_TYPE GetInstancingType() { return m_eInsType; }
+public:
+	virtual void SaveToFile(FILE* _File) override;
+	virtual void LoadFromFile(FILE* _File) override;
 public:
 	virtual void render() = 0;
 	virtual void render_Instancing() = 0;

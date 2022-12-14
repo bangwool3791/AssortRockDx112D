@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -51,6 +52,7 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -115,6 +117,9 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <MinFilesInUnityFile>10</MinFilesInUnityFile>
+      <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
+      <UnityFilesDirectory>$(ProjectDir)</UnityFilesDirectory>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +135,10 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <MinFilesInUnityFile>10</MinFilesInUnityFile>
+      <MaxFilesInUnityFile>20</MaxFilesInUnityFile>
+      <UnityFilesDirectory>$(ProjectDir)</UnityFilesDirectory>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -145,12 +154,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Animator2DUI.h" />
+    <ClInclude Include="CCameraScript.h" />
     <ClInclude Include="CEditor.h" />
+    <ClInclude Include="CEditorCam.h" />
     <ClInclude Include="CGameObjectEx.h" />
+    <ClInclude Include="CGrid2DScript.h" />
     <ClInclude Include="CImGuiMgr.h" />
+    <ClInclude Include="CLevelSaveLoad.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComInspector.h" />
+    <ClInclude Include="CreateTestLevel.h" />
+    <ClInclude Include="MenuUI.h" />
     <ClInclude Include="ModelComUI.h" />
     <ClInclude Include="ComponentUI.h" />
     <ClInclude Include="ContentUI.h" />
@@ -177,6 +192,7 @@
     <ClInclude Include="ProgressUI.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResUI.h" />
+    <ClInclude Include="ScriptUI.h" />
     <ClInclude Include="ShadowUI.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextureUI.h" />
@@ -188,12 +204,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animator2DUI.cpp" />
+    <ClCompile Include="CCameraScript.cpp" />
     <ClCompile Include="CEditor.cpp" />
+    <ClCompile Include="CEditorCam.cpp" />
     <ClCompile Include="CGameObjectEx.cpp" />
+    <ClCompile Include="CGrid2DScript.cpp" />
     <ClCompile Include="CImGuiMgr.cpp" />
+    <ClCompile Include="CLevelSaveLoad.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComInspector.cpp" />
+    <ClCompile Include="CreateTestLevel.cpp" />
+    <ClCompile Include="MenuUI.cpp" />
     <ClCompile Include="ModelComUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
     <ClCompile Include="ContentUI.cpp" />
@@ -219,6 +241,7 @@
     </ClCompile>
     <ClCompile Include="ProgressUI.cpp" />
     <ClCompile Include="ResUI.cpp" />
+    <ClCompile Include="ScriptUI.cpp" />
     <ClCompile Include="ShadowUI.cpp" />
     <ClCompile Include="TextureUI.cpp" />
     <ClCompile Include="TileMapUI.cpp" />

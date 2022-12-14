@@ -1,5 +1,8 @@
 #include "pch.h"
 
+#include "CLevel.h"
+#include "CLevelMgr.h"
+
 #include "CDevice.h"
 #include "CTexture.h"
 #include "CResMgr.h"
@@ -58,11 +61,31 @@ void CRenderMgr::render()
 	pGlobalCB->UpdateData(PIPELINE_STAGE::ALL_STAGE);
 	pGlobalCB->UpdateData_CS();
 
+	CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
+
+	if (LEVEL_STATE::PLAY == pLevel->GetState())
+	{
+		render_game();
+	}
+	else
+	{
+		redner_editor();
+	}
+
+}
+
+void CRenderMgr::render_game()
+{
 	for (auto elem{ m_vecCam.begin() }; elem != m_vecCam.end(); ++elem)
 	{
 		(*elem)->render();
 	}
+}
 
+void CRenderMgr::redner_editor()
+{
+	assert(m_EditorCam);
+	m_EditorCam->render();
 }
 
 void CRenderMgr::UpdateNoiseTexture()

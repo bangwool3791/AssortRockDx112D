@@ -114,6 +114,7 @@ void CImGuiMgr::clear()
 #include "ModelUI.h"
 #include "ModelComUI.h"
 #include "ComInspector.h"
+#include "MenuUI.h"
 
 void CImGuiMgr::CreateUI()
 {
@@ -145,6 +146,9 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new ComInspector;
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+
+    pUI = new MenuUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     ProgressUI* progressui = new ProgressUI;

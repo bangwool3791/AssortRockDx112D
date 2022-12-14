@@ -79,17 +79,11 @@
     <Filter Include="Engine\06. Component\03. Script">
       <UniqueIdentifier>{4a669ca0-4bd8-43e2-9fa0-af61701f056d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\08. Scripts">
-      <UniqueIdentifier>{4c87c13c-05d4-40b7-b604-35d7f112157d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\06. Component\02. RenderComponent\MeshRender">
       <UniqueIdentifier>{bba20c21-96a3-412f-a030-b874f60c4851}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\06. Component\04. Camera">
       <UniqueIdentifier>{7724e083-5eee-4b22-8060-14cd4dab1cf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\Module">
-      <UniqueIdentifier>{7d8d5f93-81bc-4a20-9605-427e94c8de28}</UniqueIdentifier>
     </Filter>
     <Filter Include="Engine\03. Manager\06. RenderMgr">
       <UniqueIdentifier>{90ca4d70-6f33-4227-b754-d55673fe916f}</UniqueIdentifier>
@@ -160,18 +154,6 @@
     <Filter Include="HLSL\Compute\ParticleUpdateShader\01. WoodShader">
       <UniqueIdentifier>{a4745f6d-a69a-43f7-a0f1-67deb728286a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\08. Scripts\01. Mouse">
-      <UniqueIdentifier>{c1d20873-2aba-4115-b200-3de8486fd5cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\02. UI">
-      <UniqueIdentifier>{c7cd23dc-7f25-4419-b0a8-63f646333850}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object">
-      <UniqueIdentifier>{d088bad3-cb82-421a-b4e8-f3e078ff90e2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\06. LightScript">
-      <UniqueIdentifier>{72681695-f5a9-4837-93f4-80a6cde60a96}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\04. Phycis">
       <UniqueIdentifier>{a4daf5c1-e5b4-4f35-81ed-0bfb4dfc1ce5}</UniqueIdentifier>
     </Filter>
@@ -187,24 +169,6 @@
     <Filter Include="Engine\06. Component\08. TileMap">
       <UniqueIdentifier>{f80f3f2b-ca66-4f5e-a6a4-4d32ec9878df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\02. CMonsterScript">
-      <UniqueIdentifier>{b640cb46-46b8-4147-8db2-1b7f1f9674b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\01. CPlayerScript">
-      <UniqueIdentifier>{d8c47819-c6a1-4bb3-8f4e-f475342e6a43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\03. CShadowScript">
-      <UniqueIdentifier>{98949946-ce86-4be1-82e1-48e09bf196e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\04. CMissileScript">
-      <UniqueIdentifier>{4276742e-2d97-4ad3-9dde-e1ed3c68b0cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\03. Object\05. CTileScript">
-      <UniqueIdentifier>{1c661173-0771-497b-8f86-d9a62c2725ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\08. Scripts\02. UI\01. CRefAniScript">
-      <UniqueIdentifier>{82fb105e-7723-4223-8e1d-2e6a242c241b}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -215,9 +179,6 @@
     </ClInclude>
     <ClInclude Include="global.h">
       <Filter>Engine\00. Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleMath.h">
-      <Filter>Engine\08. Scripts\Module</Filter>
     </ClInclude>
     <ClInclude Include="define.h">
       <Filter>Engine\00. Header</Filter>
@@ -230,9 +191,6 @@
     </ClInclude>
     <ClInclude Include="CDevice.h">
       <Filter>Engine\02. Device</Filter>
-    </ClInclude>
-    <ClInclude Include="CEntity.h">
-      <Filter>Engine\08. Scripts\Module</Filter>
     </ClInclude>
     <ClInclude Include="CLevel.h">
       <Filter>Engine\04. Level</Filter>
@@ -306,9 +264,6 @@
     <ClInclude Include="CCamera.h">
       <Filter>Engine\06. Component\04. Camera</Filter>
     </ClInclude>
-    <ClInclude Include="CCameraScript.h">
-      <Filter>Engine\08. Scripts\Module</Filter>
-    </ClInclude>
     <ClInclude Include="CGraphicsShader.h">
       <Filter>Engine\07. Resource\03. Shader\GraphicsShader</Filter>
     </ClInclude>
@@ -317,9 +272,6 @@
     </ClInclude>
     <ClInclude Include="CEventMgr.h">
       <Filter>Engine\03. Manager\07. EventMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="CDragScript.h">
-      <Filter>Engine\08. Scripts\01. Mouse</Filter>
     </ClInclude>
     <ClInclude Include="CPrefab.h">
       <Filter>Engine\03. Manager\08. Prefab</Filter>
@@ -335,12 +287,6 @@
     </ClInclude>
     <ClInclude Include="CUIMgr.h">
       <Filter>Engine\03. Manager\10. UIMgr</Filter>
-    </ClInclude>
-    <ClInclude Include="CSelectUnitScript.h">
-      <Filter>Engine\08. Scripts\02. UI</Filter>
-    </ClInclude>
-    <ClInclude Include="CMouseScript.h">
-      <Filter>Engine\08. Scripts\01. Mouse</Filter>
     </ClInclude>
     <ClInclude Include="GlobalScript.h">
       <Filter>Engine\00. Header</Filter>
@@ -402,38 +348,14 @@
     <ClInclude Include="CParticleWood.h">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\03. Wood</Filter>
     </ClInclude>
-    <ClInclude Include="CGrid2DScript.h">
-      <Filter>Engine\08. Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="CLightScript.h">
-      <Filter>Engine\08. Scripts\03. Object\06. LightScript</Filter>
-    </ClInclude>
     <ClInclude Include="CParticlePhycis.h">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\04. Phycis</Filter>
     </ClInclude>
     <ClInclude Include="CTileMap.h">
       <Filter>Engine\06. Component\08. TileMap</Filter>
     </ClInclude>
-    <ClInclude Include="CPlayerScript.h">
-      <Filter>Engine\08. Scripts\03. Object\01. CPlayerScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CMonsterScript.h">
-      <Filter>Engine\08. Scripts\03. Object\02. CMonsterScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CShadowScript.h">
-      <Filter>Engine\08. Scripts\03. Object\03. CShadowScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CMissileScript2.h">
-      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CMissileScript.h">
-      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CTileScript.h">
-      <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
-    </ClInclude>
-    <ClInclude Include="CRefAniScript.h">
-      <Filter>Engine\08. Scripts\02. UI\01. CRefAniScript</Filter>
+    <ClInclude Include="CEntity.h">
+      <Filter>Engine\05. GameObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -448,9 +370,6 @@
     </ClCompile>
     <ClCompile Include="CDevice.cpp">
       <Filter>Engine\02. Device</Filter>
-    </ClCompile>
-    <ClCompile Include="CEntity.cpp">
-      <Filter>Engine\08. Scripts\Module</Filter>
     </ClCompile>
     <ClCompile Include="CLevel.cpp">
       <Filter>Engine\04. Level</Filter>
@@ -515,17 +434,11 @@
     <ClCompile Include="CCamera.cpp">
       <Filter>Engine\06. Component\04. Camera</Filter>
     </ClCompile>
-    <ClCompile Include="CCameraScript.cpp">
-      <Filter>Engine\08. Scripts\Module</Filter>
-    </ClCompile>
     <ClCompile Include="CRenderMgr.cpp">
       <Filter>Engine\03. Manager\06. RenderMgr</Filter>
     </ClCompile>
     <ClCompile Include="CEventMgr.cpp">
       <Filter>Engine\03. Manager\07. EventMgr</Filter>
-    </ClCompile>
-    <ClCompile Include="CDragScript.cpp">
-      <Filter>Engine\08. Scripts\01. Mouse</Filter>
     </ClCompile>
     <ClCompile Include="CPrefab.cpp">
       <Filter>Engine\03. Manager\08. Prefab</Filter>
@@ -541,12 +454,6 @@
     </ClCompile>
     <ClCompile Include="func.cpp">
       <Filter>Engine\00. Header\func</Filter>
-    </ClCompile>
-    <ClCompile Include="CSelectUnitScript.cpp">
-      <Filter>Engine\08. Scripts\02. UI</Filter>
-    </ClCompile>
-    <ClCompile Include="CMouseScript.cpp">
-      <Filter>Engine\08. Scripts\01. Mouse</Filter>
     </ClCompile>
     <ClCompile Include="CUIMgr.cpp">
       <Filter>Engine\03. Manager\10. UIMgr</Filter>
@@ -590,44 +497,15 @@
     <ClCompile Include="CParticleWood.cpp">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\03. Wood</Filter>
     </ClCompile>
-    <ClCompile Include="CGrid2DScript.cpp">
-      <Filter>Engine\08. Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="CLightScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\06. LightScript</Filter>
-    </ClCompile>
     <ClCompile Include="CParticlePhycis.cpp">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\04. Phycis</Filter>
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
       <Filter>Engine\06. Component\08. TileMap</Filter>
     </ClCompile>
-    <ClCompile Include="CPlayerScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\01. CPlayerScript</Filter>
+    <ClCompile Include="CEntity.cpp">
+      <Filter>Engine\05. GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="CMonsterScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\02. CMonsterScript</Filter>
-    </ClCompile>
-    <ClCompile Include="CShadowScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\03. CShadowScript</Filter>
-    </ClCompile>
-    <ClCompile Include="CMissileScript2.cpp">
-      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
-    </ClCompile>
-    <ClCompile Include="CMissileScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\04. CMissileScript</Filter>
-    </ClCompile>
-    <ClCompile Include="CTileScript.cpp">
-      <Filter>Engine\08. Scripts\03. Object\05. CTileScript</Filter>
-    </ClCompile>
-    <ClCompile Include="CRefAniScript.cpp">
-      <Filter>Engine\08. Scripts\02. UI\01. CRefAniScript</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SimpleMath.inl">
-      <Filter>Engine\08. Scripts\Module</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="register.fx">

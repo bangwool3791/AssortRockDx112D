@@ -18,9 +18,10 @@ private:
 	void finaltick();
 	void render();
 
-public:
+private:
 	CEngine();
 	virtual ~CEngine();
+	friend class CSingleton<CEngine>;
 public:
 	HWND GetMainHwnd() { return m_hMainWnd; }
 };

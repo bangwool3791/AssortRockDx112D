@@ -20,10 +20,8 @@ public :
     void render_particle(UINT _iCount);
     CLONE_ASSERT(CMesh);
 
-virtual int Load(const wstring& _strFilePath) override
-{
-    return S_OK;
-}
+    virtual void Save(const wstring _strRelativePath) {}
+    virtual int Load(const wstring& _strFilePath) override { return S_OK; }
 
 public:
     CMesh();

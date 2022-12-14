@@ -71,13 +71,14 @@ void CEngine::tick()
 	CKeyMgr::GetInst()->tick();
 	CRenderMgr::GetInst()->tick();
 
-	CLevelMgr::GetInst()->tick();
+	CLevelMgr::GetInst()->progress();
+
+	CCollisionMgr::GetInst()->tick();
 }
 
 void CEngine::finaltick()
 {
-	CLevelMgr::GetInst()->finaltick();
-	CCollisionMgr::GetInst()->tick();
+
 }
 
 void CEngine::render()

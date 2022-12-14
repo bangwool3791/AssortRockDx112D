@@ -46,13 +46,13 @@ private:
 	void CreateDefaultTexture();
 	void CreateDefaultGraphicsShader();
 	void CreateDefaultMaterial();
-	void CreateDefaultPrefab();
 	void CreateDefaultComputeShader();
 	void AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName);
 
-public :
+private:
 	CResMgr();
-	virtual  ~CResMgr();
+	virtual ~CResMgr();
+	friend class CSingleton<CResMgr>;
 
 
 };

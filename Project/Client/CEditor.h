@@ -20,6 +20,7 @@ public:
 private:
 	void tick();
 	void render();
+	void debug_render();
 private:
 	void CreateDebugDrawObject();
 	void DebugDraw(tDebugShapeInfo& _info);;
@@ -29,7 +30,8 @@ public:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END>& GetArrComponents() { return m_arrCom; }
 	CComponent* GetArrComponent(COMPONENT_TYPE _eType) { return m_arrCom[(UINT)_eType]; }
 	CGameObjectEx* FindByName(const wstring& _strky);
-public:
+private:
 	CEditor();
 	virtual ~CEditor();
+	friend class CSingleton<CEditor>;
 };

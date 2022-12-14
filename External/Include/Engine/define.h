@@ -244,7 +244,7 @@ enum class EVENT_TYPE
 	ADD_CHILD,
 	DELETE_OBJECT,
 	CHANGE_LEVEL,
-
+	CHANGE_LEVEL_STATE,
 	END,
 };
 
@@ -289,6 +289,13 @@ enum class INSTANCING_TYPE
 {
 	NONE,
 	USED,
+};
+
+enum class LEVEL_STATE
+{
+	PLAY,
+	STOP,
+	PAUSE,
 };
 
 extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END];

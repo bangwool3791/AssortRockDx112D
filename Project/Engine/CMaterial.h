@@ -25,11 +25,12 @@ public :
 	void UpdateData();
 	static void Clear();
 
-	virtual int Load(const wstring& _strFilePath) { return S_OK; }
+	virtual void Save(const wstring _strRelativePath);
+	virtual int Load(const wstring& _strFilePath);
 
 	CLONE(CMaterial)
 public :
-	CMaterial();
+	CMaterial(bool _bEngineRes);
 	CMaterial(const CMaterial& _other);
 	virtual ~CMaterial();
 };

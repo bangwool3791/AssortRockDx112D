@@ -5,6 +5,7 @@
 #include "Client.h"
 
 #include "CEditor.h"
+#include "CreateTestLevel.h"
 #include <Engine/CDevice.h>
 #include "CImGuiMgr.h"
 
@@ -50,6 +51,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         MessageBox(nullptr, L"엔진 초기화 실패", L"에러", MB_OK);
         return 0;
     }
+
+    CreateTestLelvel();
+
     CEditor::GetInst()->init();
     // ImGui 초기화  
     CImGuiMgr::GetInst()->init(g_hWnd);

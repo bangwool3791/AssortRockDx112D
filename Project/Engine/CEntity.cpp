@@ -20,3 +20,12 @@ CEntity::~CEntity()
 {
 
 }
+
+void CEntity::SaveToFile(FILE* _pFile)
+{
+	SaveWStringToFile(m_strName, _pFile);
+}
+void CEntity::LoadFromFile(FILE* _pFile)
+{
+	LoadWStringFromFile(m_strName, _pFile);
+}

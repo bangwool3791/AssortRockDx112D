@@ -76,20 +76,8 @@ void CParticleWood::finaltick()
 
 void CParticleWood::render()
 {
-	Transform()->UpdateData();
-	m_ParticleBuffer->UpdateData(17, PIPELINE_STAGE::VS | PIPELINE_STAGE::GS | PIPELINE_STAGE::PS);
-
-	GetCurMaterial()->SetScalarParam(INT_1, &m_WorldSpawn);
-	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vStartScale);
-	GetCurMaterial()->SetScalarParam(VEC4_1, &m_vEndScale);
-	GetCurMaterial()->SetScalarParam(VEC4_2, &m_vStartColor);
-	GetCurMaterial()->SetScalarParam(VEC4_3, &m_vEndColor);
-	GetCurMaterial()->UpdateData();
-
-	GetMesh()->render_particle(m_iMaxCount);
+	__super::render();
 
 	m_ParticleBuffer->Clear();
-
-	__super::render();
 }
 

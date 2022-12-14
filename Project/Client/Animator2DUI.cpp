@@ -123,14 +123,14 @@ void Animator2DUI::render_update()
             m_iIndex = 0;
 
         if (m_iIndex >= m_vecAniInfo.size())
-            m_iIndex = m_vecAniInfo.size() - 1;
+            m_iIndex = (int)(m_vecAniInfo.size() - 1);
     }
 
     if (m_iIndex < 0)
         m_iIndex = 0;
 
     if (m_iIndex != 0 && m_iIndex >= m_vecAniInfo.size())
-        m_iIndex = m_vecAniInfo.size() - 1;
+        m_iIndex = (int)(m_vecAniInfo.size() - 1);
 
     if (!m_vecAniInfo.empty())
     {

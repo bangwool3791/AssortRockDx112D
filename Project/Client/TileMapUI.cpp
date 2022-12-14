@@ -13,7 +13,7 @@
 #include <Engine\CResMgr.h>
 
 #include <Engine\CScript.h>
-#include <Engine\CTileScript.h>
+#include <Script\CTileScript.h>
 
 #include "TransformUI.h"
 #include "MeshRenderUI.h"

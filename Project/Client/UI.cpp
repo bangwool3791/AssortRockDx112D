@@ -51,7 +51,8 @@ void UI::render()
 					for (int i = 0; i < m_vecChildUI.size(); ++i)
 					{
 						m_vecChildUI[i]->render();
-						ImGui::Separator();
+						//if (m_vecChildUI[i]->m_bSeperator && i != (m_vecChildUI.size() - 1))
+						//	ImGui::Separator();
 					}
 
 					ImGui::EndPopup();
@@ -67,6 +68,9 @@ void UI::render()
 				for (int i = 0; i < m_vecChildUI.size(); ++i)
 				{
 					m_vecChildUI[i]->render();
+
+					if (m_vecChildUI[i]->m_bOpen == true && m_vecChildUI[i]->m_bSeperator && (i != m_vecChildUI.size() - 1))
+						ImGui::Separator();
 				}
 
 				ImGui::End();
@@ -86,9 +90,6 @@ void UI::render()
 			}
 
 			ImGui::EndChild();
-
-			if (m_bSeperator)
-				ImGui::Separator();
 		}	
 
 		if (false == m_bOpen)

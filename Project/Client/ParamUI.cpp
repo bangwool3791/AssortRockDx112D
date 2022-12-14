@@ -18,6 +18,11 @@ void ParamUI::Param_Int(const string& _ParamName, int* _pInOut)
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
 	ImGui::InputInt(szName, _pInOut);
+
+	if (ImGui::InputInt(szName, _pInOut, 1, 1, ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		UI::ResetFocus();
+	}
 }
 
 void ParamUI::Param_Float(const string& _ParamName, float* _pInOut)
@@ -27,7 +32,10 @@ void ParamUI::Param_Float(const string& _ParamName, float* _pInOut)
 
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
-	ImGui::InputFloat(szName, _pInOut);
+	if (ImGui::InputFloat(szName, _pInOut, 0.f, 0.f, "%6.3f", ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		UI::ResetFocus();
+	}
 }
 
 void ParamUI::Param_Vec2(const string& _ParamName, Vec2* _pInOut)
@@ -37,7 +45,10 @@ void ParamUI::Param_Vec2(const string& _ParamName, Vec2* _pInOut)
 
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
-	ImGui::InputFloat2(szName, *_pInOut);
+	if (ImGui::InputFloat(szName, *_pInOut, 0.f, 0.f, "%6.3f", ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		UI::ResetFocus();
+	}
 }
 
 void ParamUI::Param_Vec4(const string& _ParamName, Vec4* _pInOut)
@@ -47,7 +58,10 @@ void ParamUI::Param_Vec4(const string& _ParamName, Vec4* _pInOut)
 
 	ImGui::Text(_ParamName.c_str());
 	ImGui::SameLine();
-	ImGui::InputFloat4(szName, *_pInOut);
+	if (ImGui::InputFloat4(szName, *_pInOut, "%.3f", ImGuiInputTextFlags_::ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		UI::ResetFocus();
+	}
 }
 
 

@@ -10,11 +10,12 @@ class CStructuredBuffer;
 class CRenderMgr
 	: public CSingleton<CRenderMgr>
 {
-public:
+private:
 	CRenderMgr();
 	virtual ~CRenderMgr();
-
+	friend class CSingleton<CRenderMgr>;
 private:
+	CCamera*					m_EditorCam;
 	vector<CCamera*>			m_vecCam;			// 현재 레벨에 있는 모든 카메라
 	vector<tLightInfo>			m_vecLight2D;		// 현재 레벨에 있는 모든 2D 광원
 	CStructuredBuffer*			m_pLight2DBuffer;
@@ -23,6 +24,7 @@ private:
 public:
 	void RegisterCamera(auto _pCam) { m_vecCam.push_back(_pCam); }
 	void RegisterLight2D(auto _pLight) { m_vecLight2D.push_back(_pLight->GetLightInfo()); }
+	void RegisterEditCam(auto _pCam) { m_EditorCam = _pCam; }
 	// 렌더타겟을 카피텍스쳐로 복사
 	void CopyRenderTarget();
 
@@ -50,5 +52,8 @@ public:
 	void init();
 	void tick();
 	void render();
+
+	void render_game();
+	void redner_editor();
 
 };

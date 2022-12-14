@@ -15,7 +15,8 @@ public :
 public:
 	void AddEvent(tEvent& _evn) { m_vecEvent.push_back(_evn); }
 	bool IsLevelChanged() {return m_bLevelChanged;}
-public:
+private:
 	CEventMgr();
 	virtual ~CEventMgr();
+	friend class CSingleton<CEventMgr>;
 };

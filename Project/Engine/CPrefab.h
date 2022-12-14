@@ -12,6 +12,7 @@ private :
 public :
 	CGameObject* Instantiate();
 
+	virtual void Save(const wstring _strRelativePath) {}
 	virtual int Load(const wstring& _strFilePath) { return E_FAIL; }
 
 	CLONE_DUMMY(CPrefab);

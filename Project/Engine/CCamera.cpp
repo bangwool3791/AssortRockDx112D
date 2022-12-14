@@ -23,6 +23,7 @@ CCamera::CCamera()
 	, m_fFar{100000.f}
 	, m_fScale{1.f}
 	, m_iLayerMask(0)
+	, m_iCamIdx(0)
 {
 	Vec2 vRenderResolution	= CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio			= vRenderResolution.x / vRenderResolution.y;
@@ -38,6 +39,17 @@ CCamera::~CCamera()
 
 void CCamera::finaltick()
 {
+	CalcViewMat();
+
+	CalcProjMat();
+
+	CRenderMgr::GetInst()->RegisterCamera(this);
+}
+
+void CCamera::CalcViewMat()
+{
+	//역행렬을 구하는 과정
+	//View 행렬은 카메라의 역행렬
 	Vec3	vPos = Transform()->GetRelativePos();
 	Matrix	matViewTrnas = XMMatrixTranslation(-vPos.x, -vPos.y, -vPos.z);
 	Vec3	vRight = Transform()->GetRelativeDir(DIR::RIGHT);
@@ -62,6 +74,10 @@ void CCamera::finaltick()
 
 	m_matView = matViewTrnas * matViewRot;
 	//m_matView =  XMMatrixIdentity();
+}
+
+void CCamera::CalcProjMat()
+{
 	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
 	switch (m_eProjType)
@@ -73,10 +89,6 @@ void CCamera::finaltick()
 		m_matProj = XMMatrixOrthographicLH(vRenderResolution.x * m_fScale, vRenderResolution.y * m_fScale, 1.f, m_fFar);
 		break;
 	}
-	/*
-	* 
-	*/
-	CRenderMgr::GetInst()->RegisterCamera(this);
 }
 
 void CCamera::render()
@@ -334,4 +346,27 @@ void CCamera::SortObject()
 			}
 		}
 	}
+}
+
+void CCamera::SaveToFile(FILE* _File)
+{
+	COMPONENT_TYPE type = GetType();
+	fwrite(&type, sizeof(UINT), 1, _File);
+
+	fwrite(&m_eProjType, sizeof(PROJ_TYPE), 1, _File);
+	fwrite(&m_fAspectRatio, sizeof(float), 1, _File);
+	fwrite(&m_fFar, sizeof(float), 1, _File);
+	fwrite(&m_fScale, sizeof(float), 1, _File);
+	fwrite(&m_iLayerMask, sizeof(UINT), 1, _File);
+	fwrite(&m_iCamIdx, sizeof(int), 1, _File);
+}
+
+void CCamera::LoadFromFile(FILE* _File)
+{
+	fread(&m_eProjType, sizeof(PROJ_TYPE), 1, _File);
+	fread(&m_fAspectRatio, sizeof(float), 1, _File);
+	fread(&m_fFar, sizeof(float), 1, _File);
+	fread(&m_fScale, sizeof(float), 1, _File);
+	fread(&m_iLayerMask, sizeof(UINT), 1, _File);
+	fread(&m_iCamIdx, sizeof(int), 1, _File);
 }

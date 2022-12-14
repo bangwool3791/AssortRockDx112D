@@ -121,7 +121,9 @@ public:
 	Vec2&  GetMousePos_() { return m_vMousePos; }
 	Vec2  GetMouseDir() { return m_vMouseDir; }
 	Vec2& GetMouseDir_() { return m_vMouseDir; }
+private:
 	CKeyMgr();
 	virtual ~CKeyMgr();
+	friend class CSingleton<CKeyMgr>;
 };
 

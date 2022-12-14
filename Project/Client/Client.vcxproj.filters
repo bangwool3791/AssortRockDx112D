@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -105,6 +97,21 @@
     </Filter>
     <Filter Include="ModuleUI\ParamUI">
       <UniqueIdentifier>{9b60fb54-846e-4a55-bb61-977a17fcc375}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\08. MenuUI">
+      <UniqueIdentifier>{46972ef3-937c-4733-8d3c-ab216d746826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Editor\EditorScript">
+      <UniqueIdentifier>{372832ff-65f4-471b-bfad-0de64c7387f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. UI\09. ScriptUI">
+      <UniqueIdentifier>{0fb23aa7-11c4-499b-b3ae-2a75b61c9880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Editor\EditorComponent">
+      <UniqueIdentifier>{83215c66-7b92-4cb2-ae51-d7c48daab60f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="04. SaveLoad">
+      <UniqueIdentifier>{7a206137-77e6-4360-a227-1b36f2dd7c69}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -231,11 +238,29 @@
     <ClInclude Include="ParamUI.h">
       <Filter>ModuleUI\ParamUI</Filter>
     </ClInclude>
+    <ClInclude Include="MenuUI.h">
+      <Filter>03. UI\08. MenuUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraScript.h">
+      <Filter>01. Editor\EditorScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CGrid2DScript.h">
+      <Filter>01. Editor\EditorScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptUI.h">
+      <Filter>03. UI\09. ScriptUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateTestLevel.h">
+      <Filter>01. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="CEditorCam.h">
+      <Filter>01. Editor\EditorComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevelSaveLoad.h">
+      <Filter>04. SaveLoad</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Client.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Default</Filter>
     </ClCompile>
@@ -343,6 +368,30 @@
     </ClCompile>
     <ClCompile Include="ParamUI.cpp">
       <Filter>ModuleUI\ParamUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuUI.cpp">
+      <Filter>03. UI\08. MenuUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraScript.cpp">
+      <Filter>01. Editor\EditorScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CGrid2DScript.cpp">
+      <Filter>01. Editor\EditorScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptUI.cpp">
+      <Filter>03. UI\09. ScriptUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateTestLevel.cpp">
+      <Filter>01. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditorCam.cpp">
+      <Filter>01. Editor\EditorComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevelSaveLoad.cpp">
+      <Filter>04. SaveLoad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

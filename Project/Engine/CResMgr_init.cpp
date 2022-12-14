@@ -6,8 +6,6 @@
 #include "CTexture.h"
 #include "CMeshRender.h"
 
-#include "GlobalScript.h"
-
 #include "CPaintShader.h"
 
 void CResMgr::init()
@@ -21,8 +19,6 @@ void CResMgr::init()
 	CreateDefaultComputeShader();
 
 	CreateDefaultMaterial();
-
-	CreateDefaultPrefab();
 
 }
 
@@ -415,81 +411,6 @@ void CResMgr::CreateDefaultGraphicsShader()
 	AddRes<CGraphicsShader>(L"RefAniShader", pShader);
 }
 
-void CResMgr::CreateDefaultPrefab()
-{
-	CGameObject* pObject = new CGameObject;
-	pObject->SetName(L"Missile");
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CMissileScript);
-
-	pObject->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Plane"));
-
-	AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject));
-
-	pObject = new CGameObject;
-	pObject->SetName(L"UnitSelectUI");
-
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-	pObject->AddComponent(new CSelectUnitScript);
-
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectUIMaterial"));
-
-	AddRes<CPrefab>(L"UnitSelectUIPrefab", new CPrefab(pObject));
-
-	/*
-	* MouseDragPrefab
-	*/
-	pObject = new CGameObject;
-	pObject->SetName(L"MouseDrag");
-
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender);
-	pObject->AddComponent(new CDragScript);
-	pObject->AddComponent(new CCollider2D);
-
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-	AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject));
-
-	pObject = new CGameObject;
-	pObject->SetName(L"MouseObject");
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CMouseScript);
-	AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
-
-
-	pObject = new CGameObject;
-	pObject->SetName(L"Shadow");
-
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-	pObject->AddComponent(new CAnimator2D);
-	pObject->AddComponent(new CShadowScript);
-
-	pObject->Transform()->SetRelativePos(Vec3(0.5f, 0.5f, 10.f));
-	pObject->Transform()->SetRelativeScale(Vec3(1.f, 1.f, 1.f));
-	pObject->Transform()->SetRelativeRotation(Vec3(1.f, 0.f, 0.f));
-	pObject->Transform()->SetIgnoreParentScale(false);
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ShadowMtrl"));
-
-	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-	pObject->Animator2D()->Play(L"LeftWalk", true);
-
-	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
-
-	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
-	AddRes<CPrefab>(L"ShadowPrefab", new CPrefab(pObject));
-}
-
 #include "CComputeShader.h"
 #include "CParticleUpdateShader.h"
 
@@ -512,63 +433,63 @@ void CResMgr::CreateDefaultComputeShader()
 void CResMgr::CreateDefaultMaterial()
 {
 
-	CMaterial* pMaterial = new CMaterial();
+	CMaterial* pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TestShader"));
 	AddRes(L"TestMtrl", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"Std2DShader"));
 	AddRes(L"Std2DMtrl", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"Std2DAlphaBlendShader"));
 	AddRes(L"Std2DAlphaBlendMtrl", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DragEffectShader"));
 	AddRes(L"MouseDragMaterial", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"EditorShader"));
 	AddRes(L"EditMaterial", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UnitSelectUIShader"));
 	AddRes(L"UnitSelectUIMaterial", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileShader"));
 	AddRes(L"TileMaterial", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes(L"ParticleRenderMtrl", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes(L"ParticleRenderWoodMtrl", pMaterial);
 
-	pMaterial = new CMaterial();
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ObjectRenderShader"));
 	AddRes(L"ObjectMtrl", pMaterial);
 
-	pMaterial = new CMaterial;
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"PostProcessShader"));
 	AddRes<CMaterial>(L"PostProcessMtrl", pMaterial);
 
-	pMaterial = new CMaterial;
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"DebugDrawShader"));
 	AddRes<CMaterial>(L"DebugDrawMtrl", pMaterial);
 
-	pMaterial = new CMaterial;
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ShadowRenderShader"));
 	AddRes<CMaterial>(L"ShadowMtrl", pMaterial);
 
-	pMaterial = new CMaterial;
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileMapShader"));
 	AddRes<CMaterial>(L"TileMapMtrl", pMaterial);
 
-	pMaterial = new CMaterial;
+	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"RefAniShader"));
 	AddRes<CMaterial>(L"RefAniMtrl", pMaterial);
 }

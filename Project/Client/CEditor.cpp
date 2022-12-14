@@ -4,14 +4,22 @@
 #include "imgui.h"
 #include "CGameObjectEx.h"
 
+#include "CGrid2DScript.h"
+
+#include <Engine/CTimeMgr.h>
 #include <Engine\CMeshRender.h>
 
 #include <Engine\CComponent.h>
 #include <Engine\GlobalComponent.h>
 
 #include <Engine\CCamera.h>
-#include <Engine\CGrid2DScript.h>
+
+#include "CEditorCam.h"
+#include "CCameraScript.h"
+
 #include <Engine\CRenderMgr.h>
+#include <Engine/CLevel.h>
+#include <Engine\CLevelMgr.h>
 
 CEditor::CEditor()
 {
@@ -31,22 +39,22 @@ void CEditor::init()
 	CreateDebugDrawObject();
 
 	// Editor 용도 Grid Object 추가
-	//CGameObjectEx* pGridObj = new CGameObjectEx;
-	//pGridObj->SetName(L"Grid Object");
+	CGameObjectEx* pGridObj = new CGameObjectEx;
+	pGridObj->SetName(L"Grid Object");
 
-	//pGridObj->AddComponent(new CTransform);
-	//pGridObj->AddComponent(new CMeshRender);
-	//pGridObj->AddComponent(new CGrid2DScript);
+	pGridObj->AddComponent(new CTransform);
+	pGridObj->AddComponent(new CMeshRender);
+	pGridObj->AddComponent(new CGrid2DScript);
 
-	//pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	//pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
 
-	//pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	//pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	//pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
+	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
-	//pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
-	//m_vecEditorObj.push_back(pGridObj);
+	pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	m_vecEditorObj.push_back(pGridObj);
 
 	CGameObjectEx* pObject = new CGameObjectEx;
 	pObject->SetName(L"Dummy Object");
@@ -66,8 +74,21 @@ void CEditor::init()
 	//pObject->Animator2D()->Play(L"LeftWalk", true);
 	m_vecDummyObj.push_back(pObject);
 
+	CGameObjectEx* pEditorCam = new CGameObjectEx;
+	pEditorCam->SetName(L"Editor Camera");
+
+	pEditorCam->AddComponent(new CTransform);
+	pEditorCam->AddComponent(new CEditorCam);
+	pEditorCam->AddComponent(new CCameraScript);
+	pEditorCam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+	pEditorCam->Camera()->SetFar(100000.f);
+	pEditorCam->Camera()->SetLayerMaskAll();
+	pEditorCam->Camera()->SetLayerMask(31);
+
+	m_vecEditorObj.push_back(pEditorCam);
+	CRenderMgr::GetInst()->RegisterEditCam(pEditorCam->Camera());
 	/*
-	* GameObject 입력 Component
+	* Component List
 	*/
 	m_arrCom[(UINT)COMPONENT_TYPE::TRANSFORM]	= new CTransform();
 	m_arrCom[(UINT)COMPONENT_TYPE::TRANSFORM]->SetName(L"Transform");
@@ -83,9 +104,13 @@ void CEditor::init()
 
 void CEditor::progress()
 {
-	tick();
-
-	render();
+	if (LEVEL_STATE::PLAY != CLevelMgr::GetInst()->GetCurLevel()->GetState())
+	{
+		tick();
+		render();
+	}
+	//Debug Shape
+	debug_render();
 }
 
 void CEditor::tick()
@@ -108,10 +133,12 @@ void CEditor::render()
 	{
 		m_vecEditorObj[i]->render();
 	}
+}
 
-
+void CEditor::debug_render()
+{
 	// DebugDrawRender
-	// 일정 시간동안 렌더링 되는 Shape 
+// 일정 시간동안 렌더링 되는 Shape 
 	list<tDebugShapeInfo>::iterator iter = m_DebugDrawList.begin();
 	for (; iter != m_DebugDrawList.end(); )
 	{
@@ -140,8 +167,6 @@ void CEditor::render()
 		}
 	}
 	vecInfo.clear();
-
-
 }
 
 void CEditor::CreateDebugDrawObject()

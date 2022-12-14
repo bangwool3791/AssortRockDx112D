@@ -48,7 +48,7 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 	float fWidth	= (float)_AtlasTex->GetWidth();
 	float fHeight	= (float)_AtlasTex->GetHeight();
 
-	for (UINT i{ 0 }; i < _iMaxFrm; ++i)
+	for (UINT i{ 0 }; i < (UINT)_iMaxFrm; ++i)
 	{
 		tAnim2DFrm frm{};
 		frm.vLeftTop	= Vec2{ (_vLeftTop.x + _fStep * (float)i) / fWidth, _vLeftTop.y / fHeight };
@@ -110,4 +110,35 @@ void CAnimation2D::SetFullSize(Vec2 _vFullSize, int _index)
 void CAnimation2D::SetDuration(float _fDuration, int _index)
 {
 	m_vecFrm[_index].fDuration = _fDuration;
+}
+void CAnimation2D::SaveToFile(FILE* _File)
+{
+	CEntity::SaveToFile(_File);
+
+	// 프레임 개수, 데이터
+	size_t iFrameCount = m_vecFrm.size();
+	fwrite(&iFrameCount, sizeof(size_t), 1, _File);
+	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrm), iFrameCount, _File);
+
+	// 참조 아틀라스 텍스쳐
+	SaveResourceRef<CTexture>(m_AtlasTex, _File);
+}
+
+void CAnimation2D::LoadFromFile(FILE* _File)
+{
+	CEntity::LoadFromFile(_File);
+
+	// 프레임 개수, 데이터
+	size_t iFrameCount = 0;
+	fread(&iFrameCount, sizeof(size_t), 1, _File);
+
+	for (size_t i = 0; i < iFrameCount; ++i)
+	{
+		tAnim2DFrm frm = {};
+		fread(&frm, sizeof(tAnim2DFrm), 1, _File);
+		m_vecFrm.push_back(frm);
+	}
+
+	// 참조 아틀라스 텍스쳐
+	LoadResourceRef<CTexture>(m_AtlasTex, _File);
 }

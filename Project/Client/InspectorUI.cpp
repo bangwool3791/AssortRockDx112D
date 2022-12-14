@@ -10,17 +10,17 @@
 #include "Collider2DUI.h"
 #include "ShadowUI.h"
 #include "Light2DUI.h"
-
 #include "MeshUI.h"
 #include "TextureUI.h"
 #include "MaterialUI.h"
+#include "ScriptUI.h"
 
 /*
 * Resource
 */
 #include "ResUI.h"
 
-#include <Engine/CShadowScript.h>
+#include <Script/CShadowScript.h>
 
 InspectorUI::InspectorUI()
 	: UI("Inspector")
@@ -47,9 +47,9 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetSize(ImVec2(0.f, 150.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]);
 
-	m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D] = new Light2DUI;
-	m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]->SetSize(ImVec2(0.f, 150.f));
-	AddChild(m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]);
+	//m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D] = new Light2DUI;
+	//m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]->SetSize(ImVec2(0.f, 150.f));
+	//AddChild(m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]);
 
 	// ResourceUI
 	m_arrResUI[(UINT)RES_TYPE::MESH] = new MeshUI;
@@ -69,10 +69,17 @@ InspectorUI::InspectorUI()
 	m_arrResUI[(UINT)RES_TYPE::MATERIAL]->ShowSeperator(false);
 	m_arrResUI[(UINT)RES_TYPE::MATERIAL]->Close();
 	AddChild(m_arrResUI[(UINT)RES_TYPE::MATERIAL]);
+
+	ScriptUI* pScript = new ScriptUI;
+	pScript->Close();
+	AddChild(pScript);
+	m_vecScriptUI.push_back(pScript);
+	
 }
 
 InspectorUI::~InspectorUI()
 {	
+
 }
 
 void InspectorUI::update()
@@ -82,7 +89,7 @@ void InspectorUI::update()
 		SetTargetObject(nullptr);
 	}
 
-	SetLight(nullptr);
+	//SetLight(nullptr);
 
 	UI::update();
 }
@@ -95,7 +102,7 @@ void InspectorUI::render_update()
 void InspectorUI::SetTargetObject(CGameObject* _Target)
 {
 	// 리소스가 타겟인 상태였다면
-	if (nullptr != _Target)
+	if (nullptr != _Target && nullptr != m_TargetRes)
 	{
 		SetTargetResource(nullptr);
 	}
@@ -138,6 +145,39 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 		}		
 	}	
 
+	if (nullptr == m_TargetObj)
+	{
+		for (UINT i{}; i < m_vecScriptUI.size(); ++i)
+		{
+			m_vecScriptUI[i]->Close();
+		}
+	}
+	else
+	{
+		for (UINT i{}; i < m_vecScriptUI.size(); ++i)
+			m_vecScriptUI[i]->Close();
+
+
+		const vector<CScript*>& scripts = m_TargetObj->GetScripts();
+
+		if (m_vecScriptUI.size() < scripts.size())
+		{
+			for (UINT i{}; i < scripts.size() - m_vecScriptUI.size(); ++i)
+			{
+				ScriptUI* pScript = new ScriptUI;
+				pScript->Close();
+				AddChild(pScript);
+				m_vecScriptUI.push_back(pScript);
+			}
+		}
+
+		for (UINT i{}; i < scripts.size(); ++i)
+		{
+			m_vecScriptUI[i]->Open();
+			m_vecScriptUI[i]->SetTargetScript(scripts[i]);
+		}
+	}
+	
 	//auto pShadow = m_TargetObj->GetChild(L"Shadow");
 	//auto pShadowScript = m_TargetObj->GetChild(L"Shadow")->GetScript<CShadowScript>(L"ShadowScript");
 

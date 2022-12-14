@@ -54,4 +54,8 @@ public:
 	void tick();
 	void finaltick();
 	void UpdateData();
+
+public:
+	virtual void SaveToFile(FILE* _File);
+	virtual void LoadFromFile(FILE* _File);
 };

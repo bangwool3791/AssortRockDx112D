@@ -57,8 +57,8 @@ using namespace Microsoft::WRL;
 using namespace DirectX::SimpleMath;
 
 #include <d3dcommon.h>
+#include "singleton.h"
 #include "define.h"
 #include "struct.h"
 #include "func.h"
 
-#include "singleton.h"

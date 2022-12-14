@@ -37,7 +37,8 @@ public :
 	void CollisionLayerCheck(int _iLeft, int _iRight);
 	void CollisionLayerRelease(int _iLeft, int _iRight);
 
-public:
+private:
 	CCollisionMgr();
 	virtual ~CCollisionMgr();
+	friend class CSingleton<CCollisionMgr>;
 };

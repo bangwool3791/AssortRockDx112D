@@ -1,5 +1,4 @@
 #pragma once
-#include "pch.h"
 
 class CGameObject;
 
@@ -27,7 +26,8 @@ public:
 			return nullptr;
 	}
 
-public:
+private:
 	CUIMgr();
 	virtual ~CUIMgr();
+	friend class CSingleton<CUIMgr>;
 };

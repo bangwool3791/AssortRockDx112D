@@ -44,6 +44,8 @@ public:
     void Clear();
 
 public:
+    virtual void SaveToFile(FILE* _File);
+    virtual void LoadFromFile(FILE* _File);
     CLONE(CAnimator2D);
 
 public:

@@ -130,6 +130,44 @@ void Instantiate(CGameObject* _pNewObj, int _iLayerIdx = 0);
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);
 void Instantiate(CGameObject* _pNewObj, CGameObject* _pOwner, int _iLayerIdx = 0);
 
+void SaveStringToFile(const string& _str, FILE* _pFile);
+void LoadStringFromFile(string& _str, FILE* _pFile);
+
+void SaveWStringToFile(const wstring& _str, FILE* _pFile);
+void LoadWStringFromFile(wstring& _str, FILE* _pFile);
+
+#include "CResMgr.h"
+#include "Ptr.h"
+template<typename T>
+void SaveResourceRef(Ptr<T> _res, FILE* _pFile)
+{
+	int iExist = !!_res.Get();
+
+	fwrite(&iExist, sizeof(int), 1, _pFile);
+
+	if (iExist)
+	{
+		SaveWStringToFile(_res->GetKey(), _pFile);
+		SaveWStringToFile(_res->GetRelativePath(), _pFile);
+	}
+}
+
+template<typename T>
+void LoadResourceRef(Ptr<T> _Res, FILE* _pFile)
+{
+	int iExist = 0;
+
+	fread(&iExist, sizeof(int), 1, _pFile);
+
+	if (iExist)
+	{
+		wstring strKey, strRelativePath;
+		LoadWStringFromFile(strKey, _pFile);
+		LoadWStringFromFile(strRelativePath, _pFile);
+		_Res = CResMgr::GetInst()->Load<T>(strKey, strRelativePath);
+	}
+}
+
 const char* ToString(COMPONENT_TYPE);
 const wchar_t* ToWString(COMPONENT_TYPE);
 

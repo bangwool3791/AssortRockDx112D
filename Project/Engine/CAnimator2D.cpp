@@ -147,3 +147,34 @@ void CAnimator2D::SetDuration(float _fDuration, int _index)
 {
     m_pCurAnim->SetDuration(_fDuration, _index);
 }
+
+void CAnimator2D::SaveToFile(FILE* _File)
+{
+    COMPONENT_TYPE type = GetType();
+    fwrite(&type, sizeof(UINT), 1, _File);
+
+    // Animation ÀúÀå
+    size_t iAnimCount = m_mapAnim.size();
+    fwrite(&iAnimCount, sizeof(size_t), 1, _File);
+
+    for (const auto& pair : m_mapAnim)
+    {
+        pair.second->SaveToFile(_File);
+    }
+}
+
+void CAnimator2D::LoadFromFile(FILE* _File)
+{
+    // Animation
+    size_t iAnimCount = 0;
+    fread(&iAnimCount, sizeof(size_t), 1, _File);
+
+    for (size_t i = 0; i < iAnimCount; ++i)
+    {
+        CAnimation2D* pAnim = new CAnimation2D;
+        pAnim->LoadFromFile(_File);
+
+        pAnim->m_pOwner = this;
+        m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
+    }
+}

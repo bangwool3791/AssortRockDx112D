@@ -79,3 +79,35 @@ const wchar_t* ToWString(RES_TYPE _type)
 {
 	return RES_TYPE_WCHAR[(UINT)_type];
 }
+
+void SaveStringToFile(const string& _str, FILE* _pFile)
+{
+	size_t iLen = _str.length();
+	fwrite(&iLen, sizeof(size_t), 1, _pFile);
+	fwrite(_str.c_str(), sizeof(char), iLen, _pFile);
+}
+
+void LoadStringFromFile(string& _str, FILE* _pFile)
+{
+	size_t iLen = _str.length();
+	fread(&iLen, sizeof(size_t), 1, _pFile);
+	char szbuffer[256] = {};
+	fread(szbuffer, sizeof(char), iLen, _pFile);
+	_str = szbuffer;
+}
+
+void SaveWStringToFile(const wstring& _str, FILE* _pFile)
+{
+	size_t iLen = _str.length();
+	fwrite(&iLen, sizeof(size_t), 1, _pFile);
+	fwrite(_str.c_str(), sizeof(char), iLen, _pFile);
+}
+
+void LoadWStringFromFile(wstring& _str, FILE* _pFile)
+{
+	size_t iLen = _str.length();
+	fread(&iLen, sizeof(size_t), 1, _pFile);
+	wchar_t szbuffer[256] = {};
+	fread(szbuffer, sizeof(char), iLen, _pFile);
+	_str = szbuffer;
+}

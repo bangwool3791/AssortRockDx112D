@@ -6,10 +6,6 @@
 
 // ===============
 // TileMap Shader
-#define AtlasTex     g_tex_0
-#define LeftTop      g_vec2_0
-#define Slice        g_vec2_1
-#define TileCount    g_vec2_2;
 #define Size         g_vec2_3
 // ===============
 
@@ -134,7 +130,7 @@ float4 PS_TileMap(GS_OUT _in) : SV_Target
 
     if (TileBuffer[_in.iInstance].ibyOption == 0)
     {
-        vOutColor = AtlasTex.Sample(g_sam_1, _in.vUV);
+        vOutColor = g_tex_0.Sample(g_sam_1, _in.vUV);
     }
     else if (TileBuffer[_in.iInstance].ibyOption == 1)
     {

@@ -13,7 +13,6 @@
 CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
 	, m_vTileSize{1.f, 1.f }
-	, m_eTIieMode{TILE_MODE::EDIT}
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TileMapMtrl"));
@@ -29,8 +28,6 @@ CTileMap::~CTileMap()
 
 void CTileMap::SetTileCount(UINT _iWidth, UINT _iHeight)
 {
-	m_vTileCount = Vec2((float)_iWidth, (float)_iHeight);
-
 	m_vecTile.clear();
 	m_vecTile.resize(_iWidth * _iHeight);
 
@@ -42,12 +39,12 @@ void CTileMap::SetTileCount(UINT _iWidth, UINT _iHeight)
 
 void CTileMap::begin()
 {
-	m_vLeftTop = Vec2(64.f, 64.f);
-	m_vSlice = Vec2(64.f, 64.f);
 
 	tTile t{};
+
 	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
 
+	//File Load와 겹치지 않게 처리
 	for (int i = 0; i < TILEY; ++i)
 	{
 		for (int j = 0; j < TILEX; ++j)
@@ -55,8 +52,8 @@ void CTileMap::begin()
 			float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
 			float	fY = (TILECY * m_vTileSize.y / 2.f) * i;
 
-			t.vLeftTop = m_vLeftTop;
-			t.vSlice = m_vSlice;
+			t.vLeftTop = Vec2(64.f, 64.f);
+			t.vSlice = Vec2(64.f, 64.f);
 			t.vPos = { fX, fY, 1.f };
 			t.vSize = Vec3{ (float)TILECX * m_vTileSize.x , (float)TILECY * m_vTileSize.y , 0.f };
 			t.iIndex = i * TILEX + j;
@@ -78,18 +75,15 @@ void CTileMap::render()
 {
 	Transform()->UpdateData();
 
-	m_TileBuffer->SetData(m_vecTile.data(), (UINT)(m_vTileCount.x * m_vTileCount.y));
+	m_TileBuffer->SetData(m_vecTile.data(), m_vecTile.size());
 	m_TileBuffer->UpdateData(56, PIPELINE_STAGE::VS | PIPELINE_STAGE::GS | PIPELINE_STAGE::PS);
 
 
 	if (m_pCamera)
 		m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
 
-	GetCurMaterial()->SetScalarParam(VEC2_0, &m_vLeftTop);
-	GetCurMaterial()->SetScalarParam(VEC2_1, &m_vSlice);
-	GetCurMaterial()->SetScalarParam(VEC2_2, &m_vTileCount);
+
 	GetCurMaterial()->SetScalarParam(VEC2_3, m_vTileSize);
-	
 	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vCameraPos);
 	
 	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex[0]);
@@ -128,7 +122,7 @@ void CTileMap::render()
 
 	GetCurMaterial()->UpdateData();
 
-	GetMesh()->render_particle(m_vecTile.size());
+	GetMesh()->render_particle((UINT)m_vecTile.size());
 
 	CMaterial::Clear();
 }
@@ -140,17 +134,14 @@ void CTileMap::EidtApply()
 
 	static 	tTile t{};
 
-	if (TILE_MODE::EDIT == m_eTIieMode)
+	for (int i = 0; i < TILEY; ++i)
 	{
-		for (int i = 0; i < TILEY; ++i)
+		for (int j = 0; j < TILEX; ++j)
 		{
-			for (int j = 0; j < TILEX; ++j)
-			{
-				float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
-				float	fY = (TILECY * m_vTileSize.y / 2.f) * i;
-				m_vecTile[i * TILEX + j].vPos = { fX, fY, 1.f };
-				m_vecTile[i * TILEX + j].vSize = Vec3{ (float)TILECX * m_vTileSize.x , (float)TILECY * m_vTileSize.y , 0.f };
-			}
+			float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
+			float	fY = (TILECY * m_vTileSize.y / 2.f) * i;
+			m_vecTile[i * TILEX + j].vPos = { fX, fY, 1.f };
+			m_vecTile[i * TILEX + j].vSize = Vec3{ (float)TILECX * m_vTileSize.x , (float)TILECY * m_vTileSize.y , 0.f };
 		}
 	}
 }
@@ -230,5 +221,47 @@ void CTileMap::Ready_Adjacency()
 			}
 
 		}
+	}
+}
+
+void CTileMap::SaveToFile(FILE* _File)
+{
+	fwrite(&m_vTileSize, sizeof(Vec2), 1, _File);
+
+	size_t size = m_AtlasTex.size();
+	fwrite(&size, sizeof(size_t), 1, _File);
+	
+	for (size_t i{}; i < m_AtlasTex.size(); ++i)
+	{
+		SaveResourceRef(m_AtlasTex[i], _File);
+	}
+	
+	size = m_vecTile.size();
+
+	fwrite(&size, sizeof(size_t), 1, _File);
+
+	for (size_t i{}; i < m_vecTile.size(); ++i)
+	{
+		fwrite(&m_vecTile[i], sizeof(tTile), 1, _File);
+	}
+}
+
+void CTileMap::LoadFromFile(FILE* _File)
+{
+	fread(&m_vTileSize, sizeof(Vec2), 1, _File);
+
+	size_t size{};
+	fread(&size, sizeof(size_t), 1, _File);
+
+	for (size_t i{}; i < size; ++i)
+	{
+		LoadResourceRef(m_AtlasTex[i], _File);
+	}
+
+	fread(&size, sizeof(size_t), 1, _File);
+
+	for (size_t i{}; i < size; ++i)
+	{
+		fread(&m_vecTile[i], sizeof(tTile), 1, _File);
 	}
 }
