@@ -81,3 +81,12 @@ void CParticleWood::render()
 	m_ParticleBuffer->Clear();
 }
 
+void CParticleWood::SaveToFile(FILE* _File)
+{
+	__super::SaveToFile(_File);
+}
+
+void CParticleWood::LoadFromFile(FILE* _File)
+{
+	__super::LoadFromFile(_File);
+}

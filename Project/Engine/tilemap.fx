@@ -77,12 +77,17 @@ void GS_TileMap(point VS_OUT _in[1], inout TriangleStream<GS_OUT> _OutStream)
         output[i].iInstance = _in[0].iInstance;
     }
 
-    output[0].vUV = float2(0.f, 0.5f);
-    output[1].vUV = float2(0.5f, 0.f);
-    output[2].vUV = float2(1.f, 0.5f);
-    output[3].vUV = float2(0.5f, 1.f);
+    //output[0].vUV = float2(0.f, 0.5f);
+    //output[1].vUV = float2(0.5f, 0.f);
+    //output[2].vUV = float2(1.f, 0.5f);
+    //output[3].vUV = float2(0.5f, 1.f);
 
 
+    output[0].vUV = float2(0.f, 0.f);
+    output[1].vUV = float2(1.f, 0.f);
+    output[2].vUV = float2(1.f, 1.f);
+    output[3].vUV = float2(0.f, 1.f);
+     
     // 0 -- 1
     // | \  |
     // 3 -- 2
@@ -261,8 +266,7 @@ float4 PS_TileMap(GS_OUT _in) : SV_Target
         vOutColor = g_tex_32.Sample(g_sam_1, _in.vUV);
     }
 
-
-    vOutColor *= color.vDiff;
+    //vOutColor *= color.vDiff;
 
     return vOutColor;
 

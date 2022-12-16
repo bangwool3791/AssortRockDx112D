@@ -177,6 +177,7 @@ call CodeGen.exe</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h" />
+    <ClInclude Include="CEditorMouseScript.h" />
     <ClInclude Include="CLightScript.h" />
     <ClInclude Include="CMissileScript.h" />
     <ClInclude Include="CMissileScript2.h" />
@@ -193,6 +194,7 @@ call CodeGen.exe</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp" />
+    <ClCompile Include="CEditorMouseScript.cpp" />
     <ClCompile Include="CLightScript.cpp" />
     <ClCompile Include="CMissileScript.cpp" />
     <ClCompile Include="CMissileScript2.cpp" />

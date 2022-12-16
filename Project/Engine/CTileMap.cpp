@@ -42,8 +42,6 @@ void CTileMap::begin()
 
 	tTile t{};
 
-	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
-
 	//File Load와 겹치지 않게 처리
 	for (int i = 0; i < TILEY; ++i)
 	{
@@ -55,10 +53,10 @@ void CTileMap::begin()
 			t.vLeftTop = Vec2(64.f, 64.f);
 			t.vSlice = Vec2(64.f, 64.f);
 			t.vPos = { fX, fY, 1.f };
-			t.vSize = Vec3{ (float)TILECX * m_vTileSize.x , (float)TILECY * m_vTileSize.y , 0.f };
+			t.vSize = Vec3{ (float)1.f * m_vTileSize.x , (float)1.f * m_vTileSize.y , 0.f };
 			t.iIndex = i * TILEX + j;
 			t.iParentIndex = 0;
-			t.ibyOption = 0;
+			t.ibyOption = 1;
 			m_vecTile[i * TILEX + j] = t;
 		}
 	}
@@ -75,7 +73,7 @@ void CTileMap::render()
 {
 	Transform()->UpdateData();
 
-	m_TileBuffer->SetData(m_vecTile.data(), m_vecTile.size());
+	m_TileBuffer->SetData(m_vecTile.data(), (UINT)m_vecTile.size());
 	m_TileBuffer->UpdateData(56, PIPELINE_STAGE::VS | PIPELINE_STAGE::GS | PIPELINE_STAGE::PS);
 
 

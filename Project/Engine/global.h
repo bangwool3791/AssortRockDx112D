@@ -11,7 +11,9 @@
 #include <algorithm>
 #include <queue>
 #include <iostream>
+#include <stdio.h>
 #include <stdlib.h>
+#include <process.h>
 #include "precision.h"
 
 using std::vector;

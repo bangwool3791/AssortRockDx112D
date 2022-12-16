@@ -58,6 +58,9 @@
     <ClInclude Include="pch.h">
       <Filter>Default</Filter>
     </ClInclude>
+    <ClInclude Include="CEditorMouseScript.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="Script.cpp">
       <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditorMouseScript.cpp">
+      <Filter>Scripts</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

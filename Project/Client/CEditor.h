@@ -23,7 +23,8 @@ private:
 	void debug_render();
 private:
 	void CreateDebugDrawObject();
-	void DebugDraw(tDebugShapeInfo& _info);;
+	void CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse);
+	void DebugDraw(tDebugShapeInfo& _info);
 public:
 	void AddEditObject(CGameObjectEx* _pGameObject);
 	CGameObjectEx* GetDummyObject(const wstring& _name);

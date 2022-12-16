@@ -5,6 +5,14 @@
 #include "CGraphicsShader.h"
 #include "CConstBuffer.h"
 
+CMaterial::CMaterial()
+	: CRes(RES_TYPE::MATERIAL, true)
+	, m_tConst{}
+	, m_arrTex{}
+{
+
+}
+
 CMaterial::CMaterial(bool _bEngineRes)
 	: CRes(RES_TYPE::MATERIAL, _bEngineRes)
 	, m_tConst{}

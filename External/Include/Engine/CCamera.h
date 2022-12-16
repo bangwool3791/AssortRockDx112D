@@ -23,6 +23,7 @@ private:
     float                   m_fScale;
 
     UINT                    m_iLayerMask;
+    int                     m_iCamIdx;
 
     vector<CGameObject* >                    m_vecOpaque;
     vector<CGameObject* >                    m_vecMask;
@@ -73,6 +74,10 @@ public :
     void SetLayerMaskZero() { m_iLayerMask = 0; }
 public :
     CLONE(CCamera);
+
+public:
+    virtual void SaveToFile(FILE* _File);
+    virtual void LoadFromFile(FILE* _File);
 public :
     CCamera();
     ~CCamera();

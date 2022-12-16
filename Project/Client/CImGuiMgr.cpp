@@ -116,14 +116,17 @@ void CImGuiMgr::clear()
 #include "ComInspector.h"
 #include "MenuUI.h"
 
+#include "CEditor.h"
+
 void CImGuiMgr::CreateUI()
 {
     UI* pUI = new InspectorUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    //pUI = new TileMapUI;
-    //pUI->begin();
-    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    pUI = new TileMapUI;
+    pUI->begin();
+    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    ((TileMapUI*)pUI)->Initialize(CEditor::GetInst()->FindByName(L"EditorTileMap"));
 
     pUI = new OutlinerUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));

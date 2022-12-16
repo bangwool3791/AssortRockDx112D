@@ -44,10 +44,10 @@ public:
     void Clear();
 
 public:
-    CLONE(CAnimator2D);
-public:
     virtual void SaveToFile(FILE* _File);
     virtual void LoadFromFile(FILE* _File);
+    CLONE(CAnimator2D);
+
 public:
     CAnimator2D();
     CAnimator2D(const CAnimator2D& _rhs);

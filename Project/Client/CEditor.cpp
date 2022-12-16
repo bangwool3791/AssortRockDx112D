@@ -21,6 +21,10 @@
 #include <Engine/CLevel.h>
 #include <Engine\CLevelMgr.h>
 
+#include <Script\CEditorMouseScript.h>
+#include <Script\CMouseScript.h>
+#include <Script\CTileScript.h>
+
 CEditor::CEditor()
 {
 
@@ -37,7 +41,6 @@ CEditor::~CEditor()
 void CEditor::init()
 {
 	CreateDebugDrawObject();
-
 	// Editor 용도 Grid Object 추가
 	CGameObjectEx* pGridObj = new CGameObjectEx;
 	pGridObj->SetName(L"Grid Object");
@@ -87,6 +90,16 @@ void CEditor::init()
 
 	m_vecEditorObj.push_back(pEditorCam);
 	CRenderMgr::GetInst()->RegisterEditCam(pEditorCam->Camera());
+
+	CGameObjectEx* pMouseObject = new CGameObjectEx;
+	pMouseObject->SetName(L"MouseObject");
+	pMouseObject->AddComponent(new CTransform);
+	pMouseObject->AddComponent(new CEditorMouseScript);
+	pMouseObject->GetScript<CEditorMouseScript>(L"CEditorMouseScript")->Initialize(pEditorCam);
+	m_vecEditorObj.push_back(pMouseObject);
+
+	CreateTileMap(pEditorCam, pMouseObject);
+
 	/*
 	* Component List
 	*/
@@ -194,6 +207,32 @@ void CEditor::CreateDebugDrawObject()
 	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugDrawMtrl"));
 
 	m_DebugDrawObject[(UINT)DEBUG_SHAPE::CIRCLE] = pDebugObj;
+}
+
+void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
+{
+	CGameObjectEx* pTileMapObj = new CGameObjectEx;
+	pTileMapObj->AddComponent(new CTransform);
+	pTileMapObj->AddComponent(new CTileMap);
+	pTileMapObj->AddComponent(new CTileScript);
+	pTileMapObj->SetName(L"EditorTileMap");
+	//TileMapMtrl
+	CGameObject* arr[2] = { _pCamera, _pMouse };
+	pTileMapObj->TileMap()->SetCamera(_pCamera);
+	pTileMapObj->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
+	pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
+	pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
+
+	for (UINT i{}; i < TEX_32 + 1; ++i)
+	{
+		wstring str = L"Tile";
+		str += std::to_wstring(i);
+		pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+	}
+
+	pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
+	pTileMapObj->begin();
+	m_vecEditorObj.push_back(pTileMapObj);
 }
 
 void CEditor::DebugDraw(tDebugShapeInfo& _info)

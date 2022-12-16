@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CDragScript.h"
+#include "CEditorMouseScript.h"
 #include "CLightScript.h"
 #include "CMissileScript.h"
 #include "CMissileScript2.h"
@@ -16,6 +17,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CDragScript");
+	_vec.push_back(L"CEditorMouseScript");
 	_vec.push_back(L"CLightScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CMissileScript2");
@@ -26,12 +28,14 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTileScript");
+	_vec.push_back(L"ThreadTileMap");
 }
 
 
 void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CDragScript");
+	_vec.push_back("CEditorMouseScript");
 	_vec.push_back("CLightScript");
 	_vec.push_back("CMissileScript");
 	_vec.push_back("CMissileScript2");
@@ -42,12 +46,15 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTileScript");
+	_vec.push_back("ThreadTileMap");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CDragScript" == _strScriptName)
 		return new CDragScript;
+	if (L"CEditorMouseScript" == _strScriptName)
+		return new CEditorMouseScript;
 	if (L"CLightScript" == _strScriptName)
 		return new CLightScript;
 	if (L"CMissileScript" == _strScriptName)
@@ -75,6 +82,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 {
 	if ("CDragScript" == _strScriptName)
 		return new CDragScript;
+	if ("CEditorMouseScript" == _strScriptName)
+		return new CEditorMouseScript;
 	if ("CLightScript" == _strScriptName)
 		return new CLightScript;
 	if ("CMissileScript" == _strScriptName)
@@ -104,6 +113,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::DRAGSCRIPT:
 		return new CDragScript;
+		break;
+	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
+		return new CEditorMouseScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LIGHTSCRIPT:
 		return new CLightScript;
@@ -135,6 +147,7 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
 		break;
+		break;
 	}
 	return nullptr;
 }
@@ -145,6 +158,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return L"CDragScript";
+		break;
+
+	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
+		return L"CEditorMouseScript";
 		break;
 
 	case SCRIPT_TYPE::LIGHTSCRIPT:
@@ -187,6 +204,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTileScript";
 		break;
 
+	case SCRIPT_TYPE::HREADTILEMAP:
+		return L"ThreadTileMap";
+		break;
+
 	}
 	return nullptr;
 }
@@ -197,6 +218,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return "CDragScript";
+		break;
+
+	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
+		return "CEditorMouseScript";
 		break;
 
 	case SCRIPT_TYPE::LIGHTSCRIPT:
@@ -237,6 +262,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
+		break;
+
+	case SCRIPT_TYPE::HREADTILEMAP:
+		return "ThreadTileMap";
 		break;
 
 	}

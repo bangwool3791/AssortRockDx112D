@@ -46,6 +46,9 @@ public :
 	void SetOwner(CAnimator2D* _pOwner) {
 		m_pOwner = _pOwner;
 	}
+
+	virtual void SaveToFile(FILE* _File) override;
+	virtual void LoadFromFile(FILE* _File) override;
 	CLONE(CAnimation2D);
 
 public:

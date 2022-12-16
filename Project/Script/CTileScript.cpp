@@ -23,42 +23,37 @@ CTileScript::~CTileScript()
 
 void CTileScript::begin()
 {
-	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
-	m_pTileMap = static_cast<CTileMap*>(GetOwner()->GetRenderComponent());
-	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
-	assert(m_pTileMap);
-	assert(m_pCamera);
 }
 
 void CTileScript::tick()
 {
-}
-
-void CTileScript::BeginOverlap(CCollider2D* _pOther)
-{
-}
-
-void CTileScript::Overlap(CCollider2D* _pOther)
-{
 	static Vec3 vMouse;
 
-	if (_pOther->GetOwner()->GetName() == L"MouseObject")
+	//에디터의 마우스 오브젝트를 Set으로 입력 받은 뒤
+	CTransform* pTransform = GetOwner()->Transform();
+	Vec3 vPos   = pTransform->GetRelativePos();
+	Vec3 vScale = pTransform->GetRelativeScale();
+
+	Vec3 vLeftBottom = vPos - vScale;
+	Vec3 vRightTop   = vPos + vScale;
+	if (KEY_PRESSED(KEY::LBTN))
 	{
-		if (KEY_PRESSED(KEY::LBTN))
-		{
+		m_vMousePos = m_pMouseObject->Transform()->GetRelativePos();
+
+		//if (vLeftBottom <= m_vMousePos && m_vMousePos <= vRightTop)
+		//{
+		//마우스의 좌표가 Tile 객체 안에 있고 LBTN이면
 			if (m_vTileSize != m_pTileMap->GetTileSize())
 				m_vTileSize = m_pTileMap->GetTileSize();
 
-			m_vMousePos = _pOther->GetOwner()->Transform()->GetRelativePos();
-			
 			vector<tTile>& tiles = m_pTileMap->GetTiles();
 
 			UINT startX = (UINT)(m_vMousePos.x / (TILECX * m_vTileSize.x));
-			UINT startY = (UINT)(m_vMousePos.y / (TILECY * m_vTileSize.y  * 0.5f));
+			UINT startY = (UINT)(m_vMousePos.y / (TILECY * m_vTileSize.y * 0.5f));
 			UINT StartIndex = startX + startY * TILEX;
 
 			UINT endX = (UINT)(m_vRenderResolution.x / (TILECX * m_vTileSize.x));
-			UINT endY = (UINT)(m_vRenderResolution.y / (TILECY * m_vTileSize.y  * 0.5f));
+			UINT endY = (UINT)(m_vRenderResolution.y / (TILECY * m_vTileSize.y * 0.5f));
 			UINT EndIndex = endX + endY * endX;
 
 			for (UINT i{ StartIndex }; i < StartIndex + EndIndex; ++i)
@@ -68,14 +63,22 @@ void CTileScript::Overlap(CCollider2D* _pOther)
 
 				if (Picking(vMouse, i))
 				{
-					cout << "마우스 좌표 " << m_vMousePos.x << " " << m_vMousePos.y << endl;
-					cout << "피킹 " << tiles[i].vPos.x << " " << tiles[i].vPos.y << " " << tiles[i].iIndex << endl;
+				//cout << "마우스 좌표 " << m_vMousePos.x << " " << m_vMousePos.y << endl;
+					//cout << "피킹 " << tiles[i].vPos.x << " " << tiles[i].vPos.y << " " << tiles[i].iIndex << endl;
 					tiles[i].ibyOption = m_tTileInfo.ibyOption;
 					break;
 				}
 			}
-		}
+		//}
 	}
+}
+
+void CTileScript::BeginOverlap(CCollider2D* _pOther)
+{
+}
+
+void CTileScript::Overlap(CCollider2D* _pOther)
+{
 }
 
 void CTileScript::EndOverlap(CCollider2D* _pOther)
@@ -147,4 +150,15 @@ bool CTileScript::Picking(const Vec3& vPos, UINT& iIndex)
 	}
 
 	return true;
+}
+
+void CTileScript::Initialize(void* _pAddr)
+{
+	CGameObject** pGameAddr = (CGameObject**)_pAddr;
+
+	m_pCameraObject = pGameAddr[0];
+	m_pMouseObject =  pGameAddr[1];
+
+	m_pTileMap = static_cast<CTileMap*>(GetOwner()->GetRenderComponent());
+	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 }

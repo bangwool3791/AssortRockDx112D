@@ -9,16 +9,17 @@ class TileMapUI :
     public UI
 {
 private:
-    CGameObject*  m_pTileObject;
-    CTileMap*     m_pTileMap;
+    CGameObject*  m_pEditTileObject;
+    CTileMap*     m_pEditTileMap;
 private:
     Vec2         m_vTileSize;
-public:
 private:
     virtual void begin() override;
     virtual void update() override;
     virtual void render_update() override;
 
+public :
+    void    Initialize(void* pAddr);
 public:
     TileMapUI();
     ~TileMapUI();

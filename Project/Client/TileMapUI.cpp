@@ -31,17 +31,11 @@ TileMapUI::~TileMapUI()
 
 void TileMapUI::begin()
 {
-	if (!m_pTileObject)
-		m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"TileMap");
-
-	if (!m_pTileMap)
-		m_pTileMap = static_cast<CTileMap*>(m_pTileObject->GetRenderComponent());
 }
 
 void TileMapUI::update()
 {
 	UI::update();
-
 }
 
 void TileMapUI::render_update()
@@ -60,17 +54,17 @@ void TileMapUI::render_update()
 	{
 		ProgressUI* pProgressUI = dynamic_cast<ProgressUI*>(CImGuiMgr::GetInst()->FindUI("ProgressUI"));
 		assert(pProgressUI);
-		m_pTileMap->EidtApply();
+		m_pEditTileMap->EidtApply();
 		pProgressUI->Open();
 	}
 
 	ImGui::InputFloat("tile size x", &m_vTileSize.x, 0.01f, 1.0f, "%.3f");
 	ImGui::InputFloat("tile size y", &m_vTileSize.y, 0.01f, 1.0f, "%.3f");
 
-	m_pTileMap->SetTileSizeX(m_vTileSize.x);
-	m_pTileMap->SetTileSizeY(m_vTileSize.y);
+	m_pEditTileMap->SetTileSizeX(m_vTileSize.x);
+	m_pEditTileMap->SetTileSizeY(m_vTileSize.y);
 
-	for (UINT i{}; i < 32; ++i)
+	for (UINT i{}; i < TEX_32; ++i)
 	{
 		wstring str = L"Tile";
 		str += std::to_wstring(i);
@@ -78,7 +72,7 @@ void TileMapUI::render_update()
 
 		if (ImGui::ImageButton(myImage, ImVec2(50.f, 50.f)))
 		{
-			m_pTileObject->GetScript<CTileScript>(L"CTileScript")->SetTileInfo(i);
+			m_pEditTileObject->GetScript<CTileScript>(L"CTileScript")->SetTileInfo(i);
 		}
 
 		if (i == 0 || (i % 7 != 0))
@@ -86,7 +80,12 @@ void TileMapUI::render_update()
 			ImGui::SameLine();
 		}
 	}
+}
 
+void TileMapUI::Initialize(void* pAddr)
+{
+	m_pEditTileObject = (CGameObject*)pAddr;
+	m_pEditTileMap = static_cast<CTileMap*>(m_pEditTileObject->GetRenderComponent());
 }
 
 

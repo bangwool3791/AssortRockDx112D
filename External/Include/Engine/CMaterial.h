@@ -30,6 +30,7 @@ public :
 
 	CLONE(CMaterial)
 public :
+	CMaterial();
 	CMaterial(bool _bEngineRes);
 	CMaterial(const CMaterial& _other);
 	virtual ~CMaterial();

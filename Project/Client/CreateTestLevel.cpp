@@ -100,6 +100,7 @@ void CreateTestLelvel()
 	CreateDefaultPrefab();
 
 	CLevel* pLevel = new CLevel;
+#if false
 
 	pLevel->GetLayer(1)->SetName(L"Player");
 	pLevel->GetLayer(2)->SetName(L"PlayerProjecttile");
@@ -173,31 +174,31 @@ void CreateTestLelvel()
 	//Edit Test를 위해 주석 처리
 	for (float i{ -500.f }; i < 500.f; i += 100.f)
 	{
-		//pObject = new CGameObject;
-		//pObject->SetName(L"Player");
+		pObject = new CGameObject;
+		pObject->SetName(L"Player");
 
-		//pObject->AddComponent(new CTransform);
-		//pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-		//pObject->AddComponent(new CCollider2D);
-		//pObject->AddComponent(new CPlayerScript);
-		//pObject->AddComponent(new CAnimator2D);
+		pObject->AddComponent(new CTransform);
+		pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+		pObject->AddComponent(new CCollider2D);
+		pObject->AddComponent(new CPlayerScript);
+		pObject->AddComponent(new CAnimator2D);
 
-		//pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
-		//pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
-		//pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-		//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-		//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
+		pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 
-		//pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-		//pObject->Animator2D()->Play(L"LeftWalk", true);
+		pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+		pObject->Animator2D()->Play(L"LeftWalk", true);
 
-		//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-		//pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
-		//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
-		//Instantiate(pPrefab->Instantiate(), pObject, 1);
+		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
+		Instantiate(pPrefab->Instantiate(), pObject, 1);
 
-		//pLevel->AddGameObject(pObject, 1);
+		pLevel->AddGameObject(pObject, 1);
 	}
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
@@ -236,35 +237,6 @@ void CreateTestLelvel()
 	//pPostProcess->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	//pPostProcess->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PostProcessMtrl"));
 
-	// TileMap Object
-	//CGameObject* pTileMapObj = new CGameObject;
-	//pTileMapObj->AddComponent(new CTransform);
-	//pTileMapObj->AddComponent(new CTileMap);
-	//pTileMapObj->AddComponent(new CTileScript);
-	//pTileMapObj->AddComponent(new CCollider2D);
-	//pTileMapObj->SetName(L"TileMap");
-
-	//Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
-
-	//pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
-	//pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
-	//pTileMapObj->Collider2D()->SetIgnoreObjectScale(true);
-	//pTileMapObj->Collider2D()->SetScale(Vec2(TILECX * TILEX, TILECY * TILEY * 0.5f));
-	//pTileMapObj->Collider2D()->SetOffsetPos(Vec2(TILECX * TILEX * 0.5f, TILECY * TILEY * 0.25));
-
-	//for (UINT i{}; i < TEX_32 + 1; ++i)
-	//{
-	//	wstring str = L"Tile";
-	//	str += std::to_wstring(i);
-	//	pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
-	//}
-
-	//pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
-
-	//pLevel->AddGameObject(pTileMapObj, 30);
-
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
-
 	pObject = new CGameObject;
 	pObject->SetName(L"RefAni");
 
@@ -284,7 +256,7 @@ void CreateTestLelvel()
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
 	pLevel->AddGameObject(pObject, 30);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
-
+#endif
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
 	pLevel->begin();
 }

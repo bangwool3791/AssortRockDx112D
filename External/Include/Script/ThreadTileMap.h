@@ -8,11 +8,14 @@ class CTileScript :
     public CScript
 {
 private:
+    DWORD  m_dwThreadId;
+    HANDLE m_hThread;
+private:
 
     tTile               m_tTileInfo;
-    CTileMap*           m_pTileMap;
-    CGameObject*        m_pCameraObject;
-    CGameObject*        m_pMouseObject;
+    CTileMap* m_pTileMap;
+    CGameObject* m_pCameraObject;
+    CGameObject* m_pMouseObject;
     Vec3                m_vCameraPos;
     Vec3			    m_vMousePos;
     Vec2                m_vRenderResolution;
