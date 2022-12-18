@@ -23,17 +23,8 @@
     <Filter Include="03. UI">
       <UniqueIdentifier>{7d61682f-c113-422c-962d-2a0731c8bcc3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ModuleUI">
-      <UniqueIdentifier>{cf426afd-158b-4f4a-bf29-3e14555c6d44}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ModuleUI\ListUI">
-      <UniqueIdentifier>{33748bae-baff-46a9-b7d7-235a760f5866}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02. ImGui\ImFunc">
       <UniqueIdentifier>{23e917fe-a6e1-4f33-a654-98fb45f22d41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ModuleUI\ProgressUI">
-      <UniqueIdentifier>{0fe168e8-647a-45a7-858f-a22eb0ded9b0}</UniqueIdentifier>
     </Filter>
     <Filter Include="03. UI\01. Inspector">
       <UniqueIdentifier>{d3bc33fe-a5ea-46cb-919f-61ea54a9953a}</UniqueIdentifier>
@@ -74,9 +65,6 @@
     <Filter Include="03. UI\03. OutLinerUI">
       <UniqueIdentifier>{bab1ca4e-1576-4da5-ab1f-7241d754bb80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ModuleUI\TreeUI">
-      <UniqueIdentifier>{5a01a742-a7ff-4375-a0c0-52004ab0be7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. UI\04. DummyUI">
       <UniqueIdentifier>{208a37ad-40b5-4b4f-8939-32bec0e5c8ef}</UniqueIdentifier>
     </Filter>
@@ -92,12 +80,6 @@
     <Filter Include="03. UI\01. Inspector\ComponentUI\Animator2DUI">
       <UniqueIdentifier>{8389085f-5e6c-45bf-9bd2-34db88a05760}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ModuleUI\DialogUI">
-      <UniqueIdentifier>{337e5a8b-64b0-4bb8-98a5-e01003e0810f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ModuleUI\ParamUI">
-      <UniqueIdentifier>{9b60fb54-846e-4a55-bb61-977a17fcc375}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03. UI\08. MenuUI">
       <UniqueIdentifier>{46972ef3-937c-4733-8d3c-ab216d746826}</UniqueIdentifier>
     </Filter>
@@ -112,6 +94,24 @@
     </Filter>
     <Filter Include="04. SaveLoad">
       <UniqueIdentifier>{7a206137-77e6-4360-a227-1b36f2dd7c69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI">
+      <UniqueIdentifier>{cf426afd-158b-4f4a-bf29-3e14555c6d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI\ListUI">
+      <UniqueIdentifier>{33748bae-baff-46a9-b7d7-235a760f5866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI\ProgressUI">
+      <UniqueIdentifier>{0fe168e8-647a-45a7-858f-a22eb0ded9b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI\TreeUI">
+      <UniqueIdentifier>{5a01a742-a7ff-4375-a0c0-52004ab0be7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI\DialogUI">
+      <UniqueIdentifier>{337e5a8b-64b0-4bb8-98a5-e01003e0810f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\ModuleUI\ParamUI">
+      <UniqueIdentifier>{9b60fb54-846e-4a55-bb61-977a17fcc375}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +173,7 @@
       <Filter>03. UI</Filter>
     </ClInclude>
     <ClInclude Include="ListUI.h">
-      <Filter>ModuleUI\ListUI</Filter>
+      <Filter>Default\ModuleUI\ListUI</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>02. ImGui\ImGui</Filter>
@@ -197,7 +197,7 @@
       <Filter>03. UI\06. TileMapUI</Filter>
     </ClInclude>
     <ClInclude Include="ProgressUI.h">
-      <Filter>ModuleUI\ProgressUI</Filter>
+      <Filter>Default\ModuleUI\ProgressUI</Filter>
     </ClInclude>
     <ClInclude Include="ResUI.h">
       <Filter>03. UI\01. Inspector\ResUI</Filter>
@@ -215,7 +215,7 @@
       <Filter>03. UI\02. ContentUI</Filter>
     </ClInclude>
     <ClInclude Include="TreeUI.h">
-      <Filter>ModuleUI\TreeUI</Filter>
+      <Filter>Default\ModuleUI\TreeUI</Filter>
     </ClInclude>
     <ClInclude Include="OutlinerUI.h">
       <Filter>03. UI\03. OutLinerUI</Filter>
@@ -236,7 +236,7 @@
       <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
     </ClInclude>
     <ClInclude Include="ParamUI.h">
-      <Filter>ModuleUI\ParamUI</Filter>
+      <Filter>Default\ModuleUI\ParamUI</Filter>
     </ClInclude>
     <ClInclude Include="MenuUI.h">
       <Filter>03. UI\08. MenuUI</Filter>
@@ -307,7 +307,7 @@
       <Filter>03. UI</Filter>
     </ClCompile>
     <ClCompile Include="ListUI.cpp">
-      <Filter>ModuleUI\ListUI</Filter>
+      <Filter>Default\ModuleUI\ListUI</Filter>
     </ClCompile>
     <ClCompile Include="InspectorUI.cpp">
       <Filter>03. UI\01. Inspector</Filter>
@@ -325,7 +325,7 @@
       <Filter>03. UI\06. TileMapUI</Filter>
     </ClCompile>
     <ClCompile Include="ProgressUI.cpp">
-      <Filter>ModuleUI\ProgressUI</Filter>
+      <Filter>Default\ModuleUI\ProgressUI</Filter>
     </ClCompile>
     <ClCompile Include="ResUI.cpp">
       <Filter>03. UI\01. Inspector\ResUI</Filter>
@@ -343,7 +343,7 @@
       <Filter>03. UI\02. ContentUI</Filter>
     </ClCompile>
     <ClCompile Include="TreeUI.cpp">
-      <Filter>ModuleUI\TreeUI</Filter>
+      <Filter>Default\ModuleUI\TreeUI</Filter>
     </ClCompile>
     <ClCompile Include="OutlinerUI.cpp">
       <Filter>03. UI\03. OutLinerUI</Filter>
@@ -367,7 +367,7 @@
       <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
     </ClCompile>
     <ClCompile Include="ParamUI.cpp">
-      <Filter>ModuleUI\ParamUI</Filter>
+      <Filter>Default\ModuleUI\ParamUI</Filter>
     </ClCompile>
     <ClCompile Include="MenuUI.cpp">
       <Filter>03. UI\08. MenuUI</Filter>

@@ -202,6 +202,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"Plane", L"texture\\Player.bmp");
 	Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
 	Load<CTexture>(L"Character", L"texture\\Character.png");
+	Load<CTexture>(L"Test", L"texture\\test.png");
 	Load<CTexture>(L"Link", L"texture\\link.png");
 
 	Load<CTexture>(L"DeadCellColor", L"texture\\beheaded.png");
@@ -216,6 +217,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"Noise_03", L"texture\\noise\\noise_03.jpg");
 
 	Load<CTexture>(L"Sparks", L"texture\\particle\\Sparks.png");
+
 	Load<CTexture>(L"TileTex", L"texture\\TILE.bmp");
 
 	for (UINT i{}; i < TEX_32; i++)

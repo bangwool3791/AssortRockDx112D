@@ -14,6 +14,12 @@ class CTexture :
     public CRes
 {
 private:
+    uint8_t*                            m_pixel;
+    long long                           m_iPixelSize;
+
+public :
+    uint8_t* GetPixel() { return m_pixel; }
+private:
     ScratchImage                        m_Image;    // System Mem 에 로딩된 이미지 픽셀데이터 관리
     ComPtr<ID3D11Texture2D>             m_Tex2D;    // GPU Mem 에 옮긴 데이터 관리하는 객체
     
@@ -42,7 +48,6 @@ private:
     // 파일로 부터 로딩
     virtual void Save(const wstring _strRelativePath) {}
     virtual int Load(const wstring& _strFilePath);
-
 public:
     // 생성
     void Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iBindFlag);

@@ -247,6 +247,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Ptr.h" />
     <ClInclude Include="smallobjallocator.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="CTileMap.h" />
   </ItemGroup>

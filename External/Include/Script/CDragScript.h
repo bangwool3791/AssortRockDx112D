@@ -16,6 +16,7 @@ public:
 
     CLONE(CDragScript);
 
+    void SetCamera(CGameObject* _pCamera);
 private:
     bool bClicked;
     Vec2 StartPos;

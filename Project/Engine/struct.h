@@ -1,5 +1,13 @@
 #pragma once
 
+struct tRGBA
+{
+	int R;
+	int G;
+	int B;
+	int A;
+};
+
 struct Vtx
 {
 	Vec3 vPos;

@@ -294,7 +294,7 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 			wstring strName = pGameObject->GetName().c_str();
 			CGameObjectEx* pTarget = pGameObject->Clone();
 			AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)pTarget);
-			CEditor::GetInst()->AddEditObject(pTarget);
+			CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, pTarget);
 		}
 	}
 	else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelComTree"))

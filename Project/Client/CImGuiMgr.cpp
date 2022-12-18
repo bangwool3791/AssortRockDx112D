@@ -126,7 +126,7 @@ void CImGuiMgr::CreateUI()
     pUI = new TileMapUI;
     pUI->begin();
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
-    ((TileMapUI*)pUI)->Initialize(CEditor::GetInst()->FindByName(L"EditorTileMap"));
+    ((TileMapUI*)pUI)->Initialize(CEditor::GetInst()->FindByName(L"MapTool"));
 
     pUI = new OutlinerUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));

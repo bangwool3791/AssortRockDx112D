@@ -26,6 +26,7 @@ public:
 	const tAnim2DInfo& GetAniInfo() { return m_info; }
 	const tAnim2DFrm& GetAniFrame() { return m_vecFrm[m_iCurIdx]; }
 	tAnim2DFrm&	GetAniFrameCopy() { return m_vecFrm[m_iCurIdx]; }
+	Ptr<CTexture> GetTexture() { return m_AtlasTex; }
 
 	void SetLeftTop(Vec2 _vLeftTop, int _index);
 	void SetSlice(Vec2 _vSlice, int _index);

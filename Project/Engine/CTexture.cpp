@@ -22,7 +22,6 @@ int CTexture::Load(const wstring& _strFilePath)
     _wsplitpath_s(_strFilePath.c_str(), nullptr, 0, nullptr, 0, nullptr, 0, szExt, 50);
 
     wstring strExt = szExt;
-
     if (strExt == L".dds" || strExt == L".DDS")
     {
         hr = LoadFromDDSFile(_strFilePath.c_str(), DDS_FLAGS::DDS_FLAGS_NONE, nullptr, m_Image);
@@ -36,6 +35,8 @@ int CTexture::Load(const wstring& _strFilePath)
     else // WIC (png, jpg, jpeg, bmp )
     {
         hr = LoadFromWICFile(_strFilePath.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, nullptr, m_Image);
+        m_pixel = m_Image.GetPixels();
+        m_iPixelSize = m_Image.GetPixelsSize();
     }
 
     if (FAILED(hr))

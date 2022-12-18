@@ -43,6 +43,7 @@ public:
     void UpdateData();
     void Clear();
 
+    Ptr<CTexture> GetTexture() { return m_pCurAnim->GetTexture(); }
 public:
     virtual void SaveToFile(FILE* _File);
     virtual void LoadFromFile(FILE* _File);

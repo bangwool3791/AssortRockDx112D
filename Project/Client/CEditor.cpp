@@ -21,44 +21,85 @@
 #include <Engine/CLevel.h>
 #include <Engine\CLevelMgr.h>
 
+#include <Script\CDragScript.h>
 #include <Script\CEditorMouseScript.h>
 #include <Script\CMouseScript.h>
 #include <Script\CTileScript.h>
+#include <Script\CRefAniScript.h>
 
 CEditor::CEditor()
+	:m_editmode{EDIT_MODE::ANIMATOR}
 {
 
 }
 
 CEditor::~CEditor()
 {
-	Safe_Del_Vec(m_vecEditorObj);
+	
+	for (auto iter{ m_EditorObj.begin() }; iter != m_EditorObj.end(); ++iter)
+	{
+		for (auto iter2{ iter->begin() }; iter2 != iter->end(); ++iter2)
+		{
+			Safe_Delete(iter2->second);
+		}
+	}
 	Safe_Del_Vec(m_vecDummyObj);
 	Safe_Del_Array(m_DebugDrawObject);
 	Safe_Del_Array(m_arrCom);
+	
+	Safe_Delete(m_GirdObject);
+	Safe_Delete(m_MouseObject);
+	Safe_Delete(m_CameraObject);
 }
 
 void CEditor::init()
 {
+	m_EditorObj.resize((UINT)EDIT_MODE::END);
+
 	CreateDebugDrawObject();
 	// Editor 용도 Grid Object 추가
-	CGameObjectEx* pGridObj = new CGameObjectEx;
-	pGridObj->SetName(L"Grid Object");
+	m_GirdObject = new CGameObjectEx;
+	m_GirdObject->SetName(L"Grid Object");
 
-	pGridObj->AddComponent(new CTransform);
-	pGridObj->AddComponent(new CMeshRender);
-	pGridObj->AddComponent(new CGrid2DScript);
+	m_GirdObject->AddComponent(new CTransform);
+	m_GirdObject->AddComponent(new CMeshRender);
+	m_GirdObject->AddComponent(new CGrid2DScript);
 
-	pGridObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pGridObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	m_GirdObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	m_GirdObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
 
-	pGridObj->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	pGridObj->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	pGridObj->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	m_GirdObject->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	m_GirdObject->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
+	m_GirdObject->GetScript<CGrid2DScript>()->SetThickness(2.f);
 
-	pGridObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
-	m_vecEditorObj.push_back(pGridObj);
+	m_GirdObject->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 
+	m_CameraObject= new CGameObjectEx;
+	m_CameraObject->SetName(L"Editor Camera");
+
+	m_CameraObject->AddComponent(new CTransform);
+	m_CameraObject->AddComponent(new CEditorCam);
+	m_CameraObject->AddComponent(new CCameraScript);
+	m_CameraObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+	m_CameraObject->Camera()->SetFar(100000.f);
+	m_CameraObject->Camera()->SetLayerMaskAll();
+	m_CameraObject->Camera()->SetLayerMask(31);
+
+	CRenderMgr::GetInst()->RegisterEditCam(m_CameraObject->Camera());
+
+	m_MouseObject = new CGameObjectEx;
+	m_MouseObject->SetName(L"MouseObject");
+	m_MouseObject->AddComponent(new CTransform);
+	m_MouseObject->AddComponent(new CEditorMouseScript);
+	m_MouseObject->GetScript<CEditorMouseScript>(L"CEditorMouseScript")->Initialize(m_CameraObject);
+	
+
+	CreateTileMap(m_CameraObject, m_MouseObject);
+
+	CreateAnimatorTool(m_CameraObject, m_MouseObject);
+
+	
+	//* Object Tool List
 	CGameObjectEx* pObject = new CGameObjectEx;
 	pObject->SetName(L"Dummy Object");
 
@@ -76,30 +117,7 @@ void CEditor::init()
 	//pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 	//pObject->Animator2D()->Play(L"LeftWalk", true);
 	m_vecDummyObj.push_back(pObject);
-
-	CGameObjectEx* pEditorCam = new CGameObjectEx;
-	pEditorCam->SetName(L"Editor Camera");
-
-	pEditorCam->AddComponent(new CTransform);
-	pEditorCam->AddComponent(new CEditorCam);
-	pEditorCam->AddComponent(new CCameraScript);
-	pEditorCam->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
-	pEditorCam->Camera()->SetFar(100000.f);
-	pEditorCam->Camera()->SetLayerMaskAll();
-	pEditorCam->Camera()->SetLayerMask(31);
-
-	m_vecEditorObj.push_back(pEditorCam);
-	CRenderMgr::GetInst()->RegisterEditCam(pEditorCam->Camera());
-
-	CGameObjectEx* pMouseObject = new CGameObjectEx;
-	pMouseObject->SetName(L"MouseObject");
-	pMouseObject->AddComponent(new CTransform);
-	pMouseObject->AddComponent(new CEditorMouseScript);
-	pMouseObject->GetScript<CEditorMouseScript>(L"CEditorMouseScript")->Initialize(pEditorCam);
-	m_vecEditorObj.push_back(pMouseObject);
-
-	CreateTileMap(pEditorCam, pMouseObject);
-
+	
 	/*
 	* Component List
 	*/
@@ -115,6 +133,10 @@ void CEditor::init()
 	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"Light2D");
 }
 
+/*
+* Editor 상태 분기 
+* progress, tick render
+*/
 void CEditor::progress()
 {
 	if (LEVEL_STATE::PLAY != CLevelMgr::GetInst()->GetCurLevel()->GetState())
@@ -128,24 +150,34 @@ void CEditor::progress()
 
 void CEditor::tick()
 {
-	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
+	m_CameraObject->tick();
+	m_MouseObject->tick();
+	
+	for (auto iter{ m_EditorObj[(UINT)m_editmode].begin() }; iter != m_EditorObj[(UINT)m_editmode].end(); ++iter)
 	{
-		m_vecEditorObj[i]->tick();
+		iter->second->tick();
 	}
 
-	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
+	m_CameraObject->finaltick();
+	m_MouseObject->finaltick();
+
+	for (auto iter{ m_EditorObj[(UINT)m_editmode].begin() }; iter != m_EditorObj[(UINT)m_editmode].end(); ++iter)
 	{
-		m_vecEditorObj[i]->finaltick();
+		iter->second->finaltick();
 	}
+
 }
 
 void CEditor::render()
 {
+	m_MouseObject->render();
 
-	for (size_t i = 0; i < m_vecEditorObj.size(); ++i)
+	for (auto iter{ m_EditorObj[(UINT)m_editmode].begin() }; iter != m_EditorObj[(UINT)m_editmode].end(); ++iter)
 	{
-		m_vecEditorObj[i]->render();
+		iter->second->render();
 	}
+
+	m_CameraObject->render();
 }
 
 void CEditor::debug_render()
@@ -211,28 +243,68 @@ void CEditor::CreateDebugDrawObject()
 
 void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 {
-	CGameObjectEx* pTileMapObj = new CGameObjectEx;
-	pTileMapObj->AddComponent(new CTransform);
-	pTileMapObj->AddComponent(new CTileMap);
-	pTileMapObj->AddComponent(new CTileScript);
-	pTileMapObj->SetName(L"EditorTileMap");
-	//TileMapMtrl
+	CGameObjectEx* pGameObectEx = new CGameObjectEx;
+	pGameObectEx->AddComponent(new CTransform);
+	pGameObectEx->AddComponent(new CTileMap);
+	pGameObectEx->AddComponent(new CTileScript);
+	pGameObectEx->SetName(L"EditorTileMap");
+
 	CGameObject* arr[2] = { _pCamera, _pMouse };
-	pTileMapObj->TileMap()->SetCamera(_pCamera);
-	pTileMapObj->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
-	pTileMapObj->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
-	pTileMapObj->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
+	pGameObectEx->TileMap()->SetCamera(_pCamera);
+	pGameObectEx->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
+	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
+	pGameObectEx->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
 
 	for (UINT i{}; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"Tile";
 		str += std::to_wstring(i);
-		pTileMapObj->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+		pGameObectEx->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
 	}
 
-	pTileMapObj->TileMap()->SetTileCount(TILEX, TILEY);
-	pTileMapObj->begin();
-	m_vecEditorObj.push_back(pTileMapObj);
+	pGameObectEx->TileMap()->SetTileCount(TILEX, TILEY);
+	pGameObectEx->begin();
+	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"MapTool", pGameObectEx);
+}
+
+void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)
+{
+	CGameObjectEx* pObject;
+
+	pObject = new CGameObjectEx;
+	pObject->SetName(L"RefAni");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	pObject->AddComponent(new CRefAniScript);
+
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Link");
+	UINT width = pTex->GetWidth();
+	UINT height = pTex->GetHeight();
+
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3((float)width, (float)height, 10.f));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
+	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
+	pObject->begin();
+
+	m_EditorObj[(UINT)EDIT_MODE::ANIMATOR].emplace(L"AnimationTool", pObject);
+
+	pObject = new CGameObjectEx;
+	pObject->SetName(L"MouseDrag");
+
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender);
+	pObject->AddComponent(new CDragScript);
+
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
+	pObject->GetScript<CDragScript>(L"CDragScript")->SetCamera(m_CameraObject);
+	pObject->begin();
+
+	m_EditorObj[(UINT)EDIT_MODE::ANIMATOR].emplace(L"AnimationToolDrag", pObject);
+
 }
 
 void CEditor::DebugDraw(tDebugShapeInfo& _info)
@@ -278,29 +350,82 @@ CGameObjectEx* CEditor::GetDummyObject(const wstring& _name)
 	return nullptr;
 }
 
-void CEditor::AddEditObject(CGameObjectEx* _pGameObject)
+void CEditor::Add_Editobject(EDIT_MODE _emode, CGameObjectEx* _pGameObject)
 {
-	for (UINT i{}; i < m_vecEditorObj.size(); ++i)
+	const wstring& wstrName = _pGameObject->GetName();
+
+	map<const wchar_t*, CGameObjectEx*>& map = m_EditorObj[(UINT)_emode];
+
+	for (auto iter{ map.begin() }; iter != map.end(); ++iter)
 	{
-		if (m_vecEditorObj[i]->GetName() == _pGameObject->GetName())
-		{
-			/*
-			* Message Box 추가
-			*/
+		if (!lstrcmp(wstrName.c_str(), iter->first))
 			return;
-		}
 	}
-	m_vecEditorObj.push_back(_pGameObject);
+
+	map.emplace(make_pair(wstrName.c_str(), _pGameObject));
+}
+
+void CEditor::Add_Editobject(EDIT_MODE _emode, const wchar_t* _pName, CGameObjectEx* _pGameObject)
+{
+	map<const wchar_t*, CGameObjectEx*>& map = m_EditorObj[(UINT)_emode];
+	
+	for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+	{
+		if (!lstrcmp(_pName, iter->first))
+			return;
+	}
+
+	map.emplace(make_pair(_pName, _pGameObject));
 }
 
 CGameObjectEx* CEditor::FindByName(const wstring& _strky)
 {
-	for (UINT i{}; i < m_vecEditorObj.size(); ++i)
+	if (!lstrcmp(_strky.c_str(), L"MouseObject"))
 	{
-		if (m_vecEditorObj[i]->GetName() == _strky)
-			return m_vecEditorObj[i];
+		return m_MouseObject;
+	}
+	else if (!lstrcmp(_strky.c_str(), L"Editor Camera"))
+	{
+		return m_CameraObject;
+	}
+
+	for (auto iter{ m_EditorObj.begin() }; iter != m_EditorObj.end(); ++iter)
+	{
+		for (auto iter2{ iter->begin() }; iter2 != iter->end(); ++iter2)
+		{
+			if (!lstrcmp(_strky.c_str(), iter2->first))
+			{
+				return iter2->second;
+			}
+		}
 	}
 	return nullptr;
 }
 
+void CEditor::SetEditmode(EDIT_MODE _editmode)
+{
+	assert(!(_editmode == EDIT_MODE::END));
+
+	m_editmode = _editmode;
+
+	Vec3 vPos{};
+	CGameObjectEx* pGmaeObject{};
+
+	switch (_editmode)
+	{
+	case EDIT_MODE::ANIMATOR:
+	{
+		pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"AnimationTool")->second;
+		vPos = pGmaeObject->Transform()->GetRelativePos();
+	}
+		break;
+	case EDIT_MODE::MAPTOOL:
+		pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"MapTool")->second;
+		vPos = pGmaeObject->Transform()->GetRelativePos();
+		vPos.x += TILECX * 0.5f * TILEX;
+		vPos.y += TILECY * 0.25f * TILEY;
+		break;
+	}
+	m_CameraObject->Transform()->SetRelativePos(vPos);
+}
 

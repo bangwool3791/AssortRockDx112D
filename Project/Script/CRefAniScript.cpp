@@ -23,38 +23,16 @@ void CRefAniScript::begin()
 
 void CRefAniScript::tick()
 {
+	/*
+	* 마우스가 있으면
+	* 시작 위치(첫 클릭시)와 끝 위치(마우스 땟을 때)를 받아온다.
+	* Rect 매쉬를 생성한다. 
+	* 
+	*/
 }
 
 void CRefAniScript::BeginOverlap(CCollider2D* _pOther)
 {
-	if (CUIMgr::GetInst()->Get_Object(UI_TYPE::ANIMATION_BOX))
-		return;
-	static bool bfalg = false;
-
-	if (!lstrcmp(L"MouseDrag", _pOther->GetOwner()->GetName().c_str()))// && !bfalg)
-	{
-		/*
-		* Prefab으로 객체 생성 필요
-		*/
-		CGameObject* pGameObject = _pOther->GetOwner();
-		Vec3 vOhterPos = _pOther->GetOwner()->Transform()->GetRelativePos();
-		Vec3 vOhterScale = _pOther->GetOwner()->Transform()->GetRelativeScale();
-
-		Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
-		Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-
-		if (vOhterPos.x + vOhterScale.x * 0.5f <= vPos.x + vScale.x * 0.5f
-			&& vOhterPos.x - vOhterScale.x * 0.5f >= vPos.x - vScale.x * 0.5f
-			&& vOhterPos.y + vOhterScale.y * 0.5f <= vPos.y + vScale.y * 0.5f
-			&& vOhterPos.y - vOhterScale.y * 0.5f >= vPos.y - vScale.y * 0.5f)
-		{
-			CGameObject* pTemp{};
-			Instantiate(pTemp = pGameObject->Clone(), 30);
-			pTemp->SetName(L"Animation_Box");
-			bfalg = true;
-			CUIMgr::GetInst()->AddUI(pTemp, UI_TYPE::ANIMATION_BOX);
-		}
-	}
 }
 
 void CRefAniScript::Overlap(CCollider2D* _pOther)

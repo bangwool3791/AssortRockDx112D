@@ -2,6 +2,7 @@
 
 
 #include <Windows.h>
+#include <stack>
 #include <vector>
 #include <list>
 #include <map>
@@ -21,7 +22,8 @@ using std::list;
 using std::map;
 using std::make_pair;
 using std::back_insert_iterator;
-
+using std::stack;
+using std::pair;
 using std::string;
 using std::wstring;
 

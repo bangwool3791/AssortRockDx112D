@@ -9,7 +9,7 @@ CDragScript::CDragScript()
 	:CScript(DRAGSCRIPT)
 	, bClicked{ false }
 {
-
+	SetName(L"CDragScript");
 }
 
 CDragScript::~CDragScript()
@@ -20,16 +20,14 @@ CDragScript::~CDragScript()
 
 void CDragScript::begin()
 {
-	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
+	//m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
 }
 
 void CDragScript::tick()
 {
-	if (m_pCamera)
-	{
-		m_fCameraScale = m_pCamera->Camera()->GetOrthographicScale();
-		m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
-	}
+
+	m_fCameraScale = m_pCamera->Camera()->GetOrthographicScale();
+	m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
 
 	m_vMousePos = CKeyMgr::GetInst()->GetMousePos();
 	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
@@ -88,4 +86,9 @@ void CDragScript::Overlap(CCollider2D* _pOther)
 void CDragScript::EndOverlap(CCollider2D* _pOther)
 {
 
+}
+
+void CDragScript::SetCamera(CGameObject* _pCamera)
+{
+	m_pCamera = _pCamera;
 }

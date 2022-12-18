@@ -39,7 +39,7 @@ VTX_OUT VS_DragEffect(VTX_IN _in)
 
 float4 PS_DragEffect(VTX_OUT _in) : SV_Target
 {
-    float4 vOutColor = float4(1.f, 0.f, 1.f, 0.5f);
+    float4 vOutColor = float4(0.f, 1.f, 0.f, 0.5f);
 
     return vOutColor;
 }

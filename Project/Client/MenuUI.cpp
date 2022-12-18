@@ -2,6 +2,7 @@
 #include "MenuUI.h"
 #include "InspectorUI.h"
 
+#include "CEditor.h"
 #include "CImGuiMgr.h"
 
 #include <Engine\CGameObject.h>
@@ -31,15 +32,16 @@ void MenuUI::render()
         }
         if (ImGui::BeginMenu("Edit"))
         {
-            if (ImGui::MenuItem("Undo", "CTRL+Z"))
+            if (ImGui::MenuItem("Animator"))
             {
-
+                CEditor::GetInst()->SetEditmode(EDIT_MODE::ANIMATOR);
             }
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+
+            if (ImGui::MenuItem("Maptool"))
+            {
+                CEditor::GetInst()->SetEditmode(EDIT_MODE::MAPTOOL);
+            }
+
             ImGui::EndMenu();
         }
 
