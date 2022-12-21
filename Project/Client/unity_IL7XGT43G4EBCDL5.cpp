@@ -36,6 +36,12 @@
 #include "C:\Development\MyEngine\DirectX11\Project\Client\CreateTestLevel.cpp"
 
 
+#include "C:\Development\MyEngine\DirectX11\Project\Client\ImGuiFileDialog.cpp"
+
+
+#include "C:\Development\MyEngine\DirectX11\Project\Client\imgui_filedialog.cpp"
+
+
 #include "C:\Development\MyEngine\DirectX11\Project\Client\MenuUI.cpp"
 
 
@@ -61,7 +67,4 @@
 
 
 #include "C:\Development\MyEngine\DirectX11\Project\Client\imgui_draw.cpp"
-
-
-#include "C:\Development\MyEngine\DirectX11\Project\Client\imgui_impl_dx11.cpp"
 

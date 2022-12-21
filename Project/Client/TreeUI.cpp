@@ -133,6 +133,7 @@ TreeUI::TreeUI(const string& _strName)
 
 TreeUI::~TreeUI()
 {
+	Safe_Del_Vec(m_vecGameObjectEx);
 	Clear();
 }
 
@@ -292,9 +293,9 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 			TreeNode* pNode = (TreeNode*)payload->Data;
 			CGameObjectEx* pGameObject = (CGameObjectEx*)pNode->GetData();
 			wstring strName = pGameObject->GetName().c_str();
-			CGameObjectEx* pTarget = pGameObject->Clone();
-			AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)pTarget);
-			CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, pTarget);
+			m_vecGameObjectEx.push_back(pGameObject->Clone());
+			AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)m_vecGameObjectEx[m_vecGameObjectEx.size()-1]);
+			CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, m_vecGameObjectEx[m_vecGameObjectEx.size() - 1]);
 		}
 	}
 	else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelComTree"))

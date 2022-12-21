@@ -228,6 +228,10 @@ void CResMgr::CreateDefaultTexture()
 		Load<CTexture>(name, str);
 	}
 
+	/*
+	* They are billions
+	*/
+	Load<CTexture>(L"Human", L"texture\\HumansA_LQ.png");
 	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |

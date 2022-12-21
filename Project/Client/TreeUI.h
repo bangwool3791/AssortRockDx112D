@@ -52,21 +52,23 @@ class TreeUI :
 	public UI
 {
 private:
-	static UINT m_iNextNodeIdx;
+	static UINT			 m_iNextNodeIdx;
 
 private:
-	TreeNode*	m_RootNode;
-	bool		m_bDummyRootUse;	//루트 노드를 더미로 취급할 것인가
+	TreeNode*				m_RootNode;
+	bool					m_bDummyRootUse;	//루트 노드를 더미로 취급할 것인가
 
-	TreeNode*	m_SelectedNode;
-	TreeNode*	m_BeginDragNode;
-	TreeNode*	m_DropTargetNode;
+	TreeNode*				m_SelectedNode;
+	TreeNode*				m_BeginDragNode;
+	TreeNode*				m_DropTargetNode;
 
-	UI*			m_SelectInst;
-	FUNC_1		m_SelectFunc;
+	UI*						m_SelectInst;
+	FUNC_1					m_SelectFunc;
 
-	UI*			m_DragDropInst;
-	FUNC_2		m_DragDropFunc;
+	UI*						m_DragDropInst;
+	FUNC_2					m_DragDropFunc;
+
+	vector<CGameObjectEx*>  m_vecGameObjectEx;
 
 public:
 	virtual void update() override;

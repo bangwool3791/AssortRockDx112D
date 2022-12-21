@@ -48,6 +48,7 @@ void CAnimator2D::CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTe
 
     pAnimation2D = new CAnimation2D;
     pAnimation2D->Create(_strKey, _AtlasTex, _vLeftTop, _vSlice, _fStep, _iMaxFrm, _FPS);
+    pAnimation2D->SetName(_strKey);
     pAnimation2D->m_pOwner = this;
     m_mapAnim[_strKey] = pAnimation2D;
 }
@@ -108,44 +109,15 @@ void CAnimator2D::Clear()
     m_pCurAnim->Clear();
 }
 
-const tAnim2DInfo& CAnimator2D::GetAniInfo()
+
+int  CAnimator2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize)
 {
-    return m_pCurAnim->GetAniInfo();
+    return m_pCurAnim->Add_Animation2D(_vLeftTop, _vSlice, _FPS, _vFullSize);
 }
 
-const tAnim2DFrm& CAnimator2D::GetAniFrame()
+int CAnimator2D::Delete_Animation2D()
 {
-    return m_pCurAnim->GetAniFrame();
-}
-
-tAnim2DFrm CAnimator2D::GetAniFrameCopy()
-{
-    return m_pCurAnim->GetAniFrameCopy();
-}
-
-void CAnimator2D::SetLeftTop(Vec2 _vLeftTop, int _index)
-{
-    m_pCurAnim->SetLeftTop(_vLeftTop, _index);
-}
-
-void CAnimator2D::SetSlice(Vec2 _vSlice, int _index)
-{
-    m_pCurAnim->SetSlice(_vSlice, _index);
-}
-
-void CAnimator2D::SetOffset(Vec2 _vOffset, int _index)
-{
-    m_pCurAnim->SetOffset(_vOffset, _index);
-}
-
-void CAnimator2D::SetFullSize(Vec2 _vFullSize, int _index)
-{
-    m_pCurAnim->SetFullSize(_vFullSize, _index);
-}
-
-void CAnimator2D::SetDuration(float _fDuration, int _index)
-{
-    m_pCurAnim->SetDuration(_fDuration, _index);
+    return m_pCurAnim->Delete_Animation2D();
 }
 
 void CAnimator2D::SaveToFile(FILE* _File)
@@ -177,4 +149,88 @@ void CAnimator2D::LoadFromFile(FILE* _File)
         pAnim->m_pOwner = this;
         m_mapAnim.insert(make_pair(pAnim->GetName(), pAnim));
     }
+}
+
+void CAnimator2D::SetTexture(Ptr<CTexture> _AtlasTex)
+{
+
+    for (auto iter{ m_mapAnim.begin() }; iter != m_mapAnim.end(); ++iter)
+    {
+        iter->second->SetTexture(_AtlasTex);
+    }
+}
+
+const tAnim2DInfo& CAnimator2D::GetAniInfo()
+{
+    return m_pCurAnim->GetAniInfo();
+}
+
+const tAnim2DFrm& CAnimator2D::GetAniFrame()
+{
+    return m_pCurAnim->GetAniFrame();
+}
+
+void CAnimator2D::SetLeftTopX(float _fValue, int _index)
+{
+    m_pCurAnim->SetLeftTopX(_fValue, _index);
+}
+
+void CAnimator2D::SetLeftTopY(float _fValue, int _index)
+{
+    m_pCurAnim->SetLeftTopY(_fValue, _index);
+}
+
+void CAnimator2D::SetLeftTop(Vec2 _vLeftTop, int _index)
+{
+    m_pCurAnim->SetLeftTop(_vLeftTop, _index);
+}
+
+void CAnimator2D::SetSliceX(float _fValue, int _index)
+{
+    m_pCurAnim->SetSliceX(_fValue, _index);
+}
+
+void CAnimator2D::SetSliceY(float _fValue, int _index)
+{
+    m_pCurAnim->SetSliceY(_fValue, _index);
+}
+
+void CAnimator2D::SetSlice(Vec2 _vSlice, int _index)
+{
+    m_pCurAnim->SetSlice(_vSlice, _index);
+}
+
+void CAnimator2D::SetOffsetX(float _fValue, int _index)
+{
+    m_pCurAnim->SetOffsetX(_fValue, _index);
+}
+
+void CAnimator2D::SetOffsetY(float _fValue, int _index)
+{
+    m_pCurAnim->SetOffsetY(_fValue, _index);
+}
+
+void CAnimator2D::SetOffset(Vec2 _vOffset, int _index)
+{
+    m_pCurAnim->SetOffset(_vOffset, _index);
+}
+
+void CAnimator2D::SetFullSizeX(float _fValue, int _index)
+{
+    m_pCurAnim->SetFullSizeX(_fValue, _index);
+}
+
+void CAnimator2D::SetFullSizeY(float _fValue, int _index)
+{
+    m_pCurAnim->SetFullSizeY(_fValue, _index);
+}
+
+void CAnimator2D::SetFullSize(Vec2 _vFullSize, int _index)
+{
+    m_pCurAnim->SetFullSize(_vFullSize, _index);
+}
+
+void CAnimator2D::SetDuration(float _fDuration, int _index)
+{
+    m_pCurAnim->SetDuration(_fDuration, _index);
 }

@@ -24,7 +24,7 @@ private:
 	/*
 	* °´Ã¼ ´Ã¾î³ª¸é map<vector>Ã³¸®
 	*/
-	CGameObjectEx*										m_CameraObject;
+	CGameObjectEx*										m_pCameraObject;
 	CGameObjectEx*										m_MouseObject;
 	CGameObjectEx*										m_GirdObject;
 	vector<map<const wchar_t*, CGameObjectEx*>>			m_EditorObj;
@@ -54,6 +54,7 @@ public:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END>& GetArrComponents() { return m_arrCom; }
 	CComponent* GetArrComponent(COMPONENT_TYPE _eType) { return m_arrCom[(UINT)_eType]; }
 	CGameObjectEx* FindByName(const wstring& _strky);
+	void PopByName(const wstring& _strky);
 private:
 	CEditor();
 	virtual ~CEditor();

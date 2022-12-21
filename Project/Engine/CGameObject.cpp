@@ -193,7 +193,11 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 			m_pRenderComponent = pRenderCom;
 		}
 
-		assert(!m_arrCom[(UINT)eComType]);
+		if (nullptr != m_arrCom[(UINT)eComType])
+		{
+			delete m_arrCom[(UINT)eComType];
+			m_arrCom[(UINT)eComType] = nullptr;
+		}
 
 		m_arrCom[(UINT)eComType] = _pComponent;
 		break;

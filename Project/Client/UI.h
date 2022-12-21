@@ -45,3 +45,4 @@ public:
 typedef void (UI::*FUNC_0)(void);
 typedef void (UI::*FUNC_1)(DWORD_PTR);
 typedef void (UI::*FUNC_2)(DWORD_PTR, DWORD_PTR);
+typedef void (UI::*FUNC_3)(float, int);

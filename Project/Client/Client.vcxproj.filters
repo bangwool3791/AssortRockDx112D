@@ -113,6 +113,9 @@
     <Filter Include="Default\ModuleUI\ParamUI">
       <UniqueIdentifier>{9b60fb54-846e-4a55-bb61-977a17fcc375}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. ImGui\ImGuiFileDialog">
+      <UniqueIdentifier>{69e02787-9e20-40d6-ac61-b1df77a81af0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -259,6 +262,15 @@
     <ClInclude Include="CLevelSaveLoad.h">
       <Filter>04. SaveLoad</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiFileDialog.h">
+      <Filter>02. ImGui\ImGuiFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiFileDialogConfig.h">
+      <Filter>02. ImGui\ImGuiFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_filedialog.h">
+      <Filter>02. ImGui\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -392,6 +404,12 @@
     </ClCompile>
     <ClCompile Include="CLevelSaveLoad.cpp">
       <Filter>04. SaveLoad</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGuiFileDialog.cpp">
+      <Filter>02. ImGui\ImGuiFileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_filedialog.cpp">
+      <Filter>02. ImGui\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

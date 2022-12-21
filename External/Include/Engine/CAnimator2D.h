@@ -9,7 +9,7 @@ class CAnimator2D :
 {
 private:
     std::map<wstring, CAnimation2D*> m_mapAnim;
-    CAnimation2D*                    m_pCurAnim;
+    CAnimation2D* m_pCurAnim;
 
     bool                             m_bRepeat;
     wstring                          m_strKey;
@@ -20,29 +20,52 @@ public:
     const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
     const tAnim2DInfo& GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
-    tAnim2DFrm GetAniFrameCopy();
 
     /*
     Vec2 vLeftTop;
-	Vec2 vSlice;
-	Vec2 vOffset;
-	Vec2 vFullSize;
-	float fDuration;
+    Vec2 vSlice;
+    Vec2 vOffset;
+    Vec2 vFullSize;
+    float fDuration;
     */
+    void SetLeftTopX(float _fx, int _index);
+    void SetLeftTopY(float _fx, int _index);
     void SetLeftTop(Vec2 _vLeftTop, int _index);
+    void SetSliceX(float _fx, int _index);
+    void SetSliceY(float _fx, int _index);
     void SetSlice(Vec2 _vSlice, int _index);
+    void SetOffsetX(float _fx, int _index);
+    void SetOffsetY(float _fx, int _index);
     void SetOffset(Vec2 _vOffset, int _index);
+    void SetFullSizeX(float _fx, int _index);
+    void SetFullSizeY(float _fx, int _index);
     void SetFullSize(Vec2 _vFullSize, int _index);
     void SetDuration(float _fDuration, int _index);
+
+    float GetLeftTopX(int _index) { return m_pCurAnim->GetLeftTopX(_index); }
+    float GetLeftTopY(int _index) { return m_pCurAnim->GetLeftTopY(_index); }
+    Vec2 GetLeftTop(int _index) { return m_pCurAnim->GetLeftTop(_index); }
+    float GetSliceX(int _index) { return m_pCurAnim->GetSliceX(_index); }
+    float GetSliceY(int _index) { return m_pCurAnim->GetSliceY(_index); }
+    Vec2 GetSlice(int _index) { return m_pCurAnim->GetSlice(_index); }
+    float GetOffsetX(int _index) { return m_pCurAnim->GetOffsetX(_index); }
+    float GetOffsetY(int _index) { return m_pCurAnim->GetOffsetY(_index); }
+    Vec2 GetOffset(int _index) { return m_pCurAnim->GetOffset(_index); }
+    float GetFullSizeX(int _index) { return m_pCurAnim->GetFullSizeX(_index); }
+    float GetFullSizeY(int _index) { return m_pCurAnim->GetFullSizeY(_index); }
+    Vec2 GetFullSize(int _index) { return m_pCurAnim->GetFullSize(_index); }
+    float GetDuration(int _index) { return m_pCurAnim->GetLeftTopX(_index); }
 public:
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* FindAnimation(const wstring& _strKey);
-
+    int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize);
+    int  Delete_Animation2D();
     void Play(const wstring& _strKey, bool _bRepeat);
 
     void UpdateData();
     void Clear();
 
+    void SetTexture(Ptr<CTexture> _AtlasTex);
     Ptr<CTexture> GetTexture() { return m_pCurAnim->GetTexture(); }
 public:
     virtual void SaveToFile(FILE* _File);

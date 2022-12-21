@@ -23,10 +23,10 @@ class CGameObject
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;
 	vector<CScript*>							  m_vecScripts;
-	CRenderComponent* m_pRenderComponent{};
+	CRenderComponent*						      m_pRenderComponent{};
 protected:
 	//부모 오브젝트
-	CGameObject* m_pParent;
+	CGameObject*							      m_pParent;
 	vector<CGameObject*>						  m_vecChild;
 	int											  m_iLayerIdx;
 	bool										  m_bDead;

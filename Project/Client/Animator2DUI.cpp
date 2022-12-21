@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "Animator2DUI.h"
 
+#include <Engine\CDevice.h>
+#include <Engine/CResMgr.h>
+#include <Engine/CTimeMgr.h>
 #include <Engine\CCamera.h>
 #include <Engine\CKeyMgr.h>
 #include <Engine\CResMgr.h>
@@ -16,25 +19,9 @@
 
 #include "CGameObjectEx.h"
 
-
-bool SelectionRect(ImVec2* start_pos, ImVec2* end_pos, ImGuiMouseButton mouse_button = ImGuiMouseButton_Left)
-{
-    //IM_ASSERT(start_pos != NULL);
-    //IM_ASSERT(end_pos != NULL);
-    if (ImGui::IsMouseClicked(mouse_button))
-    {
-        *start_pos = ImGui::GetMousePos();
-    }
-    if (ImGui::IsMouseDown(mouse_button))
-    {
-        *end_pos = ImGui::GetMousePos();
-        ImDrawList* draw_list = ImGui::GetForegroundDrawList(); //ImGui::GetWindowDrawList();
-        draw_list->AddRect(*start_pos, *end_pos, ImGui::GetColorU32(IM_COL32(0, 130, 216, 255)));   // Border
-        draw_list->AddRectFilled(*start_pos, *end_pos, ImGui::GetColorU32(IM_COL32(0, 130, 216, 50)));    // Background
-    }
-    return ImGui::IsMouseReleased(mouse_button);
-}
-
+static const int dx[] = { -1, 0, 1, 0 };
+static const int dy[] = { 0, 1, 0, -1 };
+#define HSV_SKY_GREY ImColor::HSV(0.f, 0.f, 0.5f)
 /*
 * Editor
 * Rect Mesh Link
@@ -46,13 +33,25 @@ bool SelectionRect(ImVec2* start_pos, ImVec2* end_pos, ImGuiMouseButton mouse_bu
 Animator2DUI::Animator2DUI()
     : ComponentUI("Animator2D", COMPONENT_TYPE::ANIMATOR2D)
     , m_strPause("Stop")
-    , m_tInfo{}
-    , m_iIndex{}
+    , m_fMaxX{}
+    , m_fMaxY{}
+    , m_fMinX{}
+    , m_fMinY{} 
+    , m_iSelectedIdx{}
 {
 }
 
 Animator2DUI::~Animator2DUI()
 {
+    CEditor::GetInst()->PopByName(L"Dummy Object");
+
+    for (int i{}; i < m_iPixel_Width; ++i)
+    {
+        delete *(m_dfs_visited + i);
+        delete *(m_bfs_visited + i);
+    }
+    delete m_dfs_visited;
+    delete m_bfs_visited;
 }
 #include <string.h>
 #include "TreeUI.h"
@@ -60,22 +59,13 @@ Animator2DUI::~Animator2DUI()
 
 void Animator2DUI::begin()
 {
-    const map<wstring, Ptr<CRes>>& mapResource = CResMgr::GetInst()->GetResource(RES_TYPE::TEXTURE);
+    Initialize_Animation_Info();
 
-    for (auto iter{ mapResource.begin() }; iter != mapResource.end(); ++iter)
-    {
-        string str = string(iter->first.begin(), iter->first.end());
-        m_items.push_back(str);
-    }
-    m_pAnimator = (CAnimator2D*)CEditor::GetInst()->GetArrComponent(COMPONENT_TYPE::ANIMATOR2D);
-    m_pTexture = m_pAnimator->GetTexture();
-    m_pixel_width = m_pTexture->GetWidth();
-    m_pixel_height = m_pTexture->GetHeight();
-    //const wstring& wstrName = m_pAnimator->GetTexture()->GetName();
-    //const wstring& wstrName = L"C:\\Development\\MyEngine\\DirectX11\\OutputFile\\bin\\content\\texture\\Character.png";
-    //Load_Image(m_vec_pixel, string(wstrName.begin(), wstrName.end()), m_pixel_width, m_pixel_height);
+    Initialize_Aimation_Pixel();
+
     m_MouseObject = CEditor::GetInst()->FindByName(L"MouseObject");
-    m_CameraObject = CEditor::GetInst()->FindByName(L"Editor Camera");
+    m_pCameraObject = CEditor::GetInst()->FindByName(L"Editor Camera");
+    m_pPointObject = CEditor::GetInst()->FindByName(L"AnimationToolDrag");
 }
 
 void Animator2DUI::update()
@@ -87,188 +77,593 @@ void Animator2DUI::render_update()
 {
     ComponentUI::render_update();
 
-    static ImGuiComboFlags flags = 0;
-
-    static int item_current_idx = 0; // Here we store our selection data as an index.
-    const char* combo_preview_value = m_items[item_current_idx].c_str();  // Pass in the preview value visible before opening the combo (it could be anything)
-
-    if (ImGui::BeginCombo("Texture", combo_preview_value, flags))
-    {
-        for (int n = 0; n < m_items.size(); n++)
-        {
-            const bool is_selected = (item_current_idx == n);
-            if (ImGui::Selectable(m_items[n].c_str(), is_selected))
-                item_current_idx = n;
-
-            // Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-            if (is_selected)
-                ImGui::SetItemDefaultFocus();
-        }
-        ImGui::EndCombo();
-    }
-
     if (ImGui::BeginDragDropTarget())
     {
         if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelTree"))
         {
             TreeNode* pNode = (TreeNode*)payload->Data;
-            CComponent* pCompoent = (CComponent*)pNode->GetData();
-            if (dynamic_cast<CAnimator2D*>(pCompoent))
+            m_pGameObject = (CGameObjectEx*)pNode->GetData();
+
+            if (dynamic_cast<CGameObjectEx*>(m_pGameObject))
             {
-                m_pAnimator = dynamic_cast<CAnimator2D*>(pCompoent);
+                m_pAnimator = dynamic_cast<CGameObjectEx*>(m_pGameObject)->Animator2D();
+                
+                if (nullptr == m_pAnimator)
+                {
+                    cout << "Dummy Object has not Animation2D Component" << endl;
+                    return;
+                }
+
+                m_pAtlasTexture = m_pAnimator->GetTexture();
+                Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+                m_pImage = m_pAtlasTexture->GetSRV().Get();
+                //더미 오브젝트 넣고, 툴 환시 더미 오브젝트 빼기 ?
+                CEditor::GetInst()->Add_Editobject(EDIT_MODE::ANIMATOR, m_pGameObject);
+                CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+                pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+                Initialize_Aimation_Pixel();
             }
         }
         ImGui::EndDragDropTarget();
     }
 
-    wstring wstr = wstring(m_items[item_current_idx].begin(), m_items[item_current_idx].end());
-    ImTextureID myImage = CResMgr::GetInst()->FindRes<CTexture>(wstr)->GetSRV().Get();
-
-    if (ImGui::ImageButton(myImage, ImVec2(500.f, 500.f)))
+    if (m_pGameObject)
     {
-        ImVec2 screen_pos = ImGui::GetCursorScreenPos();
-        cout << "ImGui Mouse [x] [y] " << screen_pos.x << " " << screen_pos.y << endl;
+        Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+        Vec3 vCameraPos = m_pCameraObject->Transform()->GetRelativePos();
+        Vec3 vPos = vCameraPos;
+        vPos.x += vResolution.x * 0.5f;
+        m_pGameObject->Transform()->SetRelativePos(vPos);
+        m_pGameObject->Transform()->SetRelativeScale(Vec3(500.f, 500.f, 0.f));
     }
 
-    ImGui::Text("Index  "); ImGui::SameLine(); ImGui::InputInt("##Index", &m_iIndex);
+    Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "Texture");
 
-    if (ImGui::Button("Load", ImVec2(200, 100)))
+    ImGui::PushID(0);
+    ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.f, 0.f, 0.5f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0.f, 0.f, 0.3f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0.f, 0.f, 0.1f));
+    
+    if (ImGui::Button("Open", ImVec2(65.f, 40.f)))
     {
-        if (nullptr == m_pAnimator)
+        m_fileDialogOpen = true;
+        m_fileDialogInfo.type = ImGuiFileDialogType_OpenFile;
+        m_fileDialogInfo.title = "Open File";
+        m_fileDialogInfo.fileName = "test.png";
+        //m_fileDialogInfo.directoryPath = std::filesystem::current_path();
+        string path = CPathMgr::GetInst()->GetSingleContentPath();
+        std::filesystem::path _path(path + "\\texture");
+        m_fileDialogInfo.directoryPath = _path;
+        //m_fileDialogInfo.directoryPath.filename().append("\\content\\texture");
+    }
+
+    if (m_fileDialogOpen)
+    {
+        // Any place in draw loop
+        if (ImGui::FileDialog(&m_fileDialogOpen, &m_fileDialogInfo))
         {
-            //메시지 박스 처리
-        }
-        m_vecAniInfo.clear();
-
-        m_vecAniInfo = m_pAnimator->GetFames();
-
-        if (m_iIndex < 0)
-            m_iIndex = 0;
-
-        if (m_iIndex >= m_vecAniInfo.size())
-            m_iIndex = (int)(m_vecAniInfo.size() - 1);
-    }
-
-    if (m_iIndex < 0)
-        m_iIndex = 0;
-
-    if (m_iIndex != 0 && m_iIndex >= m_vecAniInfo.size())
-        m_iIndex = (int)(m_vecAniInfo.size() - 1);
-
-    if (!m_vecAniInfo.empty())
-    {
-        ImGui::Text("vLeftTop  "); ImGui::SameLine(); ImGui::InputFloat2("##vLeftTop", m_vecAniInfo[m_iIndex].vLeftTop);
-        ImGui::Text("vOffset   "); ImGui::SameLine(); ImGui::InputFloat2("##vOffset", m_vecAniInfo[m_iIndex].vOffset);
-        ImGui::Text("fDuration "); ImGui::SameLine(); ImGui::InputFloat("##fDuration", (float*)&(m_vecAniInfo[m_iIndex].fDuration));
-        ImGui::Text("vSlice    "); ImGui::SameLine(); ImGui::InputFloat2("##vSlice", m_vecAniInfo[m_iIndex].vSlice);
-        ImGui::Text("vFullSize "); ImGui::SameLine(); ImGui::InputFloat2("##vFullSize", m_vecAniInfo[m_iIndex].vFullSize);
-    }
-
-    if (KEY_PRESSED(KEY::LBTN))
-    {
-        Vec3 vCamPos = m_CameraObject->Camera()->Transform()->GetRelativePos();
-        float fScale = m_CameraObject->Camera()->GetOrthographicScale();
-        m_pixel = m_pTexture->GetPixel();
-        Vec3 vPos = m_MouseObject->Transform()->GetRelativePos();
-        //vPos *= fScale;
-        cout << "[X] : " << vPos.x << " [Y] : " << vPos.y << endl;
-        vPos.x += m_pixel_width * 0.5f;
-        vPos.y = -1.f * vPos.y + m_pixel_height * 0.5f;
-        //vPos *= fScale;
-        tRGBA tInfo = GetRGBA(vPos.x, vPos.y);
-        cout << "X : " << vPos.x << " Y : " << vPos.y << endl;
-        cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
-
-        int dx[] = { -1, 0, 1, 0 };
-        int dy[] = { 0, 1, 0, -1 };
-        int group_id; // 단지의 번호로 첫번째 단지부터 1로 시작
-
-        bool** visited = (bool** )malloc(sizeof(bool*) * m_pixel_width);
-        for (int i{}; i < m_pixel_width; ++i)
-        {
-            *(visited + i) = (bool*)malloc(sizeof(bool) * m_pixel_height);
-            memset(*(visited + i), 0, sizeof(bool) * m_pixel_height);
+            SetTextureUI();
         }
 
-        std::stack<std::pair<int, int>> s; // 이용할 스택, (x,y) -> (행, 열)
-        int x = vPos.x;
-        int y = vPos.y;
+    }
 
-        int resultX = m_pixel_width;
-        int resultY = m_pixel_height;
-        s.push(make_pair(x, y)); // pair를 만들어서 stack에 넣습니다.
+    ImGui::SameLine();
+    ImGui::Button("Sprite\r\nMode", ImVec2(65.f, 40.f));
+    ImGui::SameLine();
+    ImGui::Button("Scene\r\nMode", ImVec2(65.f, 40.f));
+    ImGui::PopStyleColor(3);
+    ImGui::PopID();
 
-        // 처음 x,y를 방문 했기때문에
-        visited[x][y] = true;
+    Vec2 vMinUV = m_uvLeftTop - m_uvDiff;
+    Vec2 vMaxUV = m_uvRightBottom + m_uvDiff;
 
-        while (!s.empty()) {
+    Render_Pos();
 
-            // 스택의 top 원소 꺼내기
-            x = s.top().first;
-            y = s.top().second;
-            s.pop();
+    Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "FullSize");
+    ImGui::Image(m_pImage, ImVec2(212.f, 212.f), ImVec2(vMinUV.x, vMinUV.y), ImVec2(vMaxUV.x, vMaxUV.y));
+    Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "UV");
+    ImGui::Image(m_pImage, ImVec2(212.f, 212.f), ImVec2(m_uvLeftTop.x, m_uvLeftTop.y), ImVec2(m_uvRightBottom.x, m_uvRightBottom.y));
 
-            // 해당 위치의 주변을 확인
-            for (int i = 0; i < 4; i++) 
+    float f = 0.f;
+    Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "Frame");
+
+    ImGui::Button("Pos", ImVec2(40.f, 20.f)); ImGui::SameLine();
+    ImGui::Button("x", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##1", &m_vLeftTop.x))
+        m_pAnimator->SetLeftTopX(m_vLeftTop.x, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::Button("y", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if(ImGui::InputFloat("##2", &m_vLeftTop.y))
+        m_pAnimator->SetLeftTopY(m_vLeftTop.y, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("Apply##1", ImVec2(40.f, 20.f)))
+        m_pAnimator->SetLeftTop(m_vLeftTop, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("All##1", ImVec2(40.f, 20.f)))
+        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+            m_pAnimator->SetLeftTop(m_vLeftTop, i);
+
+    ImGui::Button("Slice", ImVec2(40.f, 20.f));
+    ImGui::SameLine();
+    ImGui::Button("x", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##3", &m_vSlice.x))
+        m_pAnimator->SetSliceX(m_vSlice.x, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::Button("y", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##4", &m_vSlice.y))
+        m_pAnimator->SetSliceY(m_vSlice.y, m_iCurIdx);
+
+
+    if(ImGui::Button("FullSize", ImVec2(40.f, 20.f)))
+        m_pAnimator->SetFullSize(m_vFullSize, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::Button("x", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##6", &m_vFullSize.x))
+        m_pAnimator->SetFullSizeX(m_vFullSize.x, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::Button("y", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##7", &m_vFullSize.y))
+        m_pAnimator->SetFullSizeY(m_vFullSize.y, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("Apply##2", ImVec2(40.f, 20.f)))
+        m_pAnimator->SetFullSize(m_vFullSize, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("All##2", ImVec2(40.f, 20.f)))
+        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+            m_pAnimator->SetFullSize(m_vFullSize, i);
+
+    ImGui::Button("OffSet", ImVec2(40.f, 20.f));
+    ImGui::SameLine();
+    ImGui::Button("x", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##8", &m_vOffset.x))
+        m_pAnimator->SetOffsetX(m_vOffset.x, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::Button("y", ImVec2(20.f, 20.f));
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::InputFloat("##9", &m_vOffset.y))
+        m_pAnimator->SetOffsetY(m_vOffset.y, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("Apply##3", ImVec2(40.f, 20.f)))
+        m_pAnimator->SetOffset(m_vOffset, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("All##3", ImVec2(40.f, 20.f)))
+        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+            m_pAnimator->SetOffset(m_vOffset, i);
+
+    ImGui::Button("Duration", ImVec2(40.f, 20.f));
+    ImGui::SameLine();
+    if (ImGui::InputFloat("##10", &m_fDuration))
+        m_pAnimator->SetOffsetX(m_fDuration, m_iCurIdx);
+    ImGui::SameLine();
+    ImGui::PushItemWidth(50.f);
+    if (ImGui::Button("All##4", ImVec2(40.f, 20.f)))
+        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+            m_pAnimator->SetDuration(m_fDuration, i);
+    
+    ImGui::Separator();
+    if (ImGui::Button("Add", ImVec2(40.f, 20.f)))
+    {
+        m_iCurIdx = m_pAnimator->Add_Animation2D(m_vLeftTop, m_vSlice, m_fDuration, m_vFullSize);
+        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+    }
+
+    ImGui::SameLine();
+    ImGui::Button("Edit", ImVec2(40.f, 20.f));
+    ImGui::SameLine();
+    if (ImGui::Button("Del", ImVec2(40.f, 20.f)))
+    {
+        m_iCurIdx = m_pAnimator->Delete_Animation2D();
+        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+    }
+    ImGui::SameLine();
+    ImGui::Button("Play", ImVec2(40.f, 20.f));
+    
+    ImVec2 vSize{ 200.f, 100.f };
+    if (ImGui::BeginListBox("##ListBox", vSize))
+    {
+        for (size_t i = 0; i < m_vecFrameIndex.size(); ++i)
+        {
+            bool Selectable = (m_iCurIdx == i);
+            if (ImGui::Selectable(m_vecFrameIndex[i].c_str(), Selectable))
             {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
+                m_iCurIdx = (int)i;
+            }
 
-                // 지도를 벗어나지 않고
-                if (0 <= nx && nx < m_pixel_width && 0 <= ny && ny < m_pixel_height) 
+            if (Selectable)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+
+            // 해당 아이템이 더블클릭 되었다.
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            {
+            }
+        }
+
+        ImGui::EndListBox();
+    }
+
+    Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "Animation");
+
+    static char str0[128] = {};
+    ImGui::InputText("##5", str0, IM_ARRAYSIZE(str0));
+    ImGui::SameLine();
+    ImGui::Button("Add", ImVec2(40.f, 20.f));
+    ImGui::SameLine();
+    ImGui::Button("Del", ImVec2(40.f, 20.f));
+
+    ImGui::Button("Save", ImVec2(80.f, 20.f));
+    ImGui::SameLine();
+    ImGui::Button("Load", ImVec2(80.f, 20.f));
+    ImGui::SameLine();
+
+    if (ImGui::BeginListBox("##ListBox", vSize))
+    {
+        for (size_t i = 0; i < m_vecAnimation.size(); ++i)
+        {
+            bool Selectable = (m_iSelectedIdx == i);
+            if (ImGui::Selectable(m_vecAnimation[i].c_str(), Selectable))
+            {
+                m_iSelectedIdx = (int)i;
+            }
+
+            if (Selectable)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+
+            // 해당 아이템이 더블클릭 되었다.
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            {
+            }
+        }
+
+        ImGui::EndListBox();
+    }
+
+    static float fDeltaTime = DT;
+    static bool bCheck = false;
+    fDeltaTime += DT;
+
+    if (0.3f < fDeltaTime)
+    {
+        if (KEY_PRESSED(KEY::LBTN))
+        {
+            if (Click_Pixel_LBtn())
+                bCheck = true;
+            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+        }
+        
+        if (KEY_PRESSED(KEY::LEFT))
+        {
+            Click_Pixel_KeyBoard(KEY::LEFT);
+            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            bCheck = true;
+        }
+        else if (KEY_PRESSED(KEY::RIGHT))
+        {
+            Click_Pixel_KeyBoard(KEY::RIGHT);
+            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            bCheck = true;
+        }
+        else if (KEY_PRESSED(KEY::UP))
+        {
+            Click_Pixel_KeyBoard(KEY::UP);
+            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            bCheck = true;
+        }
+        else if (KEY_PRESSED(KEY::DOWN))
+        {
+            Click_Pixel_KeyBoard(KEY::DOWN);
+            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            bCheck = true;
+        }
+    }
+
+    if (bCheck)
+    {
+         m_pAnimator->SetLeftTop(Vec2(m_fMinX, m_fMinY), m_iCurIdx);
+         m_pAnimator->SetSlice(Vec2(m_fMaxX - m_fMinX, m_fMaxY - m_fMinY), m_iCurIdx);
+         //두개의 Vec2 멤버
+        //클릭시 처리
+        //리스트 클릭 시 처리
+         m_uvLeftTop = Vec2{ (float)m_fMinX / m_iPixel_Width ,m_fMinY / m_iPixel_Height };
+         m_uvRightBottom = Vec2{ (float)m_fMaxX / m_iPixel_Width ,m_fMaxY / m_iPixel_Height };
+
+         m_uvSlice = Vec2{ abs(m_fMaxX - m_fMinX),abs(m_fMaxY - m_fMinY) };
+         bCheck = false;
+    }
+}
+
+void Animator2DUI::Click_Pixel_KeyBoard(KEY _Key)
+{
+    if (_Key == KEY::LEFT || _Key == KEY::RIGHT || _Key == KEY::UP || _Key == KEY::DOWN)
+    {
+        static int x{};
+        static int y{};
+
+        if (_Key == KEY::LEFT)
+        {
+            x = m_pPointObject->Transform()->GetRelativePos().x - m_pPointObject->Transform()->GetRelativeScale().x;
+            y = m_pPointObject->Transform()->GetRelativePos().y;
+        }
+        else if (_Key == KEY::RIGHT)
+        {
+            x = m_pPointObject->Transform()->GetRelativePos().x + m_pPointObject->Transform()->GetRelativeScale().x;
+            y = m_pPointObject->Transform()->GetRelativePos().y;
+        }
+        else if (_Key == KEY::UP)
+        {
+            x = m_pPointObject->Transform()->GetRelativePos().x;
+            y = m_pPointObject->Transform()->GetRelativePos().y - m_pPointObject->Transform()->GetRelativeScale().y;
+        }
+        else if (_Key == KEY::DOWN)
+        {
+            x = m_pPointObject->Transform()->GetRelativePos().x + m_pPointObject->Transform()->GetRelativeScale().x;
+            y = m_pPointObject->Transform()->GetRelativePos().y + m_pPointObject->Transform()->GetRelativeScale().y;
+        }
+
+        UINT _ux = x + m_iPixel_Width * 0.5f;
+        UINT _uy = -1.f * y + m_iPixel_Height * 0.5f;
+
+        Set_Texture_Pixel(_ux, _uy);
+    }
+}
+
+bool Animator2DUI::Click_Pixel_LBtn()
+{
+    Vec3 vMousePos = m_MouseObject->Transform()->GetRelativePos();
+
+    //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
+    Vec3 vPos = vMousePos;
+
+    Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+    vResolution *= m_pCameraObject->Camera()->GetOrthographicScale();
+    //vPos.x = vMousePos.x + vResolution.x * 0.5f;
+    //vPos.y = -1.f * vMousePos.y + vResolution.y * 0.5f;
+
+    Vec3 vSacle{};
+
+    vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
+    vSacle.y = m_pCameraObject->Camera()->Transform()->GetRelativePos().y;
+    if (vResolution.x * -0.5f + vSacle.x > vPos.x || vResolution.y * -0.5f  + vSacle.y > vPos.y
+        || vResolution.x * 0.5f + vSacle.x  <= vPos.x
+        || vResolution.y * 0.5f + vSacle.y <= vPos.y)
+        return false;
+
+    vMousePos.x += m_iPixel_Width * 0.5f;
+    vMousePos.y = -1.f * vMousePos.y + m_iPixel_Height * 0.5f;
+
+    tRGBA tInfo = GetRGBA(vMousePos.x, vMousePos.y);
+
+    //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
+    //cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
+
+
+    UINT x = vMousePos.x;
+    UINT y = vMousePos.y;
+    Set_Texture_Pixel(x, y);
+    return true;
+
+}
+
+void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
+{
+    int index = 4 * (x + y * m_iPixel_Width);
+
+    if (true == (m_pPixels[index] == 0.f &&
+        m_pPixels[index + 1] == 0.f &&
+        m_pPixels[index + 2] == 0.f && m_pPixels[index + 3] == 0))
+    {
+        //bfs사용
+        Vec2 vPixel = Get_Pixel_Bfs(x, y);
+        x = vPixel.x;
+        y = vPixel.y;
+    }
+
+    float fMinX = m_iPixel_Width;
+    float fMinY = m_iPixel_Height;
+
+    float fMaxX = -1;
+    float fMaxY = -1;
+
+    static std::stack<std::pair<int, int>> StackPiexel;
+    StackPiexel.push(make_pair(x, y)); // pair를 만들어서 stack에 넣습니다.
+
+    // 처음 x,y를 방문 했기때문에
+    if (0 > x || 0 > y || m_iPixel_Width <= x || m_iPixel_Height <= y)
+        return;
+
+    m_dfs_visited[x][y] = true;
+
+    while (!StackPiexel.empty()) {
+
+        x = StackPiexel.top().first;
+        y = StackPiexel.top().second;
+        StackPiexel.pop();
+
+        // 해당 위치의 주변을 확인
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            // 지도를 벗어나지 않고
+            if (0 <= nx && nx < m_iPixel_Width && 0 <= ny && ny < m_iPixel_Height)
+            {
+                // 방문하지 않았다면 -> 방문
+                if (m_dfs_visited[ny][nx] == false)
                 {
-                    // 집이면서 방문하지 않았다면 -> 방문
-                    if (visited[nx][ny] == false) 
+                    m_dfs_visited[ny][nx] = true;
+
+                    int index = 4 * (nx + ny * m_iPixel_Width);
+                    if (false == (m_pPixels[index] == 0.f &&
+                        m_pPixels[index + 1] == 0.f &&
+                        m_pPixels[index + 2] == 0.f && m_pPixels[index + 3] == 0))
                     {
-                        visited[nx][ny] = true;
+                        if (nx < fMinX)
+                            fMinX = nx;
 
-                        //cout << "dfs 과정 좌표 [x] " << nx << " " << "[y] " << ny << endl;
+                        if (ny < fMinY)
+                            fMinY = ny;
 
-                        if (nx < resultX && ny <= resultY)
-                        {
-                            int index = 4 * (nx + ny * m_pixel_width);
-                            if (false == (m_pixel[index] == 255.f &&
-                                m_pixel[index + 1] == 255.f &&
-                                m_pixel[index + 2] == 255.f && m_pixel[index + 3] == 0))
-                            {
-                               // cout << "dfs 과정 좌표 [x] " << nx << " " << "[y] " << ny << endl;
-                                resultX = nx;
-                                resultY = ny;
-
-                            }
+                        if (nx > fMaxX) {
+                            fMaxX = nx;
                         }
-                         s.push(make_pair(x, y)); // push하는 경우이기 때문에 현재 위치도 넣어준다.
-                        s.push(make_pair(nx, ny)); // 스택에 현재 nx,ny도 푸시
+
+                        if (ny > fMaxY)
+                            fMaxY = ny;
+
+                        StackPiexel.push(make_pair(x, y)); // push하는 경우이기 때문에 현재 위치도 넣어준다.
+                        StackPiexel.push(make_pair(nx, ny)); // 스택에 현재 nx,ny도 푸시
                     }
                 }
             }
         }
-        cout << "dsf 결과 좌표 [x] " << resultX << " " << "[y]" << resultY << endl;
     }
+
+    fMinX = fMinX - m_iPixel_Width * 0.5f;
+    fMaxX = fMaxX - m_iPixel_Width * 0.5f;
+
+    fMinY = (fMinY - m_iPixel_Height * 0.5f) * -1.f;
+    fMaxY = (fMaxY - m_iPixel_Height * 0.5f) * -1.f;
+
+    cout << "m_minx " << fMinX << "m_miny " << fMinY << "m_maxx " << fMaxX << "m_maxy " << fMaxY << endl;
+    Vec3 vPos = Vec3{ (fMaxX + fMinX) * 0.5f, (fMaxY + fMinY) * 0.5f, 1.f };
+    Vec3 vScale = Vec3{ float(fMaxX - fMinX), float(fMaxY - fMinY), 1.f };
+    m_pPointObject->Transform()->SetRelativePos(vPos);
+    m_pPointObject->Transform()->SetRelativeScale(vScale);
+
+    Clear_Visited(m_dfs_visited, m_iPixel_Width, m_iPixel_Height);
+
+    m_fMinX = fMinX + m_iPixel_Width * 0.5f;
+    m_fMaxX = fMaxX + m_iPixel_Width * 0.5f;
+
+    m_fMinY = -1.f * fMinY + m_iPixel_Height * 0.5f;
+    m_fMaxY = -1.f * fMaxY + m_iPixel_Height * 0.5f;
 }
 
-void dfs_stack(int x, int y) {
-
-
-}
-extern "C" {
-#define STB_IMAGE_IMPLEMENTATION
-#include <Engine\stb_image.h>
-}
-
-
-bool Animator2DUI::Load_Image(std::vector<unsigned char>& image, const std::string& filename, int& x, int& y)
+Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
 {
-    int n;
-    unsigned char* data = stbi_load(filename.c_str(), &x, &y, &n, 4);
-    if (data != nullptr)
-    {
-        image = std::vector<unsigned char>(data, data + x * y * 4);
+    float fMinX = m_iPixel_Width;
+    float fMinY = m_iPixel_Height;
+
+    float fMaxX = -1;
+    float fMaxY = -1;
+
+    std::queue<std::pair<int, int>> QueuePixel;
+    QueuePixel.push(make_pair(x, y)); // pair를 만들어서 stack에 넣습니다.
+
+    // 처음 x,y를 방문 했기때문에
+    m_bfs_visited[x][y] = true;
+
+    while (!QueuePixel.empty()) {
+
+        x = QueuePixel.front().first;
+        y = QueuePixel.front().second;
+
+        QueuePixel.pop();
+
+        // 해당 위치의 주변을 확인
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            // 지도를 벗어나지 않고
+            if (0 <= nx && nx < m_iPixel_Width && 0 <= ny && ny < m_iPixel_Height)
+            {
+                // 방문하지 않았다면 -> 방문
+                if (m_bfs_visited[ny][nx] == false)
+                {
+                    m_bfs_visited[ny][nx] = true;
+
+                    int index = 4 * (nx + ny * m_iPixel_Width);
+                    bool bChecked =  m_pPixels[index] == 0.f && m_pPixels[index + 1] == 0.f && m_pPixels[index + 2] == 0.f && m_pPixels[index + 3] == 0.f;
+
+                    if (bChecked)
+                    {
+
+                        QueuePixel.push(make_pair(x, y)); // push하는 경우이기 때문에 현재 위치도 넣어준다.
+                        QueuePixel.push(make_pair(nx, ny)); // 스택에 현재 nx,ny도 푸시
+                    }
+                    else
+                    {
+                        Clear_Visited(m_bfs_visited, m_iPixel_Width, m_iPixel_Height);
+                        return Vec2{ nx,ny };
+                    }
+                }
+            }
+        }
     }
-    stbi_image_free(data);
-    return (data != nullptr);
+}
+void Animator2DUI::Clear_Visited(bool** _visited, size_t width, size_t height)
+{
+    for (size_t i{}; i < height; ++i)
+    {
+        for (size_t j{}; j < width; ++j)
+        {
+            _visited[i][j] = false;
+        }
+    }
 }
 
+void Animator2DUI::Initialize_Aimation_Pixel()
+{
+    if (m_dfs_visited)
+    {
+        for (int i{}; i < m_iPixel_Height; ++i)
+        {
+            delete* (m_dfs_visited + i);
+        }
+        delete m_dfs_visited;
+        m_dfs_visited = nullptr;
+    }
+    if (m_bfs_visited)
+    {
+        for (int i{}; i < m_iPixel_Height; ++i)
+        {
+            delete *(m_bfs_visited + i);
+        }
+        delete m_bfs_visited;
+        m_bfs_visited = nullptr;
+    }
+    m_pPixels = m_pAtlasTexture->GetPixel();
+    m_iPixel_Width = m_pAtlasTexture->GetWidth();
+    m_iPixel_Height = m_pAtlasTexture->GetHeight();
+
+    m_dfs_visited = (bool**)malloc(sizeof(bool*) * m_iPixel_Height);
+    m_bfs_visited = (bool**)malloc(sizeof(bool*) * m_iPixel_Height);
+    for (int i{}; i < m_iPixel_Height; ++i)
+    {
+        *(m_dfs_visited + i) = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
+        memset(*(m_dfs_visited + i), 0, sizeof(bool) * m_iPixel_Width);
+
+        *(m_bfs_visited + i) = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
+        memset(*(m_bfs_visited + i), 0, sizeof(bool) * m_iPixel_Width);
+    }
+}
 
 tRGBA Animator2DUI::GetRGBA(int _x, int _y)
 {
@@ -277,13 +672,127 @@ tRGBA Animator2DUI::GetRGBA(int _x, int _y)
 
     static const size_t RGBA = 4;
 
-    //_y = m_pixel_height - _y;
-    size_t index = RGBA * (_y * m_pixel_width + _x);
+    //_y = m_iPixel_Height - _y;
+    size_t index = RGBA * (_y * m_iPixel_Width + _x);
 
-    tInfo.R = m_pixel[index + 0];
-    tInfo.G = m_pixel[index + 1];
-    tInfo.B = m_pixel[index + 2];
-    tInfo.A = m_pixel[index + 3];
+    tInfo.R = m_pPixels[index + 0];
+    tInfo.G = m_pPixels[index + 1];
+    tInfo.B = m_pPixels[index + 2];
+    tInfo.A = m_pPixels[index + 3];
     
     return tInfo;
+}
+
+void Animator2DUI::SetTextureUI()
+{
+    //Texture 파일 경로 찾기
+    string strFileName = m_fileDialogInfo.resultPath.filename().string();
+    wstring wstrFileName = wstring(strFileName.begin(), strFileName.end());
+    wstring wstrPath = L"texture\\" + wstrFileName;
+    CResMgr::GetInst()->Load<CTexture>(wstrFileName, wstrPath);
+
+    //Aniamtion 객체
+    //Dummy 객체 Anmation component, 
+    //Default Anmation component (초기 값 일 때)
+    m_pAtlasTexture = CResMgr::GetInst()->FindRes<CTexture>(wstrFileName);
+    m_pAnimator->SetTexture(m_pAtlasTexture);
+    m_pImage = m_pAtlasTexture->GetSRV().Get();
+
+    CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+    pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+
+    Initialize_Aimation_Pixel();
+}
+
+void Animator2DUI::Initialize_Animation_Info()
+{
+    m_pAnimator = (CAnimator2D*)CEditor::GetInst()->GetArrComponent(COMPONENT_TYPE::ANIMATOR2D);
+
+    m_uvFullSize = m_pAnimator->GetAniFrame().vFullSize;
+    m_uvSlice = m_pAnimator->GetAniFrame().vSlice;
+    m_uvOffset = m_pAnimator->GetAniFrame().vOffset;
+    m_uvDiff = (m_uvFullSize - m_uvSlice) / 2.f;
+
+    m_pAtlasTexture = m_pAnimator->GetTexture();
+    m_pImage = m_pAtlasTexture->GetSRV().Get();
+}
+
+void Animator2DUI::Render_Text(ImVec4 _vColor, Vec2 _vSize, string _str)
+{
+    ImGui::PushID(0);
+    ImGui::PushStyleColor(ImGuiCol_Button, _vColor);
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, _vColor);
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, _vColor);
+    ImGui::Button(_str.c_str(), ImVec2(_vSize.x, _vSize.y));
+    ImGui::PopStyleColor(3);
+    ImGui::PopID();
+}
+
+void Animator2DUI::Render_Pos()
+{
+    static string strLeftop = "Pos : (";
+    strLeftop = "Pos : (";
+    float fLeft = m_pPointObject->Transform()->GetRelativePos().x - m_pPointObject->Transform()->GetRelativeScale().x * 0.5f;
+    float fTop = m_pPointObject->Transform()->GetRelativePos().y + m_pPointObject->Transform()->GetRelativeScale().y * 0.5f;
+    fLeft += m_iPixel_Width * 0.5f;
+    fTop = -1.f * fTop + m_iPixel_Height * 0.5f;
+    char szLeft[50] = {};
+    char szTop[50] = {};
+    sprintf_s(szLeft, "%7.1f", fLeft);
+    sprintf_s(szTop, "%7.1f", fTop);
+    strLeftop += szLeft;
+    strLeftop += ", ";
+    strLeftop += szTop;
+    strLeftop += ")";
+    ImGui::Text(strLeftop.c_str());
+
+    static string strSize = "Size : (";
+    strSize = "Size : (";
+    float fSizex = m_pPointObject->Transform()->GetRelativeScale().x;
+    float fSizey = m_pPointObject->Transform()->GetRelativeScale().y;
+    char szSizex[50] = {};
+    char szSizey[50] = {};
+    sprintf_s(szSizex, "%7.1f", fSizex);
+    sprintf_s(szSizey, "%7.1f", abs(fSizey));
+    strSize += szSizex;
+    strSize += ", ";
+    strSize += szSizey;
+    strSize += ")";
+    ImGui::Text(strSize.c_str());
+}
+
+void Animator2DUI::Refresh_Animation(float width, float height)
+{
+    const vector<tAnim2DFrm> vecFrames = m_pAnimator->GetFames();
+
+    m_vecFrameIndex.clear();
+
+    m_vLeftTop.x = m_pAnimator->GetAniFrame().vLeftTop.x * width;
+    m_vLeftTop.y = m_pAnimator->GetAniFrame().vLeftTop.y * height;
+    m_vSlice.x = m_pAnimator->GetAniFrame().vSlice.x * width;
+    m_vSlice.y = m_pAnimator->GetAniFrame().vSlice.y * height;
+    m_vFullSize.x = m_pAnimator->GetAniFrame().vFullSize.x * width;
+    m_vFullSize.y = m_pAnimator->GetAniFrame().vFullSize.y * height;
+    m_vOffset.x = m_pAnimator->GetAniFrame().vOffset.x * width;
+    m_vOffset.y = m_pAnimator->GetAniFrame().vOffset.y * height;
+    m_fFPS = 1 / m_pAnimator->GetAniFrame().fDuration;
+
+    m_uvLeftTop = m_pAnimator->GetAniFrame().vLeftTop;
+    m_uvSlice = m_pAnimator->GetAniFrame().vSlice;
+    m_uvRightBottom = m_uvLeftTop + m_uvSlice;
+    m_uvFullSize = m_pAnimator->GetAniFrame().vFullSize;
+    m_uvOffset = m_pAnimator->GetAniFrame().vOffset;
+    m_fDuration = 1 / m_pAnimator->GetAniFrame().fDuration;
+
+    for (int i{}; i < vecFrames.size(); ++i)
+    {
+        if (10 > i)
+        {
+            m_vecFrameIndex.push_back("0" + std::to_string(i));
+        }
+        else
+        {
+            m_vecFrameIndex.push_back(std::to_string(i));
+        }
+    }
 }

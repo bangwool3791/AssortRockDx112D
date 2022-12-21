@@ -70,14 +70,15 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
     if (0.f == vOutColor.a)
           discard;
 
-    tLightColor color = (tLightColor)0.f;
+    //tLightColor color = (tLightColor)0.f;
 
-    for (int i = 0; i < g_iLight2DCount; ++i)
-    {
-        CalcLight2D(color, _in.vWorldPos, i);
-    }
+    //for (int i = 0; i < g_iLight2DCount; ++i)
+    //{
+    //    CalcLight2D(color, _in.vWorldPos, i);
+    //}
 
-    vOutColor *= color.vDiff;
+    //vOutColor *= color.vDiff;
+
     return vOutColor;
 }
 

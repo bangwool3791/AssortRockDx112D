@@ -35,7 +35,7 @@ int CTexture::Load(const wstring& _strFilePath)
     else // WIC (png, jpg, jpeg, bmp )
     {
         hr = LoadFromWICFile(_strFilePath.c_str(), WIC_FLAGS::WIC_FLAGS_NONE, nullptr, m_Image);
-        m_pixel = m_Image.GetPixels();
+        m_pPixels = m_Image.GetPixels();
         m_iPixelSize = m_Image.GetPixelsSize();
     }
 

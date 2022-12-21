@@ -14,11 +14,11 @@ class CTexture :
     public CRes
 {
 private:
-    uint8_t*                            m_pixel;
+    uint8_t*                            m_pPixels;
     long long                           m_iPixelSize;
 
 public :
-    uint8_t* GetPixel() { return m_pixel; }
+    uint8_t* GetPixel() { return m_pPixels; }
 private:
     ScratchImage                        m_Image;    // System Mem 에 로딩된 이미지 픽셀데이터 관리
     ComPtr<ID3D11Texture2D>             m_Tex2D;    // GPU Mem 에 옮긴 데이터 관리하는 객체

@@ -50,19 +50,19 @@ void ModelUI::SetObjectToInspector(DWORD_PTR _res)
 	* 트리 노드 게임 오브 젝트 선택 시 Inspector Component 정보 표기
 	*/
 	TreeNode* pNode = (TreeNode*)_res;
-	m_pGameObject = (CGameObject*)pNode->GetData();
+	m_pGameObject = (CGameObjectEx*)pNode->GetData();
 
 	if (nullptr == m_pGameObject)
 		return;
 
-	wstring str = m_pGameObject->GetName();
+	wstring str = ((CGameObject*)m_pGameObject)->GetName();
 	if (str.empty())
 		return;
 
 	m_strName = string(str.begin(), str.end());
 }
 
-void ModelUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObject* _Object)
+void ModelUI::AddGameObjectToTree(TreeNode* _ParentNode, CGameObjectEx* _Object)
 {
 }
 

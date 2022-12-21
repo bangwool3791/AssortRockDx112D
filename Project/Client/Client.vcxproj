@@ -112,7 +112,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;USE_STD_FILESYSTEM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -165,6 +165,9 @@
     <ClInclude Include="Collider2DUI.h" />
     <ClInclude Include="ComInspector.h" />
     <ClInclude Include="CreateTestLevel.h" />
+    <ClInclude Include="ImGuiFileDialog.h" />
+    <ClInclude Include="ImGuiFileDialogConfig.h" />
+    <ClInclude Include="imgui_filedialog.h" />
     <ClInclude Include="MenuUI.h" />
     <ClInclude Include="ModelComUI.h" />
     <ClInclude Include="ComponentUI.h" />
@@ -215,6 +218,8 @@
     <ClCompile Include="Collider2DUI.cpp" />
     <ClCompile Include="ComInspector.cpp" />
     <ClCompile Include="CreateTestLevel.cpp" />
+    <ClCompile Include="ImGuiFileDialog.cpp" />
+    <ClCompile Include="imgui_filedialog.cpp" />
     <ClCompile Include="MenuUI.cpp" />
     <ClCompile Include="ModelComUI.cpp" />
     <ClCompile Include="ComponentUI.cpp" />
