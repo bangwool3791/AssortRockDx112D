@@ -12,6 +12,7 @@ CAnimation2D::CAnimation2D()
 	, m_fAccTime(0.f)
 	, m_fWidth{}
 	, m_fHeight{}
+	, m_eState{ANIMATION_STATE::END}
 {
 }
 
@@ -22,7 +23,8 @@ CAnimation2D::~CAnimation2D()
 
 void CAnimation2D::finaltick()
 {
-	if (m_bFinish)
+	if (ANIMATION_STATE::PAUSE == m_eState ||
+		ANIMATION_STATE::FINISH == m_eState)
 		return;
 
 	m_fAccTime += DT;
@@ -35,7 +37,7 @@ void CAnimation2D::finaltick()
 		if (m_iCurIdx >= m_vecFrm.size())
 		{
 			m_iCurIdx = (int)m_vecFrm.size() - 1;
-			m_bFinish = true;
+			m_eState = ANIMATION_STATE::FINISH;
 		}
 
 	}
@@ -47,16 +49,16 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 
 	m_AtlasTex = _AtlasTex;
 
-	float fWidth = (float)_AtlasTex->GetWidth();
-	float fHeight = (float)_AtlasTex->GetHeight();
+	m_fWidth = (float)_AtlasTex->GetWidth();
+	m_fHeight = (float)_AtlasTex->GetHeight();
 
 	for (UINT i{ 0 }; i < (UINT)_iMaxFrm; ++i)
 	{
 		tAnim2DFrm frm{};
-		frm.vLeftTop = Vec2{ (_vLeftTop.x + _fStep * (float)i) / fWidth, _vLeftTop.y / fHeight };
-		frm.vSlice = Vec2{ _vSlice.x / fWidth, _vSlice.y / fHeight };
+		frm.vLeftTop = Vec2{ (_vLeftTop.x + _fStep * (float)i) / m_fWidth, _vLeftTop.y / m_fHeight };
+		frm.vSlice = Vec2{ _vSlice.x / m_fWidth, _vSlice.y / m_fHeight };
 		frm.fDuration = 1.f / _FPS;
-		frm.vFullSize = Vec2{ 200.f / fWidth, 200.f / fHeight };
+		frm.vFullSize = Vec2{ 200.f / m_fWidth, 200.f / m_fHeight };
 		m_vecFrm.push_back(frm);
 	}
 }
@@ -89,7 +91,7 @@ void CAnimation2D::Clear()
 	pCB->UpdateData(PIPELINE_STAGE::PS);
 }
 
-int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize)
+int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize)
 {
 	assert(m_AtlasTex.Get());
 
@@ -99,7 +101,7 @@ int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec
 	tAnim2DFrm frm{};
 	frm.vLeftTop = Vec2{ _vLeftTop.x / fWidth, _vLeftTop.y / fHeight };
 	frm.vSlice = Vec2{ _vSlice.x / fWidth, _vSlice.y / fHeight };
-	frm.fDuration = 1.f / _FPS;
+	frm.fDuration = _fDuration;
 	frm.vFullSize = Vec2{ _vFullSize.x / fWidth, _vFullSize.y / fHeight };
 	m_vecFrm.push_back(frm);
 	m_iCurIdx = m_vecFrm.size() - 1;
@@ -108,7 +110,7 @@ int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec
 
 int  CAnimation2D::Delete_Animation2D()
 {
-	if (m_vecFrm.size() > 1)
+	if (m_vecFrm.size() > 0)
 	{
 		m_vecFrm.pop_back();
 		m_iCurIdx = m_vecFrm.size() - 1;

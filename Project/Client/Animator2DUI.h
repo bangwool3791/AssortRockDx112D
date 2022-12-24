@@ -17,13 +17,18 @@ class Animator2DUI :
 {
     //정리 필요
 private:
-    string                m_strPause;
+    char                  m_szAnimation[128];
+    string                m_strAnimationName;
     Ptr<CTexture>         m_pAtlasTexture;
 
     vector<tAnim2DFrm>    m_vecFrames;
     CAnimator2D*          m_pAnimator;
     vector<tAnim2DFrm>    m_vecAniInfo;
     int                   m_iCurIdx;
+    int                   m_iSelectedIdx;
+
+    bool                  m_fileDialogOpen;
+    ImFileDialogInfo      m_fileDialogInfo;
 
     bool**                m_dfs_visited;
     bool**                m_bfs_visited;
@@ -36,10 +41,6 @@ private:
     ImTextureID           m_pImage;
     vector<string>        m_vecAnimation;
     vector<string>        m_vecFrameIndex;
-    int                   m_iSelectedIdx;
-
-    bool                  m_fileDialogOpen;
-    ImFileDialogInfo      m_fileDialogInfo;
 private:
     float                 m_fMinX;
     float                 m_fMinY;
@@ -53,7 +54,6 @@ private:
     Vec2                  m_vSlice;
     Vec2                  m_vUV;
     Vec2                  m_vOffset;
-    float                 m_fFPS;
 
     Vec2                  m_uvLeftTop;
     Vec2                  m_uvRightBottom;

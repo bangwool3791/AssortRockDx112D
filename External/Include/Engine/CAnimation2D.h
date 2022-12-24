@@ -5,6 +5,13 @@
 
 class CAnimator2D;
 
+enum class ANIMATION_STATE 
+{
+	PLAY,
+	PAUSE,
+	FINISH,
+	END,
+};
 class CAnimation2D :
 	public CEntity
 {
@@ -16,7 +23,7 @@ private:
 	Ptr<CTexture>		m_AtlasTex;
 
 	float				m_fAccTime;
-	bool				m_bFinish;
+	ANIMATION_STATE		m_eState;
 
 	float				m_fWidth;
 	float				m_fHeight;
@@ -30,7 +37,7 @@ public :
 	const tAnim2DFrm& GetAniFrame() { return m_vecFrm[m_iCurIdx]; }
 	Ptr<CTexture> GetTexture() { return m_AtlasTex; }
 	void SetTexture(Ptr<CTexture> _texture);
-
+	void SetState(ANIMATION_STATE _eState) { m_eState = _eState; }
 //Set Get
 public:
 
@@ -63,13 +70,13 @@ public:
 	float GetDuration(int _index) ;
 public:
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
-	int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize);
+	int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
 	int  Delete_Animation2D();
 	void Reset()
 	{
 		m_fAccTime = 0.f;
 		m_iCurIdx = 0;
-		m_bFinish = false;
+		m_eState = ANIMATION_STATE::PLAY;
 	}
 
 	void UpdateData();

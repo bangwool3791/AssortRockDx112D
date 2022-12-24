@@ -58,7 +58,7 @@ void CAnimator2D::finaltick()
     if (!IsValid(m_pCurAnim))
         return;
 
-    if (m_pCurAnim->m_bFinish && m_bRepeat)
+    if (ANIMATION_STATE::FINISH == m_pCurAnim->m_eState && m_bRepeat)
     {
         m_pCurAnim->Reset();
     }
@@ -110,9 +110,9 @@ void CAnimator2D::Clear()
 }
 
 
-int  CAnimator2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize)
+int  CAnimator2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize)
 {
-    return m_pCurAnim->Add_Animation2D(_vLeftTop, _vSlice, _FPS, _vFullSize);
+    return m_pCurAnim->Add_Animation2D(_vLeftTop, _vSlice, _fDuration, _vFullSize);
 }
 
 int CAnimator2D::Delete_Animation2D()
@@ -233,4 +233,53 @@ void CAnimator2D::SetFullSize(Vec2 _vFullSize, int _index)
 void CAnimator2D::SetDuration(float _fDuration, int _index)
 {
     m_pCurAnim->SetDuration(_fDuration, _index);
+}
+
+const vector<wstring>& CAnimator2D::Get_Animation_Key()
+{
+    static vector<wstring> vec{};
+
+    for (auto iter{ m_mapAnim.begin() }; iter != m_mapAnim.end(); ++iter)
+    {
+        vec.push_back(iter->first);
+    }
+
+    return vec;
+}
+
+CAnimation2D* CAnimator2D::Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS)
+{
+    map<wstring, CAnimation2D*>::iterator iter = m_mapAnim.find(_strKey);
+
+    if (iter != m_mapAnim.end())
+        return nullptr;
+
+    CAnimation2D* pAnimation2D = new CAnimation2D;
+    pAnimation2D->SetName(_strKey);
+    pAnimation2D->Create(_strKey, _AtlasTex, _vLeftTop, _vSlice, _fStep, _iMaxFrm, _FPS);
+    m_mapAnim.insert(make_pair(_strKey, pAnimation2D));
+    return pAnimation2D;
+}
+
+CAnimation2D* CAnimator2D::Delete_Animation(const wstring& _strName)
+{
+    if (m_mapAnim.size() <= 1)
+        return nullptr;
+
+    auto iter = m_mapAnim.find(_strName);
+
+    if (iter == m_mapAnim.end())
+        return nullptr;
+
+    delete iter->second;
+
+    iter = m_mapAnim.erase(iter);
+
+    if (m_mapAnim.size() > 0)
+    {
+        --iter;
+        return iter->second;
+    }
+    else
+        return nullptr;
 }

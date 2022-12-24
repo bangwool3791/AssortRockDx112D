@@ -9,7 +9,7 @@ class CAnimator2D :
 {
 private:
     std::map<wstring, CAnimation2D*> m_mapAnim;
-    CAnimation2D* m_pCurAnim;
+    CAnimation2D*                    m_pCurAnim;
 
     bool                             m_bRepeat;
     wstring                          m_strKey;
@@ -17,10 +17,13 @@ private:
 public:
     virtual void finaltick() override;
 public:
+    const vector<wstring>& Get_Animation_Key();
     const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
     const tAnim2DInfo& GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
-
+    const bool GetRepeat() { return m_bRepeat; }
+    CAnimation2D* Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
+    CAnimation2D* Delete_Animation(const wstring& _strName);
     /*
     Vec2 vLeftTop;
     Vec2 vSlice;
@@ -41,6 +44,7 @@ public:
     void SetFullSizeY(float _fx, int _index);
     void SetFullSize(Vec2 _vFullSize, int _index);
     void SetDuration(float _fDuration, int _index);
+    void SetState(ANIMATION_STATE _eState) { m_pCurAnim->SetState(_eState); }
 
     float GetLeftTopX(int _index) { return m_pCurAnim->GetLeftTopX(_index); }
     float GetLeftTopY(int _index) { return m_pCurAnim->GetLeftTopY(_index); }
@@ -58,7 +62,7 @@ public:
 public:
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* FindAnimation(const wstring& _strKey);
-    int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _FPS, Vec2 _vFullSize);
+    int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
     int  Delete_Animation2D();
     void Play(const wstring& _strKey, bool _bRepeat);
 
