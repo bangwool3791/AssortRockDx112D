@@ -5,6 +5,7 @@ CSelectUnitScript::CSelectUnitScript()
 	:CScript{SELECTUNITSCRIPT}
 	,m_fSpeed{0.f}
 {
+	SetName(L"CSelectUnitScript");
 }
 
 CSelectUnitScript::~CSelectUnitScript()

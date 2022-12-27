@@ -160,9 +160,14 @@ void CAnimator2D::SetTexture(Ptr<CTexture> _AtlasTex)
     }
 }
 
-const tAnim2DInfo& CAnimator2D::GetAniInfo()
+tAnim2DInfo CAnimator2D::GetAniInfo()
 {
-    return m_pCurAnim->GetAniInfo();
+    if(m_pCurAnim)
+        return m_pCurAnim->GetAniInfo();
+    else
+    {
+        return tAnim2DInfo();
+    }
 }
 
 const tAnim2DFrm& CAnimator2D::GetAniFrame()

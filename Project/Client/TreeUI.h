@@ -52,7 +52,7 @@ class TreeUI :
 	public UI
 {
 private:
-	static UINT			 m_iNextNodeIdx;
+	static UINT			    m_iNextNodeIdx;
 
 private:
 	TreeNode*				m_RootNode;
@@ -82,6 +82,7 @@ public:
 	void SetSelectedNode(TreeNode* _SelectedNode);
 	void SetBeginDragNode(TreeNode* _beginDragNode) { m_BeginDragNode = _beginDragNode; }
 	void SetDropTargetNode(TreeNode* _DropTargetNode);
+	TreeNode* GetSelectedNode() { return m_SelectedNode; }
 
 	void AddDynamic_Selected(UI* _Inst, FUNC_1 _Func)
 	{

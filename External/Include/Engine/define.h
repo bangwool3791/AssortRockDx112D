@@ -240,11 +240,13 @@ enum class DIR
 
 enum class EVENT_TYPE
 {
-	CREATE_OBJECT,
-	ADD_CHILD,
-	DELETE_OBJECT,
+	CREATE_OBJECT,  // wParam : Object Adress, lParam : Layer Index
+	DELETE_OBJECT,	// wParam : Object Adress,
+	ADD_CHILD,		// wParam : Child Adress, lParam : Parent Adress
+	EDIT_RES,
+	DELETE_RES,		// wParam : RES_TYPE, lParam : Resource Adress
 	CHANGE_LEVEL,
-	CHANGE_LEVEL_STATE,
+	CHANGE_LEVEL_STATE,	// wParam : Next Level State
 	END,
 };
 

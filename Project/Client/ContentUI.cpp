@@ -3,6 +3,8 @@
 
 #include <Engine\CRes.h>
 #include <Engine/CResMgr.h>
+#include <Engine\CKeyMgr.h>
+
 #include "TreeUI.h"
 #include "CImGuiMgr.h"
 #include "InspectorUI.h"
@@ -34,12 +36,52 @@ void ContentUI::update()
 		ResetContent();
 	}
 
+	if (KEY_PRESSED(KEY::LCTRL) && KEY_PRESSED(KEY::S))
+	{
+		TreeNode* pSelectedNode = m_Tree->GetSelectedNode();
+
+		if (nullptr != pSelectedNode)
+		{
+			RES_TYPE type = ((CRes*)pSelectedNode->GetData())->GetResType();
+
+			wstring strRelativePath;
+
+			switch (type)
+			{
+			case RES_TYPE::PREFAB:
+				break;
+			case RES_TYPE::MESHDATA:
+				break;
+			case RES_TYPE::COMPUTE_SHADER:
+				break;
+			case RES_TYPE::MATERIAL:
+			{
+				Ptr<CMaterial> pRes = (CMaterial*)pSelectedNode->GetData();
+				strRelativePath = L"material\\";
+				strRelativePath += pRes->GetKey();
+				pRes->Save(strRelativePath);
+			}
+				break;
+			case RES_TYPE::MESH:
+				break;
+			case RES_TYPE::TEXTURE:
+				break;
+			case RES_TYPE::SOUND:
+				break;
+			case RES_TYPE::GRAPHICS_SHADER:
+				break;
+			case RES_TYPE::END:
+				break;
+			default:
+				break;
+			}
+		}
+	}
 	UI::update();
 }
 
 void ContentUI::render_update()
 {
-
 }
 
 void ContentUI::ResetContent()

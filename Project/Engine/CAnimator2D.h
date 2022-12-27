@@ -19,7 +19,7 @@ public:
 public:
     const vector<wstring>& Get_Animation_Key();
     const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
-    const tAnim2DInfo& GetAniInfo();
+    tAnim2DInfo GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
     const bool GetRepeat() { return m_bRepeat; }
     CAnimation2D* Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);

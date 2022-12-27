@@ -10,6 +10,7 @@
 CRefAniScript::CRefAniScript()
 	:CScript{ REFANISCRIPT}
 {
+	SetName(L"CRefAniScript");
 }
 
 CRefAniScript::~CRefAniScript()

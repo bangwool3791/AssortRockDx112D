@@ -1,16 +1,25 @@
 #include "pch.h"
 #include "MaterialUI.h"
+#include "ParamUI.h"
+#include "ListUI.h"
 
 #include <Engine\struct.h>
 #include <Engine\CShader.h>
 #include <Engine\CMaterial.h>
 #include <Engine\CResMgr.h>
+#include <Engine/CMeshRender.h>
+#include <Engine\CEventMgr.h>
 
-#include "ParamUI.h"
+#include <Engine\CGameObject.h>
+#include <Engine\CLevel.h>
+#include <Engine\CLevelMgr.h>
+
+#include "CImGuiMgr.h"
 
 MaterialUI::MaterialUI()
 	: ResUI("Material##UI", RES_TYPE::MATERIAL)
 	, m_eSelectTexParam(TEX_PARAM::TEX_END)
+	, m_strRes{}
 {
 }
 
@@ -30,11 +39,59 @@ void MaterialUI::render_update()
 	CMaterial* pMtrl = (CMaterial*)GetTarget().Get();
 
 	string strKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+
+	if (m_strRes != strKey)
+		m_strRes = strKey;
+
 	string strRelativePath = string(pMtrl->GetRelativePath().begin(), pMtrl->GetRelativePath().end());
 
 	ImGui::Text("Key           ");
 	ImGui::SameLine();
-	ImGui::InputText("##MtrlKey", (char*)strKey.data(), strKey.length(), ImGuiInputTextFlags_ReadOnly);
+	ImGui::PushItemWidth(100.f);
+	if (ImGui::InputText("##MtrlKey", (char*)strKey.data(), strKey.length(), ImGuiInputTextFlags_EnterReturnsTrue))
+	{
+		if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)pMtrl->GetResType(), pMtrl->GetKey()))
+		{
+			MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
+		}
+		wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+		strFilePath += pMtrl->GetRelativePath();
+
+		string strPath(strFilePath.begin(), strFilePath.end());
+		
+		if (remove(strPath.c_str()))
+			cout << strPath << " " << "파일 삭제" << endl;
+
+		for (size_t i{}; i < MAX_LAYER; ++i)
+		{
+			const vector<CGameObject*>& vecObjects = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(i)->GetObjects();
+
+			for (size_t i{}; i < vecObjects.size(); ++i)
+			{
+				wstring wstrPath = vecObjects[i]->MeshRender()->GetSharedMaterial()->GetRelativePath();
+				if (strFilePath == wstrPath)
+				{
+					vecObjects[i]->MeshRender()->GetSharedMaterial()->SetRelativePath(wstring(strKey.begin(), strKey.end()));
+					break;
+				}
+			}
+		}
+
+		pMtrl->SwapFile(L"\\material\\" + wstring(strKey.begin(), strKey.end()) + L".mtrl");
+		pMtrl->SetName(wstring(strKey.begin(), strKey.end()));
+		// 삭제 가능
+		tEvent evn = {};
+		evn.eType = EVENT_TYPE::EDIT_RES;
+		evn.wParam = (DWORD_PTR)pMtrl->GetResType();
+		evn.lParam = (DWORD_PTR)(pMtrl);
+		CEventMgr::GetInst()->AddEvent(evn);
+
+		MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
+	}
+
+	ImGui::Text("Path          ");
+	ImGui::SameLine();
+	ImGui::InputText("##MtrlPath", (char*)strRelativePath.data(), strRelativePath.length(), ImGuiInputTextFlags_ReadOnly);
 
 	string strShaderKey;
 	
@@ -45,10 +102,35 @@ void MaterialUI::render_update()
 
 	ImGui::Text("GraphicsShader");
 	ImGui::SameLine();
+	ImGui::PushItemWidth(100.f);
 	ImGui::InputText("##ShaderName", (char*)strShaderKey.data(), strShaderKey.length(), ImGuiInputTextFlags_ReadOnly);
+	ImGui::SameLine();
+	//쉐이더 변경 및 선택
+	if (ImGui::Button("##ShaderBtn", Vec2(15.f, 15.f)))
+	{
+		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
+		assert(pListUI);
 
+		// 메쉬 목록을 받아와서, ListUI 에 전달
+		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::GRAPHICS_SHADER);
+		static vector<wstring> vecRes;
+		vecRes.clear();
+
+		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.begin();
+		for (; iter != mapRes.end(); ++iter)
+		{
+			vecRes.push_back(iter->first);
+		}
+		pListUI->SetItemList(vecRes);
+		pListUI->AddDynamicDBClicked(this, (FUNC_1)&MaterialUI::SetShader);
+
+		pListUI->Open();
+	}
 	ImGui::NewLine();
 	ImGui::Text("Shader Parameter");
+
+	if (nullptr == pMtrl->GetShader())
+		return;
 
 	const vector<tScalarParam> vecScalar = pMtrl->GetShader()->GetScalarParam();
 
@@ -141,4 +223,15 @@ void MaterialUI::SetTexture(DWORD_PTR _strTexKey)
 
 	CMaterial* pMtrl = ((CMaterial*)GetTarget().Get());
 	pMtrl->SetTexParam(m_eSelectTexParam, pTex);
+}
+
+void MaterialUI::SetShader(DWORD_PTR _strShaderKey)
+{
+	string strKey = (char*)_strShaderKey;
+	wstring wstrKey = wstring(strKey.begin(), strKey.end());
+
+	Ptr<CGraphicsShader> pShader = CResMgr::GetInst()->FindRes<CGraphicsShader>(wstrKey);
+	assert(nullptr != pShader);
+
+	((CMaterial*)GetTarget().Get())->SetShader(pShader);
 }

@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "CreateTestLevel.h"
+#include "CLevelSaveLoad.h"
 
 #include <Engine\CPrefab.h>
 #include <Engine\CResMgr.h>
@@ -98,9 +99,13 @@ void CreateDefaultPrefab()
 void CreateTestLelvel()
 {
 	CreateDefaultPrefab();
-
+	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+	CLevelMgr::GetInst()->ChangeLevel(Level);
+	return;
+	
 	CLevel* pLevel = new CLevel;
-#if false
+	pLevel->SetName(L"Level");
+#if true
 
 	pLevel->GetLayer(1)->SetName(L"Player");
 	pLevel->GetLayer(2)->SetName(L"PlayerProjecttile");
@@ -172,8 +177,8 @@ void CreateTestLelvel()
 	CGameObject* pObject = nullptr;
 
 	//Edit Test를 위해 주석 처리
-	for (float i{ -500.f }; i < 500.f; i += 100.f)
-	{
+	//for (float i{ -500.f }; i < 500.f; i += 100.f)
+	//{
 		pObject = new CGameObject;
 		pObject->SetName(L"Player");
 
@@ -183,7 +188,7 @@ void CreateTestLelvel()
 		pObject->AddComponent(new CPlayerScript);
 		pObject->AddComponent(new CAnimator2D);
 
-		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
+		pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
 		pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
 		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
@@ -193,18 +198,19 @@ void CreateTestLelvel()
 		pObject->Animator2D()->Play(L"LeftWalk", true);
 
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+		Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.dds");
 		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
 		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
 		Instantiate(pPrefab->Instantiate(), pObject, 1);
 
 		pLevel->AddGameObject(pObject, 1);
-	}
+	//}
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
 	* Mouse
 	*/
-	Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
+	pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
 	Instantiate(pPrefab->Instantiate(), 31);
 
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
@@ -237,25 +243,25 @@ void CreateTestLelvel()
 	//pPostProcess->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	//pPostProcess->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"PostProcessMtrl"));
 
-	pObject = new CGameObject;
-	pObject->SetName(L"RefAni");
+	//pObject = new CGameObject;
+	//pObject->SetName(L"RefAni");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CRefAniScript);
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	//pObject->AddComponent(new CCollider2D);
+	//pObject->AddComponent(new CRefAniScript);
 
-	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Link");
-	UINT width = pTex->GetWidth();
-	UINT height = pTex->GetHeight();
+	//Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Link");
+	//UINT width = pTex->GetWidth();
+	//UINT height = pTex->GetHeight();
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
-	pObject->Transform()->SetRelativeScale(Vec3((float)width, (float)height, 10.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
-	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
-	pLevel->AddGameObject(pObject, 30);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
+	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	//pObject->Transform()->SetRelativeScale(Vec3((float)width, (float)height, 10.f));
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
+	//pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
+	//pLevel->AddGameObject(pObject, 30);
+	//CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
 #endif
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
 	pLevel->begin();

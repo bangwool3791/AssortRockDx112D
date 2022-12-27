@@ -27,7 +27,7 @@ private:
     int                   m_iCurIdx;
     int                   m_iSelectedIdx;
 
-    bool                  m_fileDialogOpen;
+    bool                  m_fileDialogOpen{};
     ImFileDialogInfo      m_fileDialogInfo;
 
     bool**                m_dfs_visited;

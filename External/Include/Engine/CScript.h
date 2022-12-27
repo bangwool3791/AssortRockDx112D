@@ -38,7 +38,7 @@ protected:
     Vec3  m_vTarget;
 public :
     void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
-    void AddScalarParam(SCRIPT_PARAM _eParam, const string& _name, void* _pParam)
+    void AddScriptParam(SCRIPT_PARAM _eParam, const string& _name, void* _pParam)
     {
         m_vecParam.push_back(tScriptParam{ _name, _eParam ,_pParam });
     }

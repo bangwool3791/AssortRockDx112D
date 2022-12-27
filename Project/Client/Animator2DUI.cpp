@@ -37,6 +37,22 @@ Animator2DUI::Animator2DUI()
     , m_fMinX{}
     , m_fMinY{}
     , m_iSelectedIdx{}
+    , m_MouseObject{}
+    , m_bfs_visited{}
+    , m_dfs_visited{}
+    , m_fDuration{}
+    ,m_fileDialogInfo {}
+    , m_iCurIdx{}
+    , m_iPixel_Height{}
+    , m_iPixel_Width{}
+    , m_pAnimator{}
+    , m_pCameraObject{}
+    , m_pGameObject{}
+    , m_pImage{}
+    , m_pPixels{}
+    , m_pPointObject{}
+    , m_szAnimation{}
+    , m_fileDialogOpen{}
 {
 }
 
@@ -94,7 +110,7 @@ void Animator2DUI::render_update()
                 }
 
                 m_pAtlasTexture = m_pAnimator->GetTexture();
-                Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+                Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
                 m_pImage = m_pAtlasTexture->GetSRV().Get();
                 //더미 오브젝트 넣고, 툴 환시 더미 오브젝트 빼기 ?
                 CEditor::GetInst()->Add_Editobject(EDIT_MODE::ANIMATOR, m_pGameObject);
@@ -192,7 +208,7 @@ void Animator2DUI::render_update()
     ImGui::SameLine();
     ImGui::PushItemWidth(50.f);
     if (ImGui::Button("All##1", ImVec2(40.f, 20.f)))
-        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+        for (int i{}; i < m_vecFrameIndex.size(); ++i)
             m_pAnimator->SetLeftTop(m_vLeftTop, i);
 
     ImGui::Button("Slice", ImVec2(40.f, 20.f));
@@ -215,7 +231,7 @@ void Animator2DUI::render_update()
     ImGui::SameLine();
     ImGui::PushItemWidth(50.f);
     if (ImGui::Button("All##2", ImVec2(40.f, 20.f)))
-        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+        for (int i{}; i < m_vecFrameIndex.size(); ++i)
             m_pAnimator->SetSlice(m_vSlice, i);
 
 
@@ -240,7 +256,7 @@ void Animator2DUI::render_update()
     ImGui::SameLine();
     ImGui::PushItemWidth(50.f);
     if (ImGui::Button("All##3", ImVec2(40.f, 20.f)))
-        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+        for (int i{}; i < m_vecFrameIndex.size(); ++i)
             m_pAnimator->SetFullSize(m_vFullSize, i);
 
     ImGui::Button("OffSet", ImVec2(40.f, 20.f));
@@ -263,7 +279,7 @@ void Animator2DUI::render_update()
     ImGui::SameLine();
     ImGui::PushItemWidth(50.f);
     if (ImGui::Button("All##4", ImVec2(40.f, 20.f)))
-        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+        for (int i{}; i < m_vecFrameIndex.size(); ++i)
             m_pAnimator->SetOffset(m_vOffset, i);
 
     ImGui::Button("Duration", ImVec2(40.f, 20.f));
@@ -273,14 +289,14 @@ void Animator2DUI::render_update()
     ImGui::SameLine();
     ImGui::PushItemWidth(50.f);
     if (ImGui::Button("All##5", ImVec2(40.f, 20.f)))
-        for (size_t i{}; i < m_vecFrameIndex.size(); ++i)
+        for (int i{}; i < m_vecFrameIndex.size(); ++i)
             m_pAnimator->SetDuration(m_fDuration, i);
 
     ImGui::Separator();
     if (ImGui::Button("Add##1", ImVec2(40.f, 20.f)))
     {
         m_iCurIdx = m_pAnimator->Add_Animation2D(m_vLeftTop, m_vSlice, m_fDuration, m_vFullSize);
-        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
     }
 
     ImGui::SameLine();
@@ -291,7 +307,7 @@ void Animator2DUI::render_update()
     if (ImGui::Button("Del##1", ImVec2(40.f, 20.f)))
     {
         m_iCurIdx = m_pAnimator->Delete_Animation2D();
-        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), m_pAtlasTexture->GetHeight());
+        Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
     }
     ImGui::SameLine();
     if (ImGui::Button("Play", ImVec2(40.f, 20.f)))
@@ -340,7 +356,7 @@ void Animator2DUI::render_update()
         {
             //const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS
             wstring strKey = wstring(m_strAnimationName.begin(), m_strAnimationName.end());
-            CAnimation2D* pAnimator = m_pAnimator->Add_Animation(strKey, m_pAtlasTexture, m_vLeftTop, m_vSlice, 0, m_vecFrameIndex.size(), 1.f / m_fDuration);
+            CAnimation2D* pAnimator = m_pAnimator->Add_Animation(strKey, m_pAtlasTexture, m_vLeftTop, m_vSlice, 0, (int)m_vecFrameIndex.size(), 1.f / m_fDuration);
 
             if (nullptr != pAnimator)
             {
@@ -415,7 +431,7 @@ void Animator2DUI::render_update()
                         m_vecFrameIndex.push_back(std::to_string(i));
                     }
                 }
-                m_iCurIdx = vecFrames.size() - 1;
+                m_iCurIdx = (int)vecFrames.size() - 1;
             }
 
             if (Selectable)
@@ -495,27 +511,27 @@ void Animator2DUI::Click_Pixel_KeyBoard(KEY _Key)
 
         if (_Key == KEY::LEFT)
         {
-            x = m_pPointObject->Transform()->GetRelativePos().x - m_pPointObject->Transform()->GetRelativeScale().x;
-            y = m_pPointObject->Transform()->GetRelativePos().y;
+            x = (int)m_pPointObject->Transform()->GetRelativePos().x - (int)m_pPointObject->Transform()->GetRelativeScale().x;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().y;
         }
         else if (_Key == KEY::RIGHT)
         {
-            x = m_pPointObject->Transform()->GetRelativePos().x + m_pPointObject->Transform()->GetRelativeScale().x;
-            y = m_pPointObject->Transform()->GetRelativePos().y;
+            x = (int)m_pPointObject->Transform()->GetRelativePos().x + (int)m_pPointObject->Transform()->GetRelativeScale().x;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().y;
         }
         else if (_Key == KEY::UP)
         {
-            x = m_pPointObject->Transform()->GetRelativePos().x;
-            y = m_pPointObject->Transform()->GetRelativePos().y - m_pPointObject->Transform()->GetRelativeScale().y;
+            x = (int)m_pPointObject->Transform()->GetRelativePos().x;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().y - (int)m_pPointObject->Transform()->GetRelativeScale().y;
         }
         else if (_Key == KEY::DOWN)
         {
-            x = m_pPointObject->Transform()->GetRelativePos().x + m_pPointObject->Transform()->GetRelativeScale().x;
-            y = m_pPointObject->Transform()->GetRelativePos().y + m_pPointObject->Transform()->GetRelativeScale().y;
+            x = (int)m_pPointObject->Transform()->GetRelativePos().x + (int)m_pPointObject->Transform()->GetRelativeScale().x;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().y + (int)m_pPointObject->Transform()->GetRelativeScale().y;
         }
 
-        UINT _ux = x + m_iPixel_Width * 0.5f;
-        UINT _uy = -1.f * y + m_iPixel_Height * 0.5f;
+        UINT _ux = (UINT)(x + m_iPixel_Width * 0.5f);
+        UINT _uy = (UINT)(-1.f * y + m_iPixel_Height * 0.5f);
 
         Set_Texture_Pixel(_ux, _uy);
     }
@@ -548,14 +564,14 @@ bool Animator2DUI::Click_Pixel_LBtn()
     if (0 > vMousePos.x || 0 > vMousePos.y || m_iPixel_Width <= vMousePos.x || m_iPixel_Height <= vMousePos.y)
         return false;
 
-    tRGBA tInfo = GetRGBA(vMousePos.x, vMousePos.y);
+    tRGBA tInfo = GetRGBA((int)vMousePos.x, (int)vMousePos.y);
 
     //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
     //cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
 
 
-    UINT x = vMousePos.x;
-    UINT y = vMousePos.y;
+    UINT x = (UINT)vMousePos.x;
+    UINT y = (UINT)vMousePos.y;
     Set_Texture_Pixel(x, y);
     return true;
 
@@ -575,12 +591,12 @@ void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
         if (vPixel.x == -1.f && vPixel.y == -1.f)
             return;
 
-        x = vPixel.x;
-        y = vPixel.y;
+        x = (UINT)vPixel.x;
+        y = (UINT)vPixel.y;
     }
 
-    float fMinX = m_iPixel_Width;
-    float fMinY = m_iPixel_Height;
+    float fMinX = (float)m_iPixel_Width;
+    float fMinY = (float)m_iPixel_Height;
 
     float fMaxX = -1;
     float fMaxY = -1;
@@ -589,7 +605,7 @@ void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
     StackPiexel.push(make_pair(x, y)); // pair를 만들어서 stack에 넣습니다.
 
     // 처음 x,y를 방문 했기때문에
-    if (0 > x || 0 > y || m_iPixel_Width <= x || m_iPixel_Height <= y)
+    if (0 > x || 0 > y || (UINT)m_iPixel_Width <= x || (UINT)m_iPixel_Height <= y)
         return;
 
     m_dfs_visited[x][y] = true;
@@ -620,17 +636,17 @@ void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
                         m_pPixels[index + 2] == 0.f && m_pPixels[index + 3] == 0))
                     {
                         if (nx < fMinX)
-                            fMinX = nx;
+                            fMinX = (float)nx;
 
                         if (ny < fMinY)
-                            fMinY = ny;
+                            fMinY = (float)ny;
 
                         if (nx > fMaxX) {
-                            fMaxX = nx;
+                            fMaxX = (float)nx;
                         }
 
                         if (ny > fMaxY)
-                            fMaxY = ny;
+                            fMaxY = (float)ny;
 
                         StackPiexel.push(make_pair(x, y)); // push하는 경우이기 때문에 현재 위치도 넣어준다.
                         StackPiexel.push(make_pair(nx, ny)); // 스택에 현재 nx,ny도 푸시
@@ -663,8 +679,8 @@ void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
 
 Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
 {
-    float fMinX = m_iPixel_Width;
-    float fMinY = m_iPixel_Height;
+    float fMinX = (float)m_iPixel_Width;
+    float fMinY = (float)m_iPixel_Height;
 
     float fMaxX = -1;
     float fMaxY = -1;
@@ -674,7 +690,7 @@ Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
 
     // 처음 x,y를 방문 했기때문에
 
-    if (x < 0 || x > m_iPixel_Width - 1 || y < 0 || y > m_iPixel_Height)
+    if (x < 0 || x > (UINT)(m_iPixel_Width - 1) || y < 0 || y >(UINT)m_iPixel_Height)
         return Vec2(-1.f, -1.f);
 
     m_bfs_visited[x][y] = true;
@@ -718,6 +734,7 @@ Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
             }
         }
     }
+    return Vec2(-1.f, -1.f);
 }
 
 void Animator2DUI::Clear_Visited(bool** _visited, size_t width, size_t height)
@@ -737,7 +754,7 @@ void Animator2DUI::Initialize_Aimation_Pixel()
     {
         for (int i{}; i < m_iPixel_Height; ++i)
         {
-            delete* (m_dfs_visited + i);
+            delete m_dfs_visited[i];
         }
         delete m_dfs_visited;
         m_dfs_visited = nullptr;
@@ -746,7 +763,7 @@ void Animator2DUI::Initialize_Aimation_Pixel()
     {
         for (int i{}; i < m_iPixel_Height; ++i)
         {
-            delete* (m_bfs_visited + i);
+            delete m_bfs_visited[i];
         }
         delete m_bfs_visited;
         m_bfs_visited = nullptr;
@@ -759,11 +776,17 @@ void Animator2DUI::Initialize_Aimation_Pixel()
     m_bfs_visited = (bool**)malloc(sizeof(bool*) * m_iPixel_Height);
     for (int i{}; i < m_iPixel_Height; ++i)
     {
-        *(m_dfs_visited + i) = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
-        memset(*(m_dfs_visited + i), 0, sizeof(bool) * m_iPixel_Width);
+        if (m_dfs_visited[i])
+        {
+            m_dfs_visited[i] = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
+            memset(m_dfs_visited[i], 0, sizeof(bool) * m_iPixel_Width);
+        }
 
-        *(m_bfs_visited + i) = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
-        memset(*(m_bfs_visited + i), 0, sizeof(bool) * m_iPixel_Width);
+        if (m_bfs_visited[i])
+        {
+            m_bfs_visited[i] = (bool*)malloc(sizeof(bool) * m_iPixel_Width);
+            memset(m_bfs_visited[i], 0, sizeof(bool) * m_iPixel_Width);
+        }
     }
 }
 

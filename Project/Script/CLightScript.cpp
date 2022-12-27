@@ -6,6 +6,7 @@
 CLightScript::CLightScript()
 	:CScript(LIGHTSCRIPT)
 {
+	SetName(L"CLightScript");
 }
 
 CLightScript::~CLightScript()

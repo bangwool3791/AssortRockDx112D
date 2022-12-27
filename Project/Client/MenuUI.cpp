@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "MenuUI.h"
 #include "InspectorUI.h"
+#include "ContentUI.h"
 
+#include "CLevelSaveLoad.h"
 #include "CEditor.h"
 #include "CImGuiMgr.h"
 
@@ -11,7 +13,6 @@
 #include <Engine\CLevelMgr.h>
 #include <Engine\CScript.h>
 #include <Script\CScriptMgr.h>
-
 MenuUI::MenuUI()
 	:UI("##MenuUI")
 {
@@ -28,6 +29,11 @@ void MenuUI::render()
     {
         if (ImGui::BeginMenu("File"))
         {
+            if (ImGui::MenuItem("Level Save"))
+            {
+                CSaveLoadMgr::GetInst()->SaveLevel(CLevelMgr::GetInst()->GetCurLevel(), L"level\\Test.lv");
+            }
+
             ImGui::EndMenu();
         }
         if (ImGui::BeginMenu("Edit"))
@@ -70,9 +76,6 @@ void MenuUI::render()
                 }
                 ImGui::EndMenu();
             }
-
-
-
             ImGui::EndMenu();
         }
 
@@ -122,11 +125,23 @@ void MenuUI::render()
                 evn.wParam = (DWORD_PTR)LEVEL_STATE::STOP;
                 CEventMgr::GetInst()->AddEvent(evn);
             }
-
-
             ImGui::EndMenu();
         }
 
+        if (ImGui::BeginMenu("Resource"))
+        {
+            if (ImGui::MenuItem("Create Material"))
+            {
+                Ptr<CMaterial> pMtrl = new CMaterial;
+                wstring strKey = CResMgr::GetInst()->GetNewResName<CMaterial>();
+
+                CResMgr::GetInst()->AddRes<CMaterial>(strKey, pMtrl.Get());
+
+                ContentUI* pContent = (ContentUI*)CImGuiMgr::GetInst()->FindUI("Content");
+                pContent->ResetContent();
+            }
+            ImGui::EndMenu();
+        }
         ImGui::EndMainMenuBar();
     }
 }

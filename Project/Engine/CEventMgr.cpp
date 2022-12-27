@@ -88,6 +88,31 @@ void CEventMgr::tick()
 			CLevelMgr::GetInst()->ChangeLevelState((LEVEL_STATE)iter->wParam);
 		}
 			break;
+
+		case EVENT_TYPE::EDIT_RES:
+		{
+			switch ((RES_TYPE)iter->wParam)
+			{
+			case RES_TYPE::PREFAB:
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CPrefab*)iter->lParam);
+				break;
+			case RES_TYPE::COMPUTE_SHADER:
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);
+				break;
+			case RES_TYPE::MATERIAL:
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CMaterial*)iter->lParam);
+				break;
+			case RES_TYPE::MESH:
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CMesh*)iter->lParam);
+				break;
+			case RES_TYPE::TEXTURE:
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CTexture*)iter->lParam);
+				break;
+			default:
+				break;
+			}
+		}
+			break;
 		}
 	}
 

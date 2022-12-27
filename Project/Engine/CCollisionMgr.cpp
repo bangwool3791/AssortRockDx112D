@@ -229,3 +229,38 @@ void CCollisionMgr::CollisionLayerRelease(int _iLeft, int _iRight)
 	m_matrix[iRow] &= ~(1 << iCol);
 }
 
+void CCollisionMgr::SaveToFile(FILE* _pFIle)
+{
+	// 프레임 개수, 데이터
+	size_t iFrameCount = MAX_LAYER;
+	fwrite(&iFrameCount, sizeof(size_t), 1, _pFIle);
+	fwrite(m_matrix, sizeof(UINT), iFrameCount, _pFIle);
+	
+	size_t iInfoSize = m_mapColInfo.size();
+	fwrite(&iInfoSize, sizeof(size_t), 1, _pFIle);
+	for (auto iter{ m_mapColInfo.begin() }; iter != m_mapColInfo.end(); ++iter)
+	{
+		fwrite(&iter->first, sizeof(ULONGLONG), 1, _pFIle);
+		fwrite(&iter->second, sizeof(bool), 1, _pFIle);
+	}
+}
+
+void CCollisionMgr::LoadToFile(FILE* _pFIle)
+{
+	size_t iFrameCount = 0;
+	fread(&iFrameCount, sizeof(size_t), 1, _pFIle);
+	fread(m_matrix, sizeof(UINT), iFrameCount, _pFIle);
+
+	size_t iInfoSize{};
+	fread(&iInfoSize, sizeof(size_t), 1, _pFIle);
+	ULONGLONG key{};
+	bool value{};
+	while (iInfoSize > 0)
+	{
+
+		fread(&key, sizeof(ULONGLONG), 1, _pFIle);
+		fread(&value, sizeof(bool), 1, _pFIle);
+		m_mapColInfo.insert(make_pair(key, value));
+		--iInfoSize;
+	}
+}

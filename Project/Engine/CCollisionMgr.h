@@ -26,7 +26,6 @@ private:
 	void CollisionBtwLayer(CLevel* _pCurScene, int _iLeft, int _iRight);
 	void CollisionBtwCollider(CCollider2D* _pLeft, CCollider2D* _pRight);
 	bool IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight);
-
 public :
 	void clear()
 	{
@@ -36,7 +35,8 @@ public :
 
 	void CollisionLayerCheck(int _iLeft, int _iRight);
 	void CollisionLayerRelease(int _iLeft, int _iRight);
-
+	void SaveToFile(FILE* _pFIle);
+	void LoadToFile(FILE* _pFIle);
 private:
 	CCollisionMgr();
 	virtual ~CCollisionMgr();

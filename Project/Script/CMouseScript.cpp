@@ -17,6 +17,7 @@ CMouseScript::CMouseScript()
 	:CScript{ MOUSESCRIPT }
 	,bClicked{ false }
 {
+	SetName(L"CMouseScript");
 }
 
 CMouseScript::~CMouseScript()

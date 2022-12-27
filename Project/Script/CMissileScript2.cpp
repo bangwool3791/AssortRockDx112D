@@ -5,6 +5,7 @@ CMissileScript2::CMissileScript2()
 	: CScript(MISSILESCRIPT2)
 	, m_fSpeed(200.f)
 {
+	SetName(L"CMissileScript2");
 }
 
 CMissileScript2::~CMissileScript2()

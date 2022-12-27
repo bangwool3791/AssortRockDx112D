@@ -7,12 +7,11 @@ class CRes :
 {
 private:
     wstring         m_strKey;
-    wstring         m_strRelativePath;
     const RES_TYPE  m_eResType;
     int             m_iRefCount;
-
     bool            m_bEngineRes;
-
+protected:
+    wstring         m_strRelativePath;
 public:
     void AddRef()
     {
@@ -44,11 +43,11 @@ public:
     const wstring& GetKey() { return m_strKey; }
     const wstring& GetRelativePath() { return m_strRelativePath; }
     RES_TYPE GetResType() { return m_eResType; }
-
+    bool IsEngineRes() { return m_bEngineRes; }
 public:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }
-
+    bool CheckRelativePath(const wstring& _strRelativePath);
     template<typename T>
     friend class Ptr;
     friend class CResMgr;

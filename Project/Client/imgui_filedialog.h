@@ -28,8 +28,8 @@ struct ImFileDialogInfo
 	std::filesystem::path directoryPath;
 	std::filesystem::path resultPath;
 
-	bool refreshInfo;
-	size_t currentIndex;
+	bool refreshInfo{};
+	size_t currentIndex{};
 	std::vector<std::filesystem::directory_entry> currentFiles;
 	std::vector<std::filesystem::directory_entry> currentDirectories;
 };

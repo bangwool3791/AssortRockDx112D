@@ -118,3 +118,4 @@ void MeshRenderUI::SetMaterial(DWORD_PTR _strMaterialKey)
 
 	GetTarget()->MeshRender()->SetSharedMaterial(pMtrl);
 }
+

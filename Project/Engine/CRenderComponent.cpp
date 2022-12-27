@@ -66,4 +66,5 @@ void CRenderComponent::LoadFromFile(FILE* _File)
 	fread(&m_eInsType, sizeof(INSTANCING_TYPE), 1, _File);
 	LoadResourceRef(m_pMesh, _File);
 	LoadResourceRef(m_pSharedMtrl, _File);
+	m_pCurMtrl = m_pSharedMtrl;
 }

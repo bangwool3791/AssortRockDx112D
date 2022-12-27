@@ -4,8 +4,13 @@ class CPlayerScript :
     public CScript
 {
 private:
-    float m_fSpeed;
-public:
+    float        m_fAccTime;
+    float        m_fSpeed;
+    float        m_fJumpHeight;
+    Ptr<CPrefab> m_Prefab;
+private:
+    void SaveToFile(FILE* _File);
+    void LoadFromFile(FILE* _File);
 public :
     virtual void begin();
     virtual void tick();

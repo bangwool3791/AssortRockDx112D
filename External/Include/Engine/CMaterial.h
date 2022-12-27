@@ -27,7 +27,7 @@ public :
 
 	virtual void Save(const wstring _strRelativePath);
 	virtual int Load(const wstring& _strFilePath);
-
+	void SwapFile(const wstring _strRelativePath);
 	CLONE(CMaterial)
 public :
 	CMaterial();

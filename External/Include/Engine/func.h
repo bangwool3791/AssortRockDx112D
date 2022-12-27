@@ -153,7 +153,7 @@ void SaveResourceRef(Ptr<T> _res, FILE* _pFile)
 }
 
 template<typename T>
-void LoadResourceRef(Ptr<T> _Res, FILE* _pFile)
+void LoadResourceRef(Ptr<T>& _Res, FILE* _pFile)
 {
 	int iExist = 0;
 

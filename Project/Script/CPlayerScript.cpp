@@ -18,7 +18,12 @@ CPlayerScript::CPlayerScript()
 	:CScript{PLAYERSCRIPT}
 	, m_fSpeed{100.f}
 {
-	AddScalarParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
+	SetName(L"CPlayerScript");
+
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
+	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player JumpHeight", &m_fJumpHeight);
+
+	m_Prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
 }
 
 CPlayerScript::~CPlayerScript()
@@ -103,4 +108,22 @@ void CPlayerScript::EndOverlap(CCollider2D* _pOther)
 		//CUIMgr::GetInst()->AddUI(GetOwner(), UI_TYPE::GAMEOBJECT);
 		//CUIMgr::GetInst()->AddUI(pUnit_UI, UI_TYPE::UNIT_UI);
 	}
+}
+
+void CPlayerScript::SaveToFile(FILE* _File)
+{
+	CScript::SaveToFile(_File);
+	fwrite(&m_fSpeed, sizeof(float), 1, _File);
+	fwrite(&m_fJumpHeight, sizeof(float), 1, _File);
+
+	SaveResourceRef(m_Prefab, _File);
+}
+
+void CPlayerScript::LoadFromFile(FILE* _File)
+{
+	CScript::LoadFromFile(_File);
+	fread(&m_fSpeed, sizeof(float), 1, _File);
+	fread(&m_fJumpHeight, sizeof(float), 1, _File);
+
+	LoadResourceRef(m_Prefab, _File);
 }

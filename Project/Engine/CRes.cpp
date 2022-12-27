@@ -20,6 +20,25 @@ CRes::~CRes()
 {
 }
 
+bool CRes::CheckRelativePath(const wstring& _strRelativePath)
+{
+	//최초 저장이면, 해당 경로를 저장
+	if (m_strRelativePath.empty())
+	{
+		m_strRelativePath = _strRelativePath;
+		return true;
+	}
+	// 한번 이상 파일에 저장된 적이 있으며
+	else
+	{
+		//같은 경로에 재 저장은 가능
+		if (m_strRelativePath == _strRelativePath)
+			return true;
+		else
+			return false;
+	}
+}
+
 void CRes::SaveKeyPath(FILE* _pFile)
 {
 	SaveWStringToFile(m_strKey, _pFile);

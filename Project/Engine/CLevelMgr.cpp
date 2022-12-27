@@ -44,14 +44,14 @@ void CLevelMgr::progress()
 	{
 		//키 입력이 안먹는다.
 		m_pCurLevel->tick();
+		m_pCurLevel->finaltick();
 	}
 	//엔진에서 제공하는 Component(Transform, register 맵핑, Particle) finaltick동작
-	m_pCurLevel->finaltick();
 }
 
 void CLevelMgr::render()
 {
-	m_pCurLevel->render();
+	//m_pCurLevel->render();
 }
 
 CGameObject* CLevelMgr::FindObjectByName(const wstring& _strName)

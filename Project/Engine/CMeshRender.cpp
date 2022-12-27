@@ -104,7 +104,9 @@ void CMeshRender::render_Instancing()
 	tAnim2DInfo tAnimInfo;
 
 	if (Animator2D())
+	{
 		tAnimInfo = Animator2D()->GetAniInfo();
+	}
 
 	tObjectRender tObjectInfo = { transform, tMtrl, tAnimInfo };
 

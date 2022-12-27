@@ -5,6 +5,7 @@ CMonsterScript::CMonsterScript()
 	: CScript(MONSTERSCRIPT)
 	, m_fSpeed(100.f)
 {
+	SetName(L"CMonsterScript");
 }
 
 CMonsterScript::~CMonsterScript()

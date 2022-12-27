@@ -18,3 +18,18 @@ CResMgr::~CResMgr()
 		Safe_Del_Map(m_arrRes[i]);
 	}
 }
+
+bool CResMgr::DeleteRes(RES_TYPE _Type, const wstring& _strKey)
+{
+	map<wstring, Ptr<CRes>>::iterator iter = m_arrRes[(UINT)_Type].find(_strKey);
+
+	if (m_arrRes[(UINT)_Type].end() != iter)
+	{
+		m_arrRes[(UINT)_Type].erase(iter);
+		m_bChanged = true;
+		return true;
+	}
+
+	return false;
+}
+

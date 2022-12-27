@@ -20,12 +20,14 @@ private:
 public:
 	template<typename T>
 	inline void AddRes(const wstring& _strKey, T* _pRes);
+	bool DeleteRes(RES_TYPE _Type, const wstring& _strKey);
 	template<typename T>
 	Ptr<T> Load(const wstring& _strKey, const wstring& _strRelativePath);
 	template<typename T>
 	Ptr<T> FindRes(const wstring& _strKey);
-
-public :
+	template<typename T>
+	wstring GetNewResName();
+public:
 	void init();
 	void tick() { m_bChanged = false; }
 	bool IsChanged() { return m_bChanged; }
@@ -78,20 +80,22 @@ RES_TYPE GetType()
 	if (typeid(T).hash_code() == typeid(CPrefab).hash_code())
 		return RES_TYPE::PREFAB;
 	else
-		return RES_TYPE::END;	
+		return RES_TYPE::END;
 }
 
 template<typename T>
 inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 {
 	RES_TYPE eResType = ::GetType<T>();
-	
-	CRes* pRes = FindRes<T>(_strKey).Get();
 
-	assert(!pRes);
+	Ptr<T> pRes = FindRes<T>(_strKey);
 
+	assert(nullptr == pRes);
+
+	//클래스-Path//Relative Path 경로 설정
 	_pRes->SetKey(_strKey);
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
+	m_bChanged = true;
 }
 
 template<typename T>
@@ -117,11 +121,11 @@ inline Ptr<T> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativeP
 
 	if (nullptr != pResource)
 		return (T*)pResource;
-	
+
 	pResource = new T;
 
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-	strFilePath +=_strRelativePath;
+	strFilePath += _strRelativePath;
 
 	if (FAILED(pResource->Load(strFilePath)))
 	{
@@ -134,4 +138,48 @@ inline Ptr<T> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativeP
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, pResource));
 
 	return (T*)pResource;
+}
+
+template<typename T>
+wstring CResMgr::GetNewResName()
+{
+	RES_TYPE type = GetType<T>();
+
+	wstring strKey = L"New ";
+
+	switch (type)
+	{
+	case RES_TYPE::PREFAB:
+		strKey += L"Prefab";
+		break;
+	case RES_TYPE::MESHDATA:
+		strKey += L"MeshData";
+		break;
+	case RES_TYPE::MATERIAL:
+		strKey += L"Material";
+		break;
+	case RES_TYPE::TEXTURE:
+		strKey += L"Texture";
+		break;
+	}
+
+	wstring strTemp{};
+
+	UINT iNum = 1;
+
+	while (true)
+	{
+		strTemp = strKey;
+		strTemp += std::to_wstring(iNum);
+
+		if (nullptr != CResMgr::FindRes<CMaterial>(strTemp))
+		{
+			++iNum;
+		}
+		else
+		{
+			break;
+		}
+	}
+	return strTemp;
 }
