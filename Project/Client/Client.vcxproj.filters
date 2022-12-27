@@ -116,6 +116,9 @@
     <Filter Include="02. ImGui\ImGuiFileDialog">
       <UniqueIdentifier>{69e02787-9e20-40d6-ac61-b1df77a81af0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Default\ModuleUI\PopupUI">
+      <UniqueIdentifier>{81a3de36-f844-49b2-8ba4-920186de3b9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -271,6 +274,9 @@
     <ClInclude Include="imgui_filedialog.h">
       <Filter>02. ImGui\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="PopupUI.h">
+      <Filter>Default\ModuleUI\PopupUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -410,6 +416,9 @@
     </ClCompile>
     <ClCompile Include="imgui_filedialog.cpp">
       <Filter>02. ImGui\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupUI.cpp">
+      <Filter>Default\ModuleUI\PopupUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

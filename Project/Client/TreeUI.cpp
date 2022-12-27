@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "TreeUI.h"
+#include <Engine\CKeyMgr.h>
+#include <Engine\func.h>
+#include <Engine\CPrefab.h>
 #include <Engine\CComponent.h>
 #include "CGameObjectEx.h"
 #include "CEditor.h"
@@ -7,6 +10,23 @@
 // TreeNode
 // ========
 
+/*
+* 	if ("##ContentTree" == m_TreeUI->GetName())
+	{
+		CPrefab* prefab = dynamic_cast<CPrefab*>((CPrefab*)m_data);
+		if (KEY_RELEASE(KEY::LBTN))
+		{
+			if (prefab)
+			{
+				ImVec2 vVec2 = ImGui::GetCursorPos();
+				Vec3 vPos = { vVec2.x, vVec2.y, 1.f };
+				CGameObject* pGameObject = prefab->Instantiate();
+				int LayerIndex = pGameObject->GetLayerIndex();
+				Instantiate(pGameObject, vPos, 1);
+			}
+		}
+	}
+*/
 TreeNode::TreeNode()
 	:m_strName{}
 	, m_data{}
@@ -75,7 +95,8 @@ void TreeNode::render_update()
 			std::string delimiter = "##";
 			std::string token = strName.substr(0, strName.find(delimiter)); 
 			ImGui::Text(token.c_str());
-
+			//Prefab일 때 클라이언트 영역 안에 있으면 Level 생성
+			// 
 			//드래그 이벤트 끝
 			ImGui::EndDragDropSource();
 		}
@@ -86,9 +107,12 @@ void TreeNode::render_update()
 			* 유저 선택 노드
 			* 노드 안에 있는 Resource 데이터를 인스펙터로 전달한다.
 			*/
-			m_TreeUI->SetSelectedNode(this);
+			m_TreeUI->SetLBtnSelectedNode(this);
 		}
-
+		else if (!m_bFrame && ImGui::IsItemHovered(0) && ImGui::IsMouseClicked(1))
+		{
+			m_TreeUI->SetRBtnSelectedNode(this);
+		}
 		// 드랍 체크(드랍 대상)
 		if (ImGui::BeginDragDropTarget())
 		{
@@ -125,9 +149,10 @@ TreeUI::TreeUI(const string& _strName)
 	, m_BeginDragNode(nullptr)
 	, m_DropTargetNode(nullptr)
 	, m_SelectInst(nullptr)
-	, m_SelectFunc(nullptr)
+	, m_Select_LBtn_Func(nullptr)
 	, m_DragDropInst(nullptr)
 	, m_DragDropFunc(nullptr)
+
 {
 }
 
@@ -243,7 +268,7 @@ void TreeUI::Clear()
 	}
 }
 
-void TreeUI::SetSelectedNode(TreeNode* _SelectedNode)
+void TreeUI::SetLBtnSelectedNode(TreeNode* _SelectedNode)
 {
 	if (nullptr != m_SelectedNode)
 	{
@@ -255,13 +280,29 @@ void TreeUI::SetSelectedNode(TreeNode* _SelectedNode)
 
 	/*
 	* Content UI, Outliner UI -> Tree UI, has a 관계 상속
-	*						  -> 생성 m_SelectInst, m_SelectFunc 초기화
+	*						  -> 생성 m_SelectInst, m_Select_LBtn_Func 초기화
 	*			 
 	* Content, Outliner UI-> SetObjectToInspector 함수 호출
 	*/
-	if (m_SelectInst && m_SelectFunc)
+	if (m_SelectInst && m_Select_LBtn_Func)
 	{
-		(m_SelectInst->*m_SelectFunc)((DWORD_PTR)m_SelectedNode);
+		(m_SelectInst->*m_Select_LBtn_Func)((DWORD_PTR)m_SelectedNode);
+	}
+}
+
+void TreeUI::SetRBtnSelectedNode(TreeNode* _SelectedNode)
+{
+	if (nullptr != m_SelectedNode)
+	{
+		m_SelectedNode->m_bSelected = false;
+	}
+
+	m_SelectedNode = _SelectedNode;
+	m_SelectedNode->m_bSelected = true;
+
+	if (m_SelectInst && m_Select_RBtn_Func)
+	{
+		(m_SelectInst->*m_Select_RBtn_Func)((DWORD_PTR)m_SelectedNode);
 	}
 }
 

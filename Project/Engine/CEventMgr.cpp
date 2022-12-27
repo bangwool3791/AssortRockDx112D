@@ -27,7 +27,6 @@ void CEventMgr::tick()
 	}
 	m_vecGarbage.clear();
 
-
 	for (auto iter{ m_vecEvent.begin()}; iter != m_vecEvent.end(); ++iter)
 	{
 		switch (iter->eType)
@@ -94,7 +93,7 @@ void CEventMgr::tick()
 			switch ((RES_TYPE)iter->wParam)
 			{
 			case RES_TYPE::PREFAB:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CPrefab*)iter->lParam);
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName() + L"Prefab", new CPrefab((CGameObject*)iter->lParam));
 				break;
 			case RES_TYPE::COMPUTE_SHADER:
 				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);

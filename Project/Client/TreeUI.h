@@ -53,8 +53,9 @@ class TreeUI :
 {
 private:
 	static UINT			    m_iNextNodeIdx;
-
+	TreeUI*					m_ChildTreeUI;
 private:
+	bool					m_bUpdate;
 	TreeNode*				m_RootNode;
 	bool					m_bDummyRootUse;	//루트 노드를 더미로 취급할 것인가
 
@@ -63,7 +64,8 @@ private:
 	TreeNode*				m_DropTargetNode;
 
 	UI*						m_SelectInst;
-	FUNC_1					m_SelectFunc;
+	FUNC_1					m_Select_LBtn_Func;
+	FUNC_1					m_Select_RBtn_Func;
 
 	UI*						m_DragDropInst;
 	FUNC_2					m_DragDropFunc;
@@ -79,15 +81,24 @@ public:
 	TreeNode* AddObjectEx(TreeNode* _parent, const string& _strName, CGameObjectEx* _pObj, bool _IsFrame = false);
 	void Clear();
 	void SetDummyRoot(bool _bUse) { m_bDummyRootUse = _bUse; }
-	void SetSelectedNode(TreeNode* _SelectedNode);
+	void SetLBtnSelectedNode(TreeNode* _SelectedNode);
+	void SetRBtnSelectedNode(TreeNode* _SelectedNode);
 	void SetBeginDragNode(TreeNode* _beginDragNode) { m_BeginDragNode = _beginDragNode; }
 	void SetDropTargetNode(TreeNode* _DropTargetNode);
+	void SetUpdate(bool _bUpdate) { m_bUpdate = _bUpdate; }
+	void CreateChild(const string& _name, const vector<string>& _vec);
 	TreeNode* GetSelectedNode() { return m_SelectedNode; }
 
-	void AddDynamic_Selected(UI* _Inst, FUNC_1 _Func)
+	void AddDynamic_LBtn_Selected(UI* _Inst, FUNC_1 _Func)
 	{
 		m_SelectInst = _Inst;
-		m_SelectFunc = _Func;
+		m_Select_LBtn_Func = _Func;
+	}
+
+	void AddDynamic_RBtn_Selected(UI* _Inst, FUNC_1 _Func)
+	{
+		m_SelectInst = _Inst;
+		m_Select_RBtn_Func = _Func;
 	}
 
 	void AddDynamic_DragDrop(UI* _Inst, FUNC_2 _Func)

@@ -36,6 +36,9 @@
 #include "C:\Development\MyEngine\DirectX11\Project\Client\ParamUI.cpp"
 
 
+#include "C:\Development\MyEngine\DirectX11\Project\Client\PopupUI.cpp"
+
+
 #include "C:\Development\MyEngine\DirectX11\Project\Client\ProgressUI.cpp"
 
 

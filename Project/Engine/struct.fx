@@ -81,6 +81,7 @@ struct tRenderInfo
     row_major matrix mat_2;
     row_major matrix mat_3;
 
+    int arr[40];
     /*
     * Animation Info
     */

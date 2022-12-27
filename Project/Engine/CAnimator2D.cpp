@@ -28,8 +28,6 @@ CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
         m_mapAnim.insert(make_pair(iter->first, pAnimation2D = iter->second->Clone()));
         pAnimation2D->SetOwner(this);
     }
-
-    Play(m_strKey, m_bRepeat);
 }
 
 CAnimator2D::~CAnimator2D()

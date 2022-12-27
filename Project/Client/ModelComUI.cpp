@@ -20,7 +20,7 @@ ModelComUI::ModelComUI()
 	m_Tree->ShowSeperator(false);
 	m_Tree->SetDummyRoot(true);
 
-	m_Tree->AddDynamic_Selected(this, (FUNC_1)&ModelComUI::SetObjectToInspector);
+	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&ModelComUI::SetObjectToInspector);
 	m_Tree->AddDynamic_DragDrop(this, (FUNC_2)&ModelComUI::AddChildObject);
 
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> arr = CEditor::GetInst()->GetArrComponents();

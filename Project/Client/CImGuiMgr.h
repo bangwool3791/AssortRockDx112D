@@ -14,7 +14,6 @@ private:
 public:
 	UI* FindUI(const string& _name);
 
-
 public:	
 	void init(HWND _hWnd);
 	void progress();

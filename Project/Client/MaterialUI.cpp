@@ -54,6 +54,7 @@ void MaterialUI::render_update()
 		{
 			MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
 		}
+
 		wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 		strFilePath += pMtrl->GetRelativePath();
 

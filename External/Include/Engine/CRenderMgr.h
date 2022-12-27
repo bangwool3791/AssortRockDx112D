@@ -28,14 +28,7 @@ public:
 	// 렌더타겟을 카피텍스쳐로 복사
 	void CopyRenderTarget();
 
-	CCamera* GetMainCam()
-	{
-		if (m_vecCam.empty())
-			return nullptr;
-
-		return m_vecCam[0];
-	}
-
+	CCamera* GetMainCam();
 	void DebugDraw(DEBUG_SHAPE _eShape, Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fRadius, float _fDuration)
 	{
 #ifdef _DEBUG

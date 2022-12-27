@@ -53,12 +53,13 @@ void CMouseScript::finaltick()
 {
 	if (KEY_PRESSED(KEY::RBTN))
 	{
-		const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
-		for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
-		{
-			if((*iter)->GetScript<CPlayerScript>())
-				(*iter)->GetScript<CPlayerScript>()->Set_Target(m_vTarget);
-		}
+		//툴에서 마우스 관련 객체 생성으로 트리 갱신되어 주석처리
+		//const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);
+		//for (auto iter{ objects.begin() }; iter != objects.end(); ++iter)
+		//{
+		//	if((*iter)->GetScript<CPlayerScript>())
+		//		(*iter)->GetScript<CPlayerScript>()->Set_Target(m_vTarget);
+		//}
 	}
 
 	if (KEY_PRESSED(KEY::LBTN) && !bClicked)
@@ -69,21 +70,21 @@ void CMouseScript::finaltick()
 		/*
 		* 드래그 UNIT CLEAR
 		*/
+		//툴에서 마우스 관련 객체 생성으로 트리 갱신되어 주석처리
+		//Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MouseDragPrefab");
+		//CGameObject* pDrag = pPrefab->Instantiate();
+		//Instantiate(pDrag, Vec3{ 0.f, 0.f, 0.f }, 31);
 
-		Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MouseDragPrefab");
-		CGameObject* pDrag = pPrefab->Instantiate();
-		Instantiate(pDrag, Vec3{ 0.f, 0.f, 0.f }, 31);
-
-		CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
-		////마우스 클릭 충돌 활성화
-		GetOwner()->Collider2D()->ReleasePause();
-		bClicked = true;
+		//CUIMgr::GetInst()->AddUI(pDrag, UI_TYPE::DRAG);
+		//////마우스 클릭 충돌 활성화
+		//GetOwner()->Collider2D()->ReleasePause();
+		//bClicked = true;
 	}
 
 	if (KEY_RELEASE(KEY::LBTN) && bClicked)
 	{
-		bClicked = false;
-		CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
+		//bClicked = false;
+		//CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
 }
 

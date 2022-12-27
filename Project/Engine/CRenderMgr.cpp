@@ -103,9 +103,6 @@ void CRenderMgr::UpdateNoiseTexture()
 */
 void CRenderMgr::UpdateLight2D()
 {
-	/*
-	* 
-	*/
 	if (m_pLight2DBuffer->GetElementsCount() < m_vecLight2D.size())
 	{
 		m_pLight2DBuffer->Create(m_pLight2DBuffer->GetElementsSize(), (UINT)m_vecLight2D.size(), SB_TYPE::SRV_ONLY, nullptr, true);
@@ -121,7 +118,6 @@ void CRenderMgr::UpdateLight2D()
 	g_global.iLight2DCount = (UINT)m_vecLight2D.size();
 }
 
-
 void CRenderMgr::CopyRenderTarget()
 {
 	static Ptr<CTexture> RTTex = CResMgr::GetInst()->FindRes<CTexture>(L"RenderTargetTex");
@@ -133,4 +129,19 @@ void CRenderMgr::CopyRenderTarget()
 	CONTEXT->CopyResource(m_RTCopyTex->GetTex2D().Get(), RTTex->GetTex2D().Get());
 
 	m_RTCopyTex->UpdateData(60, PIPELINE_STAGE::PS);
+}
+
+CCamera* CRenderMgr::GetMainCam()
+{
+	if (LEVEL_STATE::PLAY == CLevelMgr::GetInst()->GetLevelState())
+	{
+		if (m_vecCam.empty())
+			return nullptr;
+
+		return m_vecCam[0];
+	}
+	else
+	{
+		return m_EditorCam;
+	}
 }

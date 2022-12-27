@@ -24,7 +24,7 @@ ModelUI::ModelUI()
 	m_Tree->AddItem(nullptr, "Model", (DWORD_PTR)nullptr);
 	m_Tree->SetDummyRoot(false);
 
-	m_Tree->AddDynamic_Selected(this, (FUNC_1)&ModelUI::SetObjectToInspector);
+	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&ModelUI::SetObjectToInspector);
 }
 
 ModelUI::~ModelUI()

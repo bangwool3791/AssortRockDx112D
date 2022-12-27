@@ -224,12 +224,13 @@ void CTileMap::Ready_Adjacency()
 
 void CTileMap::SaveToFile(FILE* _File)
 {
-	fwrite(&m_vTileSize, sizeof(Vec2), 1, _File);
+	CRenderComponent::SaveToFile(_File);
 
 	size_t size = m_AtlasTex.size();
+
 	fwrite(&size, sizeof(size_t), 1, _File);
 	
-	for (size_t i{}; i < m_AtlasTex.size(); ++i)
+	for (size_t i{}; i < size; ++i)
 	{
 		SaveResourceRef(m_AtlasTex[i], _File);
 	}
@@ -238,7 +239,7 @@ void CTileMap::SaveToFile(FILE* _File)
 
 	fwrite(&size, sizeof(size_t), 1, _File);
 
-	for (size_t i{}; i < m_vecTile.size(); ++i)
+	for (size_t i{}; i < size; ++i)
 	{
 		fwrite(&m_vecTile[i], sizeof(tTile), 1, _File);
 	}
@@ -246,9 +247,10 @@ void CTileMap::SaveToFile(FILE* _File)
 
 void CTileMap::LoadFromFile(FILE* _File)
 {
-	fread(&m_vTileSize, sizeof(Vec2), 1, _File);
+	CRenderComponent::LoadFromFile(_File);
 
-	size_t size{};
+	size_t size = 0;
+
 	fread(&size, sizeof(size_t), 1, _File);
 
 	for (size_t i{}; i < size; ++i)
@@ -258,8 +260,15 @@ void CTileMap::LoadFromFile(FILE* _File)
 
 	fread(&size, sizeof(size_t), 1, _File);
 
+	m_vecTile.clear();
+
 	for (size_t i{}; i < size; ++i)
 	{
-		fread(&m_vecTile[i], sizeof(tTile), 1, _File);
+		tTile tile{};
+
+		fread(&tile, sizeof(tTile), 1, _File);
+		m_vecTile.push_back(tile);
 	}
+
+	SetTileCount(TILEX, TILEY);
 }

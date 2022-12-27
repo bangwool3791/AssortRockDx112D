@@ -18,6 +18,7 @@ class CCollider2D;
 
 class CGameObject
 	:public CEntity
+	//template type -> map 분기 처리
 	, public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE>
 {
 private:

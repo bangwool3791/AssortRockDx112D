@@ -326,11 +326,13 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 
 	pDebugObj->MeshRender()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC4_0, &_info.vColor);
 
+	CCamera* pMainCam = CRenderMgr::GetInst()->GetMainCam();
+
 	pDebugObj->Transform()->finaltick();
 
 	g_transform.matWorld = pDebugObj->Transform()->GetWorldMat();
-	g_transform.matView = m_pCameraObject->Camera()->GetViewMat();
-	g_transform.matProj = m_pCameraObject->Camera()->GetProjMat();
+	g_transform.matView = pMainCam->GetViewMat();
+	g_transform.matProj = pMainCam->GetProjMat();
 
 	pDebugObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 	pDebugObj->render();

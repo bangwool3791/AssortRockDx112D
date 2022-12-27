@@ -170,14 +170,6 @@ void CCamera::render_mask()
 		m_pObjectRenderBuffer->Clear();
 		g_vecInfoObject.clear();
 	}
-
-	static float tTime = DT;
-	tTime += DT;
-	if (3 < tTime)
-	{
-		tTime = 0;
-		cout << "render_mask()" << endl;
-	}
 }
 
 void CCamera::render_transparent()
@@ -206,14 +198,6 @@ void CCamera::render_transparent()
 		CMaterial::Clear();
 		m_pObjectRenderBuffer->Clear();
 		g_vecInfoObject.clear();
-	}
-
-	static float tTime = DT;
-	tTime += DT;
-	if (3 < tTime)
-	{
-		tTime = 0;
-		cout << "render_transparent" << endl;
 	}
 }
 
@@ -252,14 +236,6 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 */
 void CCamera::SortObject()
 {
-	static float tTime = DT;
-	tTime += DT;
-	if (3 < tTime)
-	{
-		tTime = 0;
-		cout << "SortObject()" << endl;
-	}
-
 	m_vecOpaque.clear();
 	m_vecMask.clear();
 	m_vecTransparent.clear();

@@ -22,7 +22,7 @@ DummyUI::DummyUI()
 	m_Tree->ShowSeperator(false);
 	m_Tree->SetDummyRoot(true);
 
-	//m_Tree->AddDynamic_Selected(this, (FUNC_1)&DummyUI::SetObjectToInspector);
+	//m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&DummyUI::SetObjectToInspector);
 	//m_Tree->AddDynamic_DragDrop(this, (FUNC_2)&DummyUI::AddChildObject);
 }
 
@@ -36,7 +36,6 @@ void DummyUI::begin()
 	const wstring& wstr = pGameObject->GetName();
 	m_Tree->AddItem(nullptr, string(wstr.begin(), wstr.end()), (DWORD_PTR)pGameObject);
 	m_Tree->SetDummyRoot(false);
-	
 }
 
 void DummyUI::update()
