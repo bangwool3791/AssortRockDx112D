@@ -20,6 +20,7 @@ private:
 
 	bool				m_bFrame;
 	bool				m_bSelected;
+	bool				m_bObjectSelected;
 
 public :
 	DWORD_PTR GetData() { return m_data; }
@@ -67,6 +68,8 @@ private:
 	FUNC_1					m_Select_LBtn_Func;
 	FUNC_1					m_Select_RBtn_Func;
 
+	FUNC_1					m_DragDropWorldFunc;
+
 	UI*						m_DragDropInst;
 	FUNC_2					m_DragDropFunc;
 
@@ -84,6 +87,7 @@ public:
 	void SetLBtnSelectedNode(TreeNode* _SelectedNode);
 	void SetRBtnSelectedNode(TreeNode* _SelectedNode);
 	void SetBeginDragNode(TreeNode* _beginDragNode) { m_BeginDragNode = _beginDragNode; }
+	void SetDropObject(TreeNode* _DropTargetNode);
 	void SetDropTargetNode(TreeNode* _DropTargetNode);
 	void SetUpdate(bool _bUpdate) { m_bUpdate = _bUpdate; }
 	void CreateChild(const string& _name, const vector<string>& _vec);
@@ -105,6 +109,12 @@ public:
 	{
 		m_DragDropInst = _Inst;
 		m_DragDropFunc = _Func;
+	}
+
+	void AddDynamic_DragDrop_World(UI* _Inst, FUNC_1 _Func)
+	{
+		m_DragDropInst = _Inst;
+		m_DragDropWorldFunc = _Func;
 	}
 	TreeNode* GetNode(CGameObjectEx* _pObj);
 public:

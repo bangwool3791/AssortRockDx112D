@@ -19,8 +19,6 @@ void CCameraScript::begin()
 void CCameraScript::tick()
 {
 	Move();
-
-
 }
 
 void CCameraScript::Move()

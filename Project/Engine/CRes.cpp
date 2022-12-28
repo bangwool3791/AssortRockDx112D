@@ -32,7 +32,7 @@ bool CRes::CheckRelativePath(const wstring& _strRelativePath)
 	else
 	{
 		//같은 경로에 재 저장은 가능
-		if (m_strRelativePath == _strRelativePath)
+		if (!lstrcmp(m_strRelativePath.c_str(), _strRelativePath.c_str()))
 			return true;
 		else
 			return false;

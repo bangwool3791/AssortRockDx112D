@@ -99,7 +99,7 @@ void CEventMgr::tick()
 				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);
 				break;
 			case RES_TYPE::MATERIAL:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CMaterial*)iter->lParam);
+				CResMgr::GetInst()->AddRes<CMaterial>(((CRes*)iter->lParam)->GetName(), (CMaterial*)(iter->lParam));
 				break;
 			case RES_TYPE::MESH:
 				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CMesh*)iter->lParam);

@@ -11,21 +11,6 @@
 // ========
 
 /*
-* 	if ("##ContentTree" == m_TreeUI->GetName())
-	{
-		CPrefab* prefab = dynamic_cast<CPrefab*>((CPrefab*)m_data);
-		if (KEY_RELEASE(KEY::LBTN))
-		{
-			if (prefab)
-			{
-				ImVec2 vVec2 = ImGui::GetCursorPos();
-				Vec3 vPos = { vVec2.x, vVec2.y, 1.f };
-				CGameObject* pGameObject = prefab->Instantiate();
-				int LayerIndex = pGameObject->GetLayerIndex();
-				Instantiate(pGameObject, vPos, 1);
-			}
-		}
-	}
 */
 TreeNode::TreeNode()
 	:m_strName{}
@@ -36,6 +21,7 @@ TreeNode::TreeNode()
 	, m_iIdx{}
 	, m_bFrame{}
 	, m_bSelected{}
+	, m_bObjectSelected{}
 {
 	
 }
@@ -96,8 +82,16 @@ void TreeNode::render_update()
 			std::string token = strName.substr(0, strName.find(delimiter)); 
 			ImGui::Text(token.c_str());
 			//Prefab일 때 클라이언트 영역 안에 있으면 Level 생성
-			// 
-			//드래그 이벤트 끝
+
+			if ("##ContentTree" == m_TreeUI->GetName())
+			{
+				CPrefab* prefab = dynamic_cast<CPrefab*>((CPrefab*)m_data);
+				if(nullptr != prefab)
+				{
+					m_TreeUI->SetDropObject(this);
+				}
+
+			}
 			ImGui::EndDragDropSource();
 		}
 		// 클릭 체크
@@ -123,7 +117,6 @@ void TreeNode::render_update()
 
 			ImGui::EndDragDropTarget();
 		}
-
 		/*
 		* TreeNode 하위 자식 노드 render
 		*/
@@ -134,6 +127,14 @@ void TreeNode::render_update()
 
 		ImGui::TreePop();
 	}
+
+	/*
+	* 노드 드래그가 발생했고 마우스 이벤트가 릴리즈이면
+	* 카메라가 비치는 영역 안에 마우스 오브젝트가 있으면
+	* 오브젝트 생성 이벤트
+	* 카메라가 비치는 영역 안에 마우스 오브젝트가 없으면
+	* 오브젝트 해지 이벤트
+	*/
 }
 
 // ======
@@ -306,6 +307,21 @@ void TreeUI::SetRBtnSelectedNode(TreeNode* _SelectedNode)
 	}
 }
 
+void TreeUI::SetDropObject(TreeNode* _SelectedNode)
+{
+	if (nullptr != m_SelectedNode)
+	{
+		m_SelectedNode->m_bSelected = false;
+	}
+
+	m_SelectedNode = _SelectedNode;
+	m_SelectedNode->m_bSelected = true;
+
+	if (m_SelectInst && m_DragDropWorldFunc)
+	{
+		(m_SelectInst->*m_DragDropWorldFunc)((DWORD_PTR)m_SelectedNode);
+	}
+}
 /*
 * Tree Drop
 * Node, has a 소유 TreeNode->SetDropTargetNode

@@ -14,6 +14,8 @@ private:
     void SetTexture(DWORD_PTR _strTexKey);
     void SetShader(DWORD_PTR _strShaderKey);
 public:
+    void ConvertGameObjectPath(const wstring& originPath, const wstring& _NewPath);
+public:
     MaterialUI();
     ~MaterialUI();
 };

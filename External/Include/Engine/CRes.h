@@ -22,7 +22,10 @@ public:
     {
         --m_iRefCount;
 
-        assert(!(m_iRefCount < 0));
+        if ((m_iRefCount < 0))
+        {
+            int a = 0;
+        }
 
         if (0 == m_iRefCount)
         {

@@ -7,8 +7,9 @@ class ContentUI :
     public UI
 {
 private:
-    TreeUI*     m_Tree;
-
+    CPrefab*         m_pTargetPrefab;
+    TreeUI*          m_Tree;
+    bool             m_bDragEvent;
 
 public:
     void ResetContent();
@@ -21,7 +22,7 @@ private:
 
 private:
     void SetResourceToInspector(DWORD_PTR _res);
-
+    void SetDragObject(DWORD_PTR _res);
 public:
     ContentUI();
     ~ContentUI();

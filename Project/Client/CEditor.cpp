@@ -226,7 +226,7 @@ void CEditor::CreateDebugDrawObject()
 
 	pDebugObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh_Debug"));
 	pDebugObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"DebugDrawMtrl"));
-
+	pDebugObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::USED);
 	m_DebugDrawObject[(UINT)DEBUG_SHAPE::RECT] = pDebugObj;
 
 	// DEBUG_SHAPE::CIRCLE

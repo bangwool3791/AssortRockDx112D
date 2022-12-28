@@ -151,7 +151,8 @@ void CMaterial::Save(const wstring _strRelativePath)
 {
 	if (!CheckRelativePath(_strRelativePath))
 	{
-		assert(nullptr);
+		MessageBox(nullptr, L"CMaterial Path Overlapped", L"Error", MB_OK);
+		return;
 	}
 
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
@@ -175,6 +176,8 @@ void CMaterial::Save(const wstring _strRelativePath)
 	}
 
 	fclose(pFile);
+
+	MessageBox(nullptr, L"CMaterial Save", L"Success", MB_OK);
 }
 
 int CMaterial::Load(const wstring& _strFilePath)

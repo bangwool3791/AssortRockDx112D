@@ -36,58 +36,58 @@ void MaterialUI::update()
 void MaterialUI::render_update()
 {
 	ResUI::render_update();
+
 	CMaterial* pMtrl = (CMaterial*)GetTarget().Get();
 
-	string strKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
+	string strMtrlKey = string(pMtrl->GetKey().begin(), pMtrl->GetKey().end());
 
-	if (m_strRes != strKey)
-		m_strRes = strKey;
+	if (m_strRes != strMtrlKey)
+		m_strRes = strMtrlKey;
 
 	string strRelativePath = string(pMtrl->GetRelativePath().begin(), pMtrl->GetRelativePath().end());
 
 	ImGui::Text("Key           ");
 	ImGui::SameLine();
 	ImGui::PushItemWidth(100.f);
-	if (ImGui::InputText("##MtrlKey", (char*)strKey.data(), strKey.length(), ImGuiInputTextFlags_EnterReturnsTrue))
+
+	if (ImGui::InputText("##MtrlKey", (char*)strMtrlKey.data(), strMtrlKey.length(), ImGuiInputTextFlags_EnterReturnsTrue))
 	{
+		string strValidKey{};
+
+		RemoveNullString(strValidKey, strMtrlKey);
+
+		wstring wstrValidKey(strValidKey.begin(), strValidKey.end());
+		
 		if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)pMtrl->GetResType(), pMtrl->GetKey()))
 		{
 			MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
 		}
 
-		wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-		strFilePath += pMtrl->GetRelativePath();
+		wstring wstrOriginFilePath = CPathMgr::GetInst()->GetContentPath();
+		wstrOriginFilePath = pMtrl->GetRelativePath();
 
-		string strPath(strFilePath.begin(), strFilePath.end());
+		string strPath(wstrOriginFilePath.begin(), wstrOriginFilePath.end());
 		
 		if (remove(strPath.c_str()))
-			cout << strPath << " " << "파일 삭제" << endl;
-
-		for (size_t i{}; i < MAX_LAYER; ++i)
 		{
-			const vector<CGameObject*>& vecObjects = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(i)->GetObjects();
-
-			for (size_t i{}; i < vecObjects.size(); ++i)
-			{
-				wstring wstrPath = vecObjects[i]->MeshRender()->GetSharedMaterial()->GetRelativePath();
-				if (strFilePath == wstrPath)
-				{
-					vecObjects[i]->MeshRender()->GetSharedMaterial()->SetRelativePath(wstring(strKey.begin(), strKey.end()));
-					break;
-				}
-			}
+			MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
 		}
 
-		pMtrl->SwapFile(L"\\material\\" + wstring(strKey.begin(), strKey.end()) + L".mtrl");
-		pMtrl->SetName(wstring(strKey.begin(), strKey.end()));
-		// 삭제 가능
-		tEvent evn = {};
-		evn.eType = EVENT_TYPE::EDIT_RES;
-		evn.wParam = (DWORD_PTR)pMtrl->GetResType();
-		evn.lParam = (DWORD_PTR)(pMtrl);
-		CEventMgr::GetInst()->AddEvent(evn);
+		wstring NewwstrPath(L"\\material\\" + wstring(strValidKey.begin(), strValidKey.end()) + L".mtrl");
 
-		MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
+		ConvertGameObjectPath(wstrOriginFilePath, wstrValidKey);
+
+		pMtrl->SwapFile(L"\\material\\" + wstrValidKey + L".mtrl");
+
+		pMtrl->SetName(wstrValidKey);
+		
+		{
+			tEvent evn = {};
+			evn.eType = EVENT_TYPE::EDIT_RES;
+			evn.wParam = (DWORD_PTR)pMtrl->GetResType();
+			evn.lParam = (DWORD_PTR)(pMtrl);
+			CEventMgr::GetInst()->AddEvent(evn);
+		}
 	}
 
 	ImGui::Text("Path          ");
@@ -235,4 +235,25 @@ void MaterialUI::SetShader(DWORD_PTR _strShaderKey)
 	assert(nullptr != pShader);
 
 	((CMaterial*)GetTarget().Get())->SetShader(pShader);
+}
+
+void MaterialUI::ConvertGameObjectPath(const wstring& originPath, const wstring& _NewPath)
+{
+	for (size_t i{}; i < MAX_LAYER; ++i)
+	{
+		const vector<CGameObject*>& vecObjects = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(i)->GetObjects();
+
+		for (size_t i{}; i < vecObjects.size(); ++i)
+		{
+			if (vecObjects[i]->MeshRender())
+			{
+				wstring wstrPath = vecObjects[i]->MeshRender()->GetSharedMaterial()->GetRelativePath();
+				if (originPath == wstrPath)
+				{
+					vecObjects[i]->MeshRender()->GetSharedMaterial()->SetRelativePath(_NewPath);
+					break;
+				}
+			}
+		}
+	}
 }

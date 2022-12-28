@@ -25,7 +25,6 @@ OutlinerUI::OutlinerUI()
 	m_Tree->AddDynamic_RBtn_Selected(this, (FUNC_1)&OutlinerUI::SetObject);
 	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&OutlinerUI::SetObjectToInspector);
 	m_Tree->AddDynamic_DragDrop(this, (FUNC_2)&OutlinerUI::AddChildObject);
-
 	// 레벨 오브젝트 갱신
 	ResetLevel();
 }
@@ -118,7 +117,6 @@ void OutlinerUI::SetObject(DWORD_PTR _res)
 	TreeNode* pSelectedNode = (TreeNode*)_res;
 	m_pGameObject = (CGameObject*)pSelectedNode->GetData();
 }
-
 
 void OutlinerUI::SetObjectToInspector(DWORD_PTR _res)
 {

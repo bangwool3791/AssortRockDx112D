@@ -33,23 +33,23 @@ CPlayerScript::~CPlayerScript()
 
 void CPlayerScript::begin()
 {
-	m_vTarget = GetOwner()->Transform()->GetRelativePos();
+	//m_vTarget = GetOwner()->Transform()->GetRelativePos();
 }
 
 void CPlayerScript::tick()
 {
-	Vec3 vPos = Transform()->GetRelativePos();
-	vPos.z = 1.f;
+	//Vec3 vPos = Transform()->GetRelativePos();
+	//vPos.z = 1.f;
 
-	/*
-	* Occur Frame Drop
-	*/
-	if ((m_vTarget - vPos).Length() > 1.f)
-	{
-		auto vMove = m_vTarget - vPos;
-		vPos += vMove * DT;
-		Transform()->SetRelativePos(vPos);
-	}
+	///*
+	//* Occur Frame Drop
+	//*/
+	//if ((m_vTarget - vPos).Length() > 1.f)
+	//{
+	//	auto vMove = m_vTarget - vPos;
+	//	vPos += vMove * DT;
+	//	Transform()->SetRelativePos(vPos);
+	//}
 }
 
 void CPlayerScript::BeginOverlap(CCollider2D* _pOther) 

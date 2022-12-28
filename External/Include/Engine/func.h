@@ -117,6 +117,23 @@ void clear_function(T& container)
 	}
 }
 
+inline void RemoveNullString(string& target, const string& source)
+{
+	int index = 0;
+
+	for (size_t i{}; i < source.size(); ++i)
+	{
+		if ('\0' != source[i])
+			index++;
+	}
+
+	target.resize(index);
+	for (size_t i{}; i < index; ++i)
+	{
+		target[i] = source[i];
+	}
+}
+
 class CEntity;
 inline bool IsValid(CEntity* _pCom)
 {

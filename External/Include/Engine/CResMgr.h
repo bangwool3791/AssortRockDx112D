@@ -101,6 +101,7 @@ inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 template<typename T>
 inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 {
+	auto ite2r = m_arrRes[3].find(L"aaaa");
 	auto iter = m_arrRes[(UINT)::GetType<T>()].find(_strKey);
 
 	if (iter == m_arrRes[(UINT)::GetType<T>()].end())
