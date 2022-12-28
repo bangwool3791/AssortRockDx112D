@@ -53,7 +53,8 @@ void MeshRenderUI::render_update()
 	if (ImGui::Button("##MeshBtn", Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-		assert(pListUI);
+		
+		assert(nullptr != pListUI);
 
 		// 메쉬 목록을 받아와서, ListUI 에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::MESH);
@@ -78,7 +79,8 @@ void MeshRenderUI::render_update()
 	if (ImGui::Button("##MtrlBtn", Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-		assert(pListUI);
+		
+		assert(nullptr != pListUI);
 
 		// 메테리얼 목록을 받아와서, ListUI 에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::MATERIAL);
@@ -103,6 +105,7 @@ void MeshRenderUI::SetMesh(DWORD_PTR _strMeshKey)
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
 
 	Ptr<CMesh> pMesh = CResMgr::GetInst()->FindRes<CMesh>(wstrKey);
+	
 	assert(nullptr != pMesh);
 
 	GetTarget()->MeshRender()->SetMesh(pMesh);
@@ -114,6 +117,7 @@ void MeshRenderUI::SetMaterial(DWORD_PTR _strMaterialKey)
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
 
 	Ptr<CMaterial> pMtrl = CResMgr::GetInst()->FindRes<CMaterial>(wstrKey);
+	
 	assert(nullptr != pMtrl);
 
 	GetTarget()->MeshRender()->SetSharedMaterial(pMtrl);

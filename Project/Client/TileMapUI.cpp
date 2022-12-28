@@ -53,7 +53,9 @@ void TileMapUI::render_update()
 	if (ImGui::Button("Apply"))
 	{
 		ProgressUI* pProgressUI = dynamic_cast<ProgressUI*>(CImGuiMgr::GetInst()->FindUI("ProgressUI"));
-		assert(pProgressUI);
+		
+		assert(nullptr != pProgressUI);
+
 		m_pEditTileMap->EidtApply();
 		pProgressUI->Open();
 	}

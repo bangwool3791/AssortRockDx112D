@@ -10,6 +10,7 @@
 #include "ParamUI.h"
 
 CImGuiMgr::CImGuiMgr()
+    : m_NotifyHandle{}
 {
 }
 
@@ -56,6 +57,11 @@ void CImGuiMgr::init(HWND _hWnd)
 
     // UI 생성
     CreateUI();
+
+    // 파일 변경감지 핸들 등록
+    m_NotifyHandle = FindFirstChangeNotification(
+        CPathMgr::GetInst()->GetContentPath(), true,
+        FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME);
 }
 
 void CImGuiMgr::progress()
@@ -94,6 +100,8 @@ void CImGuiMgr::progress()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
     }
+    //알림 확인
+    ObserveContent();
 }
 
 void CImGuiMgr::clear()
@@ -134,7 +142,8 @@ void CImGuiMgr::CreateUI()
 
     pUI = new ContentUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
-
+    ((ContentUI*)pUI)->ReloadContent();
+    ((ContentUI*)pUI)->ResetContent();
     pUI = new DummyUI;
     pUI->begin();
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
@@ -171,4 +180,17 @@ UI* CImGuiMgr::FindUI(const string& _name)
 
     return iter->second;
     
+}
+
+void CImGuiMgr::ObserveContent()
+{
+    DWORD dwWateState = WaitForSingleObject(m_NotifyHandle, 0);
+
+    if (dwWateState == WAIT_OBJECT_0)
+    {
+        ContentUI* pContentUI = (ContentUI*)FindUI("Content");
+        pContentUI->ReloadContent();
+
+        FindNextChangeNotification(m_NotifyHandle);
+    }
 }

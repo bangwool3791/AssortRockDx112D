@@ -52,11 +52,7 @@ void MaterialUI::render_update()
 
 	if (ImGui::InputText("##MtrlKey", (char*)strMtrlKey.data(), strMtrlKey.length(), ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		string strValidKey{};
-
-		RemoveNullString(strValidKey, strMtrlKey);
-
-		wstring wstrValidKey(strValidKey.begin(), strValidKey.end());
+		wstring wstrValidKey(strMtrlKey.begin(), strMtrlKey.end());
 		
 		if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)pMtrl->GetResType(), pMtrl->GetKey()))
 		{
@@ -64,7 +60,7 @@ void MaterialUI::render_update()
 		}
 
 		wstring wstrOriginFilePath = CPathMgr::GetInst()->GetContentPath();
-		wstrOriginFilePath = pMtrl->GetRelativePath();
+		wstrOriginFilePath += pMtrl->GetRelativePath();
 
 		string strPath(wstrOriginFilePath.begin(), wstrOriginFilePath.end());
 		
@@ -73,12 +69,11 @@ void MaterialUI::render_update()
 			MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
 		}
 
-		wstring NewwstrPath(L"\\material\\" + wstring(strValidKey.begin(), strValidKey.end()) + L".mtrl");
-
+		wstrValidKey = L"material\\" + wstrValidKey;
+		wstrValidKey = lstrcat(wstrValidKey.data(), L".mtrl");
 		ConvertGameObjectPath(wstrOriginFilePath, wstrValidKey);
 
-		pMtrl->SwapFile(L"\\material\\" + wstrValidKey + L".mtrl");
-
+		pMtrl->SwapFile(wstrValidKey);
 		pMtrl->SetName(wstrValidKey);
 		
 		{
@@ -110,7 +105,8 @@ void MaterialUI::render_update()
 	if (ImGui::Button("##ShaderBtn", Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-		assert(pListUI);
+		
+		assert(nullptr != pListUI);
 
 		// 메쉬 목록을 받아와서, ListUI 에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::GRAPHICS_SHADER);
@@ -220,6 +216,7 @@ void MaterialUI::SetTexture(DWORD_PTR _strTexKey)
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
 
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(wstrKey);
+	
 	assert(nullptr != pTex);
 
 	CMaterial* pMtrl = ((CMaterial*)GetTarget().Get());
@@ -232,7 +229,9 @@ void MaterialUI::SetShader(DWORD_PTR _strShaderKey)
 	wstring wstrKey = wstring(strKey.begin(), strKey.end());
 
 	Ptr<CGraphicsShader> pShader = CResMgr::GetInst()->FindRes<CGraphicsShader>(wstrKey);
-	assert(nullptr != pShader);
+	
+	if(nullptr == pShader)
+
 
 	((CMaterial*)GetTarget().Get())->SetShader(pShader);
 }

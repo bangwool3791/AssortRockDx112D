@@ -12,6 +12,7 @@ CAnimator2D::CAnimator2D()
     , m_mapAnim{}
     , m_strKey{}
 {
+
 }
 
 CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
@@ -21,13 +22,16 @@ CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
     , m_strKey{_rhs.m_strKey}
 {
     CAnimation2D* pAnimation2D{};
-
-    for (auto iter = _rhs.m_mapAnim.begin(); iter != _rhs.m_mapAnim.end(); ++iter)
+    auto iter = _rhs.m_mapAnim.begin();
+    for (; iter != _rhs.m_mapAnim.end(); ++iter)
     {
         pAnimation2D = nullptr;
         m_mapAnim.insert(make_pair(iter->first, pAnimation2D = iter->second->Clone()));
         pAnimation2D->SetOwner(this);
     }
+    assert(m_mapAnim.size());
+    --iter;
+    Play(iter->first, true);
 }
 
 CAnimator2D::~CAnimator2D()
@@ -37,12 +41,13 @@ CAnimator2D::~CAnimator2D()
 
 void CAnimator2D::CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS)
 {
-    assert(_AtlasTex.Get());
+    assert(nullptr != _AtlasTex);
 
     CAnimation2D* pAnimation2D;
 
     pAnimation2D = FindAnimation(_strKey);
-    assert(!pAnimation2D);
+
+    assert(nullptr == pAnimation2D);
 
     pAnimation2D = new CAnimation2D;
     pAnimation2D->Create(_strKey, _AtlasTex, _vLeftTop, _vSlice, _fStep, _iMaxFrm, _FPS);
@@ -80,7 +85,7 @@ void CAnimator2D::Play(const wstring& _strKey, bool _bRepeat)
     m_strKey = _strKey;
     CAnimation2D* pAnimation = FindAnimation(_strKey);
 
-    assert(pAnimation);
+    assert(nullptr != pAnimation);
 
     if (IsValid(pAnimation))
     {

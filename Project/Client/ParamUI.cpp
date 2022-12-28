@@ -104,7 +104,8 @@ bool ParamUI::Param_Tex(const string& _ParamName, Ptr<CTexture>& _Tex, UI* _Inst
 	if (ImGui::Button(szName, Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));
-		assert(pListUI);
+
+		assert(nullptr != pListUI);
 
 		//메쉬 목록을 받아와서, ListUI에 전달
 		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource(RES_TYPE::TEXTURE);

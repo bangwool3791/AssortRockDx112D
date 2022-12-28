@@ -23,7 +23,7 @@ void ResUI::render_update()
 
     // 정보를 표현하려는 리소스가 해당 UI 와 일치하는 타입인지 확인한다.
     // 클릭 또는 드랍 리소스가 UI 객체 타입과 다르다면 assert
-    if (m_eResType != GetTarget()->GetResType())
-        assert(nullptr);
+    assert(m_eResType == GetTarget()->GetResType());
+        
 }
 

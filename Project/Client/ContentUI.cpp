@@ -41,13 +41,6 @@ ContentUI::~ContentUI()
 
 void ContentUI::update()
 {
-	static bool bChk = false;
-
-	if (bChk == false)
-	{
-		ReloadContent();
-		bChk = true;
-	}
 	if (CResMgr::GetInst()->IsChanged())
 	{
 		ResetContent();
@@ -92,7 +85,7 @@ void ContentUI::update()
 			{
 				RES_TYPE type = ((CRes*)pSelectedNode->GetData())->GetResType();
 
-				wstring strRelativePath;
+				wstring wstrRelativePath;
 
 				switch (type)
 				{
@@ -105,9 +98,17 @@ void ContentUI::update()
 				case RES_TYPE::MATERIAL:
 				{
 					Ptr<CMaterial> pRes = (CMaterial*)pSelectedNode->GetData();
-					strRelativePath = L"\\material\\";
-					strRelativePath += pRes->GetKey();
-					pRes->Save(strRelativePath);
+					if (pRes->GetName().find(L".mtrl") != std::string::npos) 
+					{
+						pRes->Save(pRes->GetName());
+					}
+					else
+					{
+						wstrRelativePath = L"material\\";
+						wstrRelativePath = lstrcpy(wstrRelativePath.data(), pRes->GetName().data());
+						wstrRelativePath = lstrcpy(wstrRelativePath.data(), +L".mtrl");
+						pRes->Save(wstrRelativePath);
+					}
 				}
 				break;
 				case RES_TYPE::MESH:
@@ -209,10 +210,7 @@ void ContentUI::ReloadContent()
 
 			wstring strRelativePath = iter->second->GetRelativePath();
 
-			if (strRelativePath.empty())
-			{
-				MessageBox(nullptr, L"ReloadContent File Path", L"Error", MB_OK);
-			}
+			assert(!strRelativePath.empty());
 
 			if (!std::filesystem::exists(strFolderPath + strRelativePath))
 			{
@@ -267,11 +265,7 @@ void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 
 	hFindHandle = FindFirstFile(strFolderPath.c_str(), &data);
 
-	if (INVALID_HANDLE_VALUE == hFindHandle)
-	{
-		MessageBox(nullptr, L"FindFirstFile", L"Error", MB_OK);
-		return;
-	}
+	assert(hFindHandle);
 
 	while (FindNextFile(hFindHandle, &data))
 	{

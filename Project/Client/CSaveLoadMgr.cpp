@@ -28,7 +28,7 @@ void CSaveLoadMgr::init()
 void CSaveLoadMgr::SaveLevel(CLevel* _Level, wstring _strRelativePath)
 {
 	//입력 레벨이 nullptr이면 assert
-	assert(_Level);
+	assert(nullptr != _Level);
 
 	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
 	strFilePath += _strRelativePath;

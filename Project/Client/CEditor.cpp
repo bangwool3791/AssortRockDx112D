@@ -420,7 +420,7 @@ void CEditor::PopByName(const wstring& _strky)
 
 void CEditor::SetEditmode(EDIT_MODE _editmode)
 {
-	assert(!(_editmode == EDIT_MODE::END));
+	assert(_editmode != EDIT_MODE::END);
 
 	m_editmode = _editmode;
 
