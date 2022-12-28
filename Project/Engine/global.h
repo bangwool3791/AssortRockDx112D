@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <Windows.h>
 #include <stack>
 #include <vector>
@@ -41,6 +40,12 @@ using std::cout;
 using std::endl;
 
 #include <typeinfo>
+
+// FileSystem
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
+#include <experimental/filesystem>
+using namespace std::experimental;
+using namespace std::experimental::filesystem;
 
 #include <d3d11.h>
 #include <d3dcompiler.h>

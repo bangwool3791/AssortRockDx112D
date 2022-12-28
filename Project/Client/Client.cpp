@@ -7,6 +7,7 @@
 #include "CEditor.h"
 #include "CreateTestLevel.h"
 #include <Engine/CDevice.h>
+#include "CSaveLoadMgr.h"
 #include "CImGuiMgr.h"
 
 #ifdef UNICODE
@@ -53,7 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     CreateTestLelvel();
-
+    CSaveLoadMgr::GetInst()->init();
     CEditor::GetInst()->init();
     // ImGui 초기화  
     CImGuiMgr::GetInst()->init(g_hWnd);

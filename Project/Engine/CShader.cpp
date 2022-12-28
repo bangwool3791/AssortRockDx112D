@@ -2,7 +2,7 @@
 #include "CShader.h"
 
 CShader::CShader(RES_TYPE _eResType)
-	:CRes(_eResType)
+	:CRes(_eResType, true)
 {
 
 }

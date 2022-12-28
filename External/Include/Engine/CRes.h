@@ -17,7 +17,7 @@ public:
     {
         ++m_iRefCount;
     }
-    
+
     void Release()
     {
         --m_iRefCount;
@@ -33,20 +33,21 @@ public:
         }
     }
 public:
+    int GetRefCount() const { return m_iRefCount; }
     //파일로 저장
     virtual void Save(const wstring _strRelativePath) = 0;
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath) = 0;
 
-protected: 
+protected:
     void SaveKeyPath(FILE* _pFile);
     void LoadKeyPath(FILE* _pFile);
 
 public:
-    const wstring& GetKey() { return m_strKey; }
-    const wstring& GetRelativePath() { return m_strRelativePath; }
-    RES_TYPE GetResType() { return m_eResType; }
-    bool IsEngineRes() { return m_bEngineRes; }
+    const wstring& GetKey() const { return m_strKey; }
+    const wstring& GetRelativePath() const { return m_strRelativePath; }
+    RES_TYPE GetResType() const { return m_eResType; }
+    bool IsEngineRes() const { return m_bEngineRes; }
 public:
     void SetKey(const wstring& _strKey) { m_strKey = _strKey; }
     void SetRelativePath(const wstring& _strRelativePath) { m_strRelativePath = _strRelativePath; }

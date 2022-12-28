@@ -36,7 +36,8 @@ public:
 
     UINT  GetWidth()     { return m_Desc.Width; }
     UINT  GetHeight()    { return m_Desc.Height; }
-    ComPtr<ID3D11Texture2D>   GetTex2D() {return m_Tex2D;}
+
+    ComPtr<ID3D11Texture2D>           GetTex2D() {return m_Tex2D;}
     ComPtr<ID3D11RenderTargetView>    GetRTV() { return  m_RTV; }
     ComPtr<ID3D11DepthStencilView>    GetDSV() { return  m_DSV; }
     ComPtr<ID3D11ShaderResourceView>  GetSRV() { return  m_SRV; }
@@ -52,10 +53,10 @@ public:
     // »ý¼º
     void Create(UINT _iWidth, UINT _iHeight, DXGI_FORMAT _Format, UINT _iBindFlag);
     void Create(ComPtr<ID3D11Texture2D> _Tex2D);
-    CLONE_DUMMY(CTexture);
 
+    CLONE_ASSERT(CTexture);
 public:
-    CTexture();
+    CTexture(bool _bEngineRes = false);
     virtual ~CTexture();
 };
 

@@ -114,7 +114,7 @@ void CEditor::init()
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 
-	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 	pObject->Animator2D()->Play(L"LeftWalk", true);
 	m_vecDummyObj.push_back(pObject);
 	
@@ -126,7 +126,7 @@ void CEditor::init()
 	m_arrCom[(UINT)COMPONENT_TYPE::COLLIDER2D]	= new CCollider2D();
 	m_arrCom[(UINT)COMPONENT_TYPE::COLLIDER2D]->SetName(L"Colider2D");
 	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]	= new CAnimator2D();
-	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Human"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\HumansA_LQ.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->Play(L"LeftWalk", true);
 	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetName(L"Animator2D");
 	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]		= new CLight2D();
@@ -279,7 +279,7 @@ void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)
 	pObject->AddComponent(new CRefAniScript);
 	pObject->AddComponent(new CAnimator2D);
 
-	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Human");
+	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\HumansA_LQ.png");
 	UINT width = pTex->GetWidth();
 	UINT height = pTex->GetHeight();
 

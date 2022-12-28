@@ -3,14 +3,14 @@
 
 #include "CDevice.h"
 
-CMesh::CMesh()
-	:CRes(RES_TYPE::MESH)
+CMesh::CMesh(bool _bEngineRes)
+	: CRes(RES_TYPE::MESH, _bEngineRes)
 	, m_tVBDesc{}
 	, m_tIBDesc{}
-	, m_iIdxCount{0}
+	, m_iIdxCount(0)
 {
-
 }
+
 
 CMesh::~CMesh()
 {

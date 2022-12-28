@@ -112,6 +112,15 @@ void CEventMgr::tick()
 			}
 		}
 			break;
+		case EVENT_TYPE::DELETE_RES:
+		{
+			// wParam : RES_TYPE, lParam : Resource Adress
+			if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)iter->wParam, ((CRes*)iter->lParam)->GetKey()))
+			{
+				MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
+			}
+			break;
+		}
 		}
 	}
 

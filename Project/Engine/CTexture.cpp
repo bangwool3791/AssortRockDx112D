@@ -4,11 +4,12 @@
 #include "CDevice.h"
 
 
-CTexture::CTexture()
-    : CRes(RES_TYPE::TEXTURE)
+CTexture::CTexture(bool _bEngineRes)
+    : CRes(RES_TYPE::TEXTURE, _bEngineRes)
     , m_Desc{}
 {
 }
+
 
 CTexture::~CTexture()
 {

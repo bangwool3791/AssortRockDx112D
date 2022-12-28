@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "CreateTestLevel.h"
-#include "CLevelSaveLoad.h"
+#include "CSaveLoadMgr.h"
 
 #include <Engine\CPrefab.h>
 #include <Engine\CResMgr.h>
@@ -32,7 +32,7 @@ void CreateDefaultPrefab()
 	pObject->Transform()->SetRelativeScale(Vec3{ 50.f, 50.f, 1.f });
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Plane"));
+	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Player.bmp"));
 
 	CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject));
 
@@ -87,10 +87,10 @@ void CreateDefaultPrefab()
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"Tile"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ShadowMtrl"));
 
-	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 	pObject->Animator2D()->Play(L"LeftWalk", true);
 
-	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.dds");
+	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
 
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 	CResMgr::GetInst()->AddRes<CPrefab>(L"ShadowPrefab", new CPrefab(pObject));
@@ -98,11 +98,11 @@ void CreateDefaultPrefab()
 
 void CreateTestLelvel()
 {
-	CreateDefaultPrefab();
-	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
-	CLevelMgr::GetInst()->ChangeLevel(Level);
-	Level->begin();
-	return;
+	//CreateDefaultPrefab();
+	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+	//CLevelMgr::GetInst()->ChangeLevel(Level);
+	//Level->begin();
+	//return;
 	
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
@@ -195,24 +195,22 @@ void CreateTestLelvel()
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 
-		pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"Link"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+		pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 		pObject->Animator2D()->Play(L"LeftWalk", true);
 
 		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-		Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.dds");
+		Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
 		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
 		pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
-		Instantiate(pPrefab->Instantiate(), pObject, 1);
-
 		pLevel->AddGameObject(pObject, 1);
 	}
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
 	* Mouse
 	*/
-	pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
-	Instantiate(pPrefab->Instantiate(), 31);
+	//pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
+	//Instantiate(pPrefab->Instantiate(), 31);
 
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
 
@@ -252,7 +250,7 @@ void CreateTestLelvel()
 	//pObject->AddComponent(new CCollider2D);
 	//pObject->AddComponent(new CRefAniScript);
 
-	//Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"Link");
+	//Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png");
 	//UINT width = pTex->GetWidth();
 	//UINT height = pTex->GetHeight();
 

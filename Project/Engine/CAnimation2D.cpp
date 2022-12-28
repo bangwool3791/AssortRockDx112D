@@ -104,7 +104,7 @@ int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuratio
 	frm.fDuration = _fDuration;
 	frm.vFullSize = Vec2{ _vFullSize.x / fWidth, _vFullSize.y / fHeight };
 	m_vecFrm.push_back(frm);
-	m_iCurIdx = m_vecFrm.size() - 1;
+	m_iCurIdx = (int)(m_vecFrm.size() - 1);
 	return m_iCurIdx;
 }
 
@@ -239,8 +239,8 @@ float CAnimation2D::GetDuration(int _index)
 void CAnimation2D::SetTexture(Ptr<CTexture> _texture)
 {
 	m_AtlasTex = _texture;
-	m_fWidth= m_AtlasTex->GetWidth();
-	m_fHeight= m_AtlasTex->GetHeight();
+	m_fWidth= (float)m_AtlasTex->GetWidth();
+	m_fHeight= (float)m_AtlasTex->GetHeight();
 }
 
 void CAnimation2D::SaveToFile(FILE* _File)

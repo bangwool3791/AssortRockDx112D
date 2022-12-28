@@ -18,6 +18,7 @@ CRes::CRes(const CRes& _other)
 
 CRes::~CRes()
 {
+	assert(!(0 < m_iRefCount));
 }
 
 bool CRes::CheckRelativePath(const wstring& _strRelativePath)

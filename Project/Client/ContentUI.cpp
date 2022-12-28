@@ -16,6 +16,7 @@
 #include <Engine\CKeyMgr.h>
 #include <Engine\CTransform.h>
 #include <Engine/CCamera.h>
+#include <Engine\CPathMgr.h>
 
 ContentUI::ContentUI()
 	:UI("Content")
@@ -40,6 +41,13 @@ ContentUI::~ContentUI()
 
 void ContentUI::update()
 {
+	static bool bChk = false;
+
+	if (bChk == false)
+	{
+		ReloadContent();
+		bChk = true;
+	}
 	if (CResMgr::GetInst()->IsChanged())
 	{
 		ResetContent();
@@ -146,6 +154,89 @@ void ContentUI::ResetContent()
 	}
 }
 
+void ContentUI::ReloadContent()
+{
+	// Content 폴더에 있는 모든 리소스들을 검사 및 로딩
+	wstring strFolderPath = CPathMgr::GetInst()->GetContentPath();
+	FindContentFileName(strFolderPath);
+
+	for (size_t i{}; i < m_vecContentName.size(); ++i)
+	{
+		RES_TYPE resType = GetResTypeByExt(m_vecContentName[i]);
+
+		if (RES_TYPE::END == resType)
+			continue;
+
+		switch (resType)
+		{
+		case RES_TYPE::PREFAB:
+			CResMgr::GetInst()->Load<CPrefab>(m_vecContentName[i]);
+			break;
+		case RES_TYPE::MESHDATA:
+			break;
+		case RES_TYPE::COMPUTE_SHADER:
+			break;
+		case RES_TYPE::MATERIAL:
+			CResMgr::GetInst()->Load<CMaterial>(m_vecContentName[i]);
+			break;
+		case RES_TYPE::MESH:
+			break;
+		case RES_TYPE::TEXTURE:
+			CResMgr::GetInst()->Load<CTexture>(m_vecContentName[i]);
+			break;
+		case RES_TYPE::SOUND:
+			break;
+		case RES_TYPE::GRAPHICS_SHADER:
+			break;
+		case RES_TYPE::END:
+			break;
+		default:
+			break;
+		}
+	}
+
+	for (UINT i{}; i < (UINT)RES_TYPE::END; ++i)
+	{
+		const map<wstring, Ptr<CRes>>& mapRes = CResMgr::GetInst()->GetResource((RES_TYPE)i);
+		map<wstring, Ptr<CRes>>::const_iterator iter = mapRes.cbegin();
+
+		for (iter; iter != mapRes.end(); ++iter)
+		{
+			if (iter->second->IsEngineRes())
+			{
+				continue;
+			}
+
+			wstring strRelativePath = iter->second->GetRelativePath();
+
+			if (strRelativePath.empty())
+			{
+				MessageBox(nullptr, L"ReloadContent File Path", L"Error", MB_OK);
+			}
+
+			if (!std::filesystem::exists(strFolderPath + strRelativePath))
+			{
+				if (iter->second->GetRefCount() <= 1)
+				{
+					// 삭제 가능
+					tEvent evn = {};
+					evn.eType = EVENT_TYPE::DELETE_RES;
+					evn.wParam = i;
+					evn.lParam = (DWORD_PTR)(iter->second.Get());
+
+					CEventMgr::GetInst()->AddEvent(evn);
+
+					MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
+				}
+				else
+				{
+					// 해당 리소스를 참조하는 객체가 있음	
+					MessageBox(nullptr, L"사용 중 인 리소스/n리소스 삭제 실패", L"리소스 변경 확인", MB_OK);
+				}
+			}
+		}
+	}
+}
 
 void ContentUI::SetDragObject(DWORD_PTR _res)
 {
@@ -163,4 +254,58 @@ void ContentUI::SetResourceToInspector(DWORD_PTR _res)
 	// InspectorUI 에 클릭된 Resouce 를 알려준다.
 	InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 	Inspector->SetTargetResource(pRes);
+}
+
+void ContentUI::FindContentFileName(const wstring& _strFolderPath)
+{
+	// 모든 파일명을 알아낸다.
+	wstring strFolderPath = _strFolderPath + L"*.*";
+
+	HANDLE hFindHandle = nullptr;
+
+	WIN32_FIND_DATA data{};
+
+	hFindHandle = FindFirstFile(strFolderPath.c_str(), &data);
+
+	if (INVALID_HANDLE_VALUE == hFindHandle)
+	{
+		MessageBox(nullptr, L"FindFirstFile", L"Error", MB_OK);
+		return;
+	}
+
+	while (FindNextFile(hFindHandle, &data))
+	{
+		if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && wcscmp(data.cFileName, L".."))
+		{
+			FindContentFileName(_strFolderPath + data.cFileName + L"\\");
+		}
+		else
+		{
+			wstring strRelative = GetRelativePath(CPathMgr::GetInst()->GetContentPath(), _strFolderPath + data.cFileName);
+			m_vecContentName.push_back(strRelative);
+		}
+	}
+	FindClose(hFindHandle);
+}
+
+RES_TYPE ContentUI::GetResTypeByExt(const wstring& _filename)
+{
+	wstring strExt = path(_filename.c_str()).extension();
+
+	if (strExt == L".pref")
+		return RES_TYPE::PREFAB;
+	else if (strExt == L".mdat")
+		return RES_TYPE::MESHDATA;
+	else if (strExt == L".mtrl")
+		return RES_TYPE::MATERIAL;
+	else if (strExt == L".mesh")
+		return RES_TYPE::MESH;
+	else if (strExt == L".dds" || strExt == L".DDS" || strExt == L".tag" || strExt == L".TGA"
+		|| strExt == L".png" || strExt == L".jpg" || strExt == L".JPG" || strExt == L".jegp" || strExt == L".JPEG"
+		|| strExt == L".bmp" || strExt == L".BMP")
+		return RES_TYPE::TEXTURE;
+	else if (strExt == L".mp3" || strExt == L".MP3" || strExt == L".wav" || strExt == L".WAV" || strExt == L".ogg" || strExt == L".OGG")
+		return RES_TYPE::SOUND;
+	else
+		return RES_TYPE::END;
 }

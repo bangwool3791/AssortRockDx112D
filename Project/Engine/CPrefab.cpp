@@ -3,6 +3,9 @@
 
 #include "CGameObject.h"
 
+SAVE_GAMEOBJECT CPrefab::Save_GameObject_Func = nullptr;
+LOAD_GAMEOBJECT CPrefab::Load_GameObject_Func = nullptr;
+
 CPrefab::CPrefab()
 	:CRes(RES_TYPE::PREFAB)
 	, m_pProtoObj{nullptr}
@@ -32,4 +35,38 @@ CGameObject* CPrefab::Instantiate()
 		return m_pProtoObj->Clone();
 
 	return nullptr;
+}
+
+void CPrefab::Save(const wstring _strRelativePath)
+{
+	if (!CheckRelativePath(_strRelativePath))
+		MessageBox(nullptr, L"CPrefab File Save", L"Failed", MB_OK);
+	
+	FILE* pFile = nullptr;
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	SaveKeyPath(pFile);
+
+	Save_GameObject_Func(m_pProtoObj, pFile);
+
+	fclose(pFile);
+}
+
+int CPrefab::Load(const wstring& _strFilePath)
+{
+	FILE* pFile = nullptr;
+
+	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+
+	LoadKeyPath(pFile);
+
+	m_pProtoObj = Load_GameObject_Func(pFile);
+
+	fclose(pFile);
+
+	return S_OK;
 }

@@ -66,8 +66,8 @@ void TileMapUI::render_update()
 
 	for (UINT i{}; i < TEX_32; ++i)
 	{
-		wstring str = L"Tile";
-		str += std::to_wstring(i);
+		wstring str = L"texture\\Terrain\\Tile\\Tile";
+		str += std::to_wstring(i) + L".png";
 		ImTextureID myImage = CResMgr::GetInst()->FindRes<CTexture>(str)->GetSRV().Get();
 
 		if (ImGui::ImageButton(myImage, ImVec2(50.f, 50.f)))

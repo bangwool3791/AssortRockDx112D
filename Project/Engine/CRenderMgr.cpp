@@ -90,7 +90,7 @@ void CRenderMgr::redner_editor()
 
 void CRenderMgr::UpdateNoiseTexture()
 {
-	Ptr<CTexture> NoiseTex = CResMgr::GetInst()->FindRes<CTexture>(L"Noise_02");
+	Ptr<CTexture> NoiseTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\noise\\noise_02.png");
 
 	NoiseTex->UpdateData(58, PIPELINE_STAGE::ALL_STAGE);
 	NoiseTex->UpdateData_CS(58, true);

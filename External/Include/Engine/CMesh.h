@@ -18,12 +18,12 @@ public :
     void UpdateData();
     void render();
     void render_particle(UINT _iCount);
-    CLONE_ASSERT(CMesh);
 
     virtual void Save(const wstring _strRelativePath) {}
     virtual int Load(const wstring& _strFilePath) override { return S_OK; }
 
+    CLONE_ASSERT(CMesh);
 public:
-    CMesh();
+    CMesh(bool _bEngineRes = false);
     virtual ~CMesh();
 };

@@ -262,7 +262,7 @@
     <ClInclude Include="CEditorCam.h">
       <Filter>01. Editor\EditorComponent</Filter>
     </ClInclude>
-    <ClInclude Include="CLevelSaveLoad.h">
+    <ClInclude Include="CSaveLoadMgr.h">
       <Filter>04. SaveLoad</Filter>
     </ClInclude>
     <ClInclude Include="ImGuiFileDialog.h">
@@ -408,7 +408,7 @@
     <ClCompile Include="Client.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="CLevelSaveLoad.cpp">
+    <ClCompile Include="CSaveLoadMgr.cpp">
       <Filter>04. SaveLoad</Filter>
     </ClCompile>
     <ClCompile Include="ImGuiFileDialog.cpp">

@@ -22,6 +22,8 @@ public:
 	inline void AddRes(const wstring& _strKey, T* _pRes);
 	bool DeleteRes(RES_TYPE _Type, const wstring& _strKey);
 	template<typename T>
+	inline Ptr<T> Load(const wstring& _strRelativePath);
+	template<typename T>
 	Ptr<T> Load(const wstring& _strKey, const wstring& _strRelativePath);
 	template<typename T>
 	Ptr<T> FindRes(const wstring& _strKey);
@@ -108,6 +110,37 @@ inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 		return nullptr;
 
 	return (T*)iter->second.Get();
+}
+
+template<typename T>
+inline Ptr<T> CResMgr::Load(const wstring& _strRelativePath)
+{
+	//1. 타입을 읽어온다.
+	//2. 경로를 완성한다.
+	//3. 리소스 객체를 완성한다.
+	RES_TYPE eResType = GetType<T>();
+
+	CRes* pResource = FindRes<T>(_strRelativePath).Get();
+
+	if (nullptr != pResource)
+		return (T*)pResource;
+
+	pResource = new T;
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	if (FAILED(pResource->Load(strFilePath)))
+	{
+		MessageBox(nullptr, strFilePath.c_str(), L"리소스 로딩 실패", MB_OK);
+		return nullptr;
+	}
+
+	pResource->SetKey(_strRelativePath);
+	pResource->SetRelativePath(_strRelativePath);
+	m_arrRes[(UINT)eResType].insert(make_pair(_strRelativePath, pResource));
+
+	return (T*)pResource;
 }
 
 template<typename T>

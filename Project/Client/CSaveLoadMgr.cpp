@@ -1,4 +1,4 @@
-#include "CLevelSaveLoad.h"
+#include "CSaveLoadMgr.h"
 
 #include <Engine\CLevel.h>
 
@@ -6,6 +6,7 @@
 #include <Engine\CComponent.h>
 #include <Engine\CGameObject.h>
 #include <Engine\CScript.h>
+#include <Engine\CPrefab.h>
 #include <Script\CScriptMgr.h>
 
 CSaveLoadMgr::CSaveLoadMgr()
@@ -16,6 +17,12 @@ CSaveLoadMgr::CSaveLoadMgr()
 CSaveLoadMgr::~CSaveLoadMgr()
 {
 
+}
+
+void CSaveLoadMgr::init()
+{
+	CPrefab::Save_GameObject_Func = &CSaveLoadMgr::SaveGameObject;
+	CPrefab::Load_GameObject_Func = &CSaveLoadMgr::LoadGameObject;
 }
 
 void CSaveLoadMgr::SaveLevel(CLevel* _Level, wstring _strRelativePath)

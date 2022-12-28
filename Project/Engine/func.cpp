@@ -5,6 +5,18 @@
 #include "CEventMgr.h"
 #include "CRenderMgr.h"
 
+wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath)
+{
+	wstring strRelativePath;
+	if (-1 == _strPath.find(_strBase))
+	{
+		return strRelativePath;
+	}
+
+	strRelativePath = _strPath.substr(_strBase.length(), _strPath.length());
+	return strRelativePath;
+}
+
 void Instantiate(CGameObject* _pNewObj, int _iLayerIdx)
 {
 	tEvent evn{};

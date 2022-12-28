@@ -3,6 +3,9 @@
 
 class CGameObject;
 
+typedef void (*SAVE_GAMEOBJECT)(CGameObject*, FILE*);
+typedef CGameObject* (*LOAD_GAMEOBJECT)(FILE*);
+
 class CPrefab :
 	public CRes
 {
@@ -10,10 +13,13 @@ private :
 	CGameObject* m_pProtoObj;
 
 public :
+	static SAVE_GAMEOBJECT Save_GameObject_Func;
+	static LOAD_GAMEOBJECT Load_GameObject_Func;
+public :
 	CGameObject* Instantiate();
 
-	virtual void Save(const wstring _strRelativePath) {}
-	virtual int Load(const wstring& _strFilePath) { return E_FAIL; }
+	virtual void Save(const wstring _strRelativePath) override;
+	virtual int Load(const wstring& _strFilePath) override;
 
 	CLONE_DUMMY(CPrefab);
 

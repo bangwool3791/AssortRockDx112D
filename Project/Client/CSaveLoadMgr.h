@@ -11,11 +11,14 @@ class CSaveLoadMgr
 {
 private:
 
+public:
+	void init();
 public :
 	void SaveLevel(CLevel* _Level, wstring _strRelativePath);
-	void SaveGameObject(CGameObject* _Object, FILE* _File);
 	CLevel* LoadLevel(const wstring& _strRelativePath);
-	CGameObject* LoadGameObject(FILE* _File);
+
+	static void SaveGameObject(CGameObject* _Object, FILE* _File);
+	static CGameObject* LoadGameObject(FILE* _File);
 private:
 	CSaveLoadMgr();
 	~CSaveLoadMgr();

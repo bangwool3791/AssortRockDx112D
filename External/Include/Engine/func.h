@@ -153,6 +153,9 @@ void LoadStringFromFile(string& _str, FILE* _pFile);
 void SaveWStringToFile(const wstring& _str, FILE* _pFile);
 void LoadWStringFromFile(wstring& _str, FILE* _pFile);
 
+// Relative Path 가져오기
+wstring GetRelativePath(const wstring& _strBase, const wstring& _strPath);
+
 #include "CResMgr.h"
 #include "Ptr.h"
 template<typename T>

@@ -27,7 +27,7 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, UINT _iWidth, UINT 
 	Ptr<CTexture> pTex = FindRes<CTexture>(_strKey);
 	assert(!pTex.Get());
 
-	pTex = new CTexture;
+	pTex = new CTexture(true);
 
 	pTex->Create(_iWidth, _iHeight, _eFormat, _iBindFlag);
 
@@ -40,7 +40,7 @@ Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, ComPtr<ID3D11Textur
 	Ptr<CTexture> pTex = FindRes<CTexture>(_strKey);
 	assert(!pTex.Get());
 
-	pTex = new CTexture;
+	pTex = new CTexture(true);
 
 	pTex->Create(_Tex2D);
 
@@ -87,7 +87,7 @@ void CResMgr::CreateDefaultMesh()
 	*iterIdx = 1;
 	*iterIdx = 2;
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"RectMesh", pMesh);
 	vecIdx.clear();
@@ -98,7 +98,7 @@ void CResMgr::CreateDefaultMesh()
 	*iterIdx = 3;
 	*iterIdx = 0;
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->SetName(L"RectMesh_Debug");
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"RectMesh_Debug", pMesh);
@@ -137,7 +137,7 @@ void CResMgr::CreateDefaultMesh()
 		*iterIdx = i + 1;
 	}
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"CircleMesh", pMesh);
 	vecIdx.clear();
@@ -147,7 +147,7 @@ void CResMgr::CreateDefaultMesh()
 		*iterIdx = i + 1;
 	}
 	*iterIdx = 1;
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"CircleMesh_Debug", pMesh);
 	vecVtx.clear();
@@ -178,7 +178,7 @@ void CResMgr::CreateDefaultMesh()
 	*iterIdx = 2;
 	*iterIdx = 3;
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"Tile", pMesh);
 	vecVtx.clear();
@@ -192,46 +192,45 @@ void CResMgr::CreateDefaultMesh()
 
 	UINT idx = 0;
 
-	pMesh = new CMesh;
+	pMesh = new CMesh(true);
 	pMesh->Create(&v, 1, &idx, 1);
 	AddRes<CMesh>(L"PointMesh", pMesh);
 }
 
 void CResMgr::CreateDefaultTexture()
 {
-	Load<CTexture>(L"Plane", L"texture\\Player.bmp");
-	Load<CTexture>(L"Smoke", L"texture\\smokeparticle.png");
-	Load<CTexture>(L"Character", L"texture\\Character.png");
-	Load<CTexture>(L"Test", L"texture\\test.png");
-	Load<CTexture>(L"Link", L"texture\\link.png");
+	Load<CTexture>(L"texture\\Player.bmp", L"texture\\Player.bmp");
+	Load<CTexture>(L"texture\\smokeparticle.png", L"texture\\smokeparticle.png");
+	Load<CTexture>(L"texture\\Character.png", L"texture\\Character.png");
+	Load<CTexture>(L"texture\\test.png", L"texture\\test.png");
+	Load<CTexture>(L"texture\\link.png", L"texture\\link.png");
 
-	Load<CTexture>(L"DeadCellColor", L"texture\\beheaded.png");
-	Load<CTexture>(L"DeadCellNormal", L"texture\\beheaded_n.png");
+	Load<CTexture>(L"texture\\beheaded.png", L"texture\\beheaded.png");
+	Load<CTexture>(L"texture\\beheaded_n.png", L"texture\\beheaded_n.png");
 
-	Load<CTexture>(L"SmokeParticle", L"texture\\particle\\smokeparticle.png");
-	Load<CTexture>(L"CartoonSmoke", L"texture\\particle\\CartoonSmoke.png");
-	Load<CTexture>(L"Bubbles50px", L"texture\\particle\\Bubbles50px.png");
+	Load<CTexture>(L"texture\\particle\\smokeparticle.png", L"texture\\particle\\smokeparticle.png");
+	Load<CTexture>(L"texture\\particle\\CartoonSmoke.png", L"texture\\particle\\CartoonSmoke.png");
+	Load<CTexture>(L"texture\\particle\\Bubbles50px.png", L"texture\\particle\\Bubbles50px.png");
 	// NoiseTexture
-	Load<CTexture>(L"Noise_01", L"texture\\noise\\noise_01.png");
-	Load<CTexture>(L"Noise_02", L"texture\\noise\\noise_02.png");
-	Load<CTexture>(L"Noise_03", L"texture\\noise\\noise_03.jpg");
+	Load<CTexture>(L"texture\\noise\\noise_01.png", L"texture\\noise\\noise_01.png");
+	Load<CTexture>(L"texture\\noise\\noise_02.png", L"texture\\noise\\noise_02.png");
+	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
 
-	Load<CTexture>(L"Sparks", L"texture\\particle\\Sparks.png");
+	Load<CTexture>(L"texture\\particle\\Sparks.png", L"texture\\particle\\Sparks.png");
 
-	Load<CTexture>(L"TileTex", L"texture\\TILE.bmp");
+	Load<CTexture>(L"texture\\TILE.bmp", L"texture\\TILE.bmp");
 
 	for (UINT i{}; i < TEX_32; i++)
 	{
-		wstring name = L"Tile" + std::to_wstring(i);
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
 		str += std::to_wstring(i) + L".png";
-		Load<CTexture>(name, str);
+		Load<CTexture>(str, str);
 	}
 
 	/*
 	* They are billions
 	*/
-	Load<CTexture>(L"Human", L"texture\\HumansA_LQ.png");
+	Load<CTexture>(L"texture\\HumansA_LQ.png", L"texture\\HumansA_LQ.png");
 	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |

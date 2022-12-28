@@ -29,7 +29,7 @@ CParticlePhycis::CParticlePhycis()
 
 	SetName(L"CParticlePhycis");
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ParticleRenderWoodMtrl"));
-	GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Sparks"));
+	GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\particle\\Sparks.png"));
 	m_UpdateCS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateWoodShader").Get();
 
 	m_share.iAliveCount = 1;
@@ -54,7 +54,7 @@ CParticlePhycis::CParticlePhycis(const CParticlePhycis& _Rhs)
 	m_iType = _Rhs.m_iType;
 
 	SetName(L"CParticlePhycis");
-	GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"Sparks"));
+	GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\particle\\Sparks.png"));
 	m_UpdateCS = (CParticleUpdateShader*)CResMgr::GetInst()->FindRes<CComputeShader>(L"ParticleUpdateWoodShader").Get();
 }
 
