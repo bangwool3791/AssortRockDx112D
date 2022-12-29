@@ -5,11 +5,14 @@
 
 #include "CTexture.h"
 #include "CMeshRender.h"
-
 #include "CPaintShader.h"
+
+#include "CSound.h"
 
 void CResMgr::init()
 {
+	initSound();
+
 	CreateDefaultMesh();
 
 	CreateDefaultTexture();
@@ -635,4 +638,14 @@ void CResMgr::AddInputLayout(DXGI_FORMAT _eFormat, const char* _strSemanticName)
 	m_vecLayoutInfo.push_back(LayoutDesc);
 
 	m_iLayoutOffset += GetSizeofFormat(_eFormat);
+}
+
+void CResMgr::initSound()
+{
+	FMOD::System_Create(&CSound::g_pFMOD);
+
+	if (nullptr == CSound::g_pFMOD)
+		assert(nullptr);
+
+	CSound::g_pFMOD->init(32, FMOD_DEFAULT, nullptr);
 }

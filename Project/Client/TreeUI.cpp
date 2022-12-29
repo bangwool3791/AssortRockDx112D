@@ -135,6 +135,13 @@ void TreeNode::render_update()
 	* 카메라가 비치는 영역 안에 마우스 오브젝트가 없으면
 	* 오브젝트 해지 이벤트
 	*/
+
+
+}
+
+const string& TreeNode::GetTreeName()
+{
+	return m_TreeUI->GetName();
 }
 
 // ======
@@ -240,6 +247,25 @@ TreeNode* TreeUI::AddObjectEx(TreeNode* _parent, const string& _strName, CGameOb
 	return pNode;
 }
 
+TreeNode* TreeUI::GetNode(CGameObject* _pObj)
+{
+	if ((CGameObject*)m_RootNode->GetData() == _pObj)
+	{
+		return m_RootNode;
+	}
+
+	vector<TreeNode*>::iterator iter = m_RootNode->m_vecChildNode.begin();
+
+	for (; iter != m_RootNode->m_vecChildNode.end(); ++iter)
+	{
+		if ((CGameObject*)(*iter)->GetData() == _pObj)
+		{
+			return (*iter);
+		}
+	}
+	return nullptr;
+}
+
 TreeNode* TreeUI::GetNode(CGameObjectEx* _pObj)
 {
 	if ((CGameObjectEx*)m_RootNode->GetData() == _pObj)
@@ -256,7 +282,6 @@ TreeNode* TreeUI::GetNode(CGameObjectEx* _pObj)
 			return (*iter);
 		}
 	}
-
 	return nullptr;
 }
 
@@ -271,6 +296,10 @@ void TreeUI::Clear()
 
 void TreeUI::SetLBtnSelectedNode(TreeNode* _SelectedNode)
 {
+	if(_SelectedNode->m_ParentNode)
+		if ("Level" != _SelectedNode->m_ParentNode->GetName())
+			return;
+
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_bSelected = false;
@@ -343,33 +372,37 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 	* DummyTree -> ObjectTree
 	* ObjectTree 
 	*/
-	else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##DummyTree"))
-	{
-		if (GetName() == "##ModelTree")
-		{
-			TreeNode* pNode = (TreeNode*)payload->Data;
-			CGameObjectEx* pGameObject = (CGameObjectEx*)pNode->GetData();
-			wstring strName = pGameObject->GetName().c_str();
-			m_vecGameObjectEx.push_back(pGameObject->Clone());
-			AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)m_vecGameObjectEx[m_vecGameObjectEx.size()-1]);
-			CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, m_vecGameObjectEx[m_vecGameObjectEx.size() - 1]);
-		}
-	}
+	//else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##DummyTree"))
+	//{
+	//	if (GetName() == "##ModelTree")
+	//	{
+	//		TreeNode* pNode = (TreeNode*)payload->Data;
+	//		CGameObjectEx* pGameObject = (CGameObjectEx*)pNode->GetData();
+	//		wstring strName = pGameObject->GetName().c_str();
+	//		m_vecGameObjectEx.push_back(pGameObject->Clone());
+	//		AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)m_vecGameObjectEx[m_vecGameObjectEx.size()-1]);
+	//		CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, m_vecGameObjectEx[m_vecGameObjectEx.size() - 1]);
+	//	}
+	//}
 	else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelComTree"))
 	{
 		/*
 		* Outliner UI 단계, GameObject Resource 추가.
 		*/
-		CGameObjectEx* pGameObjectEx = (CGameObjectEx*)m_DropTargetNode->GetData();
 
-		if (pGameObjectEx)
+		if ("##OutlinerTree" == m_DropTargetNode->GetTreeName())
 		{
-			TreeNode* pNode = (TreeNode*)payload->Data;
-			CComponent* pCom = (CComponent*)pNode->GetData();
-			pGameObjectEx->AddComponent(pCom->Clone());
+			CGameObject* pGameObject = (CGameObject*)m_DropTargetNode->GetData();
 
-			pNode = GetNode(pGameObjectEx);
-			AddItem(pNode, string(pCom->GetName().begin(), pCom->GetName().end()), (DWORD_PTR)pCom);
+			if (pGameObject)
+			{
+				TreeNode* pNode = (TreeNode*)payload->Data;
+				CComponent* pCom = (CComponent*)pNode->GetData();
+				pGameObject->AddComponent(pCom->Clone());
+
+				pNode = GetNode(pGameObject);
+				AddItem(pNode, string(pCom->GetName().begin(), pCom->GetName().end()), (DWORD_PTR)pCom);
+			}
 		}
 	}
 }

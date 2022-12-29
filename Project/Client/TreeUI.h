@@ -40,7 +40,7 @@ private:
 	}
 
 	const vector<TreeNode*>& GetChild() { return m_vecChildNode; }
-
+	const string& GetTreeName();
 public:
 	TreeNode();
 	~TreeNode();
@@ -116,6 +116,7 @@ public:
 		m_DragDropInst = _Inst;
 		m_DragDropWorldFunc = _Func;
 	}
+	TreeNode* GetNode(CGameObject* _pObj);
 	TreeNode* GetNode(CGameObjectEx* _pObj);
 public:
 	TreeUI(const string& _strName);

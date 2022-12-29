@@ -11,6 +11,7 @@
 #include "CEditor.h"
 
 #include <Engine\CRes.h>
+#include <Engine\CSound.h>
 #include <Engine/CResMgr.h>
 #include <Engine\CDevice.h>
 #include <Engine\CKeyMgr.h>
@@ -104,9 +105,10 @@ void ContentUI::update()
 					}
 					else
 					{
-						wstrRelativePath = L"material\\";
-						wstrRelativePath = lstrcpy(wstrRelativePath.data(), pRes->GetName().data());
-						wstrRelativePath = lstrcpy(wstrRelativePath.data(), +L".mtrl");
+						wchar_t sz_data[255] = { L"material\\" };
+						wstring temp = lstrcat(sz_data, pRes->GetKey().data());
+						lstrcpy(sz_data, temp.data());
+						wstrRelativePath = lstrcat(sz_data, L".mtrl");
 						pRes->Save(wstrRelativePath);
 					}
 				}
@@ -186,6 +188,7 @@ void ContentUI::ReloadContent()
 			CResMgr::GetInst()->Load<CTexture>(m_vecContentName[i]);
 			break;
 		case RES_TYPE::SOUND:
+			CResMgr::GetInst()->Load<CSound>(m_vecContentName[i]);
 			break;
 		case RES_TYPE::GRAPHICS_SHADER:
 			break;
@@ -272,6 +275,10 @@ void ContentUI::FindContentFileName(const wstring& _strFolderPath)
 		if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && wcscmp(data.cFileName, L".."))
 		{
 			FindContentFileName(_strFolderPath + data.cFileName + L"\\");
+		}
+		else if (FILE_ATTRIBUTE_DIRECTORY == data.dwFileAttributes && !wcscmp(data.cFileName, L".."))
+		{
+
 		}
 		else
 		{

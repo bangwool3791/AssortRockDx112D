@@ -53,7 +53,7 @@ void OutlinerUI::render_update()
 	}
 
 	ImGui::SameLine();
-	ImGui::TextUnformatted(selected_fish == -1 ? "<None>" : names[selected_fish]);
+
 	if (ImGui::BeginPopup("my_select_popup"))
 	{
 		for (int i = 0; i < IM_ARRAYSIZE(names); i++)

@@ -66,6 +66,9 @@ void CImGuiMgr::init(HWND _hWnd)
 
 void CImGuiMgr::progress()
 {
+    //알림 확인
+    ObserveContent();
+
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -100,8 +103,6 @@ void CImGuiMgr::progress()
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault();
     }
-    //알림 확인
-    ObserveContent();
 }
 
 void CImGuiMgr::clear()
@@ -144,12 +145,12 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
     ((ContentUI*)pUI)->ReloadContent();
     ((ContentUI*)pUI)->ResetContent();
-    pUI = new DummyUI;
-    pUI->begin();
-    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    //pUI = new DummyUI;
+    //pUI->begin();
+    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
-    pUI = new ModelUI;
-    m_mapUI.insert(make_pair(pUI->GetName(), pUI));
+    //pUI = new ModelUI;
+    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new ListUI;    
     pUI->SetModal(true);

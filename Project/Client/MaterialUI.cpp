@@ -64,13 +64,15 @@ void MaterialUI::render_update()
 
 		string strPath(wstrOriginFilePath.begin(), wstrOriginFilePath.end());
 		
-		if (remove(strPath.c_str()))
-		{
+		if (0 == remove(strPath.c_str()))
 			MessageBox(nullptr, L"원본 리소스 삭제됨", L"리소스 변경 확인", MB_OK);
-		}
+		else
+			MessageBox(nullptr, L"원본 리소스 삭제 실패", L"리소스 변경 실패", MB_OK);
 
+		wchar_t sz_data[255];
 		wstrValidKey = L"material\\" + wstrValidKey;
-		wstrValidKey = lstrcat(wstrValidKey.data(), L".mtrl");
+		lstrcpy(sz_data, wstrValidKey.c_str());
+		wstrValidKey = lstrcat(sz_data, L".mtrl");
 		ConvertGameObjectPath(wstrOriginFilePath, wstrValidKey);
 
 		pMtrl->SwapFile(wstrValidKey);

@@ -226,9 +226,6 @@
     <ClInclude Include="OutlinerUI.h">
       <Filter>03. UI\03. OutLinerUI</Filter>
     </ClInclude>
-    <ClInclude Include="DummyUI.h">
-      <Filter>03. UI\04. DummyUI</Filter>
-    </ClInclude>
     <ClInclude Include="ModelUI.h">
       <Filter>03. UI\05. ModelUI</Filter>
     </ClInclude>
@@ -276,6 +273,9 @@
     </ClInclude>
     <ClInclude Include="PopupUI.h">
       <Filter>Default\ModuleUI\PopupUI</Filter>
+    </ClInclude>
+    <ClInclude Include="DummyUI.h">
+      <Filter>03. UI\04. DummyUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

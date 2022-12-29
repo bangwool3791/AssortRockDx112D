@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CResMgr.h"
+#include "CSound.h"
 
 CResMgr::CResMgr()
 	:m_vecLayoutInfo{}
@@ -17,6 +18,7 @@ CResMgr::~CResMgr()
 	{
 		Safe_Del_Map(m_arrRes[i]);
 	}
+	CSound::g_pFMOD->release();
 }
 
 bool CResMgr::DeleteRes(RES_TYPE _Type, const wstring& _strKey)
@@ -31,5 +33,10 @@ bool CResMgr::DeleteRes(RES_TYPE _Type, const wstring& _strKey)
 	}
 
 	return false;
+}
+
+void CResMgr::tick()
+{
+	m_bChanged = false;
 }
 

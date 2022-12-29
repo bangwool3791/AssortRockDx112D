@@ -4,6 +4,7 @@
 
 #include "CMesh.h"
 #include "CTexture.h"
+#include "CSound.h"
 #include "CGraphicsShader.h"
 #include "CMaterial.h"
 #include "CComputeShader.h"
@@ -31,7 +32,8 @@ public:
 	wstring GetNewResName();
 public:
 	void init();
-	void tick() { m_bChanged = false; }
+	void initSound();
+	void tick();
 	bool IsChanged() { return m_bChanged; }
 
 	const vector<D3D11_INPUT_ELEMENT_DESC>& GetInputLayoutInfo() { return m_vecLayoutInfo; }
@@ -81,6 +83,9 @@ RES_TYPE GetType()
 
 	if (typeid(T).hash_code() == typeid(CPrefab).hash_code())
 		return RES_TYPE::PREFAB;
+
+	if (typeid(T).hash_code() == typeid(CSound).hash_code())
+		return RES_TYPE::SOUND;
 	else
 		return RES_TYPE::END;
 }
@@ -92,18 +97,19 @@ inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 
 	Ptr<T> pRes = FindRes<T>(_strKey);
 
-	assert(nullptr == pRes);
-
-	//클래스-Path//Relative Path 경로 설정
 	_pRes->SetKey(_strKey);
+
+	if (nullptr == pRes)
+		m_bChanged = true;
+	else
+		m_arrRes[(UINT)eResType].erase(_strKey);
+
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
-	m_bChanged = true;
 }
 
 template<typename T>
 inline Ptr<T> CResMgr::FindRes(const wstring& _strKey)
 {
-	auto ite2r = m_arrRes[3].find(L"aaaa");
 	auto iter = m_arrRes[(UINT)::GetType<T>()].find(_strKey);
 
 	if (iter == m_arrRes[(UINT)::GetType<T>()].end())
@@ -135,11 +141,8 @@ inline Ptr<T> CResMgr::Load(const wstring& _strRelativePath)
 		MessageBox(nullptr, strFilePath.c_str(), L"리소스 로딩 실패", MB_OK);
 		return nullptr;
 	}
-
-	pResource->SetKey(_strRelativePath);
 	pResource->SetRelativePath(_strRelativePath);
-	m_arrRes[(UINT)eResType].insert(make_pair(_strRelativePath, pResource));
-
+	AddRes<T>(_strRelativePath, (T*)pResource);
 	return (T*)pResource;
 }
 
@@ -166,10 +169,8 @@ inline Ptr<T> CResMgr::Load(const wstring& _strKey, const wstring& _strRelativeP
 		MessageBox(nullptr, strFilePath.c_str(), L"리소스 로딩 실패", MB_OK);
 		return nullptr;
 	}
-
-	pResource->SetKey(_strKey);
 	pResource->SetRelativePath(_strRelativePath);
-	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, pResource));
+	AddRes<T>(_strKey, (T*)pResource);
 
 	return (T*)pResource;
 }

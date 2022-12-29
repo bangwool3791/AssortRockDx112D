@@ -71,3 +71,6 @@
 
 #include "C:\Development\MyEngine\DirectX11\Project\Engine\CParticleDefault.cpp"
 
+
+#include "C:\Development\MyEngine\DirectX11\Project\Engine\CParticlePhycis.cpp"
+

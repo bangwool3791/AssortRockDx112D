@@ -75,7 +75,7 @@ CGameObject::~CGameObject()
 		*iter = nullptr;
 	}
 
-	Safe_Del_Vec(m_vecChild);
+Safe_Del_Vec(m_vecChild);
 }
 
 void CGameObject::begin()
@@ -173,8 +173,12 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 	auto eComType = _pComponent->GetType();
 
 	if (eComType != COMPONENT_TYPE::SCRIPT)
-		assert(!m_arrCom[(UINT)eComType]);
-
+	{
+		if (m_arrCom[(UINT)eComType])
+		{
+			Safe_Delete(m_arrCom[(UINT)eComType]);
+		}
+	}
 
 	_pComponent->m_pOwnerObject = this;
 

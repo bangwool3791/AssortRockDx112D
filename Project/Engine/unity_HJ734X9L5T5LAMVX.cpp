@@ -1,8 +1,5 @@
 #include "pch.h"
 
-#include "C:\Development\MyEngine\DirectX11\Project\Engine\CParticlePhycis.cpp"
-
-
 #include "C:\Development\MyEngine\DirectX11\Project\Engine\CParticleWood.cpp"
 
 
@@ -40,6 +37,9 @@
 
 
 #include "C:\Development\MyEngine\DirectX11\Project\Engine\CShader.cpp"
+
+
+#include "C:\Development\MyEngine\DirectX11\Project\Engine\CSound.cpp"
 
 
 #include "C:\Development\MyEngine\DirectX11\Project\Engine\CStructuredBuffer.cpp"

@@ -107,6 +107,9 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 		SetTargetResource(nullptr);
 	}
 
+	if (nullptr == dynamic_cast<CGameObject*>(_Target))
+		return;
+
 	m_TargetObj = _Target;
 
 	/*
