@@ -5,25 +5,22 @@ class CStructuredBuffer :
 	public CEntity
 {
 private:
-	bool								m_bCPU = false;
-	ComPtr<ID3D11Buffer>				m_SB;
-	ComPtr<ID3D11ShaderResourceView>	m_SRV;
-	ComPtr<ID3D11UnorderedAccessView>   m_UAV;
+	bool									m_bCPU = false;
+	ComPtr<ID3D11Buffer>					m_SB;
+	ComPtr<ID3D11ShaderResourceView>		m_SRV;
+	ComPtr<ID3D11UnorderedAccessView>		m_UAV;
 
-	/*
-	* 
-	*/
 	ComPtr<ID3D11Buffer>                    m_WriteBuffer;
 	ComPtr<ID3D11Buffer>                    m_ReadBuffer;
 
-	D3D11_BUFFER_DESC					m_tDesc;
-	SB_TYPE								m_eType;
+	D3D11_BUFFER_DESC						m_tDesc;
+	SB_TYPE									m_eType;
 
-	UINT								m_iElementSize;
-	UINT								m_iElementCount;
+	UINT									m_iElementSize;
+	UINT									m_iElementCount;
 
-	UINT								m_iRecentRegisterNum;
-	UINT								m_iRecentRegisterNumRW;
+	UINT									m_iRecentRegisterNum;
+	UINT									m_iRecentRegisterNumRW;
 public:
 	int Create(UINT _iElementSize, UINT _iElementCount, SB_TYPE _eType, void* _pInitial, bool _CPUAccess = false);
 	UINT GetElementsSize() { return m_iElementSize; }

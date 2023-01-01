@@ -20,7 +20,7 @@
 #include <Engine\CPathMgr.h>
 
 ContentUI::ContentUI()
-	:UI("Content")
+	:UI("ContentUI")
 	, m_Tree{}
 	, m_bDragEvent{false}
 {
@@ -213,7 +213,10 @@ void ContentUI::ReloadContent()
 
 			wstring strRelativePath = iter->second->GetRelativePath();
 
-			assert(!strRelativePath.empty());
+			if (strRelativePath.empty())
+			{
+				int a = 0;
+			}
 
 			if (!std::filesystem::exists(strFolderPath + strRelativePath))
 			{

@@ -16,6 +16,19 @@ CAnimation2D::CAnimation2D()
 {
 }
 
+CAnimation2D::CAnimation2D(const CAnimation2D& _rhs)
+	:CEntity(_rhs)
+	, m_iCurIdx(-1)
+	, m_pOwner(nullptr)
+	, m_fAccTime(_rhs.m_fAccTime)
+	, m_fWidth{ _rhs .m_fWidth}
+	, m_fHeight{ _rhs .m_fHeight}
+	, m_eState{ _rhs.m_eState }
+	, m_vecFrm{_rhs.m_vecFrm }
+{
+	m_AtlasTex = _rhs.m_AtlasTex;
+}
+
 CAnimation2D::~CAnimation2D()
 {
 
@@ -110,12 +123,12 @@ int  CAnimation2D::Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuratio
 
 int  CAnimation2D::Delete_Animation2D()
 {
-	if (m_vecFrm.size() > 0)
+	if (m_vecFrm.size() > 1)
 	{
 		m_vecFrm.pop_back();
 		m_iCurIdx = m_vecFrm.size() - 1;
-		return m_iCurIdx;
 	}
+	return m_iCurIdx;
 }
 
 void CAnimation2D::SetLeftTopX(float _fx, int _index)
@@ -252,6 +265,8 @@ void CAnimation2D::SaveToFile(FILE* _File)
 	fwrite(&iFrameCount, sizeof(size_t), 1, _File);
 	fwrite(m_vecFrm.data(), sizeof(tAnim2DFrm), iFrameCount, _File);
 
+	fwrite(&m_fWidth, sizeof(float), 1, _File);
+	fwrite(&m_fHeight, sizeof(float), 1, _File);
 	// 참조 아틀라스 텍스쳐
 	SaveResourceRef<CTexture>(m_AtlasTex, _File);
 }
@@ -270,6 +285,9 @@ void CAnimation2D::LoadFromFile(FILE* _File)
 		fread(&frm, sizeof(tAnim2DFrm), 1, _File);
 		m_vecFrm.push_back(frm);
 	}
+
+	fread(&m_fWidth, sizeof(float), 1, _File);
+	fread(&m_fHeight, sizeof(float), 1, _File);
 
 	// 참조 아틀라스 텍스쳐
 	LoadResourceRef<CTexture>(m_AtlasTex, _File);

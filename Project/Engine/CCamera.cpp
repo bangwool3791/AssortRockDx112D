@@ -16,7 +16,7 @@
 
 CCamera::CCamera()
 	:CComponent(COMPONENT_TYPE::CAMERA)
-	, m_eProjType{ PROJ_TYPE::ORTHOGRAHPICS }
+	, m_eProjType{ PROJ_TYPE::PERSPECTIVE }
 	, m_matView{}
 	, m_matProj{}
 	, m_fAspectRatio{1.f}
@@ -83,7 +83,7 @@ void CCamera::CalcProjMat()
 	switch (m_eProjType)
 	{
 	case PERSPECTIVE:
-		m_matProj = XMMatrixPerspectiveFovLH(XM_2PI / 6.f, m_fAspectRatio, 1.f, m_fFar);
+		m_matProj = XMMatrixPerspectiveFovLH(XM_2PI / 6.f, m_fAspectRatio, 0.1f, m_fFar);
 		break;
 	case ORTHOGRAHPICS:
 		m_matProj = XMMatrixOrthographicLH(vRenderResolution.x * m_fScale, vRenderResolution.y * m_fScale, 1.f, m_fFar);

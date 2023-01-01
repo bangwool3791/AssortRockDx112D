@@ -69,6 +69,9 @@ void CImGuiMgr::progress()
     //알림 확인
     ObserveContent();
 
+
+    EDIT_MODE mode = CEditor::GetInst()->GetEditMode();
+
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
@@ -83,13 +86,95 @@ void CImGuiMgr::progress()
         map<string, UI*>::iterator iter = m_mapUI.begin();
         for (; iter != m_mapUI.end(); ++iter)
         {
-            iter->second->update();
+            switch (mode)
+            {
+            case EDIT_MODE::ANIMATOR:
+                if ("Outliner" == iter->first)
+                    iter->second->update();
+                if ("Inspector" == iter->first)
+                    iter->second->update();
+                if ("ComInspector" == iter->first)
+                    iter->second->update();
+                if ("MenuUI" == iter->first)
+                    iter->second->update();
+                if ("ModelComUI" == iter->first)
+                    iter->second->update();
+                break;
+            case EDIT_MODE::MAPTOOL:
+                if ("TileMapUI" == iter->first)
+                    iter->second->update();
+                if ("##MenuUI" == iter->first)
+                    iter->second->update();
+                if ("ProgressUI" == iter->first)
+                    iter->second->update();
+                break;
+            case EDIT_MODE::OBJECT:
+                if ("Outliner" == iter->first)
+                    iter->second->update();
+                if ("Inspector" == iter->first)
+                    iter->second->update();
+                if ("ContentUI" == iter->first)
+                    iter->second->update();
+                if ("MenuUI" == iter->first)
+                    iter->second->update();
+                if ("ModelComUI" == iter->first)
+                    iter->second->update();
+                if ("ListUI" == iter->first)
+                    iter->second->update();
+                break;
+            case EDIT_MODE::END:
+                break;
+            default:
+                break;
+            }
         }       
 
         iter = m_mapUI.begin();
         for (; iter != m_mapUI.end(); ++iter)
         {
-            iter->second->render();
+            switch (mode)
+            {
+            case EDIT_MODE::ANIMATOR:
+                if ("Outliner" == iter->first)
+                    iter->second->render();
+                if ("Inspector" == iter->first)
+                    iter->second->render();
+                if ("ComInspector" == iter->first)
+                    iter->second->render();
+                if ("##MenuUI" == iter->first)
+                    iter->second->render();
+                if ("ModelComUI" == iter->first)
+                    iter->second->render();
+                if ("ListUI" == iter->first)
+                    iter->second->render();
+                break;
+            case EDIT_MODE::MAPTOOL:
+                if ("TileMapUI" == iter->first)
+                    iter->second->render();
+                if ("##MenuUI" == iter->first)
+                    iter->second->render();
+                if ("ProgressUI" == iter->first)
+                    iter->second->render();
+                break;
+            case EDIT_MODE::OBJECT:
+                if ("Outliner" == iter->first)
+                    iter->second->render();
+                if ("Inspector" == iter->first)
+                    iter->second->render();
+                if ("ContentUI" == iter->first)
+                    iter->second->render();
+                if ("##MenuUI" == iter->first)
+                    iter->second->render();
+                if ("ModelComUI" == iter->first)
+                    iter->second->render();
+                if ("ListUI" == iter->first)
+                    iter->second->render();
+                break;
+            case EDIT_MODE::END:
+                break;
+            default:
+                break;
+            }
         }
     }
 
@@ -145,12 +230,6 @@ void CImGuiMgr::CreateUI()
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
     ((ContentUI*)pUI)->ReloadContent();
     ((ContentUI*)pUI)->ResetContent();
-    //pUI = new DummyUI;
-    //pUI->begin();
-    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
-
-    //pUI = new ModelUI;
-    //m_mapUI.insert(make_pair(pUI->GetName(), pUI));
 
     pUI = new ListUI;    
     pUI->SetModal(true);

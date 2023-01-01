@@ -21,7 +21,6 @@ public:
 
 	void SetSize(ImVec2 _size){ m_vSize = _size; }
 	ImVec2 GetSize() { return m_vSize; }
-
 	void AddChild(UI* _ChildUI);
 
 	virtual void Open() { m_bOpen = true; }

@@ -12,11 +12,19 @@
 class CGameObjectEx;
 class CAnimator2D;
 
-class Animator2DUI :
+enum class EDIT_ANIMATION_MODE
+{
+    SPRITE_MODE,
+    SCEN_MODE,
+};
+
+
+class EditAnimationUI :
     public ComponentUI
 {
     //정리 필요
 private:
+    EDIT_ANIMATION_MODE   m_eEditMode;
     char                  m_szAnimation[128];
     string                m_strAnimationName;
     Ptr<CTexture>         m_pAtlasTexture;
@@ -33,7 +41,7 @@ private:
     bool**                m_dfs_visited;
     bool**                m_bfs_visited;
 private:
-    CGameObjectEx*        m_pGameObject;
+    CGameObject*          m_pGameObject;
     CGameObjectEx*        m_MouseObject;
     CGameObjectEx*        m_pCameraObject;
     CGameObjectEx*        m_pPointObject;
@@ -91,7 +99,7 @@ public:
 private:
 
 public:
-    Animator2DUI();
-    ~Animator2DUI();
+    EditAnimationUI();
+    ~EditAnimationUI();
 };
 

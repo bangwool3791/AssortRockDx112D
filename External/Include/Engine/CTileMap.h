@@ -13,11 +13,11 @@ class CTileMap :
 public:
     enum class TILE_MODE { INGAME, EDIT };
 private:
-    Vec2                    m_vTileSize;
+    Vec4                    m_vTileSize;
 public:
     void    SetTileSizeX(float _fSize) { m_vTileSize.x = _fSize; }
     void    SetTileSizeY(float _fSize) { m_vTileSize.y = _fSize; }
-    Vec2    GetTileSize() { return m_vTileSize; }
+    Vec4    GetTileSize() { return m_vTileSize; }
 private:
     vector<Ptr<CTexture>>   m_AtlasTex;     // 타일맵이 사용하는 아틀라스 이미지   
     Vec2                    m_vTileCount;   // 타일맵 가로 세로 개수

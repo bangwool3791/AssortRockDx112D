@@ -43,9 +43,10 @@ CEditor::~CEditor()
 			Safe_Delete(iter2->second);
 		}
 	}
-	Safe_Del_Vec(m_vecDummyObj);
 	Safe_Del_Array(m_DebugDrawObject);
-	Safe_Del_Array(m_arrCom);
+	
+	for (size_t i{}; i < (UINT)COMPONENT_TYPE::END; ++i)
+		Safe_Delete(m_arrCom[i]);
 	
 	Safe_Delete(m_GirdObject);
 	Safe_Delete(m_MouseObject);
@@ -80,11 +81,12 @@ void CEditor::init()
 	m_pCameraObject->AddComponent(new CTransform);
 	m_pCameraObject->AddComponent(new CEditorCam);
 	m_pCameraObject->AddComponent(new CCameraScript);
-	m_pCameraObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+	m_pCameraObject->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	m_pCameraObject->Camera()->SetFar(100000.f);
 	m_pCameraObject->Camera()->SetLayerMaskAll();
 	m_pCameraObject->Camera()->SetLayerMask(31);
-
+	m_pCameraObject->Transform()->SetRelativePos(0.f, 100.f, 0.f);
+	m_pCameraObject->Transform()->SetRelativeRotation(90.f, 0.f, 0.f);
 	CRenderMgr::GetInst()->RegisterEditCam(m_pCameraObject->Camera());
 
 	m_MouseObject = new CGameObjectEx;
@@ -97,26 +99,6 @@ void CEditor::init()
 	CreateTileMap(m_pCameraObject, m_MouseObject);
 
 	CreateAnimatorTool(m_pCameraObject, m_MouseObject);
-
-	
-	//* Object Tool List
-	CGameObjectEx* pObject = new CGameObjectEx;
-	pObject->SetName(L"Dummy Object");
-
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CAnimator2D);
-
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
-	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
-	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
-
-	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-	pObject->Animator2D()->Play(L"LeftWalk", true);
-	m_vecDummyObj.push_back(pObject);
 	
 	/*
 	* Component List
@@ -131,6 +113,12 @@ void CEditor::init()
 	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetName(L"Animator2D");
 	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]		= new CLight2D();
 	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"Light2D");
+	m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = new CParticleSystem();
+	m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]->SetName(L"CParticleSystem");
+	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D] = new CLight2D();
+	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"CLight2D");
+	m_arrCom[(UINT)COMPONENT_TYPE::MESHRENDER] = new CMeshRender();
+	m_arrCom[(UINT)COMPONENT_TYPE::MESHRENDER]->SetName(L"CMeshRender");
 }
 
 /*
@@ -158,6 +146,22 @@ void CEditor::tick()
 		iter->second->tick();
 	}
 
+	switch (m_editmode)
+	{
+	case EDIT_MODE::ANIMATOR:
+		if(m_pAnimationObject)
+			m_pAnimationObject->tick();
+		break;
+	case EDIT_MODE::MAPTOOL:
+		break;
+	case EDIT_MODE::OBJECT:
+		break;
+	case EDIT_MODE::END:
+		break;
+	default:
+		break;
+	}
+
 	m_pCameraObject->finaltick();
 	m_MouseObject->finaltick();
 
@@ -166,6 +170,21 @@ void CEditor::tick()
 		iter->second->finaltick();
 	}
 
+	switch (m_editmode)
+	{
+	case EDIT_MODE::ANIMATOR:
+		if (m_pAnimationObject)
+			m_pAnimationObject->finaltick();
+		break;
+	case EDIT_MODE::MAPTOOL:
+		break;
+	case EDIT_MODE::OBJECT:
+		break;
+	case EDIT_MODE::END:
+		break;
+	default:
+		break;
+	}
 }
 
 void CEditor::render()
@@ -177,6 +196,21 @@ void CEditor::render()
 		iter->second->render();
 	}
 
+	switch (m_editmode)
+	{
+	case EDIT_MODE::ANIMATOR:
+		if (m_pAnimationObject)
+			m_pAnimationObject->render();
+		break;
+	case EDIT_MODE::MAPTOOL:
+		break;
+	case EDIT_MODE::OBJECT:
+		break;
+	case EDIT_MODE::END:
+		break;
+	default:
+		break;
+	}
 	m_pCameraObject->render();
 }
 
@@ -252,17 +286,17 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 	CGameObject* arr[2] = { _pCamera, _pMouse };
 	pGameObectEx->TileMap()->SetCamera(_pCamera);
 	pGameObectEx->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
-	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 1000.f);
-	pGameObectEx->Transform()->SetRelativeScale(Vec3(TILECX, TILECY, 1.f));
-
+	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 10.f);
+	pGameObectEx->Transform()->SetRelativeScale(64.f, 1.f, 64.f);
 	for (UINT i{}; i < TEX_32 + 1; ++i)
 	{
-		wstring str = L"Tile";
+		wstring str = L"texture\\Terrain\\Tile\\Tile";
 		str += std::to_wstring(i);
+		str += L".png";
 		pGameObectEx->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
 	}
 
-	pGameObectEx->TileMap()->SetTileCount(TILEX, TILEY);
+	pGameObectEx->TileMap()->SetTileCount(1, 1);
 	pGameObectEx->begin();
 	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"MapTool", pGameObectEx);
 }
@@ -284,7 +318,7 @@ void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)
 	UINT height = pTex->GetHeight();
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
-	pObject->Transform()->SetRelativeScale(Vec3((float)width, (float)height, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3((float)width, 0.f, height));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
@@ -338,18 +372,6 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	pDebugObj->render();
 }
 
-CGameObjectEx* CEditor::GetDummyObject(const wstring& _name)
-{
-	for (UINT i{}; i < m_vecDummyObj.size(); ++i)
-	{
-		if (m_vecDummyObj[i]->GetName() == _name)
-		{
-			return m_vecDummyObj[i];
-		}
-	}
-	return nullptr;
-}
-
 void CEditor::Add_Editobject(EDIT_MODE _emode, CGameObjectEx* _pGameObject)
 {
 	const wstring& wstrName = _pGameObject->GetName();
@@ -363,6 +385,11 @@ void CEditor::Add_Editobject(EDIT_MODE _emode, CGameObjectEx* _pGameObject)
 	}
 
 	map.emplace(make_pair(wstrName.c_str(), _pGameObject));
+}
+
+void CEditor::UpdateAnimationObject(CGameObject* _pGameObject)
+{
+	m_pAnimationObject = _pGameObject;
 }
 
 void CEditor::Add_Editobject(EDIT_MODE _emode, const wchar_t* _pName, CGameObjectEx* _pGameObject)
@@ -418,7 +445,7 @@ void CEditor::PopByName(const wstring& _strky)
 	}
 }
 
-void CEditor::SetEditmode(EDIT_MODE _editmode)
+void CEditor::SetEditMode(EDIT_MODE _editmode)
 {
 	assert(_editmode != EDIT_MODE::END);
 
@@ -431,17 +458,15 @@ void CEditor::SetEditmode(EDIT_MODE _editmode)
 	{
 	case EDIT_MODE::ANIMATOR:
 	{
-		pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"AnimationTool")->second;
-		vPos = pGmaeObject->Transform()->GetRelativePos();
+		//pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"AnimationTool")->second;
+		//vPos = pGmaeObject->Transform()->GetRelativePos();
 	}
 		break;
 	case EDIT_MODE::MAPTOOL:
-		pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"MapTool")->second;
-		vPos = pGmaeObject->Transform()->GetRelativePos();
-		vPos.x += TILECX * 0.5f * TILEX;
-		vPos.y += TILECY * 0.25f * TILEY;
+		//pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"MapTool")->second;
+		//vPos = pGmaeObject->Transform()->GetRelativePos();
 		break;
 	}
-	m_pCameraObject->Transform()->SetRelativePos(vPos);
+	//m_pCameraObject->Transform()->SetRelativePos(vPos);
 }
 

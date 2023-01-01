@@ -17,7 +17,8 @@ private:
 public:
     virtual void finaltick() override;
 public:
-    const vector<wstring>& Get_Animation_Key();
+    const wstring& GetKey();
+    const vector<wstring>& GetKeys();
     const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
     tAnim2DInfo GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
@@ -64,6 +65,8 @@ public:
     CAnimation2D* FindAnimation(const wstring& _strKey);
     int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
     int  Delete_Animation2D();
+    void Play();
+    void Play(const wstring& _strKey);
     void Play(const wstring& _strKey, bool _bRepeat);
 
     void UpdateData();

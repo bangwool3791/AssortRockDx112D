@@ -11,7 +11,7 @@
 #include "CImGuiMgr.h"
 
 ModelComUI::ModelComUI()
-	: UI("MdelComUI")
+	: UI("ModelComUI")
 	, m_Tree{}
 {
 	m_Tree = new TreeUI("##ModelComTree");
@@ -30,7 +30,21 @@ ModelComUI::ModelComUI()
 	m_Tree->SetDummyRoot(true);
 
 	for (UINT i{}; i < (UINT)COMPONENT_TYPE::END; ++i)
+	{
+		if (i == (UINT)COMPONENT_TYPE::COLLIDER3D 
+			|| i == (UINT)COMPONENT_TYPE::CAMERA
+			|| i == (UINT)COMPONENT_TYPE::ANIMATOR3D
+			|| i == (UINT)COMPONENT_TYPE::LIGHT3D
+			|| i == (UINT)COMPONENT_TYPE::TILEMAP
+			|| i == (UINT)COMPONENT_TYPE::SKYBOX
+			|| i == (UINT)COMPONENT_TYPE::DECAL
+			|| i == (UINT)COMPONENT_TYPE::LANDSCAPE
+			|| i == (UINT)COMPONENT_TYPE::SCRIPT)
+			continue;
+
 		m_Tree->AddItem(pNode, ToString((COMPONENT_TYPE)i), (DWORD_PTR)arr[i]);
+	}
+		
 
 	/*
 	* 컴포넌트 상태 UI

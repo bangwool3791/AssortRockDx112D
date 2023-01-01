@@ -1,6 +1,9 @@
 #include "pch.h"
 
-#include "C:\Development\MyEngine\DirectX11\Project\Client\Animator2DUI.cpp"
+#include "C:\Development\MyEngine\DirectX11\Project\Client\CAnimator2DUI.cpp"
+
+
+#include "C:\Development\MyEngine\DirectX11\Project\Client\EditAnimationUI.cpp"
 
 
 #include "C:\Development\MyEngine\DirectX11\Project\Client\CCameraScript.cpp"

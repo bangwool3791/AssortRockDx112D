@@ -43,6 +43,22 @@ void OutlinerUI::update()
 
 void OutlinerUI::render_update()
 {
+	static int IobjectIndex = 0;
+	static int ILayerIndex = 0;
+	static string strName = "DummyObject";
+
+	ImGui::Text("Layer Index"); 
+	ImGui::SameLine(); 
+	ImGui::PushItemWidth(50.f);
+	ImGui::InputScalar("##LayerIndex", ImGuiDataType_U32, &ILayerIndex);
+	ImGui::NewLine();
+
+	ImGui::Text("Object Name");
+	ImGui::SameLine();
+	ImGui::PushItemWidth(50.f);
+	ImGui::InputText("##ObjectName", strName.data(), strName.size());
+	ImGui::NewLine();
+
 	int selected_fish = -1;
 	const char* names[] = { "Create Empty","Create Empty Parent","Destroy", "Create Prefab", "Close" };
 	static bool toggles[] = { true, false, false, false, false };
@@ -66,19 +82,36 @@ void OutlinerUI::render_update()
 		ImGui::EndPopup();
 	}
 
-	if (nullptr == m_pGameObject)
-		return;
-
 	switch (selected_fish)
 	{
 	case 0:
+	{
+		tEvent evn = {};
+		evn.eType = EVENT_TYPE::CREATE_OBJECT;
+		CGameObject* pGameObject = new CGameObject;
+		evn.wParam = (DWORD_PTR)pGameObject;
+		evn.lParam = (DWORD_PTR)(ILayerIndex);
+		if (strName.empty())
+		{
+			strName = "DummyObject";
+			strName += std::to_string(IobjectIndex);
+			++IobjectIndex;
+		}
+		pGameObject->SetName(StringToWString(strName));
+		CEventMgr::GetInst()->AddEvent(evn);
+	}
 		break;
 	case 1:
 		break;
 	case 2:
+	{
+	}
 		break;
 	case 3:
 	{
+		if (nullptr == m_pGameObject)
+			return;
+
 		tEvent evn = {};
 		evn.eType = EVENT_TYPE::EDIT_RES;
 		evn.wParam = (DWORD_PTR)RES_TYPE::PREFAB;

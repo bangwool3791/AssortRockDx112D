@@ -578,7 +578,7 @@
       <Filter>HLSL\Render\Default</Filter>
     </FxCompile>
     <FxCompile Include="func.fx">
-      <Filter>Engine\07. Resource\02. Texture</Filter>
+      <Filter>HLSL\Header</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

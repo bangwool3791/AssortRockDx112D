@@ -6,7 +6,7 @@
 
 // ===============
 // TileMap Shader
-#define Size         g_vec2_3
+#define Size         g_vec4_0
 // ===============
 
 struct VS_IN
@@ -45,26 +45,26 @@ void GS_TileMap(point VS_OUT _in[1], inout TriangleStream<GS_OUT> _OutStream)
 
     float4 NewPos[4] =
     {
-        mul(float4(-0.5,  0.f,  1.f, 1.f), g_matWorld),
-        mul(float4(0.0f,  0.5, 1.f, 1.f),  g_matWorld),
-        mul(float4(0.5,  0.f,  1.f, 1.f),  g_matWorld),
-        mul(float4(0.0f, -0.5, 1.f, 1.f),  g_matWorld),
+        mul(float4(-0.5, 0.f,  0.f, 1.f), g_matWorld),
+        mul(float4(0.0f, 0.f, 0.5f, 1.f),  g_matWorld),
+        mul(float4(0.5,  0.f,  0.f, 1.f),  g_matWorld),
+        mul(float4(0.0f, 0.f, -0.5, 1.f),  g_matWorld),
     };
 
-    NewPos[0].xy *= Size.xy;
-    NewPos[1].xy *= Size.xy;
-    NewPos[2].xy *= Size.xy;
-    NewPos[3].xy *= Size.xy;
+    NewPos[0].xyz *= Size.xyz;
+    NewPos[1].xyz *= Size.xyz;
+    NewPos[2].xyz *= Size.xyz;
+    NewPos[3].xyz *= Size.xyz;
 
     NewPos[0] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
     NewPos[1] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
     NewPos[2] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
     NewPos[3] += float4(TileBuffer[_in[0].iInstance].vPos, 0.f);
 
-    NewPos[0].xyz -= g_vec4_0.xyz;
-    NewPos[1].xyz -= g_vec4_0.xyz;
-    NewPos[2].xyz -= g_vec4_0.xyz;
-    NewPos[3].xyz -= g_vec4_0.xyz;
+    //NewPos[0].xyz -= g_vec4_0.xyz;
+    //NewPos[1].xyz -= g_vec4_0.xyz;
+    //NewPos[2].xyz -= g_vec4_0.xyz;
+    //NewPos[3].xyz -= g_vec4_0.xyz;
 
     NewPos[0] = mul(NewPos[0], g_matView * g_matProj);
     NewPos[1] = mul(NewPos[1], g_matView * g_matProj);

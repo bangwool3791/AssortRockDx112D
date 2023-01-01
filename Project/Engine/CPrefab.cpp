@@ -23,6 +23,17 @@ CPrefab::CPrefab(CGameObject* _pProto)
 	}
 }
 
+CPrefab::CPrefab(CGameObject* _pProto, bool _bEngine)
+	:CRes(RES_TYPE::PREFAB, _bEngine)
+	, m_pProtoObj{ _pProto}
+{
+	if (-1 != _pProto->GetLayerIndex())
+	{
+		m_pProtoObj = _pProto->Clone();
+	}
+}
+
+
 CPrefab::~CPrefab()
 {
 	if (m_pProtoObj)

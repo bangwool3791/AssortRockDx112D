@@ -153,7 +153,9 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Animator2DUI.h" />
+    <ClInclude Include="CAnimator2DUI.h" />
+    <ClInclude Include="define.h" />
+    <ClInclude Include="EditAnimationUI.h" />
     <ClInclude Include="CCameraScript.h" />
     <ClInclude Include="CEditor.h" />
     <ClInclude Include="CEditorCam.h" />
@@ -207,7 +209,8 @@
     <ClInclude Include="MaterialUI.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Animator2DUI.cpp" />
+    <ClCompile Include="CAnimator2DUI.cpp" />
+    <ClCompile Include="EditAnimationUI.cpp" />
     <ClCompile Include="CCameraScript.cpp" />
     <ClCompile Include="CEditor.cpp" />
     <ClCompile Include="CEditorCam.cpp" />

@@ -80,6 +80,37 @@ CAnimation2D* CAnimator2D::FindAnimation(const wstring& _strKey)
     return iter;
 }
 
+void CAnimator2D::Play()
+{
+    auto iter = m_mapAnim.begin();
+    
+    m_strKey = iter->first;
+    CAnimation2D* pAnimation = iter->second;
+
+    assert(nullptr != pAnimation);
+    
+    if (IsValid(pAnimation))
+    {
+        m_pCurAnim = pAnimation;
+    }
+    m_bRepeat = true;
+    pAnimation->Reset();
+}
+
+void CAnimator2D::Play(const wstring& _strKey)
+{
+    m_strKey = _strKey;
+    CAnimation2D* pAnimation = FindAnimation(_strKey);
+
+    assert(nullptr != pAnimation);
+
+    if (IsValid(pAnimation))
+    {
+        m_pCurAnim = pAnimation;
+    }
+    pAnimation->Reset();
+}
+
 void CAnimator2D::Play(const wstring& _strKey, bool _bRepeat)
 {
     m_strKey = _strKey;
@@ -243,10 +274,15 @@ void CAnimator2D::SetDuration(float _fDuration, int _index)
     m_pCurAnim->SetDuration(_fDuration, _index);
 }
 
-const vector<wstring>& CAnimator2D::Get_Animation_Key()
+const wstring& CAnimator2D::GetKey()
+{
+    return m_pCurAnim->GetName();
+}
+
+const vector<wstring>& CAnimator2D::GetKeys()
 {
     static vector<wstring> vec{};
-
+    vec.clear();
     for (auto iter{ m_mapAnim.begin() }; iter != m_mapAnim.end(); ++iter)
     {
         vec.push_back(iter->first);

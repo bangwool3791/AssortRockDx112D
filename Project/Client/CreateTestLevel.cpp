@@ -34,7 +34,7 @@ void CreateDefaultPrefab()
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"Std2DMtrl"));
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Player.bmp"));
 
-	CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject));
+	CResMgr::GetInst()->AddRes<CPrefab>(L"MissilePrefab", new CPrefab(pObject, true));
 
 	pObject = new CGameObject;
 	pObject->SetName(L"UnitSelectUI");
@@ -46,7 +46,7 @@ void CreateDefaultPrefab()
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"CircleMesh_Debug"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UnitSelectUIMaterial"));
 
-	CResMgr::GetInst()->AddRes<CPrefab>(L"UnitSelectUIPrefab", new CPrefab(pObject));
+	CResMgr::GetInst()->AddRes<CPrefab>(L"UnitSelectUIPrefab", new CPrefab(pObject, true));
 
 	/*
 	* MouseDragPrefab
@@ -62,14 +62,14 @@ void CreateDefaultPrefab()
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"MouseDragMaterial"));
 	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-	CResMgr::GetInst()->AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject));
+	CResMgr::GetInst()->AddRes<CPrefab>(L"MouseDragPrefab", new CPrefab(pObject, true));
 
 	pObject = new CGameObject;
 	pObject->SetName(L"MouseObject");
 	pObject->AddComponent(new CTransform);
 	pObject->AddComponent(new CCollider2D);
 	pObject->AddComponent(new CMouseScript);
-	CResMgr::GetInst()->AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject));
+	CResMgr::GetInst()->AddRes<CPrefab>(L"MousePrefab", new CPrefab(pObject, true));
 
 
 	pObject = new CGameObject;
@@ -93,16 +93,16 @@ void CreateDefaultPrefab()
 	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
 
 	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
-	CResMgr::GetInst()->AddRes<CPrefab>(L"ShadowPrefab", new CPrefab(pObject));
+	CResMgr::GetInst()->AddRes<CPrefab>(L"ShadowPrefab", new CPrefab(pObject, true));
 }
 
 void CreateTestLelvel()
 {
-	//CreateDefaultPrefab();
-	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
-	//CLevelMgr::GetInst()->ChangeLevel(Level);
-	//Level->begin();
-	//return;
+	CreateDefaultPrefab();
+	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+	CLevelMgr::GetInst()->ChangeLevel(Level);
+	Level->begin();
+	return;
 	
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
@@ -123,7 +123,7 @@ void CreateTestLelvel()
 	* LAYER_MAX까지 Render
 	*/
 	pCamObj->Camera()->SetLayerMaskAll();
-	pCamObj->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+	pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 	pCamObj->Transform()->SetRelativePos(Vec3{ 0.f, 0.f, 500.f });
 	pLevel->AddGameObject(pCamObj, 0);
 
@@ -178,34 +178,61 @@ void CreateTestLelvel()
 	CGameObject* pObject = nullptr;
 	Ptr<CPrefab> pPrefab = nullptr;
 	//Edit Test를 위해 주석 처리
-	for (float i{ -500.f }; i < 500.f; i += 100.f)
-	{
-		pObject = new CGameObject;
-		pObject->SetName(L"Player");
 
-		pObject->AddComponent(new CTransform);
-		pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-		pObject->AddComponent(new CCollider2D);
-		pObject->AddComponent(new CPlayerScript);
-		pObject->AddComponent(new CAnimator2D);
+	pObject = new CGameObject;
+	pObject->SetName(L"Player");
 
-		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
-		pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
-		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
-		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+	pObject->AddComponent(new CTransform);
+	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+	pObject->AddComponent(new CCollider2D);
+	//pObject->AddComponent(new CPlayerScript);
+	pObject->AddComponent(new CAnimator2D);
 
-		pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-		pObject->Animator2D()->Play(L"LeftWalk", true);
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 
-		pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-		Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
-		pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	pObject->Animator2D()->Play(L"LeftWalk", true);
 
-		pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
-		pLevel->AddGameObject(pObject, 1);
-	}
+	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
+	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+
+	pLevel->AddGameObject(pObject, 1);
+
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+
+	//for (float i{ -500.f }; i < 500.f; i += 100.f)
+	//{
+	//	pObject = new CGameObject;
+	//	pObject->SetName(L"Player");
+
+	//	pObject->AddComponent(new CTransform);
+	//	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+	//	pObject->AddComponent(new CCollider2D);
+	//	pObject->AddComponent(new CPlayerScript);
+	//	pObject->AddComponent(new CAnimator2D);
+
+	//	pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
+	//	pObject->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+	//	pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+	//	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+
+	//	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	//	pObject->Animator2D()->Play(L"LeftWalk", true);
+
+	//	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	//	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
+	//	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+
+	//	pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"ShadowPrefab");
+	//	pLevel->AddGameObject(pObject, 1);
+	//}
+	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	/*
 	* Mouse
 	*/

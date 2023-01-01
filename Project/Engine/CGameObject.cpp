@@ -193,7 +193,11 @@ void CGameObject::AddComponent(CComponent* _pComponent)
 
 		if (nullptr != pRenderCom)
 		{
-			assert(!m_pRenderComponent);
+			if (m_pRenderComponent)
+			{
+				MessageBox(nullptr, L"m_pRenderComponent != nullptr", L"¿¡·¯", MB_OK);
+				return;
+			}
 			m_pRenderComponent = pRenderCom;
 		}
 

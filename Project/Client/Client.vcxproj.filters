@@ -119,6 +119,9 @@
     <Filter Include="Default\ModuleUI\PopupUI">
       <UniqueIdentifier>{81a3de36-f844-49b2-8ba4-920186de3b9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03. UI\10. EditAnimationUI">
+      <UniqueIdentifier>{b0eb5217-acdf-4805-a9c9-8c62c7855491}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -235,9 +238,6 @@
     <ClInclude Include="ComInspector.h">
       <Filter>03. UI\07. ComponentUI</Filter>
     </ClInclude>
-    <ClInclude Include="Animator2DUI.h">
-      <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
-    </ClInclude>
     <ClInclude Include="ParamUI.h">
       <Filter>Default\ModuleUI\ParamUI</Filter>
     </ClInclude>
@@ -276,6 +276,15 @@
     </ClInclude>
     <ClInclude Include="DummyUI.h">
       <Filter>03. UI\04. DummyUI</Filter>
+    </ClInclude>
+    <ClInclude Include="EditAnimationUI.h">
+      <Filter>03. UI\10. EditAnimationUI</Filter>
+    </ClInclude>
+    <ClInclude Include="CAnimator2DUI.h">
+      <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
+    </ClInclude>
+    <ClInclude Include="define.h">
+      <Filter>Default</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -381,9 +390,6 @@
     <ClCompile Include="ComInspector.cpp">
       <Filter>03. UI\07. ComponentUI</Filter>
     </ClCompile>
-    <ClCompile Include="Animator2DUI.cpp">
-      <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
-    </ClCompile>
     <ClCompile Include="ParamUI.cpp">
       <Filter>Default\ModuleUI\ParamUI</Filter>
     </ClCompile>
@@ -419,6 +425,12 @@
     </ClCompile>
     <ClCompile Include="PopupUI.cpp">
       <Filter>Default\ModuleUI\PopupUI</Filter>
+    </ClCompile>
+    <ClCompile Include="EditAnimationUI.cpp">
+      <Filter>03. UI\10. EditAnimationUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CAnimator2DUI.cpp">
+      <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@
 #include <Engine\CLevelMgr.h>
 #include <Engine\CGameObject.h>
 
+#include "CAnimator2DUI.h"
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
 #include "Collider2DUI.h"
@@ -43,10 +44,12 @@ InspectorUI::InspectorUI()
 	m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D]->SetSize(ImVec2(0.f, 150.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::COLLIDER2D]);
 
-	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT] = new ShadowUI;
-	m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]->SetSize(ImVec2(0.f, 150.f));
-	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]);
+	//m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT] = new ShadowUI;
+	//AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::SCRIPT]);
 
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new CAnimator2DUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetSize(ImVec2(0.f, 150.f));
+	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);
 	//m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D] = new Light2DUI;
 	//m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]->SetSize(ImVec2(0.f, 150.f));
 	//AddChild(m_arrObjUI[(UINT)OBJECT_TYPE::LIGHT2D]);
@@ -213,6 +216,8 @@ void InspectorUI::SetTargetResource(CRes* _Resource)
 		m_TargetRes = _Resource;
 		RES_TYPE eType = m_TargetRes->GetResType();
 
+		if ((int)eType < 0)
+			return;
 		if (nullptr != m_arrResUI[(UINT)eType])
 		{
 			m_arrResUI[(UINT)eType]->SetTarget(m_TargetRes);

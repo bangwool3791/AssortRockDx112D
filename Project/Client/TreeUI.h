@@ -118,6 +118,7 @@ public:
 	}
 	TreeNode* GetNode(CGameObject* _pObj);
 	TreeNode* GetNode(CGameObjectEx* _pObj);
+	void DeleteNode(CGameObject* _pObj);
 public:
 	TreeUI(const string& _strName);
 	~TreeUI();

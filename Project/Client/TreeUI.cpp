@@ -285,6 +285,37 @@ TreeNode* TreeUI::GetNode(CGameObjectEx* _pObj)
 	return nullptr;
 }
 
+void TreeUI::DeleteNode(CGameObject* _pObj)
+{
+	if ((CGameObjectEx*)m_RootNode->GetData() == _pObj)
+	{
+		vector<TreeNode*>::iterator iter = m_RootNode->m_vecChildNode.begin();
+
+		for (; iter != m_RootNode->m_vecChildNode.end();)
+		{
+			Safe_Delete(*iter);
+			iter = m_RootNode->m_vecChildNode.erase(iter);
+		}
+		Safe_Delete(m_RootNode);
+	}
+
+	vector<TreeNode*>::iterator iter = m_RootNode->m_vecChildNode.begin();
+
+	for (; iter != m_RootNode->m_vecChildNode.end();)
+	{
+		if ((CGameObjectEx*)(*iter)->GetData() == _pObj)
+		{
+			Safe_Delete(*iter);
+			iter = m_RootNode->m_vecChildNode.erase(iter);
+			break;
+		}
+		else
+		{
+			++iter;
+		}
+	}
+}
+
 void TreeUI::Clear()
 {
 	if (nullptr != m_RootNode)
@@ -296,10 +327,6 @@ void TreeUI::Clear()
 
 void TreeUI::SetLBtnSelectedNode(TreeNode* _SelectedNode)
 {
-	if(_SelectedNode->m_ParentNode)
-		if ("Level" != _SelectedNode->m_ParentNode->GetName())
-			return;
-
 	if (nullptr != m_SelectedNode)
 	{
 		m_SelectedNode->m_bSelected = false;
@@ -368,22 +395,6 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 			(m_DragDropInst->*m_DragDropFunc)((DWORD_PTR)m_BeginDragNode, (DWORD_PTR)m_DropTargetNode);
 		}
 	}
-	/*
-	* DummyTree -> ObjectTree
-	* ObjectTree 
-	*/
-	//else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##DummyTree"))
-	//{
-	//	if (GetName() == "##ModelTree")
-	//	{
-	//		TreeNode* pNode = (TreeNode*)payload->Data;
-	//		CGameObjectEx* pGameObject = (CGameObjectEx*)pNode->GetData();
-	//		wstring strName = pGameObject->GetName().c_str();
-	//		m_vecGameObjectEx.push_back(pGameObject->Clone());
-	//		AddItem(m_RootNode, string(strName.begin(), strName.end()), (DWORD_PTR)m_vecGameObjectEx[m_vecGameObjectEx.size()-1]);
-	//		CEditor::GetInst()->Add_Editobject(EDIT_MODE::OBJECT, m_vecGameObjectEx[m_vecGameObjectEx.size() - 1]);
-	//	}
-	//}
 	else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelComTree"))
 	{
 		/*
@@ -399,9 +410,6 @@ void TreeUI::SetDropTargetNode(TreeNode* _DropTargetNode)
 				TreeNode* pNode = (TreeNode*)payload->Data;
 				CComponent* pCom = (CComponent*)pNode->GetData();
 				pGameObject->AddComponent(pCom->Clone());
-
-				pNode = GetNode(pGameObject);
-				AddItem(pNode, string(pCom->GetName().begin(), pCom->GetName().end()), (DWORD_PTR)pCom);
 			}
 		}
 	}

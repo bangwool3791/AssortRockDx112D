@@ -15,6 +15,7 @@
 #include <Script\CScriptMgr.h>
 MenuUI::MenuUI()
 	:UI("##MenuUI")
+    , m_eEditMode{EDIT_MODE::ANIMATOR }
 {
 
 }
@@ -40,12 +41,14 @@ void MenuUI::render()
         {
             if (ImGui::MenuItem("Animator"))
             {
-                CEditor::GetInst()->SetEditmode(EDIT_MODE::ANIMATOR);
+                CEditor::GetInst()->SetEditMode(EDIT_MODE::ANIMATOR);
+                m_eEditMode = EDIT_MODE::ANIMATOR;
             }
 
             if (ImGui::MenuItem("Maptool"))
             {
-                CEditor::GetInst()->SetEditmode(EDIT_MODE::MAPTOOL);
+                CEditor::GetInst()->SetEditMode(EDIT_MODE::MAPTOOL);
+                m_eEditMode = EDIT_MODE::MAPTOOL;
             }
 
             ImGui::EndMenu();
@@ -107,6 +110,7 @@ void MenuUI::render()
                 tEvent evn = {};
                 evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
                 evn.wParam = (DWORD_PTR)LEVEL_STATE::PLAY;
+                CEditor::GetInst()->SetEditMode(EDIT_MODE::OBJECT);
                 CEventMgr::GetInst()->AddEvent(evn);
             }
 
@@ -115,6 +119,7 @@ void MenuUI::render()
                 tEvent evn = {};
                 evn.eType = EVENT_TYPE::CHANGE_LEVEL_STATE;
                 evn.wParam = (DWORD_PTR)LEVEL_STATE::PAUSE;
+                CEditor::GetInst()->SetEditMode(m_eEditMode);
                 CEventMgr::GetInst()->AddEvent(evn);
             }
 

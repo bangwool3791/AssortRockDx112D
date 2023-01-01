@@ -62,22 +62,22 @@ void CResMgr::CreateDefaultMesh()
 	CMesh* pMesh = nullptr;
 
 	// 사각형 메쉬 만들기
-	v.vPos = Vec3(-0.5f, 0.5f, 1.f);
+	v.vPos = Vec3(-0.5f, 0.f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 	v.vUV = Vec2(0.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.5f, 0.5f, 1.f);
+	v.vPos = Vec3(0.f, 0.f, 0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(1.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.5f, -0.5f, 1.f);
+	v.vPos = Vec3(0.5f, 0.f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(1.f, 1.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(-0.5f, -0.5f, 1.f);
+	v.vPos = Vec3(0.f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(0.f, 1.f);
 	*iterVtx = v;
@@ -156,19 +156,19 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	v.vPos = Vec3(-0.5f, 0.f, 1.f);
+	v.vPos = Vec3(-0.5f, 0.f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(0.f, 0.5f);
 	*iterVtx = v;
-	v.vPos = Vec3(0.f, 0.5f, 1.f);
+	v.vPos = Vec3(0.f, 0.f, 0.5f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(0.5f, 0.f);
 	*iterVtx = v;
-	v.vPos = Vec3(0.5f, 0.f, 1.f);
+	v.vPos = Vec3(0.5f, 0.f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(1.f, 0.5f);
 	*iterVtx = v;
-	v.vPos = Vec3(0.f, -0.5f, 1.f);
+	v.vPos = Vec3(0.f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(0.5f, 1.f);
 	*iterVtx = v;
@@ -393,15 +393,17 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	// TileMap Shader
 	pShader = new CGraphicsShader;
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
 	pShader->CreateGeometryShader(L"shader\\tilemap.fx", "GS_TileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 	/*
 	* 투명한 타일이 있을 경우
 	*/
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetDSType(DS_TYPE::LESS);
 	/*
 	* 알파블랜드는 타일은 생각하기 힘들다
 	*/

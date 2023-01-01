@@ -37,7 +37,7 @@ typedef Vector4 Vec4;
 #define TILEY 100
 
 #define TILECX 64.f
-#define TILECY 64.f
+#define TILECZ 64.f
 
 #define OBJECTPOOL_SIZE 1000
 enum class SHADER_DOMAIN

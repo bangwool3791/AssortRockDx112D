@@ -123,3 +123,13 @@ void LoadWStringFromFile(wstring& _str, FILE* _pFile)
 	fread(szbuffer, sizeof(wchar_t), iLen, _pFile);
 	_str = szbuffer;
 }
+
+string WStringToString(const wstring& _str)
+{
+	return string(_str.begin(), _str.end());
+}
+
+wstring StringToWString(const string& _str)
+{
+	return wstring(_str.begin(), _str.end());
+}

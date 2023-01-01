@@ -10,7 +10,7 @@
 #include "Collider2DUI.h"
 #include "ShadowUI.h"
 #include "Light2DUI.h"
-#include "Animator2DUI.h"
+#include "EditAnimationUI.h"
 /*
 * Resource
 */
@@ -26,7 +26,7 @@ ComInspector::ComInspector()
 	/*
 	* 자동 조절
 	*/
-	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new Animator2DUI;
+	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D] = new EditAnimationUI;
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->begin();
 	m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetSize(ImVec2(0.f, 0.f));
 	AddChild(m_arrComUI[(UINT)COMPONENT_TYPE::ANIMATOR2D]);

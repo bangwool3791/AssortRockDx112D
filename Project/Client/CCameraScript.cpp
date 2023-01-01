@@ -57,7 +57,6 @@ void CCameraScript::Move()
 			vRot.x -= vMouseDir.y * DT * XM_PI;
 			Transform()->SetRelativeRotation(vRot);
 		}
-
 		Transform()->SetRelativePos(vPos);
 	}
 
@@ -92,6 +91,11 @@ void CCameraScript::Move()
 			float fScale = Camera()->GetOrthographicScale();
 			fScale -= DT;
 			Camera()->SetOrthographicScale(fScale);
+		}
+
+		else if (KEY_PRESSED(KEY::NUM_3))
+		{
+			Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 		}
 	}
 }

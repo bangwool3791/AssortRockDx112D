@@ -19,11 +19,8 @@ MeshRenderUI::~MeshRenderUI()
 
 void MeshRenderUI::update()
 {
-	if (nullptr != GetTarget())
+	if (nullptr != GetTarget() && nullptr != GetTarget()->MeshRender())
 	{
-		if (nullptr == GetTarget()->MeshRender())
-			return;
-
 		m_Mesh = GetTarget()->MeshRender()->GetMesh();
 		m_Mtrl = GetTarget()->MeshRender()->GetCurMaterial();
 	}

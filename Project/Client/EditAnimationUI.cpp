@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Animator2DUI.h"
+#include "EditAnimationUI.h"
 
 #include <Engine\CDevice.h>
 #include <Engine/CResMgr.h>
@@ -30,7 +30,7 @@ static const int dy[] = { 0, 1, 0, -1 };
 * Animator Link
 * * Pixel Get
 */
-Animator2DUI::Animator2DUI()
+EditAnimationUI::EditAnimationUI()
     : ComponentUI("Animator2D", COMPONENT_TYPE::ANIMATOR2D)
     , m_fMaxX{}
     , m_fMaxY{}
@@ -53,10 +53,11 @@ Animator2DUI::Animator2DUI()
     , m_pPointObject{}
     , m_szAnimation{}
     , m_fileDialogOpen{}
+    , m_eEditMode{EDIT_ANIMATION_MODE::SCEN_MODE}
 {
 }
 
-Animator2DUI::~Animator2DUI()
+EditAnimationUI::~EditAnimationUI()
 {
     CEditor::GetInst()->PopByName(L"Dummy Object");
 
@@ -72,7 +73,7 @@ Animator2DUI::~Animator2DUI()
 #include "TreeUI.h"
 #include <stack>
 
-void Animator2DUI::begin()
+void EditAnimationUI::begin()
 {
     Initialize_Animation_Info();
 
@@ -83,29 +84,30 @@ void Animator2DUI::begin()
     m_pPointObject = CEditor::GetInst()->FindByName(L"AnimationToolDrag");
 }
 
-void Animator2DUI::update()
+void EditAnimationUI::update()
 {
     ComponentUI::update();
 }
 
-void Animator2DUI::render_update()
+void EditAnimationUI::render_update()
 {
     ComponentUI::render_update();
 
     if (ImGui::BeginDragDropTarget())
     {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##ModelTree"))
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("##OutlinerTree"))
         {
             TreeNode* pNode = (TreeNode*)payload->Data;
-            m_pGameObject = (CGameObjectEx*)pNode->GetData();
+            m_pGameObject = (CGameObject*)pNode->GetData();
 
-            if (dynamic_cast<CGameObjectEx*>(m_pGameObject))
+            if (dynamic_cast<CGameObject*>(m_pGameObject))
             {
-                m_pAnimator = dynamic_cast<CGameObjectEx*>(m_pGameObject)->Animator2D();
+                m_pAnimator = dynamic_cast<CGameObject*>(m_pGameObject)->Animator2D();
 
                 if (nullptr == m_pAnimator)
                 {
                     cout << "Dummy Object has not Animation2D Component" << endl;
+                    ImGui::EndDragDropTarget();
                     return;
                 }
 
@@ -113,11 +115,11 @@ void Animator2DUI::render_update()
                 Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
                 m_pImage = m_pAtlasTexture->GetSRV().Get();
                 //더미 오브젝트 넣고, 툴 환시 더미 오브젝트 빼기 ?
-                CEditor::GetInst()->Add_Editobject(EDIT_MODE::ANIMATOR, m_pGameObject);
+                CEditor::GetInst()->UpdateAnimationObject(m_pGameObject);
                 CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
                 pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
 
-                const vector<wstring>& vec = m_pAnimator->Get_Animation_Key();
+                const vector<wstring>& vec = m_pAnimator->GetKeys();
 
                 for (size_t i{}; i < vec.size(); ++i)
                 {
@@ -170,9 +172,14 @@ void Animator2DUI::render_update()
     }
 
     ImGui::SameLine();
-    ImGui::Button("Sprite\r\nMode", ImVec2(65.f, 40.f));
+    if (ImGui::Button("Sprite\r\nMode", ImVec2(65.f, 40.f)))
+        m_eEditMode = EDIT_ANIMATION_MODE::SPRITE_MODE;
+
     ImGui::SameLine();
-    ImGui::Button("Scene\r\nMode", ImVec2(65.f, 40.f));
+
+    if (ImGui::Button("Scene\r\nMode", ImVec2(65.f, 40.f)))
+        m_eEditMode = EDIT_ANIMATION_MODE::SCEN_MODE;
+
     ImGui::PopStyleColor(3);
     ImGui::PopID();
 
@@ -452,57 +459,60 @@ void Animator2DUI::render_update()
     static bool bCheck = false;
     fDeltaTime += DT;
 
-    if (0.3f < fDeltaTime)
+    if (EDIT_ANIMATION_MODE::SPRITE_MODE == m_eEditMode)
     {
-        if (KEY_PRESSED(KEY::LBTN))
+        if (0.3f < fDeltaTime)
         {
-            if (Click_Pixel_LBtn())
+            if (KEY_PRESSED(KEY::LBTN))
+            {
+                if (Click_Pixel_LBtn())
+                    bCheck = true;
+                fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            }
+
+            if (KEY_PRESSED(KEY::LEFT))
+            {
+                Click_Pixel_KeyBoard(KEY::LEFT);
+                fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
                 bCheck = true;
-            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+            }
+            else if (KEY_PRESSED(KEY::RIGHT))
+            {
+                Click_Pixel_KeyBoard(KEY::RIGHT);
+                fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+                bCheck = true;
+            }
+            else if (KEY_PRESSED(KEY::UP))
+            {
+                Click_Pixel_KeyBoard(KEY::UP);
+                fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+                bCheck = true;
+            }
+            else if (KEY_PRESSED(KEY::DOWN))
+            {
+                Click_Pixel_KeyBoard(KEY::DOWN);
+                fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
+                bCheck = true;
+            }
         }
 
-        if (KEY_PRESSED(KEY::LEFT))
+        if (bCheck)
         {
-            Click_Pixel_KeyBoard(KEY::LEFT);
-            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
-            bCheck = true;
-        }
-        else if (KEY_PRESSED(KEY::RIGHT))
-        {
-            Click_Pixel_KeyBoard(KEY::RIGHT);
-            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
-            bCheck = true;
-        }
-        else if (KEY_PRESSED(KEY::UP))
-        {
-            Click_Pixel_KeyBoard(KEY::UP);
-            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
-            bCheck = true;
-        }
-        else if (KEY_PRESSED(KEY::DOWN))
-        {
-            Click_Pixel_KeyBoard(KEY::DOWN);
-            fDeltaTime = fDeltaTime - (fDeltaTime / 0.3f) * 0.3f;
-            bCheck = true;
-        }
-    }
+            m_pAnimator->SetLeftTop(Vec2(m_fMinX, m_fMinY), m_iCurIdx);
+            m_pAnimator->SetSlice(Vec2(m_fMaxX - m_fMinX, m_fMaxY - m_fMinY), m_iCurIdx);
+            //두개의 Vec2 멤버
+           //클릭시 처리
+           //리스트 클릭 시 처리
+            m_uvLeftTop = Vec2{ (float)m_fMinX / m_iPixel_Width ,m_fMinY / m_iPixel_Height };
+            m_uvRightBottom = Vec2{ (float)m_fMaxX / m_iPixel_Width ,m_fMaxY / m_iPixel_Height };
 
-    if (bCheck)
-    {
-        m_pAnimator->SetLeftTop(Vec2(m_fMinX, m_fMinY), m_iCurIdx);
-        m_pAnimator->SetSlice(Vec2(m_fMaxX - m_fMinX, m_fMaxY - m_fMinY), m_iCurIdx);
-        //두개의 Vec2 멤버
-       //클릭시 처리
-       //리스트 클릭 시 처리
-        m_uvLeftTop = Vec2{ (float)m_fMinX / m_iPixel_Width ,m_fMinY / m_iPixel_Height };
-        m_uvRightBottom = Vec2{ (float)m_fMaxX / m_iPixel_Width ,m_fMaxY / m_iPixel_Height };
-
-        m_uvSlice = Vec2{ abs(m_fMaxX - m_fMinX),abs(m_fMaxY - m_fMinY) };
-        bCheck = false;
+            m_uvSlice = Vec2{ abs(m_fMaxX - m_fMinX),abs(m_fMaxY - m_fMinY) };
+            bCheck = false;
+        }
     }
 }
 
-void Animator2DUI::Click_Pixel_KeyBoard(KEY _Key)
+void EditAnimationUI::Click_Pixel_KeyBoard(KEY _Key)
 {
     if (_Key == KEY::LEFT || _Key == KEY::RIGHT || _Key == KEY::UP || _Key == KEY::DOWN)
     {
@@ -537,7 +547,7 @@ void Animator2DUI::Click_Pixel_KeyBoard(KEY _Key)
     }
 }
 
-bool Animator2DUI::Click_Pixel_LBtn()
+bool EditAnimationUI::Click_Pixel_LBtn()
 {
     Vec3 vMousePos = m_MouseObject->Transform()->GetRelativePos();
 
@@ -577,7 +587,7 @@ bool Animator2DUI::Click_Pixel_LBtn()
 
 }
 
-void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
+void EditAnimationUI::Set_Texture_Pixel(UINT x, UINT y)
 {
     int index = 4 * (x + y * m_iPixel_Width);
 
@@ -677,7 +687,7 @@ void Animator2DUI::Set_Texture_Pixel(UINT x, UINT y)
     m_fMaxY = -1.f * fMaxY + m_iPixel_Height * 0.5f;
 }
 
-Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
+Vec2 EditAnimationUI::Get_Pixel_Bfs(UINT x, UINT y)
 {
     float fMinX = (float)m_iPixel_Width;
     float fMinY = (float)m_iPixel_Height;
@@ -737,7 +747,7 @@ Vec2 Animator2DUI::Get_Pixel_Bfs(UINT x, UINT y)
     return Vec2(-1.f, -1.f);
 }
 
-void Animator2DUI::Clear_Visited(bool** _visited, size_t width, size_t height)
+void EditAnimationUI::Clear_Visited(bool** _visited, size_t width, size_t height)
 {
     for (size_t i{}; i < height; ++i)
     {
@@ -748,13 +758,14 @@ void Animator2DUI::Clear_Visited(bool** _visited, size_t width, size_t height)
     }
 }
 
-void Animator2DUI::Initialize_Aimation_Pixel()
+void EditAnimationUI::Initialize_Aimation_Pixel()
 {
     if (m_dfs_visited)
     {
         for (int i{}; i < m_iPixel_Height; ++i)
         {
-            delete m_dfs_visited[i];
+            if (m_dfs_visited[i])
+                delete m_dfs_visited[i];
         }
         delete m_dfs_visited;
         m_dfs_visited = nullptr;
@@ -763,7 +774,8 @@ void Animator2DUI::Initialize_Aimation_Pixel()
     {
         for (int i{}; i < m_iPixel_Height; ++i)
         {
-            delete m_bfs_visited[i];
+            if(m_bfs_visited[i])
+                delete m_bfs_visited[i];
         }
         delete m_bfs_visited;
         m_bfs_visited = nullptr;
@@ -790,7 +802,7 @@ void Animator2DUI::Initialize_Aimation_Pixel()
     }
 }
 
-tRGBA Animator2DUI::GetRGBA(int _x, int _y)
+tRGBA EditAnimationUI::GetRGBA(int _x, int _y)
 {
 
     tRGBA tInfo;
@@ -808,7 +820,7 @@ tRGBA Animator2DUI::GetRGBA(int _x, int _y)
     return tInfo;
 }
 
-void Animator2DUI::SetTextureUI()
+void EditAnimationUI::SetTextureUI()
 {
     //Texture 파일 경로 찾기
     string strFileName = m_fileDialogInfo.resultPath.filename().string();
@@ -829,7 +841,7 @@ void Animator2DUI::SetTextureUI()
     Initialize_Aimation_Pixel();
 }
 
-void Animator2DUI::Initialize_Animation_Info()
+void EditAnimationUI::Initialize_Animation_Info()
 {
     m_pAnimator = (CAnimator2D*)CEditor::GetInst()->GetArrComponent(COMPONENT_TYPE::ANIMATOR2D);
 
@@ -842,7 +854,7 @@ void Animator2DUI::Initialize_Animation_Info()
     m_pImage = m_pAtlasTexture->GetSRV().Get();
 }
 
-void Animator2DUI::Render_Text(ImVec4 _vColor, Vec2 _vSize, string _str)
+void EditAnimationUI::Render_Text(ImVec4 _vColor, Vec2 _vSize, string _str)
 {
     ImGui::PushID(0);
     ImGui::PushStyleColor(ImGuiCol_Button, _vColor);
@@ -853,7 +865,7 @@ void Animator2DUI::Render_Text(ImVec4 _vColor, Vec2 _vSize, string _str)
     ImGui::PopID();
 }
 
-void Animator2DUI::Render_Pos()
+void EditAnimationUI::Render_Pos()
 {
     static string strLeftop = "Pos : (";
     strLeftop = "Pos : (";
@@ -886,7 +898,7 @@ void Animator2DUI::Render_Pos()
     ImGui::Text(strSize.c_str());
 }
 
-void Animator2DUI::Refresh_Animation(float width, float height)
+void EditAnimationUI::Refresh_Animation(float width, float height)
 {
     const vector<tAnim2DFrm> vecFrames = m_pAnimator->GetFames();
 

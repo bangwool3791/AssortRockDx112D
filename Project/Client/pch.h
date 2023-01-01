@@ -3,6 +3,7 @@
 #include "framework.h"
 
 #include <crtdbg.h>
+#include "define.h"
 #include <Engine/global.h>
 #include <Engine/CEngine.h>
 

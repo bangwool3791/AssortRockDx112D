@@ -16,11 +16,11 @@ Collider2DUI::~Collider2DUI()
 
 void Collider2DUI::update()
 {
-	if (nullptr != GetTarget())
+	if (nullptr != GetTarget() && nullptr != GetTarget()->Collider2D())
 	{
-		m_vScale			= GetTarget()->Collider2D()->GetScale();
-		m_vOffsetPos		= GetTarget()->Collider2D()->GetOffsetPos();
-		m_vRot				= GetTarget()->Collider2D()->GetRotation();
+		m_vScale = GetTarget()->Collider2D()->GetScale();
+		m_vOffsetPos = GetTarget()->Collider2D()->GetOffsetPos();
+		m_vRot = GetTarget()->Collider2D()->GetRotation();
 		m_bIgnorObjectScale = GetTarget()->Collider2D()->GetIgnoreObjectScale();
 	}
 
@@ -40,12 +40,15 @@ void Collider2DUI::render_update()
 
 	ImGui::Text("Ignore Object Scale"); ImGui::SameLine(); ImGui::Checkbox("##IgnorParentScale", &m_bIgnorObjectScale);
 
-	if (GetTarget())
+	if (nullptr != GetTarget() && nullptr != GetTarget()->Collider2D())
 	{
-		GetTarget()->Collider2D()->SetOffsetPos(m_vOffsetPos);
-		GetTarget()->Collider2D()->SetScale(m_vScale);
+		if (GetTarget()->Collider2D())
+		{
+			GetTarget()->Collider2D()->SetOffsetPos(m_vOffsetPos);
+			GetTarget()->Collider2D()->SetScale(m_vScale);
 
-		m_vRot.ToRadian();
-		GetTarget()->Collider2D()->SetIgnoreObjectScale(m_bIgnorObjectScale);
+			m_vRot.ToRadian();
+			GetTarget()->Collider2D()->SetIgnoreObjectScale(m_bIgnorObjectScale);
+		}
 	}
 }

@@ -91,6 +91,7 @@ public:
 
 public:
 	CAnimation2D();
+	CAnimation2D(const CAnimation2D& _rhs);
 	virtual ~CAnimation2D();
 
 	friend class CAnimator2D;

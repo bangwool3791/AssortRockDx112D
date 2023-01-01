@@ -32,10 +32,6 @@ DummyUI::~DummyUI()
 
 void DummyUI::begin()
 {
-	CGameObject* pGameObject = (CGameObject*)CEditor::GetInst()->GetDummyObject(L"Dummy Object");
-	const wstring& wstr = pGameObject->GetName();
-	m_Tree->AddItem(nullptr, string(wstr.begin(), wstr.end()), (DWORD_PTR)pGameObject);
-	m_Tree->SetDummyRoot(false);
 }
 
 void DummyUI::update()

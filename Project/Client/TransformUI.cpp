@@ -17,11 +17,8 @@ TransformUI::~TransformUI()
 
 void TransformUI::update()
 {
-	if (nullptr != GetTarget())
+	if (nullptr != GetTarget() && nullptr != GetTarget()->Transform())
 	{
-		if (nullptr == GetTarget()->Transform())
-			return;
-		
 		m_vPos = GetTarget()->Transform()->GetRelativePos();
 		m_vScale = GetTarget()->Transform()->GetRelativeScale();
 		m_vRot = GetTarget()->Transform()->GetRelativeRotation();
@@ -44,7 +41,7 @@ void TransformUI::render_update()
 		
 	ImGui::Text("Ignore Parent Scale"); ImGui::SameLine(); ImGui::Checkbox("##IgnorParentScale", &m_bIgnorScale);
 
-	if (GetTarget())
+	if (nullptr != GetTarget() && nullptr != GetTarget()->Transform())
 	{
 		if (nullptr == GetTarget()->Transform())
 			return;

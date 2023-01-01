@@ -180,6 +180,8 @@ CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
 			break;
 
 		pComponent->LoadFromFile(_File);
+		if (COMPONENT_TYPE::ANIMATOR2D == type)
+			((CAnimator2D*)pComponent)->Play();
 		pObject->AddComponent(pComponent);
 	}
 	size_t iScriptCount = 0;

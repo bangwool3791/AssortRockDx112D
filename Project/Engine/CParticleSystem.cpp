@@ -16,7 +16,7 @@ CParticleSystem::CParticleSystem()
 	, m_fAccTime{}
 
 {
-	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
+	//SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
 
 	m_ParticleBuffer = new CStructuredBuffer;
 

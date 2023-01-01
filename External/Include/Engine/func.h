@@ -81,6 +81,9 @@ void Safe_Del_Vec(vector<T*>& _vec)
 }
 
 
+string WStringToString(const wstring& _str);
+wstring StringToWString(const string& _str);
+
 template<typename T>
 void tick_function(T& container)
 {

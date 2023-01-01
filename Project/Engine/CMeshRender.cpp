@@ -98,7 +98,6 @@ void CMeshRender::render_Instancing()
 		Animator2D()->UpdateData();
 	}
 
-
 	tTransform transform = g_transform;
 	tMtrlConst tMtrl = GetCurMaterial()->GetMaterial();
 	tAnim2DInfo tAnimInfo;

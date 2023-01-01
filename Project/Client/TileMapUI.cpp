@@ -20,7 +20,7 @@
 #include "ProgressUI.h"
 
 TileMapUI::TileMapUI()
-	: UI("TileMap")
+	: UI("TileMapUI")
 	, m_vTileSize{1.f, 1.f }
 {
 }

@@ -12,10 +12,10 @@
 
 CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
-	, m_vTileSize{1.f, 1.f }
+	, m_vTileSize{1.f, 0.f, 1.f, 1.f }
 {
-	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
-	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TileMapMtrl"));
+	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
 
 	m_TileBuffer = new CStructuredBuffer;
 }
@@ -48,12 +48,12 @@ void CTileMap::begin()
 		for (int j = 0; j < TILEX; ++j)
 		{
 			float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
-			float	fY = (TILECY * m_vTileSize.y / 2.f) * i;
+			float	fZ = (TILECZ * m_vTileSize.z / 2.f) * i;
 
 			t.vLeftTop = Vec2(64.f, 64.f);
 			t.vSlice = Vec2(64.f, 64.f);
-			t.vPos = { fX, fY, 1.f };
-			t.vSize = Vec3{ (float)1.f * m_vTileSize.x , (float)1.f * m_vTileSize.y , 0.f };
+			t.vPos = { fX, 0.f, fZ };
+			t.vSize = Vec4{ (float)1.f * m_vTileSize.x , 0.f , (float)1.f * m_vTileSize.z, 1.f };
 			t.iIndex = i * TILEX + j;
 			t.iParentIndex = 0;
 			t.ibyOption = 1;
@@ -81,8 +81,8 @@ void CTileMap::render()
 		m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
 
 
-	GetCurMaterial()->SetScalarParam(VEC2_3, m_vTileSize);
-	GetCurMaterial()->SetScalarParam(VEC4_0, &m_vCameraPos);
+	GetCurMaterial()->SetScalarParam(VEC4_0, m_vTileSize);
+	//GetCurMaterial()->SetScalarParam(VEC4_0, &m_vCameraPos);
 	
 	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex[0]);
 	GetCurMaterial()->SetTexParam(TEX_1, m_AtlasTex[1]);
@@ -137,9 +137,9 @@ void CTileMap::EidtApply()
 		for (int j = 0; j < TILEX; ++j)
 		{
 			float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
-			float	fY = (TILECY * m_vTileSize.y / 2.f) * i;
-			m_vecTile[i * TILEX + j].vPos = { fX, fY, 1.f };
-			m_vecTile[i * TILEX + j].vSize = Vec3{ (float)TILECX * m_vTileSize.x , (float)TILECY * m_vTileSize.y , 0.f };
+			float	fZ = (TILECZ * m_vTileSize.y / 2.f) * i;
+			m_vecTile[i * TILEX + j].vPos = { fX, 0.f, fZ };
+			m_vecTile[i * TILEX + j].vSize = Vec3{ (float)TILECX * m_vTileSize.x , 0.f , (float)TILECZ * m_vTileSize.z };
 		}
 	}
 }
