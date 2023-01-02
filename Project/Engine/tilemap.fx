@@ -42,6 +42,9 @@ float4 PS_TileMap(VS_OUT _in) : SV_Target
     tLightColor color = (tLightColor)0.f;
 
 
+    if (_in.vUV.x == -1.f)
+        discard;
+
     if (TileBuffer[_in.iInstance].ibyOption == 0)
     {
         vOutColor = g_tex_0.Sample(g_sam_1, _in.vUV);

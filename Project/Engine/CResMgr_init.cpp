@@ -247,6 +247,7 @@ void CResMgr::CreateDefaultMesh()
 
 	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	pMesh->Write();
 	AddRes<CMesh>(L"TerrainMesh", pMesh);
 	vecVtx.clear();
 	vecIdx.clear();
