@@ -86,8 +86,8 @@ void CEditor::init()
 	m_pCameraObject->Camera()->SetFar(100000.f);
 	m_pCameraObject->Camera()->SetLayerMaskAll();
 	m_pCameraObject->Camera()->SetLayerMask(31);
-	m_pCameraObject->Transform()->SetRelativePos(0.f, 0.f, 0.1f);
-	m_pCameraObject->Transform()->SetRelativeRotation(90.f, 0.f, 0.f);
+	m_pCameraObject->Transform()->SetRelativePos(1200.f, 500.f, 1000.f);
+	m_pCameraObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
 	CRenderMgr::GetInst()->RegisterEditCam(m_pCameraObject->Camera());
 
 	m_MouseObject = new CGameObjectEx;
