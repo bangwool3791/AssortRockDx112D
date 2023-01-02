@@ -3,6 +3,9 @@
 #include "C:\Development\MyEngine\DirectX11\Project\Client\CAnimator2DUI.cpp"
 
 
+#include "C:\Development\MyEngine\DirectX11\Project\Client\CBorderScript.cpp"
+
+
 #include "C:\Development\MyEngine\DirectX11\Project\Client\EditAnimationUI.cpp"
 
 
@@ -67,7 +70,4 @@
 
 
 #include "C:\Development\MyEngine\DirectX11\Project\Client\imgui_demo.cpp"
-
-
-#include "C:\Development\MyEngine\DirectX11\Project\Client\imgui_draw.cpp"
 

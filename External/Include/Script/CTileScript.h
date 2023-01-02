@@ -27,7 +27,7 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    void    SetTileInfo(UINT _ibyOption) { m_tTileInfo.ibyOption = _ibyOption; }
+    void    SetTileInfo(UINT _ibyOption);
     void    Initialize(void* _pAddr);
     CLONE(CTileScript);
 public:

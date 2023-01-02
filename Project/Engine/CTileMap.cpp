@@ -14,8 +14,8 @@ CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
 	, m_vTileSize{1.f, 0.f, 1.f, 1.f }
 {
-	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
+	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"TerrainMesh"));
+	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TileMapMtrl"));
 
 	m_TileBuffer = new CStructuredBuffer;
 }
@@ -43,23 +43,23 @@ void CTileMap::begin()
 	tTile t{};
 
 	//File Load와 겹치지 않게 처리
-	for (int i = 0; i < TILEY; ++i)
-	{
-		for (int j = 0; j < TILEX; ++j)
-		{
-			float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
-			float	fZ = (TILECZ * m_vTileSize.z / 2.f) * i;
+	//for (int i = 0; i < TILEZ; ++i)
+	//{
+	//	for (int j = 0; j < TILEX; ++j)
+	//	{
+	//		float	fX = (TILECX * m_vTileSize.x * j) + ((i % 2) * (TILECX * m_vTileSize.x / 2.f));
+	//		float	fZ = (TILECZ * m_vTileSize.z / 2.f) *j;
 
-			t.vLeftTop = Vec2(64.f, 64.f);
-			t.vSlice = Vec2(64.f, 64.f);
-			t.vPos = { fX, 0.f, fZ };
-			t.vSize = Vec4{ (float)1.f * m_vTileSize.x , 0.f , (float)1.f * m_vTileSize.z, 1.f };
-			t.iIndex = i * TILEX + j;
-			t.iParentIndex = 0;
-			t.ibyOption = 1;
-			m_vecTile[i * TILEX + j] = t;
-		}
-	}
+	//		t.vLeftTop = Vec2(64.f, 64.f);
+	//		t.vSlice = Vec2(64.f, 64.f);
+	//		t.vPos = { fX, 0.f, fZ };
+	//		t.vSize = Vec3{ (float)1.f * m_vTileSize.x , 0.f , (float)1.f * m_vTileSize.z };
+	//		t.iIndex = i * TILEX + j;
+	//		t.iParentIndex = 0;
+	//		t.ibyOption = 1;
+	//		m_vecTile[i * TILEX + j] = t;
+	//	}
+	//}
 }
 
 void CTileMap::finaltick()
@@ -73,54 +73,54 @@ void CTileMap::render()
 {
 	Transform()->UpdateData();
 
-	m_TileBuffer->SetData(m_vecTile.data(), (UINT)m_vecTile.size());
-	m_TileBuffer->UpdateData(56, PIPELINE_STAGE::VS | PIPELINE_STAGE::GS | PIPELINE_STAGE::PS);
+	//m_TileBuffer->SetData(m_vecTile.data(), (UINT)m_vecTile.size());
+	//m_TileBuffer->UpdateData(56, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
 
 	if (m_pCamera)
 		m_vCameraPos = m_pCamera->Transform()->GetRelativePos();
 
 
-	GetCurMaterial()->SetScalarParam(VEC4_0, m_vTileSize);
+	//GetCurMaterial()->SetScalarParam(VEC4_0, m_vTileSize);
 	//GetCurMaterial()->SetScalarParam(VEC4_0, &m_vCameraPos);
 	
 	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex[0]);
-	GetCurMaterial()->SetTexParam(TEX_1, m_AtlasTex[1]);
-	GetCurMaterial()->SetTexParam(TEX_2, m_AtlasTex[2]);
-	GetCurMaterial()->SetTexParam(TEX_3, m_AtlasTex[3]);
-	GetCurMaterial()->SetTexParam(TEX_4, m_AtlasTex[4]);
-	GetCurMaterial()->SetTexParam(TEX_5, m_AtlasTex[5]);
-	GetCurMaterial()->SetTexParam(TEX_6, m_AtlasTex[6]);
-	GetCurMaterial()->SetTexParam(TEX_7, m_AtlasTex[7]);
-	GetCurMaterial()->SetTexParam(TEX_8, m_AtlasTex[8]);
-	GetCurMaterial()->SetTexParam(TEX_9, m_AtlasTex[9]);
-	GetCurMaterial()->SetTexParam(TEX_10, m_AtlasTex[10]);
-	GetCurMaterial()->SetTexParam(TEX_11, m_AtlasTex[11]);
-	GetCurMaterial()->SetTexParam(TEX_12, m_AtlasTex[12]);
-	GetCurMaterial()->SetTexParam(TEX_13, m_AtlasTex[13]);
-	GetCurMaterial()->SetTexParam(TEX_14, m_AtlasTex[14]);
-	GetCurMaterial()->SetTexParam(TEX_15, m_AtlasTex[15]);
-	GetCurMaterial()->SetTexParam(TEX_16, m_AtlasTex[16]);
-	GetCurMaterial()->SetTexParam(TEX_17, m_AtlasTex[17]);
-	GetCurMaterial()->SetTexParam(TEX_18, m_AtlasTex[18]);
-	GetCurMaterial()->SetTexParam(TEX_19, m_AtlasTex[19]);
-	GetCurMaterial()->SetTexParam(TEX_20, m_AtlasTex[20]);
-	GetCurMaterial()->SetTexParam(TEX_21, m_AtlasTex[21]);
-	GetCurMaterial()->SetTexParam(TEX_22, m_AtlasTex[22]);
-	GetCurMaterial()->SetTexParam(TEX_23, m_AtlasTex[23]);
-	GetCurMaterial()->SetTexParam(TEX_24, m_AtlasTex[24]);
-	GetCurMaterial()->SetTexParam(TEX_25, m_AtlasTex[25]);
-	GetCurMaterial()->SetTexParam(TEX_26, m_AtlasTex[26]);
-	GetCurMaterial()->SetTexParam(TEX_27, m_AtlasTex[27]);
-	GetCurMaterial()->SetTexParam(TEX_28, m_AtlasTex[28]);
-	GetCurMaterial()->SetTexParam(TEX_29, m_AtlasTex[29]);
-	GetCurMaterial()->SetTexParam(TEX_30, m_AtlasTex[30]);
-	GetCurMaterial()->SetTexParam(TEX_31, m_AtlasTex[31]);
-	GetCurMaterial()->SetTexParam(TEX_32, m_AtlasTex[32]);
+	//GetCurMaterial()->SetTexParam(TEX_1, m_AtlasTex[1]);
+	//GetCurMaterial()->SetTexParam(TEX_2, m_AtlasTex[2]);
+	//GetCurMaterial()->SetTexParam(TEX_3, m_AtlasTex[3]);
+	//GetCurMaterial()->SetTexParam(TEX_4, m_AtlasTex[4]);
+	//GetCurMaterial()->SetTexParam(TEX_5, m_AtlasTex[5]);
+	//GetCurMaterial()->SetTexParam(TEX_6, m_AtlasTex[6]);
+	//GetCurMaterial()->SetTexParam(TEX_7, m_AtlasTex[7]);
+	//GetCurMaterial()->SetTexParam(TEX_8, m_AtlasTex[8]);
+	//GetCurMaterial()->SetTexParam(TEX_9, m_AtlasTex[9]);
+	//GetCurMaterial()->SetTexParam(TEX_10, m_AtlasTex[10]);
+	//GetCurMaterial()->SetTexParam(TEX_11, m_AtlasTex[11]);
+	//GetCurMaterial()->SetTexParam(TEX_12, m_AtlasTex[12]);
+	//GetCurMaterial()->SetTexParam(TEX_13, m_AtlasTex[13]);
+	//GetCurMaterial()->SetTexParam(TEX_14, m_AtlasTex[14]);
+	//GetCurMaterial()->SetTexParam(TEX_15, m_AtlasTex[15]);
+	//GetCurMaterial()->SetTexParam(TEX_16, m_AtlasTex[16]);
+	//GetCurMaterial()->SetTexParam(TEX_17, m_AtlasTex[17]);
+	//GetCurMaterial()->SetTexParam(TEX_18, m_AtlasTex[18]);
+	//GetCurMaterial()->SetTexParam(TEX_19, m_AtlasTex[19]);
+	//GetCurMaterial()->SetTexParam(TEX_20, m_AtlasTex[20]);
+	//GetCurMaterial()->SetTexParam(TEX_21, m_AtlasTex[21]);
+	//GetCurMaterial()->SetTexParam(TEX_22, m_AtlasTex[22]);
+	//GetCurMaterial()->SetTexParam(TEX_23, m_AtlasTex[23]);
+	//GetCurMaterial()->SetTexParam(TEX_24, m_AtlasTex[24]);
+	//GetCurMaterial()->SetTexParam(TEX_25, m_AtlasTex[25]);
+	//GetCurMaterial()->SetTexParam(TEX_26, m_AtlasTex[26]);
+	//GetCurMaterial()->SetTexParam(TEX_27, m_AtlasTex[27]);
+	//GetCurMaterial()->SetTexParam(TEX_28, m_AtlasTex[28]);
+	//GetCurMaterial()->SetTexParam(TEX_29, m_AtlasTex[29]);
+	//GetCurMaterial()->SetTexParam(TEX_30, m_AtlasTex[30]);
+	//GetCurMaterial()->SetTexParam(TEX_31, m_AtlasTex[31]);
+	//GetCurMaterial()->SetTexParam(TEX_32, m_AtlasTex[32]);
 
 	GetCurMaterial()->UpdateData();
 
-	GetMesh()->render_particle((UINT)m_vecTile.size());
+	GetMesh()->render_particle(1);
 
 	CMaterial::Clear();
 }
@@ -132,7 +132,7 @@ void CTileMap::EidtApply()
 
 	static 	tTile t{};
 
-	for (int i = 0; i < TILEY; ++i)
+	for (int i = 0; i < TILEZ; ++i)
 	{
 		for (int j = 0; j < TILEX; ++j)
 		{
@@ -148,7 +148,7 @@ void CTileMap::Ready_Adjacency()
 {
 	m_vecAdjacency.resize(m_vecTile.size());
 
-	for (int i = 0; i < TILEY; ++i)
+	for (int i = 0; i < TILEZ; ++i)
 	{
 		for (int j = 0; j < TILEX; ++j)
 		{
@@ -188,7 +188,7 @@ void CTileMap::Ready_Adjacency()
 
 			// 좌 하단 
 			// 맨 아랫 줄 아닌 경우    &&	맨 왼쪽 줄이 아닌 경우
-			if ((TILEY - 1 != i) && (0 != iIndex % (TILEX * 2)))
+			if ((TILEZ - 1 != i) && (0 != iIndex % (TILEX * 2)))
 			{
 				// 홀수에서 짝수 줄로 이동할 때 20 증가
 				if ((0 != i % 2) && (!m_vecTile[iIndex + TILEX].ibyOption))
@@ -204,7 +204,7 @@ void CTileMap::Ready_Adjacency()
 
 			// 우 하단 
 			// 맨 아랫 줄 아닌 경우    &&	맨 오른쪽 줄이 아닌 경우
-			if ((TILEY - 1 != i) && ((TILEX * 2 - 1) != iIndex % (TILEX * 2)))
+			if ((TILEZ - 1 != i) && ((TILEX * 2 - 1) != iIndex % (TILEX * 2)))
 			{
 				// 홀수에서 짝수 줄로 이동할 때 21 증가
 				if ((0 != i % 2) && (!m_vecTile[iIndex + (TILEX + 1)].ibyOption))
@@ -270,5 +270,5 @@ void CTileMap::LoadFromFile(FILE* _File)
 		m_vecTile.push_back(tile);
 	}
 
-	SetTileCount(TILEX, TILEY);
+	SetTileCount(TILEX, TILEZ);
 }

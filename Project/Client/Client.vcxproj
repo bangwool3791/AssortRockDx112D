@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CAnimator2DUI.h" />
+    <ClInclude Include="CBorderScript.h" />
     <ClInclude Include="define.h" />
     <ClInclude Include="EditAnimationUI.h" />
     <ClInclude Include="CCameraScript.h" />
@@ -210,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAnimator2DUI.cpp" />
+    <ClCompile Include="CBorderScript.cpp" />
     <ClCompile Include="EditAnimationUI.cpp" />
     <ClCompile Include="CCameraScript.cpp" />
     <ClCompile Include="CEditor.cpp" />

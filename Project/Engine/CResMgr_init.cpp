@@ -62,22 +62,22 @@ void CResMgr::CreateDefaultMesh()
 	CMesh* pMesh = nullptr;
 
 	// 사각형 메쉬 만들기
-	v.vPos = Vec3(-0.5f, 0.f, 0.f);
+	v.vPos = Vec3(-0.5f, 0.5f, 0.f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 	v.vUV = Vec2(0.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.f, 0.f, 0.5f);
+	v.vPos = Vec3(0.5f, 0.5f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(1.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.5f, 0.f, 0.f);
+	v.vPos = Vec3(0.5f, -0.5f, 0.f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(1.f, 1.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.f, 0.f, -0.5f);
+	v.vPos = Vec3(-0.5f, -0.5f, 0.f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(0.f, 1.f);
 	*iterVtx = v;
@@ -198,6 +198,109 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh(true);
 	pMesh->Create(&v, 1, &idx, 1);
 	AddRes<CMesh>(L"PointMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
+
+	for (int i = 0; i < TILEX; ++i)
+	{
+		for (int j = 0; j < TILEZ; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
+				float	fZ = (TILECZ * 0.5f) * i;
+
+				if (k % 4 == 0)
+					fX -= TILECX * 0.5f;
+				else if (k % 4 == 1)
+					fZ += TILECZ * 0.5f;
+				else if (k % 4 == 2)
+					fX += TILECX * 0.5f;
+				else if (k % 4 == 3)
+					fZ -= TILECZ * 0.5f;
+
+				v.vPos = Vec3{ fX, 0.f, fZ };
+				//cout << "[x][z] " << v.vPos.x << " " << v.vPos.z << endl;
+				v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+				*iterVtx = v;
+			}
+		}
+	}
+
+
+	for (int j = 0; j < TILEX * TILEZ; ++j)
+	{
+		*iterIdx = 0 + j * 4;
+		*iterIdx = 1 + j * 4;
+		*iterIdx = 2 + j * 4;
+		*iterIdx = 0 + j * 4;
+		*iterIdx = 2 + j * 4;
+		*iterIdx = 3 + j * 4;
+
+		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
+		vecVtx[1 + j * 4].vUV = Vec2(1.f, 0.f);
+		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
+		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
+		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
+		vecVtx[3 + j * 4].vUV = Vec2(0.f, 1.f);
+	}
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"TerrainMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
+
+	for (int i = 0; i < TILEX; ++i)
+	{
+		for (int j = 0; j < TILEZ; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
+				float	fZ = (TILECZ * 0.5f) * i;
+
+				if (k % 4 == 0)
+					fX -= TILECX * 0.5f;
+				else if (k % 4 == 1)
+					fZ += TILECZ * 0.5f;
+				else if (k % 4 == 2)
+					fX += TILECX * 0.5f;
+				else if (k % 4 == 3)
+					fZ -= TILECZ * 0.5f;
+
+				v.vPos = Vec3{ fX, 0.f, fZ };
+				v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+				*iterVtx = v;
+			}
+		}
+	}
+
+	for (int j = 0; j < TILEX * TILEZ; ++j)
+	{
+		*iterIdx = 0 + j * 4;
+		*iterIdx = 1 + j * 4;
+
+		*iterIdx = 1 + j * 4;
+		*iterIdx = 2 + j * 4;
+
+		*iterIdx = 2 + j * 4;
+		*iterIdx = 3 + j * 4;
+
+		*iterIdx = 3 + j * 4;
+		*iterIdx = 0 + j * 4;
+
+		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
+		vecVtx[1 + j * 4].vUV = Vec2(1.f, 0.f);
+		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
+		vecVtx[3 + j * 4].vUV = Vec2(0.f, 0.f);
+	}
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"BorderMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
 }
 
 void CResMgr::CreateDefaultTexture()
@@ -318,7 +421,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddRes<CGraphicsShader>(L"DebugDrawShader", pShader);
@@ -333,15 +436,6 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 
 	AddRes<CGraphicsShader>(L"UnitSelectUIShader", pShader);
-
-	pShader = new CGraphicsShader();
-	pShader->CreateVertexShader(L"shader\\tile.fx", "VS_Tile");
-	pShader->CreatePixelShader(L"shader\\tile.fx", "PS_Tile");
-	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetBSType(BS_TYPE::DEFAULT);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
-	AddRes<CGraphicsShader>(L"TileShader", pShader);
 
 	// ParticleRenderShader
 	pShader = new CGraphicsShader;
@@ -394,16 +488,15 @@ void CResMgr::CreateDefaultGraphicsShader()
 	// TileMap Shader
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
-	pShader->CreateGeometryShader(L"shader\\tilemap.fx", "GS_TileMap");
+	//pShader->CreateGeometryShader(L"shader\\tilemap.fx", "GS_TileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
 	/*
 	* 투명한 타일이 있을 경우
 	*/
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	/*
 	* 알파블랜드는 타일은 생각하기 힘들다
 	*/
@@ -417,6 +510,18 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 	AddRes<CGraphicsShader>(L"RefAniShader", pShader);
+
+	//Tile Map Border Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\bordermap.fx", "VS_Border");
+	pShader->CreatePixelShader(L"shader\\bordermap.fx", "PS_Border");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	AddRes<CGraphicsShader>(L"BorderShader", pShader);
+
 }
 
 #include "CComputeShader.h"
@@ -466,10 +571,6 @@ void CResMgr::CreateDefaultMaterial()
 	AddRes(L"UnitSelectUIMaterial", pMaterial);
 
 	pMaterial = new CMaterial(true);
-	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TileShader"));
-	AddRes(L"TileMaterial", pMaterial);
-
-	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"ParticleRenderShader"));
 	AddRes(L"ParticleRenderMtrl", pMaterial);
 
@@ -500,6 +601,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"RefAniShader"));
 	AddRes<CMaterial>(L"RefAniMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"BorderShader"));
+	AddRes<CMaterial>(L"BorderMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

@@ -89,6 +89,7 @@ void CCamera::CalcProjMat()
 		m_matProj = XMMatrixOrthographicLH(vRenderResolution.x * m_fScale, vRenderResolution.y * m_fScale, 1.f, m_fFar);
 		break;
 	}
+
 }
 
 void CCamera::render()

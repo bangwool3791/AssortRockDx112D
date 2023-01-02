@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CGrid2DScript.h"
+#include "CBorderScript.h"
 
 #include <Engine/CRenderMgr.h>
 
@@ -9,7 +9,7 @@
 #include <Engine/CMaterial.h>
 #include <Engine/CMeshRender.h>
 
-CGrid2DScript::CGrid2DScript()
+CBorderScript::CBorderScript()
 	: CScript(-1)
 	, m_pMainCam{}
 	, m_vColor{}
@@ -19,27 +19,27 @@ CGrid2DScript::CGrid2DScript()
 
 }
 
-CGrid2DScript::~CGrid2DScript()
+CBorderScript::~CBorderScript()
 {
 
 }
 
 
-void CGrid2DScript::begin()
+void CBorderScript::begin()
 {
 
 }
 
-void CGrid2DScript::tick()
+void CBorderScript::tick()
 {
 	m_pMainCam = CRenderMgr::GetInst()->GetMainCam();
 
 	if (!m_pMainCam)
-		return; 
+		return;
 
 	if (PROJ_TYPE::PERSPECTIVE == m_pMainCam->GetProjType())
 	{
-		//MeshRender()->Deactivate();
+		MeshRender()->Deactivate();
 	}
 	else
 	{
@@ -47,11 +47,12 @@ void CGrid2DScript::tick()
 
 		Vec3	vPos = m_pMainCam->Transform()->GetRelativePos();
 		float	fScale = m_pMainCam->GetOrthographicScale();
-		Vec2	vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+		Vec2	v2 = CDevice::GetInst()->GetRenderResolution();
+		Vec3    vRenderResolution = Vec3(v2.x, v2.y, 100000.f - 1.f);
 
 		MeshRender()->GetCurMaterial()->SetScalarParam(FLOAT_0, &fScale);
 		MeshRender()->GetCurMaterial()->SetScalarParam(VEC4_0, &vPos);
-		MeshRender()->GetCurMaterial()->SetScalarParam(VEC2_0, &vRenderResolution);
+		MeshRender()->GetCurMaterial()->SetScalarParam(VEC4_1, &vRenderResolution);
 
 		MeshRender()->GetCurMaterial()->SetScalarParam(FLOAT_1, &m_fThickness);
 		MeshRender()->GetCurMaterial()->SetScalarParam(FLOAT_2, &m_fGridInterval);

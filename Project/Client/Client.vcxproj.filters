@@ -286,6 +286,9 @@
     <ClInclude Include="define.h">
       <Filter>Default</Filter>
     </ClInclude>
+    <ClInclude Include="CBorderScript.h">
+      <Filter>01. Editor\EditorScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -431,6 +434,9 @@
     </ClCompile>
     <ClCompile Include="CAnimator2DUI.cpp">
       <Filter>03. UI\01. Inspector\ComponentUI\Animator2DUI</Filter>
+    </ClCompile>
+    <ClCompile Include="CBorderScript.cpp">
+      <Filter>01. Editor\EditorScript</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

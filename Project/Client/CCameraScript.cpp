@@ -58,6 +58,11 @@ void CCameraScript::Move()
 			Transform()->SetRelativeRotation(vRot);
 		}
 		Transform()->SetRelativePos(vPos);
+
+		if (KEY_PRESSED(KEY::SPACE))
+		{
+			Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+		}
 	}
 
 	else
@@ -93,7 +98,7 @@ void CCameraScript::Move()
 			Camera()->SetOrthographicScale(fScale);
 		}
 
-		else if (KEY_PRESSED(KEY::NUM_3))
+		if (KEY_PRESSED(KEY::SPACE))
 		{
 			Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
 		}

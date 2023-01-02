@@ -163,3 +163,12 @@ void CTileScript::Initialize(void* _pAddr)
 	m_pTileMap = static_cast<CTileMap*>(GetOwner()->GetRenderComponent());
 	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 }
+
+void CTileScript::SetTileInfo(UINT _ibyOption)
+{
+	m_tTileInfo.ibyOption = _ibyOption; 
+
+	vector<tTile>& tiles = m_pTileMap->GetTiles();
+
+	tiles[0].ibyOption = _ibyOption;
+}

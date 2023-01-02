@@ -580,5 +580,8 @@
     <FxCompile Include="func.fx">
       <Filter>HLSL\Header</Filter>
     </FxCompile>
+    <FxCompile Include="bordermap.fx">
+      <Filter>HLSL\Render\Tile</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

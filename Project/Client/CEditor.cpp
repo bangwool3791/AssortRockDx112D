@@ -5,6 +5,7 @@
 #include "CGameObjectEx.h"
 
 #include "CGrid2DScript.h"
+#include "CBorderScript.h"
 
 #include <Engine/CTimeMgr.h>
 #include <Engine\CMeshRender.h>
@@ -28,7 +29,7 @@
 #include <Script\CRefAniScript.h>
 
 CEditor::CEditor()
-	:m_editmode{EDIT_MODE::ANIMATOR}
+	:m_editmode{EDIT_MODE::MAPTOOL}
 {
 
 }
@@ -64,14 +65,14 @@ void CEditor::init()
 
 	m_GirdObject->AddComponent(new CTransform);
 	m_GirdObject->AddComponent(new CMeshRender);
-	m_GirdObject->AddComponent(new CGrid2DScript);
+	m_GirdObject->AddComponent(new CBorderScript);
 
-	m_GirdObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	m_GirdObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"EditMaterial"));
+	m_GirdObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"BorderMesh"));
+	m_GirdObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BorderMtrl"));
 
-	m_GirdObject->GetScript<CGrid2DScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
-	m_GirdObject->GetScript<CGrid2DScript>()->SetGridInterval(100.f);
-	m_GirdObject->GetScript<CGrid2DScript>()->SetThickness(2.f);
+	m_GirdObject->GetScript<CBorderScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	m_GirdObject->GetScript<CBorderScript>()->SetGridInterval(100.f);
+	m_GirdObject->GetScript<CBorderScript>()->SetThickness(2.f);
 
 	m_GirdObject->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 
@@ -81,11 +82,11 @@ void CEditor::init()
 	m_pCameraObject->AddComponent(new CTransform);
 	m_pCameraObject->AddComponent(new CEditorCam);
 	m_pCameraObject->AddComponent(new CCameraScript);
-	m_pCameraObject->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+	m_pCameraObject->Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
 	m_pCameraObject->Camera()->SetFar(100000.f);
 	m_pCameraObject->Camera()->SetLayerMaskAll();
 	m_pCameraObject->Camera()->SetLayerMask(31);
-	m_pCameraObject->Transform()->SetRelativePos(0.f, 100.f, 0.f);
+	m_pCameraObject->Transform()->SetRelativePos(0.f, 0.f, 0.1f);
 	m_pCameraObject->Transform()->SetRelativeRotation(90.f, 0.f, 0.f);
 	CRenderMgr::GetInst()->RegisterEditCam(m_pCameraObject->Camera());
 
@@ -111,8 +112,8 @@ void CEditor::init()
 	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\HumansA_LQ.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
 	((CAnimator2D*)m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D])->Play(L"LeftWalk", true);
 	m_arrCom[(UINT)COMPONENT_TYPE::ANIMATOR2D]->SetName(L"Animator2D");
-	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]		= new CLight2D();
-	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"Light2D");
+	//m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]		= new CLight2D();
+	//m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D]->SetName(L"Light2D");
 	m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM] = new CParticleSystem();
 	m_arrCom[(UINT)COMPONENT_TYPE::PARTICLESYSTEM]->SetName(L"CParticleSystem");
 	m_arrCom[(UINT)COMPONENT_TYPE::LIGHT2D] = new CLight2D();
@@ -153,6 +154,7 @@ void CEditor::tick()
 			m_pAnimationObject->tick();
 		break;
 	case EDIT_MODE::MAPTOOL:
+		m_GirdObject->tick();
 		break;
 	case EDIT_MODE::OBJECT:
 		break;
@@ -177,6 +179,7 @@ void CEditor::tick()
 			m_pAnimationObject->finaltick();
 		break;
 	case EDIT_MODE::MAPTOOL:
+		m_GirdObject->finaltick();
 		break;
 	case EDIT_MODE::OBJECT:
 		break;
@@ -203,6 +206,7 @@ void CEditor::render()
 			m_pAnimationObject->render();
 		break;
 	case EDIT_MODE::MAPTOOL:
+		m_GirdObject->render();
 		break;
 	case EDIT_MODE::OBJECT:
 		break;
@@ -211,7 +215,8 @@ void CEditor::render()
 	default:
 		break;
 	}
-	m_pCameraObject->render();
+
+	m_pCameraObject->Camera()->render();
 }
 
 void CEditor::debug_render()
@@ -286,8 +291,9 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 	CGameObject* arr[2] = { _pCamera, _pMouse };
 	pGameObectEx->TileMap()->SetCamera(_pCamera);
 	pGameObectEx->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
-	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 10.f);
-	pGameObectEx->Transform()->SetRelativeScale(64.f, 1.f, 64.f);
+	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pGameObectEx->Transform()->SetRelativeScale(1.f, 1.f, 1.f);
+
 	for (UINT i{}; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
@@ -296,7 +302,7 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 		pGameObectEx->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
 	}
 
-	pGameObectEx->TileMap()->SetTileCount(1, 1);
+	pGameObectEx->TileMap()->SetTileCount(TILEX, TILEZ);
 	pGameObectEx->begin();
 	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"MapTool", pGameObectEx);
 }
@@ -365,8 +371,8 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	pDebugObj->Transform()->finaltick();
 
 	g_transform.matWorld = pDebugObj->Transform()->GetWorldMat();
-	g_transform.matView = pMainCam->GetViewMat();
-	g_transform.matProj = pMainCam->GetProjMat();
+	g_transform.matView = CRenderMgr::GetInst()->GetMainCam()->GetViewMat();
+	g_transform.matProj = CRenderMgr::GetInst()->GetMainCam()->GetProjMat();
 
 	pDebugObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 	pDebugObj->render();

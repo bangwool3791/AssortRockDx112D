@@ -32,7 +32,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
  {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-   //_CrtSetBreakAlloc(3072);
+   //_CrtSetBreakAlloc(323149);
     g_hInst = hInstance;
     // 전역 문자열을 초기화합니다.
     MyRegisterClass(hInstance);

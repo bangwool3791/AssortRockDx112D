@@ -24,9 +24,9 @@ private:
 
     vector<tTile>           m_vecTile;
     vector<list<tTile>>	    m_vecAdjacency;
-    CStructuredBuffer* m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
+    CStructuredBuffer*      m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
 
-    CGameObject* m_pCamera;
+    CGameObject*            m_pCamera;
     Vec4                    m_vCameraPos;
 private:
     void Ready_Adjacency();

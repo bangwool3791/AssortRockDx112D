@@ -34,7 +34,7 @@ typedef Vector4 Vec4;
 #define ALPHABLEND_Z_POS 0.9f
 
 #define TILEX 100
-#define TILEY 100
+#define TILEZ 100
 
 #define TILECX 64.f
 #define TILECZ 64.f

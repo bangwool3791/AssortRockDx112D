@@ -310,6 +310,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="bordermap.fx" />
     <FxCompile Include="compute.fx" />
     <FxCompile Include="debugdraw.fx" />
     <FxCompile Include="DragEffect.fx" />
