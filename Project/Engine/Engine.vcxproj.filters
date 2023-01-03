@@ -166,11 +166,14 @@
     <Filter Include="HLSL\Render\Effect">
       <UniqueIdentifier>{2fdf47d1-039e-42f2-9f9d-520f0502303b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\08. TileMap">
-      <UniqueIdentifier>{f80f3f2b-ca66-4f5e-a6a4-4d32ec9878df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\07. Resource\05. Sound">
       <UniqueIdentifier>{3169efc9-9abd-43ef-bbe9-06fb5c7c16ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\08. Map">
+      <UniqueIdentifier>{f80f3f2b-ca66-4f5e-a6a4-4d32ec9878df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\08. Map\01. CTileMap">
+      <UniqueIdentifier>{e656da3f-9970-43f2-af37-8cdcccef7913}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -354,9 +357,6 @@
     <ClInclude Include="CParticlePhycis.h">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\04. Phycis</Filter>
     </ClInclude>
-    <ClInclude Include="CTileMap.h">
-      <Filter>Engine\06. Component\08. TileMap</Filter>
-    </ClInclude>
     <ClInclude Include="CEntity.h">
       <Filter>Engine\05. GameObject</Filter>
     </ClInclude>
@@ -365,6 +365,9 @@
     </ClInclude>
     <ClInclude Include="CSound.h">
       <Filter>Engine\07. Resource\05. Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileMap.h">
+      <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -509,14 +512,14 @@
     <ClCompile Include="CParticlePhycis.cpp">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\04. Phycis</Filter>
     </ClCompile>
-    <ClCompile Include="CTileMap.cpp">
-      <Filter>Engine\06. Component\08. TileMap</Filter>
-    </ClCompile>
     <ClCompile Include="CEntity.cpp">
       <Filter>Engine\05. GameObject</Filter>
     </ClCompile>
     <ClCompile Include="CSound.cpp">
       <Filter>Engine\07. Resource\05. Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="CTileMap.cpp">
+      <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -581,6 +584,9 @@
       <Filter>HLSL\Header</Filter>
     </FxCompile>
     <FxCompile Include="bordermap.fx">
+      <Filter>HLSL\Render\Tile</Filter>
+    </FxCompile>
+    <FxCompile Include="uitilemap.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
   </ItemGroup>

@@ -98,11 +98,11 @@ void CreateDefaultPrefab()
 
 void CreateTestLelvel()
 {
-	CreateDefaultPrefab();
-	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
-	CLevelMgr::GetInst()->ChangeLevel(Level);
-	Level->begin();
-	return;
+	//CreateDefaultPrefab();
+	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+	//CLevelMgr::GetInst()->ChangeLevel(Level);
+	//Level->begin();
+	//return;
 	
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");

@@ -168,7 +168,7 @@ void CTileScript::SetTileInfo(UINT _ibyOption)
 {
 	m_tTileInfo.ibyOption = _ibyOption; 
 
-	vector<tTile>& tiles = m_pTileMap->GetTiles();
+	//vector<tTile>& tiles = m_pTileMap->GetTiles();
 
-	tiles[0].ibyOption = _ibyOption;
+	//tiles[0].ibyOption = _ibyOption;
 }

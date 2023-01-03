@@ -39,6 +39,9 @@ typedef Vector4 Vec4;
 #define TILECX 64.f
 #define TILECZ 64.f
 
+#define UI_TILECX 50.f
+#define UI_TILECZ 50.f
+
 #define OBJECTPOOL_SIZE 1000
 enum class SHADER_DOMAIN
 {
@@ -132,6 +135,7 @@ enum class COMPONENT_TYPE
 	// render
 	MESHRENDER,
 	TILEMAP,
+	UITILEMAP,
 	PARTICLESYSTEM,
 	SKYBOX,
 	DECAL,

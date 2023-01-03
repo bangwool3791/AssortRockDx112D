@@ -77,12 +77,6 @@ void CMesh::render_particle(UINT _iCount)
 
 void CMesh::Read()
 {
-    if (m_readVB != NULL) 
-    { 
-        m_readVB->Release(); 
-        m_readVB = nullptr; 
-    }
-
     D3D11_BUFFER_DESC VbufferDesc;
 
     VbufferDesc.Usage = D3D11_USAGE_STAGING;

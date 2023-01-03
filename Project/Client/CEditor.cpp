@@ -21,6 +21,7 @@
 #include <Engine\CRenderMgr.h>
 #include <Engine/CLevel.h>
 #include <Engine\CLevelMgr.h>
+#include <Engine\CUitileMap.h>
 
 #include <Script\CDragScript.h>
 #include <Script\CEditorMouseScript.h>
@@ -206,7 +207,7 @@ void CEditor::render()
 			m_pAnimationObject->render();
 		break;
 	case EDIT_MODE::MAPTOOL:
-		m_GirdObject->render();
+		//m_GirdObject->render();
 		break;
 	case EDIT_MODE::OBJECT:
 		break;
@@ -293,6 +294,7 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 	pGameObectEx->GetScript<CTileScript>(L"CTileScript")->Initialize(arr);
 	pGameObectEx->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 	pGameObectEx->Transform()->SetRelativeScale(1.f, 1.f, 1.f);
+	pGameObectEx->begin();
 
 	for (UINT i{}; i < TEX_32 + 1; ++i)
 	{
@@ -302,8 +304,6 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 		pGameObectEx->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
 	}
 
-	pGameObectEx->TileMap()->SetTileCount(TILEX, TILEZ);
-	pGameObectEx->begin();
 	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"MapTool", pGameObectEx);
 }
 

@@ -58,7 +58,9 @@ void CResMgr::CreateDefaultMesh()
 
 	back_insert_iterator iterVtx{ vecVtx };
 	back_insert_iterator iterIdx{ vecIdx };
+	
 	Vtx v;
+
 	CMesh* pMesh = nullptr;
 
 	// 사각형 메쉬 만들기
@@ -221,7 +223,7 @@ void CResMgr::CreateDefaultMesh()
 
 				v.vPos = Vec3{ fX, 0.f, fZ };
 				//cout << "[x][z] " << v.vPos.x << " " << v.vPos.z << endl;
-				v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+				v.vColor = Vec4(0.f, 0.f, 0.f, 1.f);
 				*iterVtx = v;
 			}
 		}
@@ -247,7 +249,6 @@ void CResMgr::CreateDefaultMesh()
 
 	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
-	pMesh->Write();
 	AddRes<CMesh>(L"TerrainMesh", pMesh);
 	vecVtx.clear();
 	vecIdx.clear();
@@ -309,7 +310,6 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\Player.bmp", L"texture\\Player.bmp");
 	Load<CTexture>(L"texture\\smokeparticle.png", L"texture\\smokeparticle.png");
 	Load<CTexture>(L"texture\\Character.png", L"texture\\Character.png");
-	Load<CTexture>(L"texture\\test.png", L"texture\\test.png");
 	Load<CTexture>(L"texture\\link.png", L"texture\\link.png");
 
 	Load<CTexture>(L"texture\\beheaded.png", L"texture\\beheaded.png");
@@ -324,6 +324,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\noise\\noise_03.jpg", L"texture\\noise\\noise_03.jpg");
 
 	Load<CTexture>(L"texture\\particle\\Sparks.png", L"texture\\particle\\Sparks.png");
+	Load<CTexture>(L"texture\\Mask\\TileMask.png", L"texture\\Mask\\TileMask.png");
 
 	Load<CTexture>(L"texture\\TILE.bmp", L"texture\\TILE.bmp");
 
@@ -503,6 +504,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	*/
 	AddRes<CGraphicsShader>(L"TileMapShader", pShader);
 
+	//수정 필요
 	pShader = new CGraphicsShader;
 	pShader->CreateVertexShader(L"shader\\ref_animation.fx", "VS_RefAni");
 	pShader->CreatePixelShader(L"shader\\ref_animation.fx", "PS_RefAni");
@@ -523,6 +525,14 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	AddRes<CGraphicsShader>(L"BorderShader", pShader);
 
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\uitilemap.fx", "VS_UiTileMap");
+	pShader->CreatePixelShader(L"shader\\uitilemap.fx", "PS_UiTileMap");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"UiTileShader", pShader);
 }
 
 #include "CComputeShader.h"
@@ -606,6 +616,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"BorderShader"));
 	AddRes<CMaterial>(L"BorderMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UiTileShader"));
+	AddRes<CMaterial>(L"UiTileMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

@@ -55,8 +55,6 @@ void TileMapUI::render_update()
 		ProgressUI* pProgressUI = dynamic_cast<ProgressUI*>(CImGuiMgr::GetInst()->FindUI("ProgressUI"));
 		
 		assert(nullptr != pProgressUI);
-
-		m_pEditTileMap->EidtApply();
 		pProgressUI->Open();
 	}
 

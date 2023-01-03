@@ -330,6 +330,7 @@ call EngineCopy.bat</Command>
     <FxCompile Include="test.fx" />
     <FxCompile Include="tile.fx" />
     <FxCompile Include="tilemap.fx" />
+    <FxCompile Include="uitilemap.fx" />
     <FxCompile Include="wave.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
