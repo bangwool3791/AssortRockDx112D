@@ -38,9 +38,9 @@ void CCameraScript::Move()
 		Vec3 vRight = Transform()->GetRelativeDir(DIR::RIGHT);
 
 		if (KEY_PRESSED(KEY::W))
-			vPos += DT * vFront * fSpeed;
+			vPos.z += DT * fSpeed;
 		if (KEY_PRESSED(KEY::S))
-			vPos += DT * -vFront * fSpeed;
+			vPos.z += DT * -fSpeed;
 		if (KEY_PRESSED(KEY::A))
 			vPos += DT * -vRight * fSpeed;
 		if (KEY_PRESSED(KEY::D))

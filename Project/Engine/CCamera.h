@@ -13,6 +13,8 @@ class CCamera :
 
 {
 private:
+    Ray                    m_ray;
+
     Matrix                  m_matView;
     Matrix                  m_matProj;
 
@@ -20,6 +22,7 @@ private:
     float                   m_fAspectRatio;
 
     float                   m_fFar;
+    float                   m_fNear;
     float                   m_fScale;
 
     UINT                    m_iLayerMask;
@@ -49,6 +52,7 @@ protected:
     void CalcViewMat();
     void CalcProjMat();
 public :
+
     float        GetOrthographicScale() { return m_fScale; }
     float&       GetOrthographicScale_() { return m_fScale; }
     void         SetOrthographicScale(float _fScale) { m_fScale = _fScale; }
@@ -56,18 +60,20 @@ public :
     void        SetProjType(PROJ_TYPE _eType) { m_eProjType = _eType; }
     PROJ_TYPE   GetProjType() { return m_eProjType; }
 
-    void  SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
-    float GetAspectRatio() { return m_fAspectRatio; }
+    void        SetAspectRatio(float _fRatio) { m_fAspectRatio = _fRatio; }
+    float       GetAspectRatio() { return m_fAspectRatio; }
 
-    void  SetFar(float _fFar) { m_fFar = _fFar; }
-    float GetFar() { return m_fFar; }
+    void        SetNear(float _fNear) { m_fNear = _fNear; }
+    float       GetNear() { return m_fNear; }
+    void        SetFar(float _fFar) { m_fFar = _fFar; }
+    float       GetFar() { return m_fFar; }
 
+    Ray        CalRay();
     /*
     * Matrix°´Ã¼´Â const ref·Î return
     */
     const Matrix& GetViewMat() { return m_matView; }
     const Matrix& GetProjMat() { return m_matProj; }
-
     void SetLayerMask(const wstring& _strLayerName);
     void SetLayerMask(int _iLayerIdx);
     void SetLayerMaskAll() { m_iLayerMask = 0xffffffff; }

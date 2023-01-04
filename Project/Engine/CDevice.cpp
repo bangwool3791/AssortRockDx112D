@@ -26,6 +26,7 @@ CDevice::~CDevice()
 
 int CDevice::init(HWND _hWnd, Vec2 _vResolution)
 {
+	
 	m_hWnd = _hWnd;
 	m_vRenderResolution = _vResolution;
 	g_global.vRenderResolution = m_vRenderResolution;
@@ -189,7 +190,7 @@ int CDevice::CreateTarget()
 	// RenderTargetTexture 를 스왚체인으로부터 참조하기
 	ComPtr<ID3D11Texture2D> tex2D;
 	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)tex2D.GetAddressOf());
-
+	
 	// RenderTargetTexture 등록
 	m_pRenderTargetTex = CResMgr::GetInst()->CreateTexture(L"RenderTargetTex", tex2D);
 

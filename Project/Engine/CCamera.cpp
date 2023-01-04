@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCamera.h"
 
+
 #include "CMesh.h"
 #include "CRenderMgr.h"
 #include "CStructuredBuffer.h"
@@ -14,6 +15,8 @@
 #include "CTransform.h"
 #include "CRenderComponent.h"
 
+#include "CKeyMgr.h"
+
 CCamera::CCamera()
 	:CComponent(COMPONENT_TYPE::CAMERA)
 	, m_eProjType{ PROJ_TYPE::PERSPECTIVE }
@@ -24,6 +27,7 @@ CCamera::CCamera()
 	, m_fScale{1.f}
 	, m_iLayerMask(0)
 	, m_iCamIdx(0)
+	, m_fNear{0.1f}
 {
 	Vec2 vRenderResolution	= CDevice::GetInst()->GetRenderResolution();
 	m_fAspectRatio			= vRenderResolution.x / vRenderResolution.y;
@@ -83,7 +87,7 @@ void CCamera::CalcProjMat()
 	switch (m_eProjType)
 	{
 	case PERSPECTIVE:
-		m_matProj = XMMatrixPerspectiveFovLH(XM_2PI / 6.f, m_fAspectRatio, 0.1f, m_fFar);
+		m_matProj = XMMatrixPerspectiveFovLH(XM_2PI / 6.f, m_fAspectRatio, m_fNear, m_fFar);
 		break;
 	case ORTHOGRAHPICS:
 		m_matProj = XMMatrixOrthographicLH(vRenderResolution.x * m_fScale, vRenderResolution.y * m_fScale, 1.f, m_fFar);
@@ -346,4 +350,24 @@ void CCamera::LoadFromFile(FILE* _File)
 	fread(&m_fScale, sizeof(float), 1, _File);
 	fread(&m_iLayerMask, sizeof(UINT), 1, _File);
 	fread(&m_iCamIdx, sizeof(int), 1, _File);
+}
+
+Ray CCamera::CalRay()
+{
+	// 마우스 방향을 향하는 Ray 구하기
+	// SwapChain 타겟의 ViewPort 정보
+	D3D11_VIEWPORT tVP;
+	UINT num = 1;
+	CONTEXT->RSGetViewports(&num, &tVP);
+
+	////  현재 마우스 좌표
+	Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
+
+	//// 직선은 카메라의 좌표를 반드시 지난다.
+	m_ray.position = Transform()->GetWorldPos();
+
+	//// view space 에서의 방향
+	m_ray.direction = Transform()->GetRelativeDir(DIR::FRONT);
+
+	return m_ray;
 }

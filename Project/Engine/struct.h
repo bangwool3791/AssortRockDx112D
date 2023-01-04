@@ -163,6 +163,14 @@ struct tParticleShare
 	UINT iPadding[3];
 };
 
+// ±¤¼± ±¸Á¶Ã¼
+struct tRay
+{
+	Vec3 vStart;
+	Vec3 vDir;
+};
+
+
 extern tGlobalData g_global;
 extern  tTransform g_transform;
 extern  std::vector<tObjectRender>	g_vecInfoObject;
