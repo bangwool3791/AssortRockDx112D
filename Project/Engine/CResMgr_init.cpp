@@ -203,14 +203,18 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
+	int iOffset = TILEX * 64 >> 1;
 	for (int i = 0; i < TILEX; ++i)
 	{
 		for (int j = 0; j < TILEZ; ++j)
 		{
 			for (int k = 0; k < 4; ++k)
 			{
-				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
-				float	fZ = (TILECZ * 0.5f) * i;
+				//top view
+				float	fX = (64 >> 1) * (j - i) + iOffset;
+				float	fZ = (64 >> 1) * (j + i) + (64 >> 1);
+				//float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
+				//float	fZ = (TILECZ * 0.5f) * i;
 
 				if (k % 4 == 0)
 					fX -= TILECX * 0.5f;
@@ -241,8 +245,6 @@ void CResMgr::CreateDefaultMesh()
 
 		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
 		vecVtx[1 + j * 4].vUV = Vec2(1.f, 0.f);
-		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
-		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
 		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
 		vecVtx[3 + j * 4].vUV = Vec2(0.f, 1.f);
 	}

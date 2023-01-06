@@ -31,6 +31,7 @@ public :
     bool Collision(Vec3 _vPos);
     bool Picking(const Vec3& _vPos, UINT& i);
     bool IntersectTriangle(const Vec3& orig, const Vec3& dir, Vec3& v0, Vec3& v1, Vec3& v2, FLOAT* t, FLOAT* u, FLOAT* v);
+    void InitializeTerrainJps(vector<Vec3>& _vec);
     virtual void Save(const wstring _strRelativePath) {}
     virtual int Load(const wstring& _strFilePath) override { return S_OK; }
 

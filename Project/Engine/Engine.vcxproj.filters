@@ -175,6 +175,9 @@
     <Filter Include="Engine\06. Component\08. Map\01. CTileMap">
       <UniqueIdentifier>{e656da3f-9970-43f2-af37-8cdcccef7913}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Manager\11. JPSMgr">
+      <UniqueIdentifier>{4db505c0-9b0b-472e-aadd-5df7784c398a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -369,6 +372,24 @@
     <ClInclude Include="CTileMap.h">
       <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
     </ClInclude>
+    <ClInclude Include="BitArray.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CoreTypeDef.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="JPSCollision.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Base.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="JPSHeap.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="JPSPath.h">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -520,6 +541,12 @@
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
       <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="JPSCollision.cpp">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="JPSPath.cpp">
+      <Filter>Engine\03. Manager\11. JPSMgr</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

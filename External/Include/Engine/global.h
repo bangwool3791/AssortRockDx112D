@@ -13,7 +13,9 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstdint>
 #include <process.h>
+#include <stdint.h>
 #include "precision.h"
 
 using std::vector;
@@ -70,4 +72,4 @@ using namespace DirectX::SimpleMath;
 #include "define.h"
 #include "struct.h"
 #include "func.h"
-
+#include "Base.h"

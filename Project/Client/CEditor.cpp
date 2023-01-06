@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "CEditor.h"
-
 #include "imgui.h"
+
 #include "CGameObjectEx.h"
 
 #include "CGrid2DScript.h"
@@ -29,10 +29,11 @@
 #include <Script\CTileScript.h>
 #include <Script\CRefAniScript.h>
 
+#include <Engine\Base.h>
+
 CEditor::CEditor()
 	:m_editmode{EDIT_MODE::MAPTOOL}
 {
-
 }
 
 CEditor::~CEditor()
@@ -57,6 +58,7 @@ CEditor::~CEditor()
 
 void CEditor::init()
 {
+
 	m_EditorObj.resize((UINT)EDIT_MODE::END);
 
 	CreateDebugDrawObject();
@@ -87,7 +89,7 @@ void CEditor::init()
 	m_pCameraObject->Camera()->SetFar(100000.f);
 	m_pCameraObject->Camera()->SetLayerMaskAll();
 	m_pCameraObject->Camera()->SetLayerMask(31);
-	m_pCameraObject->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	m_pCameraObject->Transform()->SetRelativePos(3200.f, 0.f, 0.f);
 	m_pCameraObject->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
 	CRenderMgr::GetInst()->RegisterEditCam(m_pCameraObject->Camera());
 

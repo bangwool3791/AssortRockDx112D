@@ -208,6 +208,27 @@ bool CMesh::Picking(const Vec3& _vPos, UINT& i)
     cout << "[x] " << m_vertices[i + 1].vPos.x << "[z] " << m_vertices[i + 1].vPos.z << endl;
     return true;
 }
+
+void CMesh::InitializeTerrainJps(vector<Vec3>& _vec)
+{
+    Read();
+    
+    _vec.clear();
+
+    size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+
+    _vec.resize(nVerts / 4);
+    
+    int index = 0;
+    for (UINT i = 0; i < nVerts; i += 4)
+    {
+        _vec[index].x = (m_vertices[i].vPos.x + m_vertices[i + 2].vPos.x) * 0.5f;
+        _vec[index].y = (m_vertices[i + 1].vPos.y + m_vertices[i + 3].vPos.y) * 0.5f;
+        _vec[index].z = (m_vertices[i + 1].vPos.z + m_vertices[i + 3].vPos.z) * 0.5f;
+        ++index;
+    }
+}
+
 // 정점과 충돌 체크
 // vOrig는 카메라 원점, vDir는 Ray 방향
 // v0, v1, v2 는 삼각형의 정점

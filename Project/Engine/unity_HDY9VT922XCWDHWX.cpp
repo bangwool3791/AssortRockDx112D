@@ -50,27 +50,3 @@
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLayer.cpp"
 
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLevel.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLevelMgr.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLight2D.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CMaterial.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CMesh.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CMeshRender.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CParticleDefault.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CParticlePhycis.cpp"
-
