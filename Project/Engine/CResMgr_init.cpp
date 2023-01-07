@@ -211,10 +211,10 @@ void CResMgr::CreateDefaultMesh()
 			for (int k = 0; k < 4; ++k)
 			{
 				//top view
-				float	fX = (64 >> 1) * (j - i) + iOffset;
-				float	fZ = (64 >> 1) * (j + i) + (64 >> 1);
-				//float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
-				//float	fZ = (TILECZ * 0.5f) * i;
+				//float	fX = (64 >> 1) * (j - i) + iOffset;
+				//float	fZ = (64 >> 1) * (j + i) + (64 >> 1);
+				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
+				float	fZ = (TILECZ * 0.5f) * i;
 
 				if (k % 4 == 0)
 					fX -= TILECX * 0.5f;

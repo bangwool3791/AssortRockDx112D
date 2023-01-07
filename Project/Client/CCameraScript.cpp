@@ -38,9 +38,9 @@ void CCameraScript::Move()
 		Vec3 vRight = Transform()->GetRelativeDir(DIR::RIGHT);
 
 		if (KEY_PRESSED(KEY::W))
-			vPos.z += DT * fSpeed;
+			vPos += DT * vFront * fSpeed;
 		if (KEY_PRESSED(KEY::S))
-			vPos.z += DT * -fSpeed;
+			vPos += DT * vFront * -fSpeed;
 		if (KEY_PRESSED(KEY::A))
 			vPos += DT * -vRight * fSpeed;
 		if (KEY_PRESSED(KEY::D))
@@ -67,23 +67,21 @@ void CCameraScript::Move()
 
 	else
 	{
-		Vec3 vRot = Transform()->GetRelativeRotation();
-		if (vRot.x != 0.f)
-			vRot.x = 0.f;
-		if (vRot.y != 0.f)
-			vRot.y = 0.f;
+		Vec3 vFront = Transform()->GetRelativeDir(DIR::UP);
+		Vec3 vRight = Transform()->GetRelativeDir(DIR::RIGHT);
 
 		if (KEY_PRESSED(KEY::W))
-			vPos.y += DT * fSpeed;
+			vPos += DT * vFront * fSpeed;
 		if (KEY_PRESSED(KEY::S))
-			vPos.y -= DT * fSpeed;
+			vPos += DT * vFront * -fSpeed;
 		if (KEY_PRESSED(KEY::A))
-			vPos.x -= DT * fSpeed;
+			vPos += DT * -vRight * fSpeed;
 		if (KEY_PRESSED(KEY::D))
-			vPos.x += DT * fSpeed;
+			vPos += DT * vRight * fSpeed;
 
-		if (vPos != Transform()->GetRelativePos())
-			Transform()->SetRelativePos(vPos);
+		Vec2 vMouseDir = CKeyMgr::GetInst()->GetMouseDir();
+
+		Transform()->SetRelativePos(vPos);
 
 		if (KEY_PRESSED(KEY::NUM_1))
 		{

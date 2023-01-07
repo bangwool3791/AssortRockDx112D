@@ -86,6 +86,7 @@ public:
     virtual void LoadFromFile(FILE* _File);
 public :
     CCamera();
+    CCamera(const CCamera& rhs);
     ~CCamera();
 };
 

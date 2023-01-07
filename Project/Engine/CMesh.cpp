@@ -110,12 +110,12 @@ void CMesh::Read()
     else
     {
         memcpy(m_vertices.get(), msV.pData, nVerts * sizeof(Vtx));
-       //cout << m_VB.Get() << endl; //Current Buffer veing processed
+       cout << m_VB.Get() << endl; //Current Buffer veing processed
         //for (size_t i = 0; i < nVerts; i++)
         //{
-        //   cout << vertices[i].vPos.x << ", "
-        //       << vertices[i].vPos.y << ", "
-        //       << vertices[i].vPos.z << endl; //
+        //   cout << m_vertices[i].vPos.x << ", "
+        //       << m_vertices[i].vPos.y << ", "
+        //       << m_vertices[i].vPos.z << endl; //
         //} 
         //cout << "buffer end" << endl; //
         //cout << "" << endl; // 
@@ -126,7 +126,7 @@ void CMesh::Read()
 
 void CMesh::Write()
 {
-    Read();
+
     ComPtr<ID3D11Buffer> WriteBuffer;
     D3D11_BUFFER_DESC desc;
     desc.Usage = D3D11_USAGE_DYNAMIC;
@@ -143,25 +143,32 @@ void CMesh::Write()
 
     D3D11_MAPPED_SUBRESOURCE mapped;
 
-    CONTEXT->CopyResource(WriteBuffer.Get(), m_VB.Get());
-
     size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
 
     hr = CONTEXT->Map(WriteBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, NULL, &mapped);
     memcpy(mapped.pData, m_vertices.get(), m_tVBDesc.ByteWidth);
     CONTEXT->Unmap(WriteBuffer.Get(), 0);
+
+    CONTEXT->CopyResource(m_VB.Get(), WriteBuffer.Get());
 }
 
-bool CMesh::Collision(Vec3 _vPos)
+bool CMesh::SetTextureID(Vec3 _vPos, float _id)
 {
 	Read();
 
     size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
 
-    for (UINT i = 0; i < nVerts / 4; i+= 4)
+    for (UINT i = 0; i < nVerts; i+= 4)
     {
         if (Picking(_vPos, i))
+        {
+            m_vertices[i].vColor.y = _id;
+            m_vertices[i + 1].vColor.y = _id;
+            m_vertices[i + 2].vColor.y = _id;
+            m_vertices[i + 3].vColor.y = _id;
+            Write();
             return true;
+        }
     } 
 	return false;
 }
@@ -169,11 +176,12 @@ bool CMesh::Collision(Vec3 _vPos)
 bool CMesh::Picking(const Vec3& _vPos, UINT& i)
 {
     Vec3	vPoint[4] = {
-    Vec3(m_vertices[i + 1].vPos.x, 0.f, m_vertices[i + 1].vPos.z),
-    Vec3(m_vertices[i + 2].vPos.x, 0.f, m_vertices[i + 2].vPos.z),
-    Vec3(m_vertices[i + 3].vPos.x, 0.f, m_vertices[i + 3].vPos.z),
-    Vec3(m_vertices[i + 0].vPos.x, 0.f, m_vertices[i + 0].vPos.z),
+    Vec3(m_vertices[i + 1].vPos.x , 0.f, m_vertices[i + 1].vPos.z * sinf(XM_PI * 0.25)),
+    Vec3(m_vertices[i + 2].vPos.x , 0.f, m_vertices[i + 2].vPos.z * sinf(XM_PI * 0.25)),
+    Vec3(m_vertices[i + 3].vPos.x , 0.f, m_vertices[i + 3].vPos.z * sinf(XM_PI * 0.25)),
+    Vec3(m_vertices[i + 0].vPos.x , 0.f, m_vertices[i + 0].vPos.z * sinf(XM_PI * 0.25)),
     };
+
     // 시계방향으로 방향벡터를 만들자
     Vec3		vDir[4] = {
         vPoint[1] - vPoint[0],
@@ -189,12 +197,19 @@ bool CMesh::Picking(const Vec3& _vPos, UINT& i)
         Vec3(-vDir[3].z, 0.f, vDir[3].x)
     };
 
+    Vec3 vPos = _vPos;
+    vPos.y = 0.f;
+
     Vec3	vMouseDir[4] = {
-        _vPos - vPoint[0],
-        _vPos - vPoint[1],
-        _vPos - vPoint[2],
-        _vPos - vPoint[3]
+        vPos - vPoint[0],
+        vPos - vPoint[1],
+        vPos - vPoint[2],
+        vPos - vPoint[3]
     };
+
+    for (int i = 0; i < 4; ++i)
+        vMouseDir[i].Normalize();
+
     // 구한 법선 벡터들을 정규화(단위벡터) 시켜준다.
     for (int i = 0; i < 4; ++i)
         vNormal[i].Normalize();
@@ -204,8 +219,8 @@ bool CMesh::Picking(const Vec3& _vPos, UINT& i)
         if (0.f < vNormal[i].Dot(vMouseDir[i]))
             return false;
     }
-
-    cout << "[x] " << m_vertices[i + 1].vPos.x << "[z] " << m_vertices[i + 1].vPos.z << endl;
+    cout << "마우스 [x] " << _vPos.x << "[y] " << _vPos.y << "[z] " << _vPos.z << endl;
+    cout << "타일 [x] " << m_vertices[i + 1].vPos.x << "[z] " << m_vertices[i + 1].vPos.z << endl;
     return true;
 }
 

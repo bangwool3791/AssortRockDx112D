@@ -110,6 +110,5 @@ void CMeshRender::render_Instancing()
 	tObjectRender tObjectInfo = { transform, tMtrl, tAnimInfo };
 
 	g_vecInfoObject.push_back(tObjectInfo);
-
 }
 

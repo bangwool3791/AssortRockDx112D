@@ -1,7 +1,9 @@
 #pragma once
 
 #include <Windows.h>
+#include <thread>
 #include <stack>
+#include <mutex>
 #include <vector>
 #include <list>
 #include <map>
@@ -41,6 +43,7 @@ using std::cin;
 using std::cout;
 using std::endl;
 
+using std::thread;
 #include <typeinfo>
 
 // FileSystem

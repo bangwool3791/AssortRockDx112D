@@ -13,7 +13,6 @@
 
 CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
-	, m_vTileSize{1.f, 0.f, 1.f, 1.f }
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"TerrainMesh"));
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"TileMapMtrl"));
@@ -64,24 +63,15 @@ void CTileMap::begin()
 	std::list<JPSCoord> ResultNodes;	// Result for JPS
 
 	JPSPath	jps;
-	// SET
-	/*
-	* JPS 초기화 코드
-	*/
+
 	jps.Init(spCollision, GetMesh());
-	// SEARCH
+
 	jps.Search(Sx, Sy, Ex, Ey, ResultNodes);
 
-	// STRAIGHT PATH 
-	//jps.PullingString(ResultNodes);
-	//====================================================
-	// SAVE RESULT MAP TO FILE FOR DEBUG
-	//====================================================
 	std::string results(GridHeight * (GridWidth + 1) + 1, ' ');
 
 	vector<Vec3> vec;
 
-	// Mark Collision With '@' ('@' 로 충돌맵을 표시합니다.)
 	for (Int32 y = 0; y < GridHeight; y++)
 	{
 		for (Int32 x = 0; x < GridWidth; x++)
@@ -91,7 +81,6 @@ void CTileMap::begin()
 		results[(GridHeight - 1 - y) * (GridWidth + 1) + GridWidth] = '\n';
 	}
 
-	// Mark Path Nodes With '#' ('#'로 찾은 경로를 표시합니다.)
 	if (ResultNodes.size() > 0)
 	{
 		auto iterS = ResultNodes.begin();
@@ -162,7 +151,7 @@ void CTileMap::finaltick()
 	if (!bCheck)
 	{
 		bCheck = true;
-		m_AtlasTex[31] = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
+		m_AtlasTex[32] = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
 	}
 	/*
 	* 타일 Edit 모드이면 타일 벡터 순회 사이즈 조절
@@ -251,4 +240,9 @@ void CTileMap::LoadFromFile(FILE* _File)
 	}
 
 	fread(&size, sizeof(size_t), 1, _File);
+}
+
+void CTileMap::SetTexture(Vec3 _vPos, UINT i)
+{
+	GetMesh()->SetTexture(_vPos, i);
 }

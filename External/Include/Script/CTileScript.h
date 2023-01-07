@@ -8,9 +8,7 @@ class CTileScript :
     public CScript
 {
 private:
-
-    tTile               m_tTileInfo;
-    CTileMap*           m_pTileMap;
+    UINT                m_id;
     CGameObject*        m_pCameraObject;
     CGameObject*        m_pMouseObject;
     Vec3                m_vCameraPos;
@@ -18,8 +16,6 @@ private:
     Vec2                m_vRenderResolution;
 
     Vec2                m_vTileSize;
-private:
-    bool Picking(const Vec3& vPos, UINT& iIndex);
 public:
     virtual void begin();
     virtual void tick();

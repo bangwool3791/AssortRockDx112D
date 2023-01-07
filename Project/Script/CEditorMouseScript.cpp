@@ -33,16 +33,17 @@ void CEditorMouseScript::tick()
 
 		Vec3 vTarget = Vec3{ vMouse.x - (vResolution.x / 2) , -vMouse.y + (vResolution.y / 2), 1.f };
 		vTarget += vCameraPos;
+
+		Matrix matRot = XMMatrixRotationX(XM_PI * 0.25f);
+		vTarget = XMVector3TransformNormal(vTarget, matRot);
 		vTarget *= fCameraScale;
 
 		Matrix InvView;
 		InvView = XMMatrixInverse(nullptr, g_transform.matView);
 		vTarget = XMVector3TransformCoord(vTarget, InvView);
 
-		Ptr<CMesh> mesh = CResMgr::GetInst()->FindRes<CMesh>(L"TerrainMesh");
-		mesh->Collision(vTarget);
-
-		cout << "d [x] " << vTarget.x << "[y] " << vTarget.y << "[z] " << vTarget.z << endl;
+		//Ptr<CMesh> mesh = CResMgr::GetInst()->FindRes<CMesh>(L"TerrainMesh");
+		//mesh->SetTexture(vTarget);
 	}
 }
 

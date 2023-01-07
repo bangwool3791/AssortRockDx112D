@@ -58,12 +58,6 @@ void TileMapUI::render_update()
 		pProgressUI->Open();
 	}
 
-	ImGui::InputFloat("tile size x", &m_vTileSize.x, 0.01f, 1.0f, "%.3f");
-	ImGui::InputFloat("tile size y", &m_vTileSize.y, 0.01f, 1.0f, "%.3f");
-
-	m_pEditTileMap->SetTileSizeX(m_vTileSize.x);
-	m_pEditTileMap->SetTileSizeY(m_vTileSize.y);
-
 	for (UINT i{}; i < TEX_32; ++i)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";

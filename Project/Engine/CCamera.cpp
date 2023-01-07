@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "CCamera.h"
 
-
 #include "CMesh.h"
 #include "CRenderMgr.h"
 #include "CStructuredBuffer.h"
@@ -17,25 +16,38 @@
 
 #include "CKeyMgr.h"
 
+//스레드 A종류
+//스레드 B종류
+/*
+* A종류 스레드 Run
+* A종류 스레드 Stop
+* B종류 스레드 Run
+* B종류 스레드 Stop
+*/
 CCamera::CCamera()
 	:CComponent(COMPONENT_TYPE::CAMERA)
 	, m_eProjType{ PROJ_TYPE::PERSPECTIVE }
 	, m_matView{}
 	, m_matProj{}
-	, m_fAspectRatio{1.f}
-	, m_fFar{100000.f}
-	, m_fScale{1.f}
+	, m_fAspectRatio{ 1.f }
+	, m_fFar{ 100000.f }
+	, m_fScale{ 1.f }
 	, m_iLayerMask(0)
 	, m_iCamIdx(0)
-	, m_fNear{0.1f}
+	, m_fNear{ 0.1f }
 {
-	Vec2 vRenderResolution	= CDevice::GetInst()->GetRenderResolution();
-	m_fAspectRatio			= vRenderResolution.x / vRenderResolution.y;
+	Vec2 vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	m_fAspectRatio = vRenderResolution.x / vRenderResolution.y;
 
 	m_pObjectRenderBuffer = new CStructuredBuffer;
 	m_pObjectRenderBuffer->Create(sizeof(tObjectRender), 2, SB_TYPE::SRV_ONLY, nullptr, true);
 }
 
+CCamera::CCamera(const CCamera& rhs)
+	: CComponent(rhs)
+{
+
+}
 CCamera::~CCamera()
 {
 	Safe_Delete(m_pObjectRenderBuffer);
@@ -218,7 +230,7 @@ void CCamera::render_postprocess()
 void CCamera::SetLayerMask(const wstring& _strLayerName)
 {
 	CLevel* pCurLevel = CLevelMgr::GetInst()->GetCurLevel();
-	CLayer* pLayer    = pCurLevel->GetLayer(_strLayerName); 
+	CLayer* pLayer = pCurLevel->GetLayer(_strLayerName);
 	assert(pLayer);
 
 	SetLayerMask(pLayer->GetLayerIndex());
@@ -226,7 +238,7 @@ void CCamera::SetLayerMask(const wstring& _strLayerName)
 
 void CCamera::SetLayerMask(int _iLayerIdx)
 {
-	if (m_iLayerMask & (1 <<_iLayerIdx))
+	if (m_iLayerMask & (1 << _iLayerIdx))
 	{
 		m_iLayerMask &= ~(1 << m_iLayerMask);
 	}
@@ -291,7 +303,7 @@ void CCamera::SortObject()
 						m_mapOpaqueVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					}
 				}
-					break;
+				break;
 				case SHADER_DOMAIN::DOMAIN_MASK:
 				{
 					auto Type = vecGameObject[j]->GetRenderComponent()->GetInstancingType();
@@ -305,7 +317,7 @@ void CCamera::SortObject()
 						m_mapMaskVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					}
 				}
-					break;
+				break;
 				case SHADER_DOMAIN::DOMAIN_TRANSPARENT:
 				{
 					auto Type = vecGameObject[j]->GetRenderComponent()->GetInstancingType();
@@ -319,7 +331,7 @@ void CCamera::SortObject()
 						m_mapTransparentVec[vecGameObject[j]->GetName()].push_back(vecGameObject[j]);
 					}
 				}
-					break;
+				break;
 				case SHADER_DOMAIN::DOMAIN_POST_PROCESS:
 					m_vecPostProcess.push_back(vecGameObject[j]);
 					break;
