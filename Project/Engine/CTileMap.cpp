@@ -242,7 +242,7 @@ void CTileMap::LoadFromFile(FILE* _File)
 	fread(&size, sizeof(size_t), 1, _File);
 }
 
-void CTileMap::SetTexture(Vec3 _vPos, UINT i)
+void CTileMap::SetTextureID(Ray _ray, UINT i)
 {
-	GetMesh()->SetTexture(_vPos, i);
+	GetMesh()->SetTextureID(_ray, i);
 }

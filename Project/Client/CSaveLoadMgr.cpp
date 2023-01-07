@@ -127,6 +127,26 @@ CLevel* CSaveLoadMgr::LoadLevel(const wstring& _strRelativePath)
 
 	fclose(pFile);
 
+
+	CGameObject* pGameObect = new CGameObject;
+	pGameObect->AddComponent(new CTransform);
+	pGameObect->AddComponent(new CTileMap);
+	pGameObect->SetName(L"LevelTerrain");
+
+	pGameObect->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pGameObect->Transform()->SetRelativeScale(1.f, 1.f, 1.f);
+	pGameObect->begin();
+
+	for (UINT i{}; i < TEX_32 + 1; ++i)
+	{
+		wstring str = L"texture\\Terrain\\Tile\\Tile";
+		str += std::to_wstring(i);
+		str += L".png";
+		pGameObect->TileMap()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+	}
+
+	pGameObect->TileMap()->GetMesh()->Load(L"Terrain\\Terrain.dat");
+	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
 	return pLevel;
 }
 

@@ -36,26 +36,30 @@ void CTileScript::tick()
 
 	Vec3 vLeftBottom = vPos - vScale;
 	Vec3 vRightTop   = vPos + vScale;
+
 	if (KEY_PRESSED(KEY::LBTN))
 	{
-		Vec2 vMouse = CKeyMgr::GetInst()->GetMousePos();
+		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-		Vec3  vCameraPos = m_pCameraObject->Transform()->GetRelativePos();
-		float fCameraScale = m_pCameraObject->Camera()->GetOrthographicScale();
 
-		Vec3 vTarget = Vec3{ vMouse.x - (vResolution.x / 2) , -vMouse.y + (vResolution.y / 2), 1.f };
-		vTarget += vCameraPos;
-		//Matrix matRot = XMMatrixRotationX(XM_PI * 0.25f);
-		//vTarget = XMVector3TransformNormal(vTarget, matRot);
-		vTarget *= fCameraScale;
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
 
-		Matrix InvView;
-		InvView = XMMatrixInverse(nullptr, g_transform.matView);
-		vTarget = XMVector3Transform(vTarget, InvView);
+		XMVECTOR det; //Determinant, needed for matrix inverse function call
+		Vector3 origin = Vector3(p.x, p.y, 0);
+		Vector3 faraway = Vector3(p.x, p.y, 1);
 
-		cout << "마우스 [x] " << vTarget.x << "[y] " << vTarget.y << "[z] " << vTarget.z << endl;
+		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
+		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		Ray ray;
+		ray.position = rayorigin;
+		ray.direction = raydirection;
+		cout << "마우스 [x] " << rayorigin.x << "[y] " << rayorigin.y << "[z] " << rayorigin.z << endl;
 
-		GetOwner()->TileMap()->GetMesh()->SetTextureID(vTarget, m_id);
+		GetOwner()->TileMap()->GetMesh()->SetTextureID(ray, m_id);
 
 		//
 	}

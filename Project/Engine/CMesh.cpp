@@ -152,7 +152,7 @@ void CMesh::Write()
     CONTEXT->CopyResource(m_VB.Get(), WriteBuffer.Get());
 }
 
-bool CMesh::SetTextureID(Vec3 _vPos, float _id)
+bool CMesh::SetTextureID(Ray _ray, float _id)
 {
 	Read();
 
@@ -160,8 +160,10 @@ bool CMesh::SetTextureID(Vec3 _vPos, float _id)
 
     for (UINT i = 0; i < nVerts; i+= 4)
     {
-        if (Picking(_vPos, i))
+        float fDist;
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 1].vPos, m_vertices[i + 2].vPos, fDist))
         {
+            int a = 0;
             m_vertices[i].vColor.y = _id;
             m_vertices[i + 1].vColor.y = _id;
             m_vertices[i + 2].vColor.y = _id;
@@ -171,57 +173,6 @@ bool CMesh::SetTextureID(Vec3 _vPos, float _id)
         }
     } 
 	return false;
-}
-
-bool CMesh::Picking(const Vec3& _vPos, UINT& i)
-{
-    Vec3	vPoint[4] = {
-    Vec3(m_vertices[i + 1].vPos.x , 0.f, m_vertices[i + 1].vPos.z * sinf(XM_PI * 0.25)),
-    Vec3(m_vertices[i + 2].vPos.x , 0.f, m_vertices[i + 2].vPos.z * sinf(XM_PI * 0.25)),
-    Vec3(m_vertices[i + 3].vPos.x , 0.f, m_vertices[i + 3].vPos.z * sinf(XM_PI * 0.25)),
-    Vec3(m_vertices[i + 0].vPos.x , 0.f, m_vertices[i + 0].vPos.z * sinf(XM_PI * 0.25)),
-    };
-
-    // 시계방향으로 방향벡터를 만들자
-    Vec3		vDir[4] = {
-        vPoint[1] - vPoint[0],
-        vPoint[2] - vPoint[1],
-        vPoint[3] - vPoint[2],
-        vPoint[0] - vPoint[3]
-    };
-    // 각 방향벡터의 법선을 구함
-    Vec3		vNormal[4] = {
-        Vec3(-vDir[0].z, 0.f, vDir[0].x),
-        Vec3(-vDir[1].z, 0.f, vDir[1].x),
-        Vec3(-vDir[2].z, 0.f, vDir[2].x),
-        Vec3(-vDir[3].z, 0.f, vDir[3].x)
-    };
-
-    Vec3 vPos = _vPos;
-    vPos.y = 0.f;
-
-    Vec3	vMouseDir[4] = {
-        vPos - vPoint[0],
-        vPos - vPoint[1],
-        vPos - vPoint[2],
-        vPos - vPoint[3]
-    };
-
-    for (int i = 0; i < 4; ++i)
-        vMouseDir[i].Normalize();
-
-    // 구한 법선 벡터들을 정규화(단위벡터) 시켜준다.
-    for (int i = 0; i < 4; ++i)
-        vNormal[i].Normalize();
-    for (int i = 0; i < 4; ++i)
-    {
-        // 예각이 나왔다
-        if (0.f < vNormal[i].Dot(vMouseDir[i]))
-            return false;
-    }
-    cout << "마우스 [x] " << _vPos.x << "[y] " << _vPos.y << "[z] " << _vPos.z << endl;
-    cout << "타일 [x] " << m_vertices[i + 1].vPos.x << "[z] " << m_vertices[i + 1].vPos.z << endl;
-    return true;
 }
 
 void CMesh::InitializeTerrainJps(vector<Vec3>& _vec)
@@ -282,4 +233,72 @@ bool CMesh::IntersectTriangle(const Vec3& orig, const Vec3& dir, Vec3& v0, Vec3&
     *u *= fInvDet;     
     *v *= fInvDet;     
     return TRUE; 
+}
+
+void CMesh::Save(const wstring _strRelativePath) 
+{
+    Read();
+
+    if (!CheckRelativePath(_strRelativePath))
+    {
+        MessageBox(nullptr, L"CMaterial Path Overlapped", L"Error", MB_OK);
+        return;
+    }
+
+    wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+    strFilePath += _strRelativePath;
+
+    FILE* pFile = nullptr;
+    _wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+    CRes::SaveKeyPath(pFile);
+
+    if (nullptr != m_vertices)
+    {
+        size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+
+        for (UINT i = 0; i < nVerts; i += 4)
+        {
+            fwrite(&m_vertices[i].vColor, sizeof(Vec4), 1, pFile);
+            fwrite(&m_vertices[i + 1].vColor, sizeof(Vec4), 1, pFile);
+            fwrite(&m_vertices[i + 2].vColor, sizeof(Vec4), 1, pFile);
+            fwrite(&m_vertices[i + 3].vColor, sizeof(Vec4), 1, pFile);
+        }
+    }
+
+    fclose(pFile);
+
+    MessageBox(nullptr, L"CMesh Save ", L"Success", MB_OK);
+}
+
+int CMesh::Load(const wstring& _strFilePath)
+{
+    wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+    strFilePath += _strFilePath;
+
+    FILE* pFile = nullptr;
+
+    _wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+    CRes::LoadKeyPath(pFile);
+
+    if (nullptr != m_vertices)
+    {
+        size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+
+        for (UINT i = 0; i < nVerts; i += 4)
+        {
+            fread(&m_vertices[i].vColor, sizeof(Vec4), 1, pFile);
+            fread(&m_vertices[i + 1].vColor, sizeof(Vec4), 1, pFile);
+            fread(&m_vertices[i + 2].vColor, sizeof(Vec4), 1, pFile);
+            fread(&m_vertices[i + 3].vColor, sizeof(Vec4), 1, pFile);
+        }
+    }
+    fclose(pFile);
+
+    Write();
+
+    MessageBox(nullptr, L"CMesh Save ", L"Success", MB_OK);
+
+    return S_OK;
 }

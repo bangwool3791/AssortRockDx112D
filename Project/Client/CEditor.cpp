@@ -326,8 +326,8 @@ void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)
 	UINT height = pTex->GetHeight();
 
 	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
-	pObject->Transform()->SetRelativeScale(Vec3((float)width, 0.f, height));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObject->Transform()->SetRelativeScale(Vec3((float)width, 1.f, height));
+	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMeshXY"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
 	pObject->MeshRender()->GetCurMaterial()->SetTexParam(TEX_0, pTex);
 	pObject->begin();

@@ -50,6 +50,15 @@ void TileMapUI::render_update()
 
 	ImGui::SameLine();
 
+	if(ImGui::Button("Save"))
+	{
+		m_pEditTileObject->GetRenderComponent()->GetMesh()->Save(L"Terrain\\Terrain.dat");
+	}
+
+	if (ImGui::Button("Load"))
+	{
+		m_pEditTileObject->GetRenderComponent()->GetMesh()->Load(L"Terrain\\Terrain.dat");
+	}
 	if (ImGui::Button("Apply"))
 	{
 		ProgressUI* pProgressUI = dynamic_cast<ProgressUI*>(CImGuiMgr::GetInst()->FindUI("ProgressUI"));

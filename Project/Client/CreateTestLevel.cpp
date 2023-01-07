@@ -107,7 +107,7 @@ void CreateTestLelvel()
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
 #if true
-
+	pLevel->GetLayer(0)->SetName(L"Terrain");
 	pLevel->GetLayer(1)->SetName(L"Player");
 	pLevel->GetLayer(2)->SetName(L"PlayerProjecttile");
 	pLevel->GetLayer(3)->SetName(L"Monster");
@@ -123,8 +123,12 @@ void CreateTestLelvel()
 	* LAYER_MAX까지 Render
 	*/
 	pCamObj->Camera()->SetLayerMaskAll();
-	pCamObj->Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
-	pCamObj->Transform()->SetRelativePos(Vec3{ 0.f, 0.f, 500.f });
+	pCamObj->Camera()->SetProjType(ORTHOGRAHPICS);
+	pCamObj->Camera()->SetFar(100000.f);
+	pCamObj->Camera()->SetLayerMaskAll();
+	pCamObj->Camera()->SetLayerMask(31);
+	pCamObj->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pCamObj->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
 	pLevel->AddGameObject(pCamObj, 0);
 
 	// Directional Light 추가
@@ -166,7 +170,7 @@ void CreateTestLelvel()
 	pPointLight->AddComponent(new CPlayerScript);
 
 	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
-	pPointLight->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 0.f));
+	pPointLight->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 100.f));
 
 	pPointLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
 	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
@@ -218,7 +222,7 @@ void CreateTestLelvel()
 
 		pObject->Transform()->SetRelativePos(Vec3(i, 0.f, 10.f));
 		pObject->Transform()->SetRelativeScale(Vec3(100.f, 0.f, 100.f));
-		pObject->Transform()->SetRelativeRotation(Vec3(-XM_PI * 0.25f, 0.f, 0.f));
+		pObject->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 		pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 		pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 

@@ -563,6 +563,7 @@ bool EditAnimationUI::Click_Pixel_LBtn()
 
     vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
     vSacle.y = m_pCameraObject->Camera()->Transform()->GetRelativePos().y;
+
     if (vResolution.x * -0.5f + vSacle.x > vPos.x || vResolution.y * -0.5f + vSacle.y > vPos.y
         || vResolution.x * 0.5f + vSacle.x <= vPos.x
         || vResolution.y * 0.5f + vSacle.y <= vPos.y)

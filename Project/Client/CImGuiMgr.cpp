@@ -169,6 +169,8 @@ void CImGuiMgr::progress()
                     iter->second->render();
                 if ("ListUI" == iter->first)
                     iter->second->render();
+                if ("ContentUI" == iter->first)
+                    iter->second->render();
                 break;
             case EDIT_MODE::END:
                 break;
@@ -268,7 +270,7 @@ void CImGuiMgr::ObserveContent()
 
     if (dwWateState == WAIT_OBJECT_0)
     {
-        ContentUI* pContentUI = (ContentUI*)FindUI("Content");
+        ContentUI* pContentUI = (ContentUI*)FindUI("ContentUI");
         pContentUI->ReloadContent();
 
         FindNextChangeNotification(m_NotifyHandle);

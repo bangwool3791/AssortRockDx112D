@@ -22,7 +22,7 @@ private:
 public:
     void SetCamera(CGameObject* _pCamera) { m_pCamera = _pCamera; }
     void SetTileAtlas(Ptr<CTexture> _AtlasTex) { m_AtlasTex.push_back(_AtlasTex); }
-    void SetTexture(Vec3 _vPos, UINT i);
+    void SetTextureID(Ray _ray, UINT i);
 public:
     virtual void begin() override;
     virtual void finaltick() override;

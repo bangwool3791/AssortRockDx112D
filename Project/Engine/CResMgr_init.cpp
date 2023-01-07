@@ -64,22 +64,22 @@ void CResMgr::CreateDefaultMesh()
 	CMesh* pMesh = nullptr;
 
 	// 사각형 메쉬 만들기
-	v.vPos = Vec3(-0.5f, 0.5f, 0.f);
+	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
 	v.vUV = Vec2(0.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.5f, 0.5f, 0.f);
+	v.vPos = Vec3(0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(1.f, 0.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(0.5f, -0.5f, 0.f);
+	v.vPos = Vec3(0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
 	v.vUV = Vec2(1.f, 1.f);
 	*iterVtx = v;
 
-	v.vPos = Vec3(-0.5f, -0.5f, 0.f);
+	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
 	v.vUV = Vec2(0.f, 1.f);
 	*iterVtx = v;
