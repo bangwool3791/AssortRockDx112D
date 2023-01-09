@@ -9,7 +9,10 @@ class OutlinerUI :
 	public UI
 {
 private:
-	CGameObject* m_pGameObject;
+	string		 m_strName;
+	string		 m_strComponentName;
+	string	     m_strScriptName;
+	TreeNode*	 m_Node;
 	TreeUI*      m_Tree;
 private:
 	virtual void update() override;

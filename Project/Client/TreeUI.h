@@ -26,10 +26,9 @@ public :
 	DWORD_PTR GetData() { return m_data; }
 	CGameObjectEx* GetGameObjectEx() { return m_pGameObject; }
 	const string& GetName() { return m_strName; }
-
+	void SetNodeName(const string& _name) { m_strName = _name; }
 private:
 	void render_update();
-	void SetNodeName(const string& _name) {	m_strName = _name;}
 	void SetData(DWORD_PTR _data) { m_data = _data; }
 	void SetGameObject(CGameObjectEx* _pObj) { m_pGameObject = _pObj; }
 	void SetFrame(bool _bFrame) { m_bFrame = _bFrame; }
@@ -38,7 +37,7 @@ private:
 		_ChildNode->m_ParentNode = this;
 		m_vecChildNode.push_back(_ChildNode);
 	}
-
+	void DeleteChild(TreeNode* _ChildeNode);
 	const vector<TreeNode*>& GetChild() { return m_vecChildNode; }
 	const string& GetTreeName();
 public:
@@ -118,7 +117,7 @@ public:
 	}
 	TreeNode* GetNode(CGameObject* _pObj);
 	TreeNode* GetNode(CGameObjectEx* _pObj);
-	void DeleteNode(CGameObject* _pObj);
+	void DeleteNode(TreeNode* _pNode);
 public:
 	TreeUI(const string& _strName);
 	~TreeUI();

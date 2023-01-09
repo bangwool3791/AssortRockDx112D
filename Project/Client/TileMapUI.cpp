@@ -7,13 +7,13 @@
 #include <Engine\CLevelMgr.h>
 
 #include <Engine\CGameObject.h>
-#include <Engine\CTileMap.h>
+#include <Engine\CTerrain.h>
 
 #include <Engine\CTexture.h>
 #include <Engine\CResMgr.h>
 
 #include <Engine\CScript.h>
-#include <Script\CTileScript.h>
+#include <Script\CTerrainScript.h>
 
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
@@ -48,18 +48,19 @@ void TileMapUI::render_update()
 	ImGui::PopStyleColor(3);
 	ImGui::PopID();
 
-	ImGui::SameLine();
-
 	if(ImGui::Button("Save"))
 	{
 		m_pEditTileObject->GetRenderComponent()->GetMesh()->Save(L"Terrain\\Terrain.dat");
 	}
 
+	ImGui::SameLine();
+
 	if (ImGui::Button("Load"))
 	{
 		m_pEditTileObject->GetRenderComponent()->GetMesh()->Load(L"Terrain\\Terrain.dat");
 	}
-	if (ImGui::Button("Apply"))
+
+	if (ImGui::Button("추후 업데이트 Apply"))
 	{
 		ProgressUI* pProgressUI = dynamic_cast<ProgressUI*>(CImGuiMgr::GetInst()->FindUI("ProgressUI"));
 		
@@ -67,7 +68,7 @@ void TileMapUI::render_update()
 		pProgressUI->Open();
 	}
 
-	for (UINT i{}; i < TEX_32; ++i)
+	for (UINT i = 1; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
 		str += std::to_wstring(i) + L".png";
@@ -75,10 +76,10 @@ void TileMapUI::render_update()
 
 		if (ImGui::ImageButton(myImage, ImVec2(50.f, 50.f)))
 		{
-			m_pEditTileObject->GetScript<CTileScript>(L"CTileScript")->SetTileInfo(i);
+			m_pEditTileObject->GetScript<CTerrainScript>(L"CTerrainScript")->SetTileInfo(i);
 		}
 
-		if (i == 0 || (i % 7 != 0))
+		if (i % 4 != 0)
 		{
 			ImGui::SameLine();
 		}
@@ -88,7 +89,7 @@ void TileMapUI::render_update()
 void TileMapUI::Initialize(void* pAddr)
 {
 	m_pEditTileObject = (CGameObject*)pAddr;
-	m_pEditTileMap = static_cast<CTileMap*>(m_pEditTileObject->GetRenderComponent());
+	m_pEditTileMap = static_cast<CTerrain*>(m_pEditTileObject->GetRenderComponent());
 }
 
 

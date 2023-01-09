@@ -3,6 +3,7 @@
 
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
+#include "CLevelCameraScript.h"
 #include "CLightScript.h"
 #include "CMissileScript.h"
 #include "CMissileScript2.h"
@@ -12,12 +13,14 @@
 #include "CRefAniScript.h"
 #include "CSelectUnitScript.h"
 #include "CShadowScript.h"
+#include "CTerrainScript.h"
 #include "CTileScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
+	_vec.push_back(L"CLevelCameraScript");
 	_vec.push_back(L"CLightScript");
 	_vec.push_back(L"CMissileScript");
 	_vec.push_back(L"CMissileScript2");
@@ -27,8 +30,8 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CRefAniScript");
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
+	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
-	_vec.push_back(L"ThreadTileMap");
 }
 
 
@@ -36,6 +39,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
+	_vec.push_back("CLevelCameraScript");
 	_vec.push_back("CLightScript");
 	_vec.push_back("CMissileScript");
 	_vec.push_back("CMissileScript2");
@@ -45,8 +49,8 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CRefAniScript");
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
+	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
-	_vec.push_back("ThreadTileMap");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
@@ -55,6 +59,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if (L"CLevelCameraScript" == _strScriptName)
+		return new CLevelCameraScript;
 	if (L"CLightScript" == _strScriptName)
 		return new CLightScript;
 	if (L"CMissileScript" == _strScriptName)
@@ -73,6 +79,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CSelectUnitScript;
 	if (L"CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if (L"CTerrainScript" == _strScriptName)
+		return new CTerrainScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
 	return nullptr;
@@ -84,6 +92,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if ("CLevelCameraScript" == _strScriptName)
+		return new CLevelCameraScript;
 	if ("CLightScript" == _strScriptName)
 		return new CLightScript;
 	if ("CMissileScript" == _strScriptName)
@@ -102,6 +112,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CSelectUnitScript;
 	if ("CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if ("CTerrainScript" == _strScriptName)
+		return new CTerrainScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
 	return nullptr;
@@ -116,6 +128,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return new CEditorMouseScript;
+		break;
+	case (UINT)SCRIPT_TYPE::LEVELCAMERASCRIPT:
+		return new CLevelCameraScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LIGHTSCRIPT:
 		return new CLightScript;
@@ -144,9 +159,11 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::SHADOWSCRIPT:
 		return new CShadowScript;
 		break;
+	case (UINT)SCRIPT_TYPE::TERRAINSCRIPT:
+		return new CTerrainScript;
+		break;
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
-		break;
 		break;
 	}
 	return nullptr;
@@ -162,6 +179,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return L"CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::LEVELCAMERASCRIPT:
+		return L"CLevelCameraScript";
 		break;
 
 	case SCRIPT_TYPE::LIGHTSCRIPT:
@@ -200,12 +221,12 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CShadowScript";
 		break;
 
-	case SCRIPT_TYPE::TILESCRIPT:
-		return L"CTileScript";
+	case SCRIPT_TYPE::TERRAINSCRIPT:
+		return L"CTerrainScript";
 		break;
 
-	case SCRIPT_TYPE::HREADTILEMAP:
-		return L"ThreadTileMap";
+	case SCRIPT_TYPE::TILESCRIPT:
+		return L"CTileScript";
 		break;
 
 	}
@@ -222,6 +243,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return "CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::LEVELCAMERASCRIPT:
+		return "CLevelCameraScript";
 		break;
 
 	case SCRIPT_TYPE::LIGHTSCRIPT:
@@ -260,12 +285,12 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CShadowScript";
 		break;
 
-	case SCRIPT_TYPE::TILESCRIPT:
-		return "CTileScript";
+	case SCRIPT_TYPE::TERRAINSCRIPT:
+		return "CTerrainScript";
 		break;
 
-	case SCRIPT_TYPE::HREADTILEMAP:
-		return "ThreadTileMap";
+	case SCRIPT_TYPE::TILESCRIPT:
+		return "CTileScript";
 		break;
 
 	}

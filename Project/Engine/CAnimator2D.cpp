@@ -12,7 +12,7 @@ CAnimator2D::CAnimator2D()
     , m_mapAnim{}
     , m_strKey{}
 {
-
+    SetName(L"CAnimator2D");
 }
 
 CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)

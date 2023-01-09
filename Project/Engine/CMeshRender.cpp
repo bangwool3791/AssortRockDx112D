@@ -6,7 +6,8 @@
 
 CMeshRender::CMeshRender()
 	:CRenderComponent{ COMPONENT_TYPE::MESHRENDER }
-{	
+{
+	SetName(L"CMeshRender");
 	m_eInsType = INSTANCING_TYPE::NONE;
 }
 
@@ -48,7 +49,7 @@ void CMeshRender::render()
 		return;
 	/*
 	* 텍스처 버퍼 업데이트 처리
-	* 
+	*
 	* CRenderMgr::UpdateLight2D() 참고
 	* 싱글 톤 또는 static vector 처리
 	*/
@@ -78,7 +79,7 @@ void CMeshRender::render_Instancing()
 		return;
 
 	//여기서 왜 트랜스폼?
-	if (nullptr == GetCurMaterial() || nullptr == GetMesh())
+	if (nullptr == GetCurMaterial() || nullptr == GetMesh() || nullptr == Transform())
 		return;
 	/*
 	* 텍스처 버퍼 업데이트 처리

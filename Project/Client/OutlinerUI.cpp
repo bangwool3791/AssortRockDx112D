@@ -25,6 +25,11 @@ OutlinerUI::OutlinerUI()
 	m_Tree->AddDynamic_RBtn_Selected(this, (FUNC_1)&OutlinerUI::SetObject);
 	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&OutlinerUI::SetObjectToInspector);
 	m_Tree->AddDynamic_DragDrop(this, (FUNC_2)&OutlinerUI::AddChildObject);
+	
+	m_strName.resize(100);
+	m_strName = "DummyObject";
+	m_strComponentName.resize(100);
+	m_strScriptName.resize(100);
 	// 레벨 오브젝트 갱신
 	ResetLevel();
 }
@@ -45,22 +50,27 @@ void OutlinerUI::render_update()
 {
 	static int IobjectIndex = 0;
 	static int ILayerIndex = 0;
-	static string strName = "DummyObject";
-
-	ImGui::Text("Layer Index"); 
-	ImGui::SameLine(); 
-	ImGui::PushItemWidth(50.f);
-	ImGui::InputScalar("##LayerIndex", ImGuiDataType_U32, &ILayerIndex);
-	ImGui::NewLine();
 
 	ImGui::Text("Object Name");
 	ImGui::SameLine();
-	ImGui::PushItemWidth(50.f);
-	ImGui::InputText("##ObjectName", strName.data(), strName.size());
+	ImGui::PushItemWidth(100.f);
+	ImGui::InputText("##ObjectName", m_strName.data(), m_strName.size());
+	ImGui::NewLine();
+
+	ImGui::Text("Component Name");
+	ImGui::SameLine();
+	ImGui::PushItemWidth(100.f);
+	ImGui::InputText("##ComponentName", m_strComponentName.data(), 100);
+	ImGui::NewLine();
+
+	ImGui::Text("Script Name");
+	ImGui::SameLine();
+	ImGui::PushItemWidth(100.f);
+	ImGui::InputText("##ScriptName", m_strScriptName.data(), m_strScriptName.size());
 	ImGui::NewLine();
 
 	int selected_fish = -1;
-	const char* names[] = { "Create Empty","Create Empty Parent","Destroy", "Create Prefab", "Close" };
+	const char* names[] = { "Create Empty","Create Empty Parent","Destroy", "Create Prefab", "Edit Name", "Delete Component", "Delete Script" ,"Close"};
 	static bool toggles[] = { true, false, false, false, false };
 
 	if (ImGui::IsMouseClicked(1))
@@ -91,13 +101,13 @@ void OutlinerUI::render_update()
 		CGameObject* pGameObject = new CGameObject;
 		evn.wParam = (DWORD_PTR)pGameObject;
 		evn.lParam = (DWORD_PTR)(ILayerIndex);
-		if (strName.empty())
+		if (m_strName.empty())
 		{
-			strName = "DummyObject";
-			strName += std::to_string(IobjectIndex);
+			m_strName = "DummyObject";
+			m_strName += std::to_string(IobjectIndex);
 			++IobjectIndex;
 		}
-		pGameObject->SetName(StringToWString(strName));
+		pGameObject->SetName(StringToWString(m_strName));
 		CEventMgr::GetInst()->AddEvent(evn);
 	}
 		break;
@@ -105,20 +115,68 @@ void OutlinerUI::render_update()
 		break;
 	case 2:
 	{
+		if (nullptr != m_Node)
+		{
+			tEvent evn = {};
+			evn.eType = EVENT_TYPE::DELETE_OBJECT;
+			evn.wParam = m_Node->GetData();
+			m_Tree->DeleteNode(m_Node);
+		}
 	}
 		break;
 	case 3:
 	{
-		if (nullptr == m_pGameObject)
-			return;
-
-		tEvent evn = {};
-		evn.eType = EVENT_TYPE::EDIT_RES;
-		evn.wParam = (DWORD_PTR)RES_TYPE::PREFAB;
-		evn.lParam = (DWORD_PTR)(m_pGameObject);
-		CEventMgr::GetInst()->AddEvent(evn);
+		if (nullptr != m_Node)
+		{
+			tEvent evn = {};
+			evn.eType = EVENT_TYPE::EDIT_RES;
+			evn.wParam = (DWORD_PTR)RES_TYPE::PREFAB;
+			evn.lParam = (DWORD_PTR)(m_Node->GetData());
+			CEventMgr::GetInst()->AddEvent(evn);
+		}
 	}
 		break;
+
+	case 4:
+	{
+		if (nullptr != m_Node)
+		{
+			m_Node->SetNodeName(m_strName);
+			wstring lstrname = wstring(m_strName.begin(), m_strName.end());
+			((CGameObject*)(m_Node->GetData()))->SetName(lstrname);
+		}
+	}
+	break;
+	case 5:
+	{
+		if (nullptr != m_Node)
+		{
+			if (((CGameObject*)(m_Node->GetData()))->DeleteComponent(m_strComponentName))
+			{
+
+			}
+			else
+			{
+				MessageBox(nullptr, L"Fail to Delete Component", L"Error", MB_OK);
+			}
+		}
+	}
+	break;
+	case 6:
+	{
+		if (nullptr != m_Node)
+		{
+			if (((CGameObject*)(m_Node->GetData()))->DeleteScript(m_strScriptName))
+			{
+
+			}
+			else
+			{
+				MessageBox(nullptr, L"Fail to Delete Script", L"Error", MB_OK);
+			}
+		}
+	}
+	break;
 	default:
 		break;
 	}
@@ -147,8 +205,7 @@ void OutlinerUI::ResetLevel()
 
 void OutlinerUI::SetObject(DWORD_PTR _res)
 {
-	TreeNode* pSelectedNode = (TreeNode*)_res;
-	m_pGameObject = (CGameObject*)pSelectedNode->GetData();
+	m_Node = (TreeNode*)_res;
 }
 
 void OutlinerUI::SetObjectToInspector(DWORD_PTR _res)

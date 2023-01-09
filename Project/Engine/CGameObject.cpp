@@ -75,7 +75,7 @@ CGameObject::~CGameObject()
 		*iter = nullptr;
 	}
 
-Safe_Del_Vec(m_vecChild);
+	Safe_Del_Vec(m_vecChild);
 }
 
 void CGameObject::begin()
@@ -295,4 +295,40 @@ void CGameObject::DisconnectFromParent()
 	}
 
 	assert(nullptr);
+}
+
+bool CGameObject::DeleteComponent(const string& _strName)
+{
+	wstring wstrName = wstring(_strName.begin(), _strName.end());
+
+	for (size_t i{}; i < m_arrCom.size(); ++i)
+	{
+		if(nullptr != (m_arrCom[i]))
+			if (!lstrcmp(wstrName.c_str(), (m_arrCom[i])->GetName().c_str()))
+			{
+				//Engine Progess 완료 후 
+				delete m_arrCom[i];
+				m_arrCom[i] = nullptr;
+				return true;
+			}
+	}
+	return false;
+}
+
+bool CGameObject::DeleteScript(const string& _strName)
+{
+	wstring wstrName = wstring(_strName.begin(), _strName.end());
+
+	for (auto iter{ m_vecScripts.begin() }; iter != m_vecScripts.end(); ++iter)
+	{
+		if (nullptr != (*iter))
+			if (!lstrcmp(wstrName.c_str(), (*iter)->GetName().c_str()))
+			{
+				//Engine Progess 완료 후 
+				delete (*iter);
+				m_vecScripts.erase(iter);
+				return true;
+			}
+	}
+	return false;
 }

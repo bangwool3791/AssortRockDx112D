@@ -33,14 +33,17 @@ typedef Vector4 Vec4;
 
 #define ALPHABLEND_Z_POS 0.9f
 
-#define TILEX 100
-#define TILEZ 100
+#define TERRAINX 100
+#define TERRAINZ 100
 
-#define TILECX 64.f
-#define TILECZ 64.f
+#define TERRAINCX 64 * 4.f
+#define TERRAINCZ 64 * 4.f
 
-#define UI_TILECX 50.f
-#define UI_TILECZ 50.f
+#define TILEX 200
+#define TILEZ 200
+
+#define	TILECX 64 * 2.f
+#define	TILECZ 64 * 2.f
 
 #define OBJECTPOOL_SIZE 1000
 enum class SHADER_DOMAIN
@@ -134,6 +137,7 @@ enum class COMPONENT_TYPE
 
 	// render
 	MESHRENDER,
+	TERRAIN,
 	TILEMAP,
 	UITILEMAP,
 	PARTICLESYSTEM,
@@ -231,6 +235,7 @@ enum TEX_PARAM
 	TEX_PADDING1,
 	TEX_PADDING2,
 	TEX_PADDING3,
+
 	TEX_END,
 };
 

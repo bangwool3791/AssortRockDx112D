@@ -61,6 +61,10 @@ void CPlayerScript::BeginOverlap(CCollider2D* _pOther)
 	}
 	else if(!lstrcmp(L"Player", _pOther->GetOwner()->GetName().c_str()))
 	{
+		if (nullptr == GetOwner()->Transform() ||
+			nullptr == _pOther->GetOwner()->Transform())
+			return;
+
 		Vec3 vSource = GetOwner()->Transform()->GetRelativePos();
 		Vec3 vTarget = _pOther->GetOwner()->Transform()->GetRelativePos();
 		Vec3 vDiff = vTarget - vSource;
@@ -75,6 +79,10 @@ void CPlayerScript::BeginOverlap(CCollider2D* _pOther)
 
 void CPlayerScript::Overlap(CCollider2D* _pOther) 
 {
+	if (nullptr == GetOwner()->Transform() || 
+		nullptr == _pOther->GetOwner()->Transform())
+		return;
+
 	if (!lstrcmp(L"Player", _pOther->GetOwner()->GetName().c_str()))
 	{
 		Vec3 vSource = GetOwner()->Transform()->GetRelativePos();

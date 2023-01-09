@@ -14,6 +14,7 @@ CAnimation2D::CAnimation2D()
 	, m_fHeight{}
 	, m_eState{ANIMATION_STATE::END}
 {
+	SetName(L"CAnimation2D");
 }
 
 CAnimation2D::CAnimation2D(const CAnimation2D& _rhs)

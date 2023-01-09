@@ -96,12 +96,8 @@ struct tRenderInfo
 
 struct tTile
 {
-    float3		vPos;
-    float3		vSize;
-    float2		vSlice;
-    float2		vLeftTop; // UV
-    int		    iIndex;
-    int		    iParentIndex;
-    int         ibyOption;
+    float3      vPos;
+    int         iIndex;
+    int         iInfo;
 };
 #endif

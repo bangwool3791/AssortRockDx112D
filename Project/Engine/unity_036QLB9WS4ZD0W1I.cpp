@@ -24,6 +24,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CTileMap.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CTerrain.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CTimeMgr.cpp"
 
 
@@ -46,7 +49,4 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\JPSCollision.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\JPSPath.cpp"
 

@@ -151,7 +151,7 @@ StructuredBuffer<tLightInfo> g_Light2DBuffer : register(t55);
 StructuredBuffer<tLightInfo> g_Light3DBuffer : register(t56);
 
 
-StructuredBuffer<tTile>       TileBuffer     : register(t56);
+StructuredBuffer<tTile>       g_TileBuffer     : register(t56);
 
 /*
 * Instancing object

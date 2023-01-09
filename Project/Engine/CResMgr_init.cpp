@@ -203,27 +203,27 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
-	int iOffset = TILEX * 64 >> 1;
-	for (int i = 0; i < TILEX; ++i)
+	int iOffset = TERRAINX * 64 >> 1;
+	for (int i = 0; i < TERRAINX; ++i)
 	{
-		for (int j = 0; j < TILEZ; ++j)
+		for (int j = 0; j < TERRAINZ; ++j)
 		{
 			for (int k = 0; k < 4; ++k)
 			{
 				//top view
 				//float	fX = (64 >> 1) * (j - i) + iOffset;
 				//float	fZ = (64 >> 1) * (j + i) + (64 >> 1);
-				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
-				float	fZ = (TILECZ * 0.5f) * i;
+				float	fX = (TERRAINCX * j) + ((i % 2) * (TERRAINCX * 0.5f));
+				float	fZ = (TERRAINCZ * 0.5f) * i;
 
 				if (k % 4 == 0)
-					fX -= TILECX * 0.5f;
+					fX -= TERRAINCX * 0.5f;
 				else if (k % 4 == 1)
-					fZ += TILECZ * 0.5f;
+					fZ += TERRAINCZ * 0.5f;
 				else if (k % 4 == 2)
-					fX += TILECX * 0.5f;
+					fX += TERRAINCX * 0.5f;
 				else if (k % 4 == 3)
-					fZ -= TILECZ * 0.5f;
+					fZ -= TERRAINCZ * 0.5f;
 
 				v.vPos = Vec3{ fX, 0.f, fZ };
 				//cout << "[x][z] " << v.vPos.x << " " << v.vPos.z << endl;
@@ -234,7 +234,7 @@ void CResMgr::CreateDefaultMesh()
 	}
 
 
-	for (int j = 0; j < TILEX * TILEZ; ++j)
+	for (int j = 0; j < TERRAINX * TERRAINZ; ++j)
 	{
 		*iterIdx = 0 + j * 4;
 		*iterIdx = 1 + j * 4;
@@ -298,6 +298,7 @@ void CResMgr::CreateDefaultMesh()
 		vecVtx[1 + j * 4].vUV = Vec2(1.f, 0.f);
 		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
 		vecVtx[3 + j * 4].vUV = Vec2(0.f, 0.f);
+
 	}
 
 	pMesh = new CMesh(true);
@@ -305,6 +306,60 @@ void CResMgr::CreateDefaultMesh()
 	AddRes<CMesh>(L"BorderMesh", pMesh);
 	vecVtx.clear();
 	vecIdx.clear();
+
+	iOffset = TILEX * 64 >> 1;
+	for (int i = 0; i < TILEX; ++i)
+	{
+		for (int j = 0; j < TILEZ; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				//top view
+				//float	fX = (64 >> 1) * (j - i) + iOffset;
+				//float	fZ = (64 >> 1) * (j + i) + (64 >> 1);
+				float	fX = (TILECX * j) + ((i % 2) * (TILECX * 0.5f));
+				float	fZ = (TILECZ * 0.5f) * i;
+
+				if (k % 4 == 0)
+					fX -= (TILECX * 0.5f - 5.f);
+				else if (k % 4 == 1)
+					fZ += (TILECZ * 0.5f - 5.f);
+				else if (k % 4 == 2)
+					fX += (TILECX * 0.5f - 5.f);
+				else if (k % 4 == 3)
+					fZ -= (TILECZ * 0.5f - 5.f);
+
+				v.vPos = Vec3{ fX, 0.f, fZ };
+				v.vColor = Vec4(0.f, 0.f, 0.f, 1.f);
+				v.vColor = Vec4(i * TILEZ + j, 0.f, 0.f, 0.f);
+				*iterVtx = v;
+			}
+		}
+	}
+
+
+	for (int j = 0; j < TILEX * TILEZ; ++j)
+	{
+		*iterIdx = 0 + j * 4;
+		*iterIdx = 1 + j * 4;
+		*iterIdx = 2 + j * 4;
+		*iterIdx = 0 + j * 4;
+		*iterIdx = 2 + j * 4;
+		*iterIdx = 3 + j * 4;
+
+		vecVtx[0 + j * 4].vUV = Vec2(0.f, 0.f);
+		vecVtx[1 + j * 4].vUV = Vec2(1.f, 0.f);
+		vecVtx[2 + j * 4].vUV = Vec2(1.f, 1.f);
+		vecVtx[3 + j * 4].vUV = Vec2(0.f, 1.f);
+	}
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"TileMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
+
+
 }
 
 void CResMgr::CreateDefaultTexture()
@@ -491,9 +546,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 
 	// TileMap Shader
 	pShader = new CGraphicsShader;
-	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_TileMap");
+	pShader->CreateVertexShader(L"shader\\terrain.fx", "VS_TileMap");
 	//pShader->CreateGeometryShader(L"shader\\tilemap.fx", "GS_TileMap");
-	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_TileMap");
+	pShader->CreatePixelShader(L"shader\\terrain.fx", "PS_TileMap");
 	/*
 	* 투명한 타일이 있을 경우
 	*/
@@ -528,8 +583,8 @@ void CResMgr::CreateDefaultGraphicsShader()
 	AddRes<CGraphicsShader>(L"BorderShader", pShader);
 
 	pShader = new CGraphicsShader;
-	pShader->CreateVertexShader(L"shader\\uitilemap.fx", "VS_UiTileMap");
-	pShader->CreatePixelShader(L"shader\\uitilemap.fx", "PS_UiTileMap");
+	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_UiTileMap");
+	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_UiTileMap");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);

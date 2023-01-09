@@ -10,6 +10,7 @@ CCollider2D::CCollider2D()
 	, m_bIgnorObjectScale(false)
 	, m_bPause{false}
 {
+	SetName(L"CCollider2D");
 }
 
 CCollider2D::~CCollider2D()
@@ -19,6 +20,9 @@ CCollider2D::~CCollider2D()
 void CCollider2D::finaltick()
 {
 	// FinalPos °è»ê
+	if (nullptr == Transform())
+		return;
+
 	Vec3 vObjectPos = Transform()->GetWorldPos();
 	m_vFinalPos = m_vOffsetPos + Vec2(vObjectPos.x, vObjectPos.y);
 

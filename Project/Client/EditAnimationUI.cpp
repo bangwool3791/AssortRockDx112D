@@ -41,7 +41,7 @@ EditAnimationUI::EditAnimationUI()
     , m_bfs_visited{}
     , m_dfs_visited{}
     , m_fDuration{}
-    ,m_fileDialogInfo {}
+    , m_fileDialogInfo{}
     , m_iCurIdx{}
     , m_iPixel_Height{}
     , m_iPixel_Width{}
@@ -53,7 +53,7 @@ EditAnimationUI::EditAnimationUI()
     , m_pPointObject{}
     , m_szAnimation{}
     , m_fileDialogOpen{}
-    , m_eEditMode{EDIT_ANIMATION_MODE::SCEN_MODE}
+    , m_eEditMode{ EDIT_ANIMATION_MODE::SCEN_MODE }
 {
 }
 
@@ -522,22 +522,22 @@ void EditAnimationUI::Click_Pixel_KeyBoard(KEY _Key)
         if (_Key == KEY::LEFT)
         {
             x = (int)m_pPointObject->Transform()->GetRelativePos().x - (int)m_pPointObject->Transform()->GetRelativeScale().x;
-            y = (int)m_pPointObject->Transform()->GetRelativePos().y;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().z;
         }
         else if (_Key == KEY::RIGHT)
         {
             x = (int)m_pPointObject->Transform()->GetRelativePos().x + (int)m_pPointObject->Transform()->GetRelativeScale().x;
-            y = (int)m_pPointObject->Transform()->GetRelativePos().y;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().z;
         }
         else if (_Key == KEY::UP)
         {
             x = (int)m_pPointObject->Transform()->GetRelativePos().x;
-            y = (int)m_pPointObject->Transform()->GetRelativePos().y - (int)m_pPointObject->Transform()->GetRelativeScale().y;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().z - (int)m_pPointObject->Transform()->GetRelativeScale().z;
         }
         else if (_Key == KEY::DOWN)
         {
             x = (int)m_pPointObject->Transform()->GetRelativePos().x + (int)m_pPointObject->Transform()->GetRelativeScale().x;
-            y = (int)m_pPointObject->Transform()->GetRelativePos().y + (int)m_pPointObject->Transform()->GetRelativeScale().y;
+            y = (int)m_pPointObject->Transform()->GetRelativePos().z + (int)m_pPointObject->Transform()->GetRelativeScale().z;
         }
 
         UINT _ux = (UINT)(x + m_iPixel_Width * 0.5f);
@@ -562,27 +562,27 @@ bool EditAnimationUI::Click_Pixel_LBtn()
     Vec3 vSacle{};
 
     vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
-    vSacle.y = m_pCameraObject->Camera()->Transform()->GetRelativePos().y;
+    vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().z;
 
-    if (vResolution.x * -0.5f + vSacle.x > vPos.x || vResolution.y * -0.5f + vSacle.y > vPos.y
+    if (vResolution.x * -0.5f + vSacle.x > vPos.x || vResolution.y * -0.5f + vSacle.z > vPos.z
         || vResolution.x * 0.5f + vSacle.x <= vPos.x
-        || vResolution.y * 0.5f + vSacle.y <= vPos.y)
+        || vResolution.y * 0.5f + vSacle.z <= vPos.z)
         return false;
 
     vMousePos.x += m_iPixel_Width * 0.5f;
-    vMousePos.y = -1.f * vMousePos.y + m_iPixel_Height * 0.5f;
+    vMousePos.z = -1.f * vMousePos.z + m_iPixel_Height * 0.5f;
 
-    if (0 > vMousePos.x || 0 > vMousePos.y || m_iPixel_Width <= vMousePos.x || m_iPixel_Height <= vMousePos.y)
+    if (0 > vMousePos.x || 0 > vMousePos.z || m_iPixel_Width <= vMousePos.x || m_iPixel_Height <= vMousePos.z)
         return false;
 
-    tRGBA tInfo = GetRGBA((int)vMousePos.x, (int)vMousePos.y);
+    tRGBA tInfo = GetRGBA((int)vMousePos.x, (int)vMousePos.z);
 
     //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
     //cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
 
 
     UINT x = (UINT)vMousePos.x;
-    UINT y = (UINT)vMousePos.y;
+    UINT y = (UINT)vMousePos.z;
     Set_Texture_Pixel(x, y);
     return true;
 
@@ -674,8 +674,8 @@ void EditAnimationUI::Set_Texture_Pixel(UINT x, UINT y)
     fMaxY = (fMaxY - m_iPixel_Height * 0.5f) * -1.f;
 
     cout << "m_minx " << fMinX << "m_miny " << fMinY << "m_maxx " << fMaxX << "m_maxy " << fMaxY << endl;
-    Vec3 vPos = Vec3{ (fMaxX + fMinX) * 0.5f, (fMaxY + fMinY) * 0.5f, 1.f };
-    Vec3 vScale = Vec3{ float(fMaxX - fMinX), float(fMaxY - fMinY), 1.f };
+    Vec3 vPos = Vec3{ (fMaxX + fMinX) * 0.5f, 0.f, (fMaxY + fMinY) * 0.5f };
+    Vec3 vScale = Vec3{ abs(fMaxX - fMinX), 1.f, abs(fMaxY - fMinY) };
     m_pPointObject->Transform()->SetRelativePos(vPos);
     m_pPointObject->Transform()->SetRelativeScale(vScale);
 
@@ -701,7 +701,7 @@ Vec2 EditAnimationUI::Get_Pixel_Bfs(UINT x, UINT y)
 
     // 처음 x,y를 방문 했기때문에
 
-    if (x < 0 || x > (UINT)(m_iPixel_Width - 1) || y < 0 || y >(UINT)m_iPixel_Height)
+    if (x < 0 || x >(UINT)(m_iPixel_Width - 1) || y < 0 || y >(UINT)m_iPixel_Height)
         return Vec2(-1.f, -1.f);
 
     m_bfs_visited[x][y] = true;
@@ -775,7 +775,7 @@ void EditAnimationUI::Initialize_Aimation_Pixel()
     {
         for (int i{}; i < m_iPixel_Height; ++i)
         {
-            if(m_bfs_visited[i])
+            if (m_bfs_visited[i])
                 delete m_bfs_visited[i];
         }
         delete m_bfs_visited;

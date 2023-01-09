@@ -4,15 +4,18 @@
 class Terrain;
 class CGameObjectEx;
 
-class CTileScript :
+class CTerrainScript :
     public CScript
 {
 private:
-    CGameObject*        m_pCameraObject;
+    UINT                m_id;
+    CGameObject* m_pCameraObject;
+    CGameObject* m_pMouseObject;
+    Vec3                m_vCameraPos;
+    Vec3			    m_vMousePos;
     Vec2                m_vRenderResolution;
-    tTile               m_tTileInfo;
-private:
-    bool Picking(Vec3 vPos);
+
+    Vec2                m_vTileSize;
 public:
     virtual void begin();
     virtual void tick();
@@ -20,9 +23,11 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    CLONE(CTileScript);
+    void    SetTileInfo(UINT _ibyOption);
+    void    Initialize(void* _pAddr);
+    CLONE(CTerrainScript);
 public:
-    CTileScript();
-    virtual ~CTileScript();
+    CTerrainScript();
+    virtual ~CTerrainScript();
 };
 

@@ -139,6 +139,18 @@ void TreeNode::render_update()
 
 }
 
+void TreeNode::DeleteChild(TreeNode* _ChildeNode)
+{
+	for (auto iter{ m_vecChildNode.begin() }; iter != m_vecChildNode.end(); ++iter)
+	{
+		if (!strcmp((*iter)->GetName().c_str(), _ChildeNode->GetName().c_str()))
+		{
+			delete *iter;
+			m_vecChildNode.erase(iter);
+			break;
+		}
+	}
+}
 const string& TreeNode::GetTreeName()
 {
 	return m_TreeUI->GetName();
@@ -285,35 +297,9 @@ TreeNode* TreeUI::GetNode(CGameObjectEx* _pObj)
 	return nullptr;
 }
 
-void TreeUI::DeleteNode(CGameObject* _pObj)
+void TreeUI::DeleteNode(TreeNode* _pNode)
 {
-	if ((CGameObjectEx*)m_RootNode->GetData() == _pObj)
-	{
-		vector<TreeNode*>::iterator iter = m_RootNode->m_vecChildNode.begin();
-
-		for (; iter != m_RootNode->m_vecChildNode.end();)
-		{
-			Safe_Delete(*iter);
-			iter = m_RootNode->m_vecChildNode.erase(iter);
-		}
-		Safe_Delete(m_RootNode);
-	}
-
-	vector<TreeNode*>::iterator iter = m_RootNode->m_vecChildNode.begin();
-
-	for (; iter != m_RootNode->m_vecChildNode.end();)
-	{
-		if ((CGameObjectEx*)(*iter)->GetData() == _pObj)
-		{
-			Safe_Delete(*iter);
-			iter = m_RootNode->m_vecChildNode.erase(iter);
-			break;
-		}
-		else
-		{
-			++iter;
-		}
-	}
+	m_RootNode->DeleteChild(_pNode);
 }
 
 void TreeUI::Clear()

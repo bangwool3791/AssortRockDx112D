@@ -3,14 +3,14 @@
 
 class CGameObject;
 class ComponentUI;
-class CTileMap;
+class CTerrain;
 
 class TileMapUI :
     public UI
 {
 private:
     CGameObject*  m_pEditTileObject;
-    CTileMap*     m_pEditTileMap;
+    CTerrain*     m_pEditTileMap;
 private:
     Vec2         m_vTileSize;
 private:

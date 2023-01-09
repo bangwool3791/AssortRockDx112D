@@ -172,11 +172,14 @@
     <Filter Include="Engine\06. Component\08. Map">
       <UniqueIdentifier>{f80f3f2b-ca66-4f5e-a6a4-4d32ec9878df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\06. Component\08. Map\01. CTileMap">
-      <UniqueIdentifier>{e656da3f-9970-43f2-af37-8cdcccef7913}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Manager\11. JPSMgr">
       <UniqueIdentifier>{4db505c0-9b0b-472e-aadd-5df7784c398a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\08. Map\01. Terrain">
+      <UniqueIdentifier>{e656da3f-9970-43f2-af37-8cdcccef7913}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\08. Map\02. TileMap">
+      <UniqueIdentifier>{e1663176-bf51-405c-a7ed-945abac83735}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -369,8 +372,8 @@
     <ClInclude Include="CSound.h">
       <Filter>Engine\07. Resource\05. Sound</Filter>
     </ClInclude>
-    <ClInclude Include="CTileMap.h">
-      <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
+    <ClInclude Include="CTerrain.h">
+      <Filter>Engine\06. Component\08. Map\01. Terrain</Filter>
     </ClInclude>
     <ClInclude Include="BitArray.h">
       <Filter>Engine\03. Manager\11. JPSMgr</Filter>
@@ -389,6 +392,9 @@
     </ClInclude>
     <ClInclude Include="JPSPath.h">
       <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileMap.h">
+      <Filter>Engine\06. Component\08. Map\02. TileMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -539,14 +545,17 @@
     <ClCompile Include="CSound.cpp">
       <Filter>Engine\07. Resource\05. Sound</Filter>
     </ClCompile>
-    <ClCompile Include="CTileMap.cpp">
-      <Filter>Engine\06. Component\08. Map\01. CTileMap</Filter>
+    <ClCompile Include="CTerrain.cpp">
+      <Filter>Engine\06. Component\08. Map\01. Terrain</Filter>
     </ClCompile>
     <ClCompile Include="JPSCollision.cpp">
       <Filter>Engine\03. Manager\11. JPSMgr</Filter>
     </ClCompile>
     <ClCompile Include="JPSPath.cpp">
       <Filter>Engine\03. Manager\11. JPSMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CTileMap.cpp">
+      <Filter>Engine\06. Component\08. Map\02. TileMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -601,7 +610,7 @@
     <FxCompile Include="shadowrenderer.fx">
       <Filter>HLSL\Render\Effect</Filter>
     </FxCompile>
-    <FxCompile Include="tilemap.fx">
+    <FxCompile Include="terrain.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
     <FxCompile Include="ref_animation.fx">
@@ -613,7 +622,7 @@
     <FxCompile Include="bordermap.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
-    <FxCompile Include="uitilemap.fx">
+    <FxCompile Include="tilemap.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
   </ItemGroup>

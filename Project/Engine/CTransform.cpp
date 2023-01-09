@@ -13,6 +13,8 @@ CTransform::CTransform()
 	, m_vRelativeScale{1.f,1.f,1.f}
 	, m_blgnParentScale(false)
 {
+	SetName(L"CTransform");
+
 	m_vRelativeDir[(UINT)DIR::RIGHT]	= Vec3{ 1.0f, 0.0f, 0.0f };
 	m_vRelativeDir[(UINT)DIR::UP]		= Vec3{ 0.0f, 1.0f, 0.0f };
 	m_vRelativeDir[(UINT)DIR::FRONT]	= Vec3{ 0.0f, 0.0f, 1.0f };

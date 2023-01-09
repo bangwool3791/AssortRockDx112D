@@ -4,7 +4,7 @@
 CRenderComponent::CRenderComponent(COMPONENT_TYPE _eComponentType)
 	:CComponent(_eComponentType)
 {
-
+	SetName(L"CRenderComponent");
 }
 
 CRenderComponent::CRenderComponent(const CRenderComponent& _origin)

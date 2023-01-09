@@ -14,6 +14,15 @@
     <Filter Include="ScriptMgr">
       <UniqueIdentifier>{cd659ce7-f559-4c6c-bebb-52d0eb176308}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\CameraScript">
+      <UniqueIdentifier>{afe33cda-d080-42e2-a59e-8ed4f052dc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\TileScript">
+      <UniqueIdentifier>{aaade477-57a7-4e18-8268-7dc03f72ecb5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\TerrainScript">
+      <UniqueIdentifier>{013d2409-0d9c-4196-a1a7-719c8d67df0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -46,9 +55,6 @@
     <ClInclude Include="CShadowScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="CTileScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="CScriptMgr.h">
       <Filter>ScriptMgr</Filter>
     </ClInclude>
@@ -60,6 +66,15 @@
     </ClInclude>
     <ClInclude Include="CEditorMouseScript.h">
       <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="CLevelCameraScript.h">
+      <Filter>Scripts\CameraScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CTileScript.h">
+      <Filter>Scripts\TileScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CTerrainScript.h">
+      <Filter>Scripts\TerrainScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +108,6 @@
     <ClCompile Include="CShadowScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="CTileScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="CScriptMgr.cpp">
       <Filter>ScriptMgr</Filter>
     </ClCompile>
@@ -107,6 +119,15 @@
     </ClCompile>
     <ClCompile Include="CEditorMouseScript.cpp">
       <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="CLevelCameraScript.cpp">
+      <Filter>Scripts\CameraScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTileScript.cpp">
+      <Filter>Scripts\TileScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTerrainScript.cpp">
+      <Filter>Scripts\TerrainScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

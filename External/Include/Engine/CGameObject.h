@@ -6,6 +6,7 @@ class CCamera;
 class CAnimator2D;
 class CTransform;
 class CLight2D;
+class CTerrain;
 class CTileMap;
 class CParticleSystem;
 class CRenderComponent;
@@ -57,6 +58,8 @@ public:
 	void DestroyComponent(COMPONENT_TYPE _eComType);
 	void AddChild(CGameObject* _pGameObejct);
 
+	bool DeleteComponent(const string& _strName);
+	bool DeleteScript(const string& _strName);
 	CComponent* GetComponent(COMPONENT_TYPE _eComType);
 
 	GET_COMPONENT(Transform, TRANSFORM);
@@ -67,6 +70,7 @@ public:
 	GET_COMPONENT(Light2D, LIGHT2D);
 	GET_COMPONENT(ParticleSystem, PARTICLESYSTEM);
 	GET_COMPONENT(TileMap, TILEMAP);
+	GET_COMPONENT(Terrain, TERRAIN);
 
 	template<typename T>
 	T* GetScript();

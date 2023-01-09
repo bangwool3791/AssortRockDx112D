@@ -51,6 +51,9 @@ int CMesh::Create(void* _pVtxSysmem, size_t _iVtxCount, void* _pIdxSysmem, size_
 
 	hr = DEVICE->CreateBuffer(&m_tIBDesc, &tSubData, &m_IB);
 	//m_IB->SetPrivateData(WKPDID_D3DDebugObjectName, sizeof("CComputeShader::m_IB") - 1, "CComputeShader::m_IB");
+
+    Read();
+
 	return hr;
 }
 
@@ -171,8 +174,43 @@ bool CMesh::SetTextureID(Ray _ray, float _id)
             Write();
             return true;
         }
+
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 2].vPos, m_vertices[i + 3].vPos, fDist))
+        {
+            int a = 0;
+            m_vertices[i].vColor.y = _id;
+            m_vertices[i + 1].vColor.y = _id;
+            m_vertices[i + 2].vColor.y = _id;
+            m_vertices[i + 3].vColor.y = _id;
+            Write();
+            return true;
+        }
     } 
 	return false;
+}
+
+Vec3 CMesh::GetPosition(Ray _ray)
+{
+    size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+
+    for (UINT i = 0; i < nVerts; i += 4)
+    {
+        float fDist;
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 1].vPos, m_vertices[i + 2].vPos, fDist))
+        {
+            Vec3 vTarget = _ray.direction * fDist;
+            vTarget += _ray.position;
+            return vTarget;
+        }
+
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 2].vPos, m_vertices[i + 3].vPos, fDist))
+        {
+            Vec3 vTarget = _ray.direction * fDist;
+            vTarget += _ray.position;
+            return vTarget;
+        }
+    }
+    return Vec3(-1.f, -1.f, -1.f);
 }
 
 void CMesh::InitializeTerrainJps(vector<Vec3>& _vec)
@@ -298,7 +336,7 @@ int CMesh::Load(const wstring& _strFilePath)
 
     Write();
 
-    MessageBox(nullptr, L"CMesh Save ", L"Success", MB_OK);
+    MessageBox(nullptr, L"CMesh Load ", L"Success", MB_OK);
 
     return S_OK;
 }

@@ -13,8 +13,8 @@
 #define GridInterval        g_float_2    
 #define GridColor           g_vec4_1
 
-#define TILECX              64.f
-#define TILECZ              64.f
+#define TERRAINCX              64.f
+#define TERRAINCZ              64.f
 // ===============
 
 struct VTX_IN
@@ -59,8 +59,8 @@ float4 PS_Border(VTX_OUT _in) : SV_Target
     //uint iRestY = (iWorldY + (uint) fThick / 2) % (uint) GridInterval;
 
     //float		fGradient[2] = {
-    //    (TILECZ / 2.f) / (TILECX / 2.f) * -1.f,
-    //    (TILECZ / 2.f) / (TILECX / 2.f),
+    //    (TERRAINCZ / 2.f) / (TERRAINCX / 2.f) * -1.f,
+    //    (TERRAINCZ / 2.f) / (TERRAINCX / 2.f),
     //};
 
     //float x1 = -_in.vPos.z / fGradient[0] + _in.vPos.x;

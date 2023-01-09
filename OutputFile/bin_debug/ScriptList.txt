@@ -1,5 +1,6 @@
 CDragScript
 CEditorMouseScript
+CLevelCameraScript
 CLightScript
 CMissileScript
 CMissileScript2
@@ -9,5 +10,5 @@ CPlayerScript
 CRefAniScript
 CSelectUnitScript
 CShadowScript
+CTerrainScript
 CTileScript
-ThreadTileMap

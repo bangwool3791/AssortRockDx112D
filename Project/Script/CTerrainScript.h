@@ -1,19 +1,14 @@
 #pragma once
 #include <Engine/CScript.h>
 
-class CTileMap;
+class Terrain;
 class CGameObjectEx;
 
-class CTileScript :
+class CTerrainScript :
     public CScript
 {
 private:
-    DWORD  m_dwThreadId;
-    HANDLE m_hThread;
-private:
-
-    tTile               m_tTileInfo;
-    CTileMap* m_pTileMap;
+    UINT                m_id;
     CGameObject* m_pCameraObject;
     CGameObject* m_pMouseObject;
     Vec3                m_vCameraPos;
@@ -21,8 +16,6 @@ private:
     Vec2                m_vRenderResolution;
 
     Vec2                m_vTileSize;
-private:
-    bool Picking(const Vec3& vPos, UINT& iIndex);
 public:
     virtual void begin();
     virtual void tick();
@@ -30,11 +23,11 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    void    SetTileInfo(UINT _ibyOption) { m_tTileInfo.ibyOption = _ibyOption; }
+    void    SetTileInfo(UINT _ibyOption);
     void    Initialize(void* _pAddr);
-    CLONE(CTileScript);
+    CLONE(CTerrainScript);
 public:
-    CTileScript();
-    virtual ~CTileScript();
+    CTerrainScript();
+    virtual ~CTerrainScript();
 };
 

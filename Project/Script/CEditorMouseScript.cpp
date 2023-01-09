@@ -5,7 +5,7 @@
 #include "CEditorMouseScript.h"
 
 CEditorMouseScript::CEditorMouseScript()
-	: CScript(EDITOR_MOUSESCRIPT)
+	: CScript(EDITORMOUSESCRIPT)
 {
 	SetName(L"CEditorMouseScript");
 }
@@ -23,27 +23,26 @@ void CEditorMouseScript::tick()
 {
 	if (KEY_PRESSED(KEY::LBTN))
 	{
-		float px = 0.0f;
-		float py = 0.0f;
-
-		Vec2 vMouse = CKeyMgr::GetInst()->GetMousePos();
+		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-		Vec3  vCameraPos = m_pCameraObejct->Transform()->GetRelativePos();
-		float fCameraScale = m_pCameraObejct->Camera()->GetOrthographicScale();
 
-		Vec3 vTarget = Vec3{ vMouse.x - (vResolution.x / 2) , -vMouse.y + (vResolution.y / 2), 1.f };
-		vTarget += vCameraPos;
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
 
-		Matrix matRot = XMMatrixRotationX(XM_PI * 0.25f);
-		vTarget = XMVector3TransformNormal(vTarget, matRot);
-		vTarget *= fCameraScale;
+		XMVECTOR det; //Determinant, needed for matrix inverse function call
+		Vector3 origin = Vector3(p.x, p.y, 0);
+		Vector3 faraway = Vector3(p.x, p.y, 1);
 
-		Matrix InvView;
-		InvView = XMMatrixInverse(nullptr, g_transform.matView);
-		vTarget = XMVector3TransformCoord(vTarget, InvView);
-
-		//Ptr<CMesh> mesh = CResMgr::GetInst()->FindRes<CMesh>(L"TerrainMesh");
-		//mesh->SetTexture(vTarget);
+		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
+		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		Ray ray;
+		ray.position = rayorigin;
+		ray.direction = raydirection;	
+		GetOwner()->Transform()->SetRelativePos(rayend);
+		cout << "¸¶¿ì½º [x] " << rayorigin.x << "[y] " << rayorigin.y << "[z] " << rayorigin.z << endl;
 	}
 }
 
