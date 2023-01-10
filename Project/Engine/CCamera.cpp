@@ -249,11 +249,11 @@ void CCamera::SetLayerMask(int _iLayerIdx)
 {
 	if (m_iLayerMask & (1 << _iLayerIdx))
 	{
-		m_iLayerMask &= ~(1 << m_iLayerMask);
+		m_iLayerMask &= ~(1 << _iLayerIdx);
 	}
 	else
 	{
-		m_iLayerMask |= (1 << m_iLayerMask);
+		m_iLayerMask |= (1 << _iLayerIdx);
 	}
 }
 

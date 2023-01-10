@@ -23,6 +23,7 @@
 #include <Script\CShadowScript.h>
 #include <Script\CLevelCameraScript.h>
 #include <Script\CTileScript.h>
+#include <Script\InterfaceScript.h>
 
 void CreateDefaultPrefab()
 {
@@ -145,18 +146,34 @@ void CreateTestLelvel()
 	pCamObj->Camera()->SetFar(100000.f);
 	pCamObj->Camera()->SetLayerMask(31);
 	pCamObj->Transform()->SetRelativePos(0.f, 0.f, 0.f);
-	pCamObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+	pCamObj->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
+	//pCamObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 	pLevel->AddGameObject(pCamObj, 0);
+
+	// UI Interface
+	CGameObject* pObj = new CGameObject;
+	pObj->SetName(L"Interface");
+
+	pObj->AddComponent(new CTransform);
+	pObj->AddComponent(new InterfaceScript);
+	pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+
+	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, -450.f));
+	pObj->Transform()->SetRelativeScale(Vec3(1600.f, 0.f, 403.f));
+	pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+
+	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+
+	pLevel->AddGameObject(pObj, 31);
+
 	// Directional Light 추가
 	CGameObject* pDirLight = new CGameObject;
 	pDirLight->SetName(L"DirectionalLight");
-
 	pDirLight->AddComponent(new CTransform);
 	pDirLight->AddComponent(new CLight2D);
-
 	pDirLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
-
 	pLevel->AddGameObject(pDirLight, 0);
 
 
@@ -177,54 +194,55 @@ void CreateTestLelvel()
 	//pLevel->AddGameObject(pPointLight, 0);
 
 	// SpotLight 추가
-	pPointLight = new CGameObject;
-	pPointLight->SetName(L"SpotLight");
+	//pPointLight = new CGameObject;
+	//pPointLight->SetName(L"SpotLight");
 
-	pPointLight->AddComponent(new CTransform);
-	pPointLight->AddComponent(new CLight2D);
-	pPointLight->AddComponent(new CCollider2D);
-	pPointLight->AddComponent(new CPlayerScript);
+	//pPointLight->AddComponent(new CTransform);
+	//pPointLight->AddComponent(new CLight2D);
+	//pPointLight->AddComponent(new CCollider2D);
+	//pPointLight->AddComponent(new CPlayerScript);
 
-	pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
-	pPointLight->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 100.f));
+	//pPointLight->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	//pPointLight->Transform()->SetRelativeScale(Vec3(100.f, 100.f, 100.f));
 
-	pPointLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
-	pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
-	pPointLight->Light2D()->SetRadius(500.f);
-	pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
-	pPointLight->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-	pLevel->AddGameObject(pPointLight, 1);
-	// GameObject 초기화
-	CGameObject* pObject = nullptr;
-	Ptr<CPrefab> pPrefab = nullptr;
-	//Edit Test를 위해 주석 처리
+	//pPointLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
+	//pPointLight->Light2D()->SetLightType(LIGHT_TYPE::SPOT);
+	//pPointLight->Light2D()->SetRadius(500.f);
+	//pPointLight->Light2D()->SetAngle(XM_PI * 0.25f);
+	//pPointLight->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	//pLevel->AddGameObject(pPointLight, 1);
+	//// GameObject 초기화
+	//CGameObject* pObject = nullptr;
+	//Ptr<CPrefab> pPrefab = nullptr;
+	////Edit Test를 위해 주석 처리
 
-	pObject = new CGameObject;
-	pObject->SetName(L"Player");
+	//
+	//pObject = new CGameObject;
+	//pObject->SetName(L"Player");
 
-	pObject->AddComponent(new CTransform);
-	pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-	pObject->AddComponent(new CCollider2D);
-	pObject->AddComponent(new CPlayerScript);
-	pObject->AddComponent(new CAnimator2D);
+	//pObject->AddComponent(new CTransform);
+	//pObject->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
+	//pObject->AddComponent(new CCollider2D);
+	//pObject->AddComponent(new CPlayerScript);
+	//pObject->AddComponent(new CAnimator2D);
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
-	pObject->Transform()->SetRelativeScale(Vec3(100.f, 0.f, 100.f));
-	pObject->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
-	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+	//pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 100.f));
+	//pObject->Transform()->SetRelativeScale(Vec3(100.f, 0.f, 100.f));
+	//pObject->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+	//pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 
-	pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
-	pObject->Animator2D()->Play(L"LeftWalk", true);
+	//pObject->Animator2D()->CreateAnimation(L"LeftWalk", CResMgr::GetInst()->FindRes<CTexture>(L"texture\\link.png"), Vec2(0.f, 650.f), Vec2(120.f, 130.f), 120.f, 10, 16);
+	//pObject->Animator2D()->Play(L"LeftWalk", true);
 
-	pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
-	Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
-	pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
+	//pObject->Collider2D()->SetCollider2DType(COLLIDER2D_TYPE::COLLIDER2D_RECT);
+	//Ptr<CTexture> pCharacterTex = CResMgr::GetInst()->Load<CTexture>(L"Character", L"texture\\Character.png");
+	//pObject->MeshRender()->GetSharedMaterial()->SetTexParam(TEX_PARAM::TEX_0, pCharacterTex);
 
-	pLevel->AddGameObject(pObject, 1);
+	//pLevel->AddGameObject(pObject, 1);
 
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
-
+	//CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	
 	//for (float i{ -500.f }; i < 500.f; i += 100.f)
 	//{
 	//	pObject = new CGameObject;

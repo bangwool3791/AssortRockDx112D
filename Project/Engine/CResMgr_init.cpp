@@ -397,6 +397,7 @@ void CResMgr::CreateDefaultTexture()
 	*/
 	Load<CTexture>(L"texture\\HumansA_LQ.png", L"texture\\HumansA_LQ.png");
 	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
+	Load<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds", L"texture\\Interface\\Atlas1_LQ.dds");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);

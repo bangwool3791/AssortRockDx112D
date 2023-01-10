@@ -65,15 +65,15 @@ float4 PS_ObjectRender(VS_OUT _in) : SV_Target
     }
     else if(g_int_0)
     {
-        float2 vUV = (UVLeftTop + _in.vUV);
+        float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
 
-        if (vUV.x < UVLeftTop.x
-            || UVLeftTop.x + UVSlice.x < vUV.x
-            || vUV.y < UVLeftTop.y
-            || UVLeftTop.y + UVSlice.y < vUV.y)
-        {
-            discard;
-        }
+        //if (vUV.x < UVLeftTop.x
+        //    || UVLeftTop.x + UVSlice.x < vUV.x
+        //    || vUV.y < UVLeftTop.y
+        //    || UVLeftTop.y + UVSlice.y < vUV.y)
+        //{
+        //    discard;
+        //}
 
         vOutColor = g_tex_0.Sample(g_sam_0, vUV);
     }
