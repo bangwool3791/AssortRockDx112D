@@ -25,6 +25,8 @@ void CEditorMouseScript::tick()
 	{
 		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+		//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+		//vResolution = vResolution * fScale;
 
 		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
 		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
@@ -35,13 +37,12 @@ void CEditorMouseScript::tick()
 
 		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
 		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-		Vector3 raydirection = rayend - rayorigin;
+		m_vRayEnd = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = m_vRayEnd - rayorigin;
 		raydirection.Normalize();
 		Ray ray;
 		ray.position = rayorigin;
 		ray.direction = raydirection;	
-		GetOwner()->Transform()->SetRelativePos(rayend);
 		cout << "¸¶¿ì½º [x] " << rayorigin.x << "[y] " << rayorigin.y << "[z] " << rayorigin.z << endl;
 	}
 }

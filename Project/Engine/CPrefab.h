@@ -18,6 +18,9 @@ public :
 public :
 	CGameObject* Instantiate();
 
+	void Save(FILE* pFile);
+	int Load(FILE* pFile);
+
 	virtual void Save(const wstring _strRelativePath) override;
 	virtual int Load(const wstring& _strFilePath) override;
 
@@ -25,6 +28,7 @@ public :
 
 public:
 	CPrefab();
+	CPrefab(bool _bEngine);
 	CPrefab(CGameObject* _pProto);
 	CPrefab(CGameObject* _pProto, bool _bEngine);
 	virtual ~CPrefab();

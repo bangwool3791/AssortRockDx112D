@@ -69,6 +69,7 @@ public:
     void Play(const wstring& _strKey);
     void Play(const wstring& _strKey, bool _bRepeat);
 
+    void Update();
     void UpdateData();
     void Clear();
 

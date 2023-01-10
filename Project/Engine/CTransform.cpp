@@ -103,6 +103,14 @@ void CTransform::finaltick()
 	}
 }
 
+void CTransform::Update()
+{
+	g_transform.matWorld = m_matWorld;
+	g_transform.matWV = g_transform.matWorld * g_transform.matView;
+	g_transform.matWVP = g_transform.matWV * g_transform.matProj;
+}
+
+
 void CTransform::UpdateData()
 {
 	CConstBuffer* pCB = CDevice::GetInst()->GetConstBuffer(CB_TYPE::TRANSFORM);

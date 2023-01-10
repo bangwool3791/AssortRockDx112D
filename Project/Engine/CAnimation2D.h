@@ -79,6 +79,7 @@ public:
 		m_eState = ANIMATION_STATE::PLAY;
 	}
 
+	void Update();
 	void UpdateData();
 	void Clear();
 	void SetOwner(CAnimator2D* _pOwner) {

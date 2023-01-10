@@ -12,3 +12,4 @@ CSelectUnitScript
 CShadowScript
 CTerrainScript
 CTileScript
+InterfaceScript

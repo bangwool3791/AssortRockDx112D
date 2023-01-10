@@ -70,7 +70,7 @@ void OutlinerUI::render_update()
 	ImGui::NewLine();
 
 	int selected_fish = -1;
-	const char* names[] = { "Create Empty","Create Empty Parent","Destroy", "Create Prefab", "Edit Name", "Delete Component", "Delete Script" ,"Close"};
+	const char* names[] = { "Create Empty","Destroy", "Create Prefab", "Edit Name", "Delete Component", "Delete Script" ,"Close"};
 	static bool toggles[] = { true, false, false, false, false };
 
 	if (ImGui::IsMouseClicked(1))
@@ -112,8 +112,6 @@ void OutlinerUI::render_update()
 	}
 		break;
 	case 1:
-		break;
-	case 2:
 	{
 		if (nullptr != m_Node)
 		{
@@ -124,7 +122,7 @@ void OutlinerUI::render_update()
 		}
 	}
 		break;
-	case 3:
+	case 2:
 	{
 		if (nullptr != m_Node)
 		{
@@ -137,7 +135,7 @@ void OutlinerUI::render_update()
 	}
 		break;
 
-	case 4:
+	case 3:
 	{
 		if (nullptr != m_Node)
 		{
@@ -147,7 +145,7 @@ void OutlinerUI::render_update()
 		}
 	}
 	break;
-	case 5:
+	case 4:
 	{
 		if (nullptr != m_Node)
 		{
@@ -162,7 +160,7 @@ void OutlinerUI::render_update()
 		}
 	}
 	break;
-	case 6:
+	case 5:
 	{
 		if (nullptr != m_Node)
 		{

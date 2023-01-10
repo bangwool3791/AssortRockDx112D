@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <cstdint>
 #include <process.h>
+#include <filesystem>
 #include <stdint.h>
 #include "precision.h"
 
@@ -42,6 +43,8 @@ using std::cend;
 using std::cin;
 using std::cout;
 using std::endl;
+
+namespace fs = std::filesystem;
 
 using std::thread;
 #include <typeinfo>

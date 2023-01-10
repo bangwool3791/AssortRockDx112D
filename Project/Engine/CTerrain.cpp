@@ -132,6 +132,10 @@ void CTerrain::begin()
 	{
 		FILE* pFile = nullptr;
 		fopen_s(&pFile, "result_jps(b).txt", "wt");
+
+		if (!pFile)
+			return;
+
 		if (pFile != NULL)
 		{
 			fwrite(results.c_str(), sizeof(char), results.size(), pFile);

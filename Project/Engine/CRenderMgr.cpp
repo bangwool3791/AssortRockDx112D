@@ -69,7 +69,7 @@ void CRenderMgr::render()
 	}
 	else
 	{
-		redner_editor();
+		render_editor();
 	}
 
 }
@@ -82,7 +82,7 @@ void CRenderMgr::render_game()
 	}
 }
 
-void CRenderMgr::redner_editor()
+void CRenderMgr::render_editor()
 {
 	assert(m_EditorCam);
 	m_EditorCam->render();

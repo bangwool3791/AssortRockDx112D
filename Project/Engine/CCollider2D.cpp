@@ -24,7 +24,7 @@ void CCollider2D::finaltick()
 		return;
 
 	Vec3 vObjectPos = Transform()->GetWorldPos();
-	m_vFinalPos = m_vOffsetPos + Vec2(vObjectPos.x, vObjectPos.y);
+	m_vFinalPos = m_vOffsetPos + Vec2(vObjectPos.x, vObjectPos.z);
 
 	// 행렬 연산
 	// 크 회 이
@@ -33,7 +33,7 @@ void CCollider2D::finaltick()
 	if (!m_bIgnorObjectScale)
 	{
 		Vec3 vWorldScale = Transform()->GetWorldScale();
-		m_vFinalScale *= Vec2(vWorldScale.x, vWorldScale.y);
+		m_vFinalScale *= Vec2(vWorldScale.x, vWorldScale.z);
 	}
 
 	Matrix matScale = XMMatrixScaling(m_vFinalScale.x, m_vFinalScale.y, 1.f);
@@ -43,7 +43,7 @@ void CCollider2D::finaltick()
 	matRot *= XMMatrixRotationY(m_vRot.y);
 	matRot *= XMMatrixRotationZ(m_vRot.z);
 
-	Matrix matTrans = XMMatrixTranslation(m_vFinalPos.x, m_vFinalPos.y, 0.f);
+	Matrix matTrans = XMMatrixTranslation(m_vFinalPos.x, 0.f, m_vFinalPos.y);
 
 	// 충돌체 월드 행렬
 	m_matWorld = matScale * matRot * matTrans;

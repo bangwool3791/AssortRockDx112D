@@ -11,6 +11,11 @@
 // DS_TYPE : LESS
 // DOMAIN : 
 
+#define Atlas         g_int_0
+
+#define UVLeftTop     g_vec2_0
+#define UVSlice       g_vec2_1
+
 struct VS_IN
 {
     float3 vPos     : POSITION;
@@ -58,6 +63,20 @@ float4 PS_ObjectRender(VS_OUT _in) : SV_Target
 
         vOutColor = g_Atals.Sample(g_sam_1, vUV);
     }
+    else if(g_int_0)
+    {
+        float2 vUV = (UVLeftTop + _in.vUV);
+
+        if (vUV.x < UVLeftTop.x
+            || UVLeftTop.x + UVSlice.x < vUV.x
+            || vUV.y < UVLeftTop.y
+            || UVLeftTop.y + UVSlice.y < vUV.y)
+        {
+            discard;
+        }
+
+        vOutColor = g_tex_0.Sample(g_sam_0, vUV);
+    }
     else
     {
         vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
@@ -68,14 +87,14 @@ float4 PS_ObjectRender(VS_OUT _in) : SV_Target
 
 
     // ±¤¿ø Ã³¸®
-    tLightColor color = (tLightColor)0.f;
+ /*   tLightColor color = (tLightColor)0.f;
 
     for (int i = 0; i < g_iLight2DCount; ++i)
     {
         CalcLight2D(color, _in.vWorldPos, i);
-    }
+    }*/
 
-    vOutColor *= color.vDiff;
+   // vOutColor *= color.vDiff;
 
     return vOutColor;
 

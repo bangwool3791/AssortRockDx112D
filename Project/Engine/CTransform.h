@@ -53,6 +53,7 @@ public:
 public:
 	void tick();
 	void finaltick();
+	void Update();
 	void UpdateData();
 
 public:

@@ -22,6 +22,7 @@ public:
 	template<typename T>
 	inline void AddRes(const wstring& _strKey, T* _pRes);
 	bool DeleteRes(RES_TYPE _Type, const wstring& _strKey);
+	void SaveRes(RES_TYPE _Type, const wstring& _strKey);
 	template<typename T>
 	inline Ptr<T> Load(const wstring& _strRelativePath);
 	template<typename T>
@@ -43,6 +44,11 @@ public:
 	Ptr<CTexture> CreateTexture(const wstring& _strKey, ComPtr<ID3D11Texture2D> _Tex2D);
 
 	const map<wstring, Ptr<CRes>>& GetResource(RES_TYPE _eResType)
+	{
+		return m_arrRes[(UINT)_eResType];
+	}
+
+	map<wstring, Ptr<CRes>>& GetResourceRef(RES_TYPE _eResType)
 	{
 		return m_arrRes[(UINT)_eResType];
 	}
@@ -99,10 +105,14 @@ inline void CResMgr::AddRes(const wstring& _strKey, T* _pRes)
 
 	_pRes->SetKey(_strKey);
 
-	if (nullptr == pRes)
-		m_bChanged = true;
-	else
+	m_bChanged = true;
+
+	if (nullptr != pRes)
+	{
+		auto iter = m_arrRes[(UINT)eResType].find(_strKey);
+		iter->second = nullptr;
 		m_arrRes[(UINT)eResType].erase(_strKey);
+	}
 
 	m_arrRes[(UINT)eResType].insert(make_pair(_strKey, _pRes));
 }

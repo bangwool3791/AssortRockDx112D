@@ -13,6 +13,13 @@ CPrefab::CPrefab()
 
 }
 
+CPrefab::CPrefab(bool _bEngine)
+	:CRes(RES_TYPE::PREFAB, _bEngine)
+	, m_pProtoObj{ nullptr }
+{
+
+}
+
 CPrefab::CPrefab(CGameObject* _pProto)
 	:CRes(RES_TYPE::PREFAB)
 	, m_pProtoObj{_pProto}
@@ -60,6 +67,9 @@ void CPrefab::Save(const wstring _strRelativePath)
 
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
 
+	if (!pFile)
+		return;
+
 	SaveKeyPath(pFile);
 
 	Save_GameObject_Func(m_pProtoObj, pFile);
@@ -73,6 +83,9 @@ int CPrefab::Load(const wstring& _strFilePath)
 
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
 
+	if (!pFile)
+		return -1;
+
 	LoadKeyPath(pFile);
 
 	m_pProtoObj = Load_GameObject_Func(pFile);
@@ -81,3 +94,27 @@ int CPrefab::Load(const wstring& _strFilePath)
 
 	return S_OK;
 }
+
+void CPrefab::Save(FILE* pFile)
+{
+	if (!pFile)
+		return;
+
+	SaveKeyPath(pFile);
+
+	Save_GameObject_Func(m_pProtoObj, pFile);
+
+	fclose(pFile);
+}
+
+int CPrefab::Load(FILE* pFile)
+{
+	if (!pFile)
+		return -1;
+	LoadKeyPath(pFile);
+
+	m_pProtoObj = Load_GameObject_Func(pFile);
+
+	return S_OK;
+}
+

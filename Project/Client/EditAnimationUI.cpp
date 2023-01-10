@@ -12,6 +12,7 @@
 #include <Engine\CAnimator2D.h>
 #include <Engine\CTransform.h>
 
+#include <Script\CEditorMouseScript.h>
 #include "CEditor.h"
 
 #include "CImGuiMgr.h"
@@ -549,13 +550,14 @@ void EditAnimationUI::Click_Pixel_KeyBoard(KEY _Key)
 
 bool EditAnimationUI::Click_Pixel_LBtn()
 {
-    Vec3 vMousePos = m_MouseObject->Transform()->GetRelativePos();
+    Vec3 vMousePos = m_MouseObject->GetScript<CEditorMouseScript>()->GetRayEnd();
 
     //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
     Vec3 vPos = vMousePos;
 
     Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
     vResolution *= m_pCameraObject->Camera()->GetOrthographicScale();
+    vMousePos *= m_pCameraObject->Camera()->GetOrthographicScale();
     //vPos.x = vMousePos.x + vResolution.x * 0.5f;
     //vPos.y = -1.f * vMousePos.y + vResolution.y * 0.5f;
 
@@ -564,25 +566,25 @@ bool EditAnimationUI::Click_Pixel_LBtn()
     vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
     vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().z;
 
-    if (vResolution.x * -0.5f + vSacle.x > vPos.x || vResolution.y * -0.5f + vSacle.z > vPos.z
-        || vResolution.x * 0.5f + vSacle.x <= vPos.x
-        || vResolution.y * 0.5f + vSacle.z <= vPos.z)
+    if (vResolution.x * -0.5f + vSacle.x > vMousePos.x || vResolution.y * -0.5f + vSacle.z > vMousePos.z
+        || vResolution.x * 0.5f + vSacle.x <= vMousePos.x
+        || vResolution.y * 0.5f + vSacle.z <= vMousePos.z)
         return false;
 
-    vMousePos.x += m_iPixel_Width * 0.5f;
-    vMousePos.z = -1.f * vMousePos.z + m_iPixel_Height * 0.5f;
+    vPos.x += m_iPixel_Width * 0.5f;
+    vPos.z = -1.f * vMousePos.z + m_iPixel_Height * 0.5f;
 
-    if (0 > vMousePos.x || 0 > vMousePos.z || m_iPixel_Width <= vMousePos.x || m_iPixel_Height <= vMousePos.z)
+    if (0 > vPos.x || 0 > vPos.z || m_iPixel_Width <= vPos.x || m_iPixel_Height <= vPos.z)
         return false;
 
-    tRGBA tInfo = GetRGBA((int)vMousePos.x, (int)vMousePos.z);
+    tRGBA tInfo = GetRGBA((int)vPos.x, (int)vPos.z);
 
-    //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
-    //cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
+    cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.z << endl;
+    cout << "R : " << tInfo.R << " G : " << tInfo.G << " B : " << tInfo.B << " A : " << tInfo.A << endl;
 
 
-    UINT x = (UINT)vMousePos.x;
-    UINT y = (UINT)vMousePos.z;
+    UINT x = (UINT)vPos.x;
+    UINT y = (UINT)vPos.z;
     Set_Texture_Pixel(x, y);
     return true;
 
@@ -604,6 +606,7 @@ void EditAnimationUI::Set_Texture_Pixel(UINT x, UINT y)
 
         x = (UINT)vPixel.x;
         y = (UINT)vPixel.y;
+        return;
     }
 
     float fMinX = (float)m_iPixel_Width;

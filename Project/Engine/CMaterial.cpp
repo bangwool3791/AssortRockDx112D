@@ -159,6 +159,10 @@ void CMaterial::Save(const wstring _strRelativePath)
 	strFilePath += _strRelativePath;
 
 	FILE* pFile = nullptr;
+
+	if (!pFile)
+		return;
+
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
 
 	CRes::SaveKeyPath(pFile);
@@ -185,6 +189,9 @@ int CMaterial::Load(const wstring& _strFilePath)
 	FILE* pFile = nullptr;
 
 	_wfopen_s(&pFile, _strFilePath.c_str(), L"rb");
+
+	if (!pFile)
+		return -1;
 
 	CRes::LoadKeyPath(pFile);
 
@@ -214,6 +221,9 @@ void CMaterial::SwapFile(const wstring _strRelativePath)
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	if (!pFile)
+		return;
 
 	CRes::SaveKeyPath(pFile);
 

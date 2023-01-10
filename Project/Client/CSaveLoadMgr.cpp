@@ -35,7 +35,8 @@ void CSaveLoadMgr::SaveLevel(CLevel* _Level, wstring _strRelativePath)
 	
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
-
+	if (!pFile)
+		return;
 	//레벨 이름 저장
 	_Level->SaveToFile(pFile);
 
@@ -104,6 +105,9 @@ CLevel* CSaveLoadMgr::LoadLevel(const wstring& _strRelativePath)
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	if (!pFile)
+		return nullptr;
 
 	CLevel* pLevel = new CLevel;
 	pLevel->LoadFromFile(pFile);
@@ -236,4 +240,80 @@ CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
 		pObject->AddChild(pChild);
 	}
 	return pObject;
+}
+
+void CSaveLoadMgr::SavePrefab(wstring _strRelativePath)
+{
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
+
+	if (!pFile)
+		return;
+
+	decltype(CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB)) map = CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB);
+
+	size_t iPrefabCount = 0;
+
+	for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+	{
+		if (!iter->second->IsEngineRes())
+			++iPrefabCount;
+	}
+
+	fwrite(&iPrefabCount, sizeof(size_t), 1, pFile);
+
+	for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+	{
+		if(!iter->second->IsEngineRes())
+			iter->second->Save(pFile);
+	}
+	fclose(pFile);
+}
+
+void CSaveLoadMgr::LoadPrefab(wstring _strRelativePath)
+{
+
+	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
+	strFilePath += _strRelativePath;
+
+	FILE* pFile = nullptr;
+	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	if (!pFile)
+		return;
+
+	size_t iPrefabCount = 0;
+	fread(&iPrefabCount, sizeof(size_t), 1, pFile);
+
+	decltype(CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB)) map = CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB);
+
+	for (size_t i{}; i < iPrefabCount; ++i)
+	{
+		CPrefab* pPrefab = new CPrefab(false);
+
+		pPrefab->Load(pFile);
+
+		auto iter = map.find(pPrefab->GetKey());
+
+		if (iter != map.end())
+		{
+			iter->second = nullptr;
+			map.erase(iter);
+		}
+
+		map.emplace(make_pair(pPrefab->GetKey(), pPrefab));
+	}
+	fclose(pFile);
+	//FILE* pFile = nullptr;
+	//_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+	//decltype(CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB)) map = CResMgr::GetInst()->GetResource(RES_TYPE::PREFAB);
+
+	//for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+	//{
+	//	iter->second->Save(_strRelativePath);
+	//}
 }

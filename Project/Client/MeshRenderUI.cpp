@@ -118,5 +118,11 @@ void MeshRenderUI::SetMaterial(DWORD_PTR _strMaterialKey)
 	assert(nullptr != pMtrl);
 
 	GetTarget()->MeshRender()->SetSharedMaterial(pMtrl);
+
+	if (!lstrcmp(L"ObjectMtrl", pMtrl->GetKey().c_str()))
+		GetTarget()->MeshRender()->SetInstancingType(INSTANCING_TYPE::USED);
+	else
+		GetTarget()->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	
 }
 

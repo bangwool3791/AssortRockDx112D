@@ -17,6 +17,8 @@ public :
 	void SaveLevel(CLevel* _Level, wstring _strRelativePath);
 	CLevel* LoadLevel(const wstring& _strRelativePath);
 
+	void SavePrefab(wstring _strRelativePath);
+	void LoadPrefab(wstring _strRelativePath);
 	static void SaveGameObject(CGameObject* _Object, FILE* _File);
 	static CGameObject* LoadGameObject(FILE* _File);
 private:

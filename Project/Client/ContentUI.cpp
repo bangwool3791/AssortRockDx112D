@@ -9,6 +9,7 @@
 #include "CGameObjectEx.h"
 
 #include "CEditor.h"
+#include "CSaveLoadMgr.h"
 
 #include <Engine\CRes.h>
 #include <Engine\CSound.h>
@@ -46,6 +47,20 @@ void ContentUI::update()
 	{
 		ResetContent();
 	}
+
+	if(ImGui::Button("Save", Vec2(100.f, 50.f)))
+	{
+		CSaveLoadMgr::GetInst()->SavePrefab(L"prefab\\prefab.dat");
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load", Vec2(100.f, 50.f)))
+	{
+		CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
+		ResetContent();
+	}
+
 
 	if (m_bDragEvent && nullptr != m_pTargetPrefab)
 	{

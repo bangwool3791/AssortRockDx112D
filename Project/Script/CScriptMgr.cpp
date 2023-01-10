@@ -15,6 +15,7 @@
 #include "CShadowScript.h"
 #include "CTerrainScript.h"
 #include "CTileScript.h"
+#include "InterfaceScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
@@ -32,6 +33,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
+	_vec.push_back(L"InterfaceScript");
 }
 
 
@@ -51,6 +53,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
+	_vec.push_back("InterfaceScript");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
@@ -83,6 +86,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTerrainScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
+	if (L"InterfaceScript" == _strScriptName)
+		return new InterfaceScript;
 	return nullptr;
 }
 
@@ -116,6 +121,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTerrainScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
+	if ("InterfaceScript" == _strScriptName)
+		return new InterfaceScript;
 	return nullptr;
 }
 
@@ -164,6 +171,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
+		return new InterfaceScript;
 		break;
 	}
 	return nullptr;
@@ -229,6 +239,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTileScript";
 		break;
 
+	case SCRIPT_TYPE::INTERFACESCRIPT:
+		return L"InterfaceScript";
+		break;
+
 	}
 	return nullptr;
 }
@@ -291,6 +305,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
+		break;
+
+	case SCRIPT_TYPE::INTERFACESCRIPT:
+		return "InterfaceScript";
 		break;
 
 	}

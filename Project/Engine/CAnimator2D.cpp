@@ -126,6 +126,15 @@ void CAnimator2D::Play(const wstring& _strKey, bool _bRepeat)
     pAnimation->Reset();
 }
 
+void CAnimator2D::Update()
+{
+    if (!IsValid(m_pCurAnim))
+        return;
+
+    if (m_bActive)
+        m_pCurAnim->Update();
+}
+
 void CAnimator2D::UpdateData()
 {
     if (!IsValid(m_pCurAnim))

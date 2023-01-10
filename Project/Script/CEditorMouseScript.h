@@ -19,6 +19,10 @@ private:
     float                   m_fCameraScale;
     Vec3                    m_vCameraPos;
     Vec2                    m_vRenderResolution;
+    Vec3                    m_vRayStart;
+    Vec3                    m_vRayEnd;
+public:
+    Vec3                    GetRayEnd() { return m_vRayEnd; }
 public :
     void Initialize(void* pAddr);
 public:

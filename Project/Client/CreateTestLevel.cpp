@@ -134,6 +134,19 @@ void CreateTestLelvel()
 	pCamObj->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
 	pLevel->AddGameObject(pCamObj, 0);
 
+	//UI Camera Object 추가
+	pCamObj = new CGameObject;
+	pCamObj->SetName(L"UICamera");
+
+	pCamObj->AddComponent(new CTransform);
+	pCamObj->AddComponent(new CCamera);
+
+	pCamObj->Camera()->SetProjType(ORTHOGRAHPICS);
+	pCamObj->Camera()->SetFar(100000.f);
+	pCamObj->Camera()->SetLayerMask(31);
+	pCamObj->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pCamObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+	pLevel->AddGameObject(pCamObj, 0);
 	// Directional Light 추가
 	CGameObject* pDirLight = new CGameObject;
 	pDirLight->SetName(L"DirectionalLight");

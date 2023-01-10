@@ -140,13 +140,18 @@ void CCamera::render_opaque()
 	{
 		auto iterbegin = elem->second.begin();
 		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+		//인스턴싱 객체 중에서 Mtrl 정보가 바뀔 경우 예외 처리 안됨
+		Ptr<CMaterial> pMtrl = (*iterbegin)->GetRenderComponent()->GetCurMaterial();
 
+		//머터리얼 구해서 
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
 			(*elem2)->GetRenderComponent()->render_Instancing();
 		}
 		if (!g_vecInfoObject.empty())
 		{
+			//머터리얼 업데이트
+			pMtrl->UpdateData();
 			m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
 			m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 			if (pMesh.Get())
@@ -172,11 +177,13 @@ void CCamera::render_mask()
 		auto iterbegin = elem->second.begin();
 
 		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+		Ptr<CMaterial> pMtrl = (*iterbegin)->GetRenderComponent()->GetCurMaterial();
 
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
 			(*elem2)->GetRenderComponent()->render_Instancing();
 		}
+		pMtrl->UpdateData();
 		m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
 		m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
@@ -201,6 +208,7 @@ void CCamera::render_transparent()
 		auto iterbegin = elem->second.begin();
 
 		Ptr<CMesh> pMesh = (*iterbegin)->GetRenderComponent()->GetMesh();
+		Ptr<CMaterial> pMtrl = (*iterbegin)->GetRenderComponent()->GetCurMaterial();
 
 		for (auto elem2{ elem->second.begin() }; elem2 != elem->second.end(); ++elem2)
 		{
@@ -208,6 +216,7 @@ void CCamera::render_transparent()
 		}
 		m_pObjectRenderBuffer->SetData(g_vecInfoObject.data(), (UINT)g_vecInfoObject.size());
 		m_pObjectRenderBuffer->UpdateData(57, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
+		pMtrl->UpdateData();
 
 		if (pMesh.Get())
 			pMesh->render_particle((UINT)g_vecInfoObject.size());

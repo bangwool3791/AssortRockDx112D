@@ -128,10 +128,10 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 //#ifdef true
 	static const Vec3 arrLocalPos[4]
 	{
-		Vec3{-0.5f,  0.5f, 0.f},
-		Vec3{ 0.5f,  0.5f, 0.f},
-		Vec3{ 0.5f, -0.5f, 0.f},
-		Vec3{ -0.5f, -0.5f, 0.f},
+		Vec3{-0.5f,  0.f,   0.5f},
+		Vec3{ 0.5f,  0.f,   0.5f},
+		Vec3{ 0.5f,  0.f, - 0.5f},
+		Vec3{-0.5f,  0.f, - 0.5f},
 	};
 
 	Vec3 vAxis[4]{};
@@ -144,13 +144,13 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 	* 충돌 판정이라고 코드가 판단 하므로 예외 처리 조건 추가
 	*/
 	Vec3 vecRight = matLeft.Right();
-	Vec3 vecUp = matLeft.Up();
+	Vec3 vecUp = matLeft.Front();
 	
 	if (!vecRight.Length() && !vecUp.Length())
 		return false;
 
 	vecRight = matRight.Right();
-	vecUp = matRight.Up();
+	vecUp = matRight.Front();
 
 	if (!vecRight.Length() && !vecUp.Length())
 		return false;
@@ -162,10 +162,10 @@ bool CCollisionMgr::IsCollision(CCollider2D* _pLeft, CCollider2D* _pRight)
 	vAxis[3] = XMVector3TransformCoord(arrLocalPos[3], matRight) - XMVector3TransformCoord(arrLocalPos[0], matRight);
 
 	for (int i{ 0 }; i < 4; ++i)
-		vAxis[i].z = 0.f;
+		vAxis[i].y = 0.f;
 
 	Vec2 vC = _pLeft->GetFinalPos() - _pRight->GetFinalPos() ;
-	Vec3 vCenterDir = Vec3{ vC.x,vC.y, 0.f };
+	Vec3 vCenterDir = Vec3{ vC.x, 0.f, vC.y };
 	
 	float fSum{ 0.f };
 

@@ -77,6 +77,17 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 	}
 }
 
+void CAnimation2D::Update()
+{
+	m_AtlasTex->UpdateData(59, PIPELINE_STAGE::PS);
+
+	m_info.iAnim2DUse = 1;
+	m_info.vLeftTop = m_vecFrm[m_iCurIdx].vLeftTop;
+	m_info.vSlice = m_vecFrm[m_iCurIdx].vSlice;
+	m_info.vOffset = m_vecFrm[m_iCurIdx].vOffset;
+	m_info.vFullSize = m_vecFrm[m_iCurIdx].vFullSize;
+}
+
 void CAnimation2D::UpdateData()
 {
 	m_AtlasTex->UpdateData(59, PIPELINE_STAGE::PS);

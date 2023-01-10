@@ -520,6 +520,11 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 
+	pShader->AddScalarParam(INT_0, "Use Atlas");
+	pShader->AddScalarParam(VEC2_0, "UV LeftTop");
+	pShader->AddScalarParam(VEC2_1, "UV Slice");
+	pShader->AddTexureParam(TEX_0, "Output Texture 1");
+
 	AddRes<CGraphicsShader>(L"ObjectRenderShader", pShader);
 
 	// Instancing Shadow Shader

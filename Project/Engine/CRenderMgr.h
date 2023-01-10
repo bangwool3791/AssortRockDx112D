@@ -47,6 +47,6 @@ public:
 	void render();
 
 	void render_game();
-	void redner_editor();
+	void render_editor();
 
 };

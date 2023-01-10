@@ -192,6 +192,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CTerrainScript.h" />
     <ClInclude Include="CTileScript.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="InterfaceScript.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +211,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CShadowScript.cpp" />
     <ClCompile Include="CTerrainScript.cpp" />
     <ClCompile Include="CTileScript.cpp" />
+    <ClCompile Include="InterfaceScript.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

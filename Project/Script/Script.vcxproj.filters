@@ -23,6 +23,9 @@
     <Filter Include="Scripts\TerrainScript">
       <UniqueIdentifier>{013d2409-0d9c-4196-a1a7-719c8d67df0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\InterfaceScript">
+      <UniqueIdentifier>{f6716284-5fdd-4a95-8068-aade82801d9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -76,6 +79,9 @@
     <ClInclude Include="CTerrainScript.h">
       <Filter>Scripts\TerrainScript</Filter>
     </ClInclude>
+    <ClInclude Include="InterfaceScript.h">
+      <Filter>Scripts\InterfaceScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -128,6 +134,9 @@
     </ClCompile>
     <ClCompile Include="CTerrainScript.cpp">
       <Filter>Scripts\TerrainScript</Filter>
+    </ClCompile>
+    <ClCompile Include="InterfaceScript.cpp">
+      <Filter>Scripts\InterfaceScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

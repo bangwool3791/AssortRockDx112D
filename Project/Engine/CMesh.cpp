@@ -289,6 +289,9 @@ void CMesh::Save(const wstring _strRelativePath)
     FILE* pFile = nullptr;
     _wfopen_s(&pFile, strFilePath.c_str(), L"wb");
 
+    if (!pFile)
+        return;
+
     CRes::SaveKeyPath(pFile);
 
     if (nullptr != m_vertices)
@@ -317,6 +320,9 @@ int CMesh::Load(const wstring& _strFilePath)
     FILE* pFile = nullptr;
 
     _wfopen_s(&pFile, strFilePath.c_str(), L"rb");
+
+    if (!pFile)
+        return -1;
 
     CRes::LoadKeyPath(pFile);
 

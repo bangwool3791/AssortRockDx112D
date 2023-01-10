@@ -88,20 +88,22 @@ void CMeshRender::render_Instancing()
 	* 싱글 톤 또는 static vector 처리
 	*/
 	//삭제 예정
-	Transform()->UpdateData();
+	//월드 정보만 갱신 후
+	Transform()->Update();
 
 	//삭제 예정
-	GetCurMaterial()->UpdateData();
+	//GetCurMaterial()->UpdateData();
 
 	if (Animator2D())
 	{
 		//삭제 예정
-		Animator2D()->UpdateData();
+		//업데이트만 시키고
+		Animator2D()->Update();
 	}
 
 	tTransform transform = g_transform;
 	tMtrlConst tMtrl = GetCurMaterial()->GetMaterial();
-	tAnim2DInfo tAnimInfo;
+	tAnim2DInfo tAnimInfo{};
 
 	if (Animator2D())
 	{

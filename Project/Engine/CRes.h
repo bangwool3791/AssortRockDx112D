@@ -35,6 +35,10 @@ public:
 public:
     int GetRefCount() const { return m_iRefCount; }
     //파일로 저장
+    virtual void Save(FILE* pFile) {}
+    // 파일로 부터 로딩
+    virtual int Load(FILE* pFile) { return 0; }
+    //파일로 저장
     virtual void Save(const wstring _strRelativePath) = 0;
     // 파일로 부터 로딩
     virtual int Load(const wstring& _strFilePath) = 0;

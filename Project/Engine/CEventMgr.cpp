@@ -93,7 +93,7 @@ void CEventMgr::tick()
 			switch ((RES_TYPE)iter->wParam)
 			{
 			case RES_TYPE::PREFAB:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName() + L"Prefab", new CPrefab((CGameObject*)iter->lParam, false));
+				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName() + L"Prefab", new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
 				break;
 			case RES_TYPE::COMPUTE_SHADER:
 				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);
