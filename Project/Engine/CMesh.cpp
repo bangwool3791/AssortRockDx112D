@@ -346,3 +346,10 @@ int CMesh::Load(const wstring& _strFilePath)
 
     return S_OK;
 }
+
+Vtx* CMesh::GetVertices(size_t& _nVerts)
+{
+    size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+    _nVerts = nVerts;
+    return m_vertices.get();
+}

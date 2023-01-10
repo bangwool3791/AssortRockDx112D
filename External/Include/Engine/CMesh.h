@@ -30,6 +30,7 @@ public :
     void Write();
     Vec3 GetPosition(Ray _ray);
     bool SetTextureID(Ray _ray, float _id);
+    Vtx* GetVertices(size_t& nVerts);
     bool IntersectTriangle(const Vec3& orig, const Vec3& dir, Vec3& v0, Vec3& v1, Vec3& v2, FLOAT* t, FLOAT* u, FLOAT* v);
     void InitializeTerrainJps(vector<Vec3>& _vec);
     virtual void Save(const wstring _strRelativePath);

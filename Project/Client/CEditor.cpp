@@ -325,7 +325,7 @@ void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)
 	UINT width = pTex->GetWidth();
 	UINT height = pTex->GetHeight();
 
-	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 10.f));
+	pObject->Transform()->SetRelativePos(Vec3(0.f, 0.f, 0.f));
 	pObject->Transform()->SetRelativeScale(Vec3((float)width, 1.f, height));
 	pObject->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 	pObject->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"RefAniMtrl"));
@@ -468,7 +468,7 @@ void CEditor::SetEditMode(EDIT_MODE _editmode)
 	{
 		pGmaeObject = m_EditorObj[(UINT)m_editmode].find(L"AnimationTool")->second;
 		vPos = pGmaeObject->Transform()->GetRelativePos();
-		m_pCameraObject->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.5f, 0.f, 0.f));
+		//m_pCameraObject->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.5f, 0.f, 0.f));
 	}
 	break;
 	case EDIT_MODE::MAPTOOL:

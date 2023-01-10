@@ -113,7 +113,9 @@ void EditAnimationUI::render_update()
                 }
 
                 m_pAtlasTexture = m_pAnimator->GetTexture();
-                Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
+                float width = (float)m_pAtlasTexture->GetWidth();
+                float height = (float)m_pAtlasTexture->GetHeight();
+                Refresh_Animation(width, (float)m_pAtlasTexture->GetHeight());
                 m_pImage = m_pAtlasTexture->GetSRV().Get();
                 //더미 오브젝트 넣고, 툴 환시 더미 오브젝트 빼기 ?
                 CEditor::GetInst()->UpdateAnimationObject(m_pGameObject);
@@ -550,7 +552,11 @@ void EditAnimationUI::Click_Pixel_KeyBoard(KEY _Key)
 
 bool EditAnimationUI::Click_Pixel_LBtn()
 {
-    Vec3 vMousePos = m_MouseObject->GetScript<CEditorMouseScript>()->GetRayEnd();
+    CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+
+    Ray _ray = m_MouseObject->GetScript<CEditorMouseScript>()->GetRay();
+
+    Vec3 vMousePos = pGameObject->Transform()->Picking(_ray);
 
     //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
     Vec3 vPos = vMousePos;
@@ -564,12 +570,12 @@ bool EditAnimationUI::Click_Pixel_LBtn()
     Vec3 vSacle{};
 
     vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
-    vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().z;
+    vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().y;
 
-    if (vResolution.x * -0.5f + vSacle.x > vMousePos.x || vResolution.y * -0.5f + vSacle.z > vMousePos.z
-        || vResolution.x * 0.5f + vSacle.x <= vMousePos.x
-        || vResolution.y * 0.5f + vSacle.z <= vMousePos.z)
-        return false;
+    //if (vResolution.x * -0.5f + vSacle.x > vMousePos.x || vResolution.y * -0.5f + vSacle.z > vMousePos.z
+    //    || vResolution.x * 0.5f + vSacle.x <= vMousePos.x
+    //    || vResolution.y * 0.5f + vSacle.z <= vMousePos.z)
+    //    return false;
 
     vPos.x += m_iPixel_Width * 0.5f;
     vPos.z = -1.f * vMousePos.z + m_iPixel_Height * 0.5f;

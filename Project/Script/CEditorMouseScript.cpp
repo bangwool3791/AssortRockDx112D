@@ -32,17 +32,16 @@ void CEditorMouseScript::tick()
 		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
 
 		XMVECTOR det; //Determinant, needed for matrix inverse function call
-		Vector3 origin = Vector3(p.x, p.y, 0);
+		Vector3 origin = Vector3(p.x, p.y, -1);
 		Vector3 faraway = Vector3(p.x, p.y, 1);
 
 		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
 		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-		m_vRayEnd = XMVector3Transform(faraway, invViewProj);
-		Vector3 raydirection = m_vRayEnd - rayorigin;
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
 		raydirection.Normalize();
-		Ray ray;
-		ray.position = rayorigin;
-		ray.direction = raydirection;	
+		m_Ray.position = rayorigin;
+		m_Ray.direction = raydirection;
 		cout << "¸¶¿ì½º [x] " << rayorigin.x << "[y] " << rayorigin.y << "[z] " << rayorigin.z << endl;
 	}
 }

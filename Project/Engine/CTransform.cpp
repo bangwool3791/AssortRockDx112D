@@ -6,6 +6,8 @@
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
+#include "CMeshRender.h"
+
 #include "extern.cpp"
 
 CTransform::CTransform()
@@ -164,4 +166,40 @@ void CTransform::LoadFromFile(FILE* _File)
 	fread(&m_vRelativeScale, sizeof(Vec3), 1, _File);
 	fread(&m_vRelativeRotation, sizeof(Vec3), 1, _File);
 	fread(&m_blgnParentScale, sizeof(bool), 1, _File);
+}
+
+Vec3 CTransform::Picking(Ray _ray)
+{
+	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
+	Vec3 vResult{};
+	size_t verts;
+	Vtx* vertices = pMesh->GetVertices(verts);
+
+	static vector<Vec3> vec{};
+
+	vec.clear();
+
+	finaltick();
+
+	for (size_t i{}; i < verts; ++i)
+	{
+		Vec3 vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
+		vec.push_back(vPos);
+	}
+
+	for (UINT i = 0; i < verts; i += 4)
+	{
+		float fDist;
+		if (_ray.Intersects(vec[i], vec[i + 1], vec[i + 2], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			return vResult;
+		}
+
+		if (_ray.Intersects(vec[i], vec[i + 2], vec[i + 3], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			return vResult;
+		}
+	}
 }

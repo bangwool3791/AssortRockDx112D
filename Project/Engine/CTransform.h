@@ -50,6 +50,8 @@ public:
 	void SetIgnoreParentScale(bool _blgn) { m_blgnParentScale = _blgn; }
 	bool IsIgnoreParentScale() { return m_blgnParentScale; }
 	const Matrix& GetWorldMat() { return m_matWorld; }
+
+	Vec3 Picking(Ray _ray);
 public:
 	void tick();
 	void finaltick();
