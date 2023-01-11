@@ -556,26 +556,40 @@ bool EditAnimationUI::Click_Pixel_LBtn()
 
     Ray _ray = m_MouseObject->GetScript<CEditorMouseScript>()->GetRay();
 
+    Vec3 vCameraPos = m_pCameraObject->Transform()->GetRelativePos();
+
     Vec3 vMousePos = pGameObject->Transform()->Picking(_ray);
 
+    if (vMousePos.x == -1.f && vMousePos.y == -1.f && vMousePos.z == -1.f)
+        return false;
+
+    BoundingFrustum fr(m_pCameraObject->Camera()->GetProjMat());
+
+    BoundingBox box(vMousePos - vCameraPos, Vec3(1600.f, 1600.f, 1600.f));
+
+
+    if (!fr.Contains(box))
+    {
+        return false;
+    }
+    else
+    {
+        int b = 0;
+    }
     //cout << "[X] : " << vMousePos.x << " [Y] : " << vMousePos.y << endl;
     Vec3 vPos = vMousePos;
 
-    Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-    vResolution *= m_pCameraObject->Camera()->GetOrthographicScale();
-    vMousePos *= m_pCameraObject->Camera()->GetOrthographicScale();
+     Vec3 vSacle{};
+
+     Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+     vResolution *= m_pCameraObject->Camera()->GetOrthographicScale();
+
+     vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
+     vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().z;
+    
+    //vMousePos *= m_pCameraObject->Camera()->GetOrthographicScale();
     //vPos.x = vMousePos.x + vResolution.x * 0.5f;
     //vPos.y = -1.f * vMousePos.y + vResolution.y * 0.5f;
-
-    Vec3 vSacle{};
-
-    vSacle.x = m_pCameraObject->Camera()->Transform()->GetRelativePos().x;
-    vSacle.z = m_pCameraObject->Camera()->Transform()->GetRelativePos().y;
-
-    //if (vResolution.x * -0.5f + vSacle.x > vMousePos.x || vResolution.y * -0.5f + vSacle.z > vMousePos.z
-    //    || vResolution.x * 0.5f + vSacle.x <= vMousePos.x
-    //    || vResolution.y * 0.5f + vSacle.z <= vMousePos.z)
-    //    return false;
 
     vPos.x += m_iPixel_Width * 0.5f;
     vPos.z = -1.f * vMousePos.z + m_iPixel_Height * 0.5f;

@@ -146,6 +146,7 @@ void TreeNode::DeleteChild(TreeNode* _ChildeNode)
 		if (!strcmp((*iter)->GetName().c_str(), _ChildeNode->GetName().c_str()))
 		{
 			delete *iter;
+			*iter = nullptr;
 			m_vecChildNode.erase(iter);
 			break;
 		}

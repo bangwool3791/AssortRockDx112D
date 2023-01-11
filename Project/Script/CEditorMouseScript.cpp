@@ -25,8 +25,6 @@ void CEditorMouseScript::tick()
 	{
 		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-		//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
-		//vResolution = vResolution * fScale;
 
 		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
 		p.y = 1.0f - (2.0f * p.y) / vResolution.y;

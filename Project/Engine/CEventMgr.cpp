@@ -93,7 +93,12 @@ void CEventMgr::tick()
 			switch ((RES_TYPE)iter->wParam)
 			{
 			case RES_TYPE::PREFAB:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName() + L"Prefab", new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
+			{
+				wchar_t sz_data[255] = {};
+				lstrcpy(sz_data, ((CRes*)iter->lParam)->GetName().c_str());
+				wstring wstrRelativePath = lstrcat(sz_data, L"Prefab");
+				CResMgr::GetInst()->AddRes(wstrRelativePath, new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
+			}
 				break;
 			case RES_TYPE::COMPUTE_SHADER:
 				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);

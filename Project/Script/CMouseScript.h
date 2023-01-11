@@ -20,12 +20,19 @@ private:
     Vec2 EndPos;
     vector<CGameObject*>    m_vecUnit;
     CGameObject*            m_pCamera;
+    CGameObject*            m_pUiCamera;
+    CGameObject*            m_pTerrainObject;
     float                   m_fCameraScale;
     Vec3                    m_vCameraPos;
 
-    Vec2                    m_vRenderResolution;
-    Vec2                    m_vMousePos;
+    Vec3                    m_vMousePos;
     Vec3                    m_vTarget;
+    Ray                     m_uiRay;
+    Ray                     m_Ray;
+public :
+    const Ray& GetUiRay() { return m_uiRay; }
+    const Ray& GetRay() { return m_Ray; }
+    Vec3  GetMousePos() { return m_vMousePos; }
 public:
     CMouseScript();
     virtual ~CMouseScript();

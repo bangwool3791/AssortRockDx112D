@@ -26,8 +26,14 @@
     <Filter Include="Scripts\InterfaceScript">
       <UniqueIdentifier>{f6716284-5fdd-4a95-8068-aade82801d9b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\UiiconScript">
+    <Filter Include="Scripts\LevelScript">
+      <UniqueIdentifier>{0725695f-5bc2-408a-8099-49588030a459}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\TapButtonScript">
       <UniqueIdentifier>{2abe6ad2-9ecd-4729-9305-cee8a8251b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\MouseScript">
+      <UniqueIdentifier>{c582bc89-28e5-408f-8959-641c3df294d9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -44,9 +50,6 @@
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CMonsterScript.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="CMouseScript.h">
       <Filter>Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CPlayerScript.h">
@@ -86,7 +89,10 @@
       <Filter>Scripts\InterfaceScript</Filter>
     </ClInclude>
     <ClInclude Include="CButtonScript.h">
-      <Filter>Scripts\UiiconScript</Filter>
+      <Filter>Scripts\TapButtonScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CMouseScript.h">
+      <Filter>Scripts\MouseScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -103,9 +109,6 @@
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CMonsterScript.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="CMouseScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
     <ClCompile Include="CPlayerScript.cpp">
@@ -145,7 +148,10 @@
       <Filter>Scripts\InterfaceScript</Filter>
     </ClCompile>
     <ClCompile Include="CButtonScript.cpp">
-      <Filter>Scripts\UiiconScript</Filter>
+      <Filter>Scripts\TapButtonScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CMouseScript.cpp">
+      <Filter>Scripts\MouseScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

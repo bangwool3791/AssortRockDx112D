@@ -159,6 +159,12 @@ void CreateTestLelvel()
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 	pLevel->AddGameObject(pDirLight, 0);
 
+	pCamObj = new CGameObject;
+	pCamObj->SetName(L"MouseObject");
+	pCamObj->AddComponent(new CTransform);
+	pCamObj->AddComponent(new CCollider2D);
+	pCamObj->AddComponent(new CMouseScript);
+	pLevel->AddGameObject(pCamObj, 0);
 	CreateInterface(pLevel);
 
 	// PointLight Ãß°¡

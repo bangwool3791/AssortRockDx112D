@@ -2,11 +2,13 @@
 #include "UI.h"
 
 class TreeUI;
+class CGameObject;
 
 class ContentUI :
     public UI
 {
 private:
+    CGameObject*     m_pLevelMouseObject;
     CPrefab*         m_pTargetPrefab;
     TreeUI*          m_Tree;
     bool             m_bDragEvent;

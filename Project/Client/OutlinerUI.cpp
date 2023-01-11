@@ -27,7 +27,6 @@ OutlinerUI::OutlinerUI()
 	m_Tree->AddDynamic_DragDrop(this, (FUNC_2)&OutlinerUI::AddChildObject);
 	
 	m_strName.resize(100);
-	m_strName = "DummyObject";
 	m_strComponentName.resize(100);
 	m_strScriptName.resize(100);
 	// 레벨 오브젝트 갱신
@@ -118,7 +117,10 @@ void OutlinerUI::render_update()
 			tEvent evn = {};
 			evn.eType = EVENT_TYPE::DELETE_OBJECT;
 			evn.wParam = m_Node->GetData();
+			CEventMgr::GetInst()->AddEvent(evn);
+
 			m_Tree->DeleteNode(m_Node);
+
 		}
 	}
 		break;

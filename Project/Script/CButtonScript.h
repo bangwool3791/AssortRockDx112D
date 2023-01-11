@@ -22,17 +22,24 @@ private:
     array<array<tTapInfo, 6>, 6> m_arrTab;
     UINT                         m_iColum;
     UINT                         m_iIndex;
-    CGameObject* m_pCameraObject;
-    CGameObject* m_pMouseObject;
+    CGameObject*                 m_pUiCameraObject;
+    CGameObject*                 m_pLevelMouseObject;
+
+    Vec3                         m_vMousePos;
+
+    bool                         m_bClicked;
 public:
     virtual void begin();
     virtual void tick();
+    virtual void finaltick();
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 
 public :
     void SetTapIndex(UINT _index) { m_iIndex = _index; }
+    void Release() { m_bClicked = false; }
+    bool IsClicked() { return m_bClicked; }
 public:
     CLONE(CButtonScript);
 public:

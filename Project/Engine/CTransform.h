@@ -52,6 +52,7 @@ public:
 	const Matrix& GetWorldMat() { return m_matWorld; }
 
 	Vec3 Picking(Ray _ray);
+	bool Picking(Ray _ray, Vec3& _vPos);
 public:
 	void tick();
 	void finaltick();

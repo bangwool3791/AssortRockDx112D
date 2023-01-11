@@ -8,9 +8,12 @@
 #include <Engine\CTransform.h>
 #include <Engine\CTerrain.h>
 
+#include <Script\CMouseScript.h>
 
 CButtonScript::CButtonScript()
 	:CScript{ SCRIPT_TYPE::BUTTONSCRIPT }
+	, m_vMousePos{}
+	, m_bClicked{false}
 {
 	SetName(L"CButtonScript");
 	m_iColum = 0;
@@ -23,7 +26,8 @@ CButtonScript::~CButtonScript()
 
 void CButtonScript::begin()
 {
-	
+	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MouseObject");
+
 	m_Atlas = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds");
 	m_IconAtlas = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Icons.png");
 	m_AtlasAlpha = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
@@ -129,6 +133,17 @@ void CButtonScript::tick()
 	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &m_arrTab[1][m_iIndex].vSlice);
 	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_2, &m_arrTab[1][m_iIndex].vUV2);
 	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_3, &m_arrTab[1][m_iIndex].vSlice2);
+}
+
+void CButtonScript::finaltick()
+{
+	if (KEY_PRESSED(KEY::LBTN))
+	{
+		if (GetOwner()->Transform()->Picking(m_pLevelMouseObject->GetScript<CMouseScript>()->GetUiRay(), m_vMousePos))
+		{
+			m_bClicked = true;
+		}
+	}
 }
 
 void CButtonScript::BeginOverlap(CCollider2D* _pOther)

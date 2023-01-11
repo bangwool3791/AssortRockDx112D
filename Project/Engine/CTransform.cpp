@@ -171,7 +171,7 @@ void CTransform::LoadFromFile(FILE* _File)
 Vec3 CTransform::Picking(Ray _ray)
 {
 	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
-	Vec3 vResult{};
+	Vec3 vResult{-1.f, -1.f, -1.f};
 	size_t verts;
 	Vtx* vertices = pMesh->GetVertices(verts);
 
@@ -202,4 +202,46 @@ Vec3 CTransform::Picking(Ray _ray)
 			return vResult;
 		}
 	}
+
+	return vResult;
+}
+
+bool CTransform::Picking(Ray _ray, Vec3& _vPos)
+{
+	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
+	Vec3 vResult{ -1.f, -1.f, -1.f };
+	size_t verts;
+	Vtx* vertices = pMesh->GetVertices(verts);
+
+	static vector<Vec3> vec{};
+
+	vec.clear();
+
+	finaltick();
+
+	for (size_t i{}; i < verts; ++i)
+	{
+		Vec3 vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
+		vec.push_back(vPos);
+	}
+
+	for (UINT i = 0; i < verts; i += 4)
+	{
+		float fDist;
+		if (_ray.Intersects(vec[i], vec[i + 1], vec[i + 2], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			_vPos = vResult;
+			return true;
+		}
+
+		if (_ray.Intersects(vec[i], vec[i + 2], vec[i + 3], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			_vPos = vResult;
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -46,13 +46,12 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     
     if (g_TileBuffer[_in.vColor.x].iInfo == 0)
     {
-        color1 = float4(0.0f, 0.5f, 0.0f, 0.5f);
-        color2 = float4(0.0f, 0.5f, 0.0f, 0.5f);
+        discard;
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == 1)
     {
-        color1 = float4(0.0f, 0.0f, 1.f, 0.5f);
-        color2 = float4(0.0f, 0.0f, 1.f, 0.5f);
+        color1 = float4(0.0f, 0.5f, 0.0f, 0.5f);
+        color2 = float4(0.0f, 0.5f, 0.0f, 0.5f);
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == 2)
     {

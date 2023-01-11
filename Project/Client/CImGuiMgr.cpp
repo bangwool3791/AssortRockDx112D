@@ -137,39 +137,37 @@ void CImGuiMgr::progress()
             case EDIT_MODE::ANIMATOR:
                 if ("Outliner" == iter->first)
                     iter->second->render();
-                if ("Inspector" == iter->first)
+                else if ("Inspector" == iter->first)
                     iter->second->render();
-                if ("ComInspector" == iter->first)
+                else if ("ComInspector" == iter->first)
                     iter->second->render();
-                if ("##MenuUI" == iter->first)
+                else if ("##MenuUI" == iter->first)
                     iter->second->render();
-                if ("ModelComUI" == iter->first)
+                else if ("ModelComUI" == iter->first)
                     iter->second->render();
-                if ("ListUI" == iter->first)
+                else if ("ListUI" == iter->first)
                     iter->second->render();
                 break;
             case EDIT_MODE::MAPTOOL:
                 if ("TileMapUI" == iter->first)
                     iter->second->render();
-                if ("##MenuUI" == iter->first)
+                else if ("##MenuUI" == iter->first)
                     iter->second->render();
-                if ("ProgressUI" == iter->first)
+                else if ("ProgressUI" == iter->first)
                     iter->second->render();
                 break;
             case EDIT_MODE::OBJECT:
                 if ("Outliner" == iter->first)
                     iter->second->render();
-                if ("Inspector" == iter->first)
+                else if ("Inspector" == iter->first)
                     iter->second->render();
-                if ("ContentUI" == iter->first)
+                else if ("ContentUI" == iter->first)
                     iter->second->render();
-                if ("##MenuUI" == iter->first)
+                else if ("##MenuUI" == iter->first)
                     iter->second->render();
-                if ("ModelComUI" == iter->first)
+                else if ("ModelComUI" == iter->first)
                     iter->second->render();
-                if ("ListUI" == iter->first)
-                    iter->second->render();
-                if ("ContentUI" == iter->first)
+                else if ("ListUI" == iter->first)
                     iter->second->render();
                 break;
             case EDIT_MODE::END:

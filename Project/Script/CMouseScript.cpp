@@ -29,29 +29,102 @@ void CMouseScript::begin()
 {
 	GetOwner()->Transform()->SetRelativeScale(Vec3{ 3.f, 5.f, 0.f });
 	m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
+	m_pUiCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"UICamera");
+	m_pTerrainObject = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"LevelTerrain");
 	GetOwner()->Collider2D()->SetPause();
 }
 
 void CMouseScript::tick()
 {
-	if (m_pCamera)
-	{
-		m_fCameraScale = m_pCamera->Camera()->GetOrthographicScale();
-		m_vCameraPos   = m_pCamera->Transform()->GetRelativePos();
-	}
+	//if (m_pCamera)
+	//{
+	//	m_fCameraScale = m_pCamera->Camera()->GetOrthographicScale();
+	//	m_vCameraPos   = m_pCamera->Transform()->GetRelativePos();
+	//}
 
-	m_vMousePos = CKeyMgr::GetInst()->GetMousePos();
-	m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
+	//m_vMousePos = CKeyMgr::GetInst()->GetMousePos();
+	//m_vRenderResolution = CDevice::GetInst()->GetRenderResolution();
 
-	m_vTarget = Vec3{ m_vMousePos.x - (m_vRenderResolution.x / 2) , -m_vMousePos.y + (m_vRenderResolution.y / 2), 1.f };
-	m_vTarget *= m_fCameraScale;
-	m_vTarget += m_vCameraPos;
-	GetOwner()->Transform()->SetRelativePos(Vec3{ m_vTarget.x, m_vTarget.y, 1.f });
+	//m_vTarget = Vec3{ m_vMousePos.x - (m_vRenderResolution.x / 2) , -m_vMousePos.y + (m_vRenderResolution.y / 2), 1.f };
+	//m_vTarget *= m_fCameraScale;
+	//m_vTarget += m_vCameraPos;
+
+	//GetOwner()->Transform()->SetRelativePos(Vec3{ m_vTarget.x, m_vTarget.y, 1.f });
 }
 
 void CMouseScript::finaltick()
 {
-	if (KEY_PRESSED(KEY::RBTN))
+	if (KEY_PRESSED(KEY::LBTN))
+	{
+		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+		//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+		//vResolution = vResolution * fScale;
+
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+		XMVECTOR det; //Determinant, needed for matrix inverse function call
+		Vector3 origin = Vector3(p.x, p.y, -1);
+		Vector3 faraway = Vector3(p.x, p.y, 1);
+
+		const Matrix& matView = m_pUiCamera->Camera()->GetViewMat();
+		const Matrix& matProj = m_pUiCamera->Camera()->GetProjMat();
+		XMMATRIX invViewProj = XMMatrixInverse(&det, matView * matProj);
+		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		m_uiRay.position = rayorigin;
+		m_uiRay.direction = raydirection;
+
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+		origin = Vector3(p.x, p.y, -1);
+		faraway = Vector3(p.x, p.y, 1);
+
+		const Matrix& matMainView = m_pCamera->Camera()->GetViewMat();
+		const Matrix& matMainProj = m_pCamera->Camera()->GetProjMat();
+		invViewProj = XMMatrixInverse(&det, matMainView * matMainProj);
+		rayorigin = XMVector3Transform(origin, invViewProj);
+		rayend = XMVector3Transform(faraway, invViewProj);
+		raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		m_Ray.position = rayorigin;
+		m_Ray.direction = raydirection;
+
+		m_vMousePos = m_pTerrainObject->Terrain()->GetMesh()->GetPosition(m_Ray);
+	}
+
+	if (KEY_RELEASE(KEY::LBTN))
+	{
+		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+		//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+		//vResolution = vResolution * fScale;
+
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+		XMVECTOR det; //Determinant, needed for matrix inverse function call
+		Vector3 origin = Vector3(p.x, p.y, -1);
+		Vector3 faraway = Vector3(p.x, p.y, 1);
+
+		const Matrix& matView = m_pCamera->Camera()->GetViewMat();
+		const Matrix& matProj = m_pCamera->Camera()->GetProjMat();
+		XMMATRIX invViewProj = XMMatrixInverse(&det, matView * matProj);
+		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		m_Ray.position = rayorigin;
+		m_Ray.direction = raydirection;
+
+		m_vMousePos = m_pTerrainObject->Terrain()->GetMesh()->GetPosition(m_Ray);
+
+	}
+	if (KEY_PRESSED(KEY::LBTN))
 	{
 		//툴에서 마우스 관련 객체 생성으로 트리 갱신되어 주석처리
 		//const vector<CGameObject*>& objects = CUIMgr::GetInst()->Get_Objects(UI_TYPE::GAMEOBJECT);

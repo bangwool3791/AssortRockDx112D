@@ -11,6 +11,7 @@ struct VS_IN
 {
     float3 vPos     : POSITION;
     float2 vUV      : TEXCOORD;
+    uint iInstance  : SV_InstanceID;
 };
 
 struct VS_OUT
@@ -18,6 +19,7 @@ struct VS_OUT
     float4 vPos      : SV_Position;
     float2 vUV       : TEXCOORD;
     float4 vWorldPos : POSITION;
+    uint iInstance   : SV_InstanceID;
 };
 
 
@@ -33,17 +35,37 @@ VS_OUT VS_Opaque(VS_IN _in)
 
 float4 PS_Opaque(VS_OUT _in) : SV_Target
 {
-    float4 vOutColor = float4(1.f, 1.f, 1.f, 1.f);
+    float4 vOutColor = float4(1.f, 0.f, 1.f, 1.f);
 
-    float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
+    if (b[_in.iInstance].iAnim2DUse)
+    {
+        float2 vDiff = (b[_in.iInstance].vFullSize - b[_in.iInstance].vSlice) / 2.f;
+        float2 vUV = (b[_in.iInstance].vLeftTop - vDiff - b[_in.iInstance].vOffset) + (b[_in.iInstance].vFullSize * _in.vUV);
 
-    vOutColor = g_tex_0.Sample(g_sam_0, vUV);
+        if (vUV.x < b[_in.iInstance].vLeftTop.x
+            || b[_in.iInstance].vLeftTop.x + b[_in.iInstance].vSlice.x < vUV.x
+            || vUV.y < b[_in.iInstance].vLeftTop.y
+            || b[_in.iInstance].vLeftTop.y + b[_in.iInstance].vSlice.y < vUV.y)
+        {
+            discard;
+        }
 
+        vOutColor = g_Atals.Sample(g_sam_1, vUV);
+    }
+    else if (g_int_0)
+    {
+        float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
+
+        vOutColor = g_tex_0.Sample(g_sam_0, vUV);
+    }
+    else
+    {
+        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+    }
 
     if (0.f == vOutColor.a)
         discard;
 
-     return vOutColor;
-
+    return vOutColor;
 }
 #endif

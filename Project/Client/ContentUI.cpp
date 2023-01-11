@@ -19,6 +19,10 @@
 #include <Engine\CTransform.h>
 #include <Engine/CCamera.h>
 #include <Engine\CPathMgr.h>
+#include <Engine\CLevel.h>
+#include <Engine\CLevelMgr.h>
+
+#include <Script\CMouseScript.h>
 
 ContentUI::ContentUI()
 	:UI("ContentUI")
@@ -33,6 +37,8 @@ ContentUI::ContentUI()
 
 	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&ContentUI::SetResourceToInspector);
 	m_Tree->AddDynamic_DragDrop_World(this, (FUNC_1)&ContentUI::SetDragObject);
+
+	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MouseObject");
 }
 
 ContentUI::~ContentUI()
@@ -45,49 +51,6 @@ void ContentUI::update()
 	if (CResMgr::GetInst()->IsChanged())
 	{
 		ResetContent();
-	}
-
-	if(ImGui::Button("Save", Vec2(100.f, 50.f)))
-	{
-		CSaveLoadMgr::GetInst()->SavePrefab(L"prefab\\prefab.dat");
-	}
-
-	ImGui::SameLine();
-
-	if (ImGui::Button("Load", Vec2(100.f, 50.f)))
-	{
-		CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
-		ResetContent();
-	}
-
-
-	if (m_bDragEvent && nullptr != m_pTargetPrefab)
-	{
-		if (KEY_RELEASE(KEY::LBTN))
-		{
-			CGameObjectEx* pCameraObject = CEditor::GetInst()->FindByName(L"Editor Camera");
-			Vec2 vMousePos = CKeyMgr::GetInst()->GetMousePos();
-
-			Vec2 Resolution = CDevice::GetInst()->GetRenderResolution();
-			float fScale = pCameraObject->Camera()->GetOrthographicScale();
-			Resolution *= fScale;
-			Vec3  vCameraPos = pCameraObject->Transform()->GetRelativePos();
-
-			Vec3 vPos{ vMousePos.x, vMousePos.y, 1.f };
-			vPos.x -= Resolution.x * 0.5f;
-			vPos.y = vPos.y * -1.f + Resolution.y * 0.5f;
-			vPos *= fScale;
-			vPos.x += vCameraPos.x;
-			vPos.y += vCameraPos.y;
-
-			if (Resolution.x * -0.5f <= vPos.x && Resolution.y * -0.5f <= vPos.y &&
-				Resolution.x * 0.5f >= vPos.x && Resolution.y * 0.5f >= vPos.y)
-			{
-				CGameObject* pGameObject = m_pTargetPrefab->Instantiate();
-
-				Instantiate(pGameObject, vPos, 1);
-			}
-		}
 	}
 
 	if (KEY_PRESSED(KEY::LCTRL) && KEY_PRESSED(KEY::S))
@@ -148,6 +111,50 @@ void ContentUI::update()
 
 void ContentUI::render_update()
 {
+	static int iLayer = 0;
+	static bool bActive = false;
+
+	ImGui::InputInt("Layer Index", &iLayer);
+
+	ImGui::NewLine();
+
+	if (bActive)
+	{
+		if (ImGui::Button("Active", Vec2(100.f, 50.f)))
+			bActive = false;
+	}
+	else
+	{
+		if (ImGui::Button("Unactive", Vec2(100.f, 50.f)))
+			bActive = true;
+	}
+
+	if (ImGui::Button("Save", Vec2(100.f, 50.f)))
+	{
+		CSaveLoadMgr::GetInst()->SavePrefab(L"prefab\\prefab.dat");
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Load", Vec2(100.f, 50.f)))
+	{
+		CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
+		ResetContent();
+	}
+
+	if (m_bDragEvent && nullptr != m_pTargetPrefab && bActive)
+	{
+		if (KEY_RELEASE(KEY::LBTN))
+		{
+			Vec3 vMousePos = m_pLevelMouseObject->GetScript<CMouseScript>()->GetMousePos();
+
+			if (vMousePos.x != -1 && vMousePos.y != -1 && vMousePos.z != -1)
+			{
+				CGameObject* pGameObject = m_pTargetPrefab->Instantiate();
+				Instantiate(pGameObject, vMousePos, iLayer);
+			}
+		}
+	}
 }
 
 void ContentUI::ResetContent()

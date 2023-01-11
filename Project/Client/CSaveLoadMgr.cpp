@@ -271,8 +271,11 @@ void CSaveLoadMgr::SavePrefab(wstring _strRelativePath)
 	{
 		if (!iter->second->IsEngineRes())
 		{
-			wstring prefabPath = L"prefab\\" + iter->second->GetKey() + L".dat";
-			iter->second->Save(prefabPath);
+			wchar_t sz_data[255] = { L"prefab\\" };
+			wstring temp = lstrcat(sz_data, iter->second->GetKey().data());
+			lstrcpy(sz_data, temp.data());
+			wstring wstrRelativePath = lstrcat(sz_data, L".dat");
+			iter->second->Save(wstrRelativePath);
 		}
 	}
 }
