@@ -30,12 +30,13 @@ class CScript :
     public CComponent
 {
 private :
-    const int m_iScriptType;
+    const int               m_iScriptType;
     vector<tScriptParam>    m_vecParam;
 public :
     int GetScriptType() { return m_iScriptType; }
 protected:
-    Vec3  m_vTarget;
+    bool                    m_bActive;
+    Vec3                    m_vTarget;
 public :
     void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
     void AddScriptParam(SCRIPT_PARAM _eParam, const string& _name, void* _pParam)
@@ -43,6 +44,10 @@ public :
         m_vecParam.push_back(tScriptParam{ _name, _eParam ,_pParam });
     }
     const vector<tScriptParam>& GetScriptParam() { return m_vecParam; }
+
+    void Activate() { m_bActive = true; }
+    void Deactivate() { m_bActive = false; }
+    bool IsActive() { return m_bActive; }
 public :
     virtual void tick() = 0;
     virtual void finaltick() {};

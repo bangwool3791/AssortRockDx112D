@@ -625,5 +625,11 @@
     <FxCompile Include="tilemap.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
+    <FxCompile Include="ui.fx">
+      <Filter>HLSL\Render\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="opaque.fx">
+      <Filter>HLSL\Render\Default</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

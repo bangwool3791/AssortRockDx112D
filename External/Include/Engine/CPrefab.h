@@ -21,7 +21,7 @@ public :
 	void Save(FILE* pFile);
 	int Load(FILE* pFile);
 
-	virtual void Save(const wstring _strRelativePath) override;
+	virtual void Save(const wstring& _strRelativePath) override;
 	virtual int Load(const wstring& _strFilePath) override;
 
 	CLONE_DUMMY(CPrefab);

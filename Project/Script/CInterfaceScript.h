@@ -3,7 +3,7 @@
 
 class CGameObjectEx;
 
-class InterfaceScript :
+class CInterfaceScript :
     public CScript
 {
 private:
@@ -17,9 +17,9 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    CLONE(InterfaceScript);
+    CLONE(CInterfaceScript);
 public:
-    InterfaceScript();
-    virtual ~InterfaceScript();
+    CInterfaceScript();
+    virtual ~CInterfaceScript();
 };
 

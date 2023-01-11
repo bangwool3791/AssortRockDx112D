@@ -55,7 +55,7 @@ CGameObject* CPrefab::Instantiate()
 	return nullptr;
 }
 
-void CPrefab::Save(const wstring _strRelativePath)
+void CPrefab::Save(const wstring& _strRelativePath)
 {
 	if (!CheckRelativePath(_strRelativePath))
 		MessageBox(nullptr, L"CPrefab File Save", L"Failed", MB_OK);

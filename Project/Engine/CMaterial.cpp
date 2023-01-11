@@ -147,7 +147,7 @@ void CMaterial::Clear()
 		CTexture::Clear(i);
 	}
 }
-void CMaterial::Save(const wstring _strRelativePath)
+void CMaterial::Save(const wstring& _strRelativePath)
 {
 	if (!CheckRelativePath(_strRelativePath))
 	{

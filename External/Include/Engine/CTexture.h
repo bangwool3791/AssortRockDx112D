@@ -47,7 +47,7 @@ public:
     static void Clear_CS(UINT _iRegisterNum);
 private:
     // 파일로 부터 로딩
-    virtual void Save(const wstring _strRelativePath) {}
+    virtual void Save(const wstring& _strRelativePath) {}
     virtual int Load(const wstring& _strFilePath);
 public:
     // 생성

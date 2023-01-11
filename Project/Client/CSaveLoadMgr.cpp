@@ -244,8 +244,8 @@ CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
 
 void CSaveLoadMgr::SavePrefab(wstring _strRelativePath)
 {
-	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-	strFilePath += _strRelativePath;
+	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
+	wstring strFilePath = strContentPath + _strRelativePath;
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"wb");
@@ -265,19 +265,23 @@ void CSaveLoadMgr::SavePrefab(wstring _strRelativePath)
 
 	fwrite(&iPrefabCount, sizeof(size_t), 1, pFile);
 
+	fclose(pFile);
+
 	for (auto iter{ map.begin() }; iter != map.end(); ++iter)
 	{
-		if(!iter->second->IsEngineRes())
-			iter->second->Save(pFile);
+		if (!iter->second->IsEngineRes())
+		{
+			wstring prefabPath = L"prefab\\" + iter->second->GetKey() + L".dat";
+			iter->second->Save(prefabPath);
+		}
 	}
-	fclose(pFile);
 }
 
 void CSaveLoadMgr::LoadPrefab(wstring _strRelativePath)
 {
 
-	wstring strFilePath = CPathMgr::GetInst()->GetContentPath();
-	strFilePath += _strRelativePath;
+	wstring strContentPath = CPathMgr::GetInst()->GetContentPath();
+	wstring strFilePath = strContentPath + _strRelativePath;
 
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
@@ -288,13 +292,22 @@ void CSaveLoadMgr::LoadPrefab(wstring _strRelativePath)
 	size_t iPrefabCount = 0;
 	fread(&iPrefabCount, sizeof(size_t), 1, pFile);
 
+	fclose(pFile);
+
 	decltype(CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB)) map = CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB);
 
-	for (size_t i{}; i < iPrefabCount; ++i)
+
+	for (const auto& entry : fs::directory_iterator(strContentPath + L"prefab\\"))
 	{
+		if(std::string::npos == entry.path().string().find(".dat"))
+			continue;
+
+		if (entry.path() == strFilePath)
+			continue;
+
 		CPrefab* pPrefab = new CPrefab(false);
 
-		pPrefab->Load(pFile);
+		pPrefab->Load(entry.path());
 
 		auto iter = map.find(pPrefab->GetKey());
 
@@ -306,7 +319,7 @@ void CSaveLoadMgr::LoadPrefab(wstring _strRelativePath)
 
 		map.emplace(make_pair(pPrefab->GetKey(), pPrefab));
 	}
-	fclose(pFile);
+
 	//FILE* pFile = nullptr;
 	//_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
 

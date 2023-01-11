@@ -396,8 +396,10 @@ void CResMgr::CreateDefaultTexture()
 	* They are billions
 	*/
 	Load<CTexture>(L"texture\\HumansA_LQ.png", L"texture\\HumansA_LQ.png");
-	//Load<CTexture>(L"Tile0", L"texture\\Terrain\\Tile\\Tile0.png");
 	Load<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds", L"texture\\Interface\\Atlas1_LQ.dds");
+	Load<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds", L"texture\\Interface\\Atlas1_LQ.dds");
+	Load<CTexture>(L"texture\\Interface\\Icons.png", L"texture\\Interface\\Icons.png");
+	Load<CTexture>(L"texture\\Interface\\Portraits.dds", L"texture\\Interface\\Portraits.dds");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -527,6 +529,28 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->AddTexureParam(TEX_0, "Output Texture 1");
 
 	AddRes<CGraphicsShader>(L"ObjectRenderShader", pShader);
+
+	//UI Domain Shader
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\ui.fx", "VS_UI");
+	pShader->CreatePixelShader(L"shader\\ui.fx", "PS_UI");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"UIRenderShader", pShader);
+
+	//Opaque
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\opaque.fx", "VS_Opaque");
+	pShader->CreatePixelShader(L"shader\\opaque.fx", "PS_Opaque");
+
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	AddRes<CGraphicsShader>(L"OpaqueShader", pShader);
 
 	// Instancing Shadow Shader
 	pShader = new CGraphicsShader;
@@ -683,6 +707,14 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UiTileShader"));
 	AddRes<CMaterial>(L"UiTileMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"UIRenderShader"));
+	AddRes<CMaterial>(L"InterfaceMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"OpaqueShader"));
+	AddRes<CMaterial>(L"OpaqueMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

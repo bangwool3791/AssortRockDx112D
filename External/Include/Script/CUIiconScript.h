@@ -1,9 +1,7 @@
 #pragma once
 #include <Engine/CScript.h>
 
-class CGameObjectEx;
-
-class InterfaceScript :
+class CUIiconScript :
     public CScript
 {
 private:
@@ -17,9 +15,9 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    CLONE(InterfaceScript);
+    CLONE(CUIiconScript);
 public:
-    InterfaceScript();
-    virtual ~InterfaceScript();
+    CUIiconScript();
+    virtual ~CUIiconScript();
 };
 

@@ -37,7 +37,7 @@ private:
 
 public:
 	virtual void UpdateData() {}
-	virtual void Save(const wstring _strRelativePath)  override { return; }
+	virtual void Save(const wstring& _strRelativePath)  override { return; }
 	virtual int Load(const wstring& _strFilePath) override;
 
 	CLONE_ASSERT(CSound);

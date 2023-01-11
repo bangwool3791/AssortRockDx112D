@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "InterfaceScript.h"
+#include "CInterfaceScript.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
@@ -9,19 +9,19 @@
 #include <Engine\CTerrain.h>
 
 
-InterfaceScript::InterfaceScript()
-	:CScript{ INTERFACESCRIPT }
+CInterfaceScript::CInterfaceScript()
+	:CScript{ SCRIPT_TYPE::INTERFACESCRIPT }
 	, m_id{}
 {
-	SetName(L"InterfaceScript");
+	SetName(L"CInterfaceScript");
 }
 
-InterfaceScript::~InterfaceScript()
+CInterfaceScript::~CInterfaceScript()
 {
 }
 
 
-void InterfaceScript::begin()
+void CInterfaceScript::begin()
 {
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds");
 	float width = pTex->GetWidth();
@@ -35,19 +35,19 @@ void InterfaceScript::begin()
 	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &vSlice);
 }
 
-void InterfaceScript::tick()
+void CInterfaceScript::tick()
 {
 
 }
 
-void InterfaceScript::BeginOverlap(CCollider2D* _pOther)
+void CInterfaceScript::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void InterfaceScript::Overlap(CCollider2D* _pOther)
+void CInterfaceScript::Overlap(CCollider2D* _pOther)
 {
 }
 
-void InterfaceScript::EndOverlap(CCollider2D* _pOther)
+void CInterfaceScript::EndOverlap(CCollider2D* _pOther)
 {
 }

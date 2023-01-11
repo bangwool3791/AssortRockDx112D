@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "CScriptMgr.h"
 
+#include "CButtonScript.h"
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
+#include "CInterfaceScript.h"
 #include "CLevelCameraScript.h"
 #include "CLightScript.h"
 #include "CMissileScript.h"
@@ -15,12 +17,13 @@
 #include "CShadowScript.h"
 #include "CTerrainScript.h"
 #include "CTileScript.h"
-#include "InterfaceScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
+	_vec.push_back(L"CButtonScript");
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
+	_vec.push_back(L"CInterfaceScript");
 	_vec.push_back(L"CLevelCameraScript");
 	_vec.push_back(L"CLightScript");
 	_vec.push_back(L"CMissileScript");
@@ -33,14 +36,17 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
-	_vec.push_back(L"InterfaceScript");
+	_vec.push_back(L"CUIiconScript");
+	_vec.push_back(L"UIiconScript");
 }
 
 
 void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
+	_vec.push_back("CButtonScript");
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
+	_vec.push_back("CInterfaceScript");
 	_vec.push_back("CLevelCameraScript");
 	_vec.push_back("CLightScript");
 	_vec.push_back("CMissileScript");
@@ -53,15 +59,20 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
-	_vec.push_back("InterfaceScript");
+	_vec.push_back("CUIiconScript");
+	_vec.push_back("UIiconScript");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
+	if (L"CButtonScript" == _strScriptName)
+		return new CButtonScript;
 	if (L"CDragScript" == _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if (L"CInterfaceScript" == _strScriptName)
+		return new CInterfaceScript;
 	if (L"CLevelCameraScript" == _strScriptName)
 		return new CLevelCameraScript;
 	if (L"CLightScript" == _strScriptName)
@@ -86,17 +97,19 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTerrainScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
-	if (L"InterfaceScript" == _strScriptName)
-		return new InterfaceScript;
 	return nullptr;
 }
 
 CScript * CScriptMgr::GetScript(const string& _strScriptName)
 {
+	if ("CButtonScript" == _strScriptName)
+		return new CButtonScript;
 	if ("CDragScript" == _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if ("CInterfaceScript" == _strScriptName)
+		return new CInterfaceScript;
 	if ("CLevelCameraScript" == _strScriptName)
 		return new CLevelCameraScript;
 	if ("CLightScript" == _strScriptName)
@@ -121,8 +134,6 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTerrainScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
-	if ("InterfaceScript" == _strScriptName)
-		return new InterfaceScript;
 	return nullptr;
 }
 
@@ -130,11 +141,17 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 {
 	switch (_iScriptType)
 	{
+	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
+		return new CButtonScript;
+		break;
 	case (UINT)SCRIPT_TYPE::DRAGSCRIPT:
 		return new CDragScript;
 		break;
 	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return new CEditorMouseScript;
+		break;
+	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
+		return new CInterfaceScript;
 		break;
 	case (UINT)SCRIPT_TYPE::LEVELCAMERASCRIPT:
 		return new CLevelCameraScript;
@@ -172,9 +189,6 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
 		break;
-	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
-		return new InterfaceScript;
-		break;
 	}
 	return nullptr;
 }
@@ -183,12 +197,20 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::BUTTONSCRIPT:
+		return L"CButtonScript";
+		break;
+
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return L"CDragScript";
 		break;
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return L"CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::INTERFACESCRIPT:
+		return L"CInterfaceScript";
 		break;
 
 	case SCRIPT_TYPE::LEVELCAMERASCRIPT:
@@ -239,8 +261,12 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTileScript";
 		break;
 
-	case SCRIPT_TYPE::INTERFACESCRIPT:
-		return L"InterfaceScript";
+	case SCRIPT_TYPE::UIICONSCRIPT:
+		return L"CUIiconScript";
+		break;
+
+	case SCRIPT_TYPE::IICONSCRIPT:
+		return L"UIiconScript";
 		break;
 
 	}
@@ -251,12 +277,20 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::BUTTONSCRIPT:
+		return "CButtonScript";
+		break;
+
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return "CDragScript";
 		break;
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return "CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::INTERFACESCRIPT:
+		return "CInterfaceScript";
 		break;
 
 	case SCRIPT_TYPE::LEVELCAMERASCRIPT:
@@ -307,8 +341,12 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CTileScript";
 		break;
 
-	case SCRIPT_TYPE::INTERFACESCRIPT:
-		return "InterfaceScript";
+	case SCRIPT_TYPE::UIICONSCRIPT:
+		return "CUIiconScript";
+		break;
+
+	case SCRIPT_TYPE::IICONSCRIPT:
+		return "UIiconScript";
 		break;
 
 	}

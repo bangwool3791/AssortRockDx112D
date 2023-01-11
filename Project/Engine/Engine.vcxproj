@@ -342,6 +342,7 @@ call EngineCopy.bat</Command>
     <FxCompile Include="DragEffect.fx" />
     <FxCompile Include="editor.fx" />
     <FxCompile Include="func.fx" />
+    <FxCompile Include="opaque.fx" />
     <FxCompile Include="particlerender.fx" />
     <FxCompile Include="particleupdate.fx" />
     <FxCompile Include="particleupdatewood.fx" />
@@ -357,6 +358,7 @@ call EngineCopy.bat</Command>
     <FxCompile Include="tile.fx" />
     <FxCompile Include="terrain.fx" />
     <FxCompile Include="tilemap.fx" />
+    <FxCompile Include="ui.fx" />
     <FxCompile Include="wave.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

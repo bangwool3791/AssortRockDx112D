@@ -26,6 +26,9 @@
     <Filter Include="Scripts\InterfaceScript">
       <UniqueIdentifier>{f6716284-5fdd-4a95-8068-aade82801d9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\UiiconScript">
+      <UniqueIdentifier>{2abe6ad2-9ecd-4729-9305-cee8a8251b9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -79,8 +82,11 @@
     <ClInclude Include="CTerrainScript.h">
       <Filter>Scripts\TerrainScript</Filter>
     </ClInclude>
-    <ClInclude Include="InterfaceScript.h">
+    <ClInclude Include="CInterfaceScript.h">
       <Filter>Scripts\InterfaceScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CButtonScript.h">
+      <Filter>Scripts\UiiconScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -135,8 +141,11 @@
     <ClCompile Include="CTerrainScript.cpp">
       <Filter>Scripts\TerrainScript</Filter>
     </ClCompile>
-    <ClCompile Include="InterfaceScript.cpp">
+    <ClCompile Include="CInterfaceScript.cpp">
       <Filter>Scripts\InterfaceScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CButtonScript.cpp">
+      <Filter>Scripts\UiiconScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

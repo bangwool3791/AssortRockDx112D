@@ -25,7 +25,7 @@ public :
 	void UpdateData();
 	static void Clear();
 
-	virtual void Save(const wstring _strRelativePath);
+	virtual void Save(const wstring& _strRelativePath);
 	virtual int Load(const wstring& _strFilePath);
 	void SwapFile(const wstring _strRelativePath);
 	CLONE(CMaterial)

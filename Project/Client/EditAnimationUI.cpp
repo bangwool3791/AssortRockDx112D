@@ -833,24 +833,33 @@ tRGBA EditAnimationUI::GetRGBA(int _x, int _y)
 void EditAnimationUI::SetTextureUI()
 {
     //Texture 파일 경로 찾기
-    string strFileName = m_fileDialogInfo.resultPath.filename().string();
-    wstring wstrFileName = wstring(strFileName.begin(), strFileName.end());
-    wstring wstrPath = L"texture\\" + wstrFileName;
-    CResMgr::GetInst()->Load<CTexture>(wstrFileName, wstrPath);
+    wstring wstrFilePath = CPathMgr::GetInst()->GetContentPath();
+    m_fileDialogInfo.fileName;
+    string strFilePath = string(wstrFilePath.begin(), wstrFilePath.end());
+    string strFullPath = m_fileDialogInfo.resultPath.string();
 
-    //Aniamtion 객체
-    //Dummy 객체 Anmation component, 
-    //Default Anmation component (초기 값 일 때)
-    m_pAtlasTexture = CResMgr::GetInst()->FindRes<CTexture>(wstrFileName);
-    m_pAnimator->SetTexture(m_pAtlasTexture);
-    m_pImage = m_pAtlasTexture->GetSRV().Get();
+    std::size_t ind = strFullPath.find(strFilePath); // Find the starting position of substring in the string
 
-    CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
-    pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+    if (ind != std::string::npos) {
+        strFullPath.erase(ind, strFilePath.length()); // erase function takes two parameter, the starting index in the string from where you want to erase characters and total no of characters you want to erase.
 
-    Initialize_Aimation_Pixel();
+
+        wstring wstrFileName = wstring(strFullPath.begin(), strFullPath.end());
+        CResMgr::GetInst()->Load<CTexture>(wstrFileName, wstrFileName);
+
+        //Aniamtion 객체
+        //Dummy 객체 Anmation component, 
+        //Default Anmation component (초기 값 일 때)
+        m_pAtlasTexture = CResMgr::GetInst()->FindRes<CTexture>(wstrFileName);
+        m_pAnimator->SetTexture(m_pAtlasTexture);
+        m_pImage = m_pAtlasTexture->GetSRV().Get();
+
+        CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+        pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+
+        Initialize_Aimation_Pixel();
+    }
 }
-
 void EditAnimationUI::Initialize_Animation_Info()
 {
     m_pAnimator = (CAnimator2D*)CEditor::GetInst()->GetArrComponent(COMPONENT_TYPE::ANIMATOR2D);

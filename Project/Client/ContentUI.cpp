@@ -33,7 +33,6 @@ ContentUI::ContentUI()
 
 	m_Tree->AddDynamic_LBtn_Selected(this, (FUNC_1)&ContentUI::SetResourceToInspector);
 	m_Tree->AddDynamic_DragDrop_World(this, (FUNC_1)&ContentUI::SetDragObject);
-	ResetContent();
 }
 
 ContentUI::~ContentUI()

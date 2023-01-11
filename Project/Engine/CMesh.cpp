@@ -273,7 +273,7 @@ bool CMesh::IntersectTriangle(const Vec3& orig, const Vec3& dir, Vec3& v0, Vec3&
     return TRUE; 
 }
 
-void CMesh::Save(const wstring _strRelativePath) 
+void CMesh::Save(const wstring& _strRelativePath) 
 {
     Read();
 

@@ -23,7 +23,8 @@
 #include <Script\CShadowScript.h>
 #include <Script\CLevelCameraScript.h>
 #include <Script\CTileScript.h>
-#include <Script\InterfaceScript.h>
+#include <Script\CInterfaceScript.h>
+#include <Script\CButtonScript.h>
 
 void CreateDefaultPrefab()
 {
@@ -147,25 +148,7 @@ void CreateTestLelvel()
 	pCamObj->Camera()->SetLayerMask(31);
 	pCamObj->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 	pCamObj->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
-	//pCamObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 	pLevel->AddGameObject(pCamObj, 0);
-
-	// UI Interface
-	CGameObject* pObj = new CGameObject;
-	pObj->SetName(L"Interface");
-
-	pObj->AddComponent(new CTransform);
-	pObj->AddComponent(new InterfaceScript);
-	pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::USED));
-
-	pObj->Transform()->SetRelativePos(Vec3(0.f, 0.f, -450.f));
-	pObj->Transform()->SetRelativeScale(Vec3(1600.f, 0.f, 403.f));
-	pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
-
-	pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
-
-	pLevel->AddGameObject(pObj, 31);
 
 	// Directional Light 추가
 	CGameObject* pDirLight = new CGameObject;
@@ -176,6 +159,7 @@ void CreateTestLelvel()
 	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
 	pLevel->AddGameObject(pDirLight, 0);
 
+	CreateInterface(pLevel);
 
 	// PointLight 추가
 	CGameObject* pPointLight{};// = new CGameObject;
@@ -362,4 +346,84 @@ void CreateTestLelvel()
 	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
 	pLevel->begin();
+}
+
+void CreateInterface(CLevel* _pLevel)
+{
+	CGameObject* pParent = new CGameObject;
+	CGameObject* pObj{};
+
+	pParent->SetName(L"Interface");
+
+	pParent->AddComponent(new CTransform);
+	pParent->AddComponent(new CInterfaceScript);
+	pParent->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+
+	pParent->Transform()->SetRelativePos(Vec3(0.f, 0.f, -500.f));
+	pParent->Transform()->SetRelativeScale(Vec3(1600.f, 0.f, 300.f));
+	pParent->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+
+	pParent->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	pParent->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"OpaqueMtrl"));
+	_pLevel->AddGameObject(pParent, 31);
+
+	for (size_t i{}; i < 2; ++i)
+	{
+		for (size_t j{}; j < 3; ++j)
+		{
+			wstring strName = L"UIButton";
+			strName += std::to_wstring(i * 5 + j);
+
+			pObj = new CGameObject;
+			pObj->SetName(strName);
+
+			pObj->AddComponent(new CTransform);
+			pObj->AddComponent(new CButtonScript);
+			pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+
+			pObj->Transform()->SetRelativePos(Vec3(332.f + 60.f * j, 0.f, 0.f + -85.f * i));
+			pObj->Transform()->SetRelativeScale(Vec3(60.f, 1.f, 90.f));
+			pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+
+			pObj->Transform()->SetIgnoreParentScale(true);
+			pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+			pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
+
+			pObj->GetScript<CButtonScript>()->SetTapIndex(i * 3 + j);
+			pParent->AddChild(pObj);
+		}
+	}
+
+	//pObj = new CGameObject;
+	//pObj->SetName(L"UIButton2");
+
+	//pObj->AddComponent(new CTransform);
+	//pObj->AddComponent(new CButtonScript);
+	//pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+
+	//pObj->Transform()->SetRelativePos(Vec3(250.f + 50.f, 0.f, 25.f));
+	//pObj->Transform()->SetRelativeScale(Vec3(50.f, 1.f, 70.f));
+	//pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+
+	//pObj->Transform()->SetIgnoreParentScale(true);
+	//pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
+	//pParent->AddChild(pObj);
+
+	//pObj = new CGameObject;
+	//pObj->SetName(L"UIButton3");
+
+	//pObj->AddComponent(new CTransform);
+	//pObj->AddComponent(new CButtonScript);
+	//pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+
+	//pObj->Transform()->SetRelativePos(Vec3(250.f, 0.f, 25.f - 70.f));
+	//pObj->Transform()->SetRelativeScale(Vec3(50.f, 1.f, 70.f));
+	//pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+
+	//pObj->Transform()->SetIgnoreParentScale(true);
+	//pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
+	//pParent->AddChild(pObj);
+
 }
