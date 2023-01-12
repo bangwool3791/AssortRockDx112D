@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "CTransform.h"
 
+#include "CCamera.h"
+
 #include "CTimeMgr.h"
 #include "CKeyMgr.h"
+#include "CLevel.h"
+#include "CLevelMgr.h"
 #include "CDevice.h"
 #include "CConstBuffer.h"
 
@@ -208,6 +212,7 @@ Vec3 CTransform::Picking(Ray _ray)
 
 bool CTransform::Picking(Ray _ray, Vec3& _vPos)
 {
+
 	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
 	Vec3 vResult{ -1.f, -1.f, -1.f };
 	size_t verts;
@@ -219,9 +224,79 @@ bool CTransform::Picking(Ray _ray, Vec3& _vPos)
 
 	finaltick();
 
+	Vec3 vPos{};
+
 	for (size_t i{}; i < verts; ++i)
 	{
-		Vec3 vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
+		vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
+		vec.push_back(vPos);
+	}
+
+	for (UINT i = 0; i < verts; i += 4)
+	{
+		float fDist;
+		if (_ray.Intersects(vec[i], vec[i + 1], vec[i + 2], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			_vPos = vResult;
+			return true;
+		}
+
+		if (_ray.Intersects(vec[i], vec[i + 2], vec[i + 3], fDist))
+		{
+			vResult = _ray.direction * fDist + _ray.position;
+			_vPos = vResult;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+bool CTransform::Picking(Vec3& _vPos)
+{
+	Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+	Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+	//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+	//vResolution = vResolution * fScale;
+
+	p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+	p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+	XMVECTOR det; //Determinant, needed for matrix inverse function call
+	Vector3 origin = Vector3(p.x, p.y, 0.f);
+	Vector3 faraway = Vector3(p.x, p.y, 1.f);
+
+	CGameObject* m_pCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
+
+	const Matrix& matView = m_pCamera->Camera()->GetViewMat();
+	const Matrix& matProj = m_pCamera->Camera()->GetProjMat();
+	XMMATRIX invViewProj = XMMatrixInverse(&det, matView * matProj);
+	Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+	Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+	Vector3 raydirection = rayend - rayorigin;
+	raydirection.Normalize();
+	Ray _ray{};
+	_ray.position = rayorigin;
+	_ray.direction = raydirection;
+
+	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
+	Vec3 vResult{ -1.f, -1.f, -1.f };
+	size_t verts;
+	Vtx* vertices = pMesh->GetVertices(verts);
+
+	static vector<Vec3> vec{};
+
+	vec.clear();
+
+	finaltick();
+
+	Vec3 vPos{};
+
+	for (size_t i{}; i < verts; ++i)
+	{
+		vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
 		vec.push_back(vPos);
 	}
 

@@ -201,10 +201,25 @@ CGameObject* CSaveLoadMgr::LoadGameObject(FILE* _File)
 			pComponent = new CMeshRender;
 			break;
 		case COMPONENT_TYPE::TILEMAP:
-			pComponent = new CTerrain;
+			pComponent = new CTileMap;
 			break;
 		case COMPONENT_TYPE::PARTICLESYSTEM:
 			pComponent = new CParticleSystem;
+			break;
+		case COMPONENT_TYPE::EXPLOSION:
+			pComponent = new CExplosion;
+			break;
+		case COMPONENT_TYPE::BLOOD:
+			pComponent = new CBlood;
+			break;
+		case COMPONENT_TYPE::DUST:
+			pComponent = new CDust;
+			break;
+		case COMPONENT_TYPE::SMOKE:
+			pComponent = new CSmoke;
+			break;
+		case COMPONENT_TYPE::TERRAIN:
+			pComponent = new CTerrain;
 			break;
 		case COMPONENT_TYPE::END:
 			bProgess = false;
@@ -289,13 +304,13 @@ void CSaveLoadMgr::LoadPrefab(wstring _strRelativePath)
 	FILE* pFile = nullptr;
 	_wfopen_s(&pFile, strFilePath.c_str(), L"rb");
 
-	if (!pFile)
-		return;
+	if (pFile)
+	{
+		size_t iPrefabCount = 0;
+		fread(&iPrefabCount, sizeof(size_t), 1, pFile);
+		fclose(pFile);
+	}
 
-	size_t iPrefabCount = 0;
-	fread(&iPrefabCount, sizeof(size_t), 1, pFile);
-
-	fclose(pFile);
 
 	decltype(CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB)) map = CResMgr::GetInst()->GetResourceRef(RES_TYPE::PREFAB);
 

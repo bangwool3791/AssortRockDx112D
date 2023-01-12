@@ -20,8 +20,8 @@ private:
     Ptr<CTexture>                m_IconAtlas;
     Ptr<CTexture>                m_AtlasAlpha;
     array<array<tTapInfo, 6>, 6> m_arrTab;
-    UINT                         m_iColum;
-    UINT                         m_iIndex;
+    UINT                         m_iColumn;
+    UINT                         m_iRow;
     CGameObject*                 m_pUiCameraObject;
     CGameObject*                 m_pLevelMouseObject;
 
@@ -37,9 +37,15 @@ public:
     virtual void EndOverlap(CCollider2D* _pOther);
 
 public :
-    void SetTapIndex(UINT _index) { m_iIndex = _index; }
     void Release() { m_bClicked = false; }
     bool IsClicked() { return m_bClicked; }
+    void SetColumn(UINT _iColumn) { m_iColumn = _iColumn;}
+    UINT GetColumn() { return m_iColumn; }
+    void SetRow(UINT _index) { m_iRow = _index; }
+    UINT GetRow() { return m_iRow; }
+public:
+    virtual void SaveToFile(FILE* _File) override;
+    virtual void LoadFromFile(FILE* _File) override;
 public:
     CLONE(CButtonScript);
 public:

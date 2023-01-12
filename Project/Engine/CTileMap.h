@@ -30,6 +30,7 @@ public:
 
     tTile    GetInfo(Vec3 _vPos);
     void     SetInfo(UINT _iIndex, UINT _iInfo);
+    void     SetInfo(Vec3 _vPos, UINT _iInfo);
     CLONE(CTileMap);
 public:
     CTileMap();

@@ -8,6 +8,8 @@ class ContentUI :
     public UI
 {
 private:
+    CGameObject*     m_pLevelTerrain;
+    CGameObject*     m_pLevelCamera;
     CGameObject*     m_pLevelMouseObject;
     CPrefab*         m_pTargetPrefab;
     TreeUI*          m_Tree;

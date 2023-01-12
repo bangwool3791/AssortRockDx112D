@@ -1,4 +1,5 @@
 CButtonScript
+CCommandScript
 CDragScript
 CEditorMouseScript
 CInterfaceScript
@@ -14,5 +15,3 @@ CSelectUnitScript
 CShadowScript
 CTerrainScript
 CTileScript
-CUIiconScript
-UIiconScript

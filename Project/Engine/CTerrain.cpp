@@ -238,12 +238,12 @@ void CTerrain::LoadFromFile(FILE* _File)
 
 	fread(&size, sizeof(size_t), 1, _File);
 
+	m_AtlasTex.resize(size);
+
 	for (size_t i{}; i < size; ++i)
 	{
 		LoadResourceRef(m_AtlasTex[i], _File);
 	}
-
-	fread(&size, sizeof(size_t), 1, _File);
 }
 
 void CTerrain::SetTextureID(Ray _ray, UINT i)

@@ -181,6 +181,21 @@
     <Filter Include="Engine\06. Component\08. Map\02. TileMap">
       <UniqueIdentifier>{e1663176-bf51-405c-a7ed-945abac83735}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Manager\12. InterfaceMgr">
+      <UniqueIdentifier>{fa9abf49-0c5b-4efd-95b3-435e6e7d8b2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\05. Explosion">
+      <UniqueIdentifier>{6292ce51-58ad-4e93-bf3b-50987e35e298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\06. Blood">
+      <UniqueIdentifier>{38389d54-f0c2-4a63-9cfd-8dfe8377a19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\07. Dust">
+      <UniqueIdentifier>{1f22d8ef-7542-4dad-b61a-20172184fbcb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke">
+      <UniqueIdentifier>{93296349-73e5-45ca-9b83-4693382bcd06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -396,6 +411,21 @@
     <ClInclude Include="CTileMap.h">
       <Filter>Engine\06. Component\08. Map\02. TileMap</Filter>
     </ClInclude>
+    <ClInclude Include="CInterfaceMgr.h">
+      <Filter>Engine\03. Manager\12. InterfaceMgr</Filter>
+    </ClInclude>
+    <ClInclude Include="CExplosion.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\05. Explosion</Filter>
+    </ClInclude>
+    <ClInclude Include="CBlood.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\06. Blood</Filter>
+    </ClInclude>
+    <ClInclude Include="CDust.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\07. Dust</Filter>
+    </ClInclude>
+    <ClInclude Include="CSmoke.h">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -556,6 +586,21 @@
     </ClCompile>
     <ClCompile Include="CTileMap.cpp">
       <Filter>Engine\06. Component\08. Map\02. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="CInterfaceMgr.cpp">
+      <Filter>Engine\03. Manager\12. InterfaceMgr</Filter>
+    </ClCompile>
+    <ClCompile Include="CExplosion.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\05. Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="CBlood.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\06. Blood</Filter>
+    </ClCompile>
+    <ClCompile Include="CDust.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\07. Dust</Filter>
+    </ClCompile>
+    <ClCompile Include="CSmoke.cpp">
+      <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

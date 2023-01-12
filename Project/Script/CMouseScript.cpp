@@ -108,8 +108,8 @@ void CMouseScript::finaltick()
 		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
 
 		XMVECTOR det; //Determinant, needed for matrix inverse function call
-		Vector3 origin = Vector3(p.x, p.y, -1);
-		Vector3 faraway = Vector3(p.x, p.y, 1);
+		Vector3 origin = Vector3(p.x, p.y, 0.f);
+		Vector3 faraway = Vector3(p.x, p.y, 1.f);
 
 		const Matrix& matView = m_pCamera->Camera()->GetViewMat();
 		const Matrix& matProj = m_pCamera->Camera()->GetProjMat();

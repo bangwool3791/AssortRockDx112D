@@ -71,7 +71,9 @@ void MenuUI::render()
 
                         if (pTargetObject)
                         {
-                            pTargetObject->AddComponent(CScriptMgr::GetScript(vecScriptName[i]));
+                            CComponent* pComponent =  CScriptMgr::GetScript(vecScriptName[i]);
+                            pComponent->begin();
+                            pTargetObject->AddComponent(pComponent);
                             //갱신 용도
                             pInspector->SetTargetObject(pTargetObject);
                         }

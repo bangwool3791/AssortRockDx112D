@@ -35,6 +35,9 @@ void ScriptUI::render_update()
 
 void ScriptUI::render_scriptparam()
 {
+    if (nullptr == m_pTargetScript->GetOwner())
+        return;
+
     const vector<tScriptParam>& vecParam = m_pTargetScript->GetScriptParam();
 
     for (size_t i = 0; i < vecParam.size(); ++i)

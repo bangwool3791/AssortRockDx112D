@@ -98,6 +98,14 @@ CGameObject* CLevel::FindObjectByName(const wstring& _Name)
 		{
 			if (_Name == vecObjects[j]->GetName())
 				return vecObjects[j];
+
+			const vector<CGameObject*>& vecChilds = vecObjects[j]->GetChilds();
+
+			for (size_t k = 0; k < vecChilds.size(); ++k)
+			{
+				if (_Name == vecChilds[k]->GetName())
+					return vecChilds[k];
+			}
 		}
 	}
 

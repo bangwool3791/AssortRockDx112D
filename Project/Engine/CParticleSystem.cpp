@@ -34,6 +34,32 @@ CParticleSystem::CParticleSystem()
 
 }
 
+CParticleSystem::CParticleSystem(COMPONENT_TYPE _type)
+	:CRenderComponent(_type)
+	, m_iMaxCount(10)
+	, m_ParticleBuffer{}
+	, m_ParticleShare{}
+	, m_arrParticle{}
+	, m_fAccTime{}
+
+{
+	//SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"PointMesh"));
+
+	m_ParticleBuffer = new CStructuredBuffer;
+
+	tParticle arr[10] = {};
+	for (UINT i{ 0 }; i < 10; ++i)
+	{
+		m_arrParticle[i].fSpeed = arr[i].fSpeed = 200.f;
+		m_arrParticle[i].vDir = arr[i].vDir = Vec2(cosf(XM_PI * i / 5), sinf(XM_PI * i / 5));
+	}
+
+	m_ParticleBuffer->Create(sizeof(tParticle), m_iMaxCount, SB_TYPE::UAV_INC, &arr);
+
+	m_ParticleShare = new CStructuredBuffer;
+	m_ParticleShare->Create(sizeof(tParticleShare), 1, SB_TYPE::UAV_INC, nullptr, true);
+}
+
 CParticleSystem::CParticleSystem(const CParticleSystem& _Rhs)
 	:CRenderComponent(COMPONENT_TYPE::PARTICLESYSTEM)
 	, m_iMaxCount(_Rhs.m_iMaxCount)

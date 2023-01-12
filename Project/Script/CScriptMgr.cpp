@@ -2,6 +2,7 @@
 #include "CScriptMgr.h"
 
 #include "CButtonScript.h"
+#include "CCommandScript.h"
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
 #include "CInterfaceScript.h"
@@ -21,6 +22,7 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CButtonScript");
+	_vec.push_back(L"CCommandScript");
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
 	_vec.push_back(L"CInterfaceScript");
@@ -36,14 +38,13 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
-	_vec.push_back(L"CUIiconScript");
-	_vec.push_back(L"UIiconScript");
 }
 
 
 void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CButtonScript");
+	_vec.push_back("CCommandScript");
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
 	_vec.push_back("CInterfaceScript");
@@ -59,14 +60,14 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
-	_vec.push_back("CUIiconScript");
-	_vec.push_back("UIiconScript");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CButtonScript" == _strScriptName)
 		return new CButtonScript;
+	if (L"CCommandScript" == _strScriptName)
+		return new CCommandScript;
 	if (L"CDragScript" == _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
@@ -104,6 +105,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 {
 	if ("CButtonScript" == _strScriptName)
 		return new CButtonScript;
+	if ("CCommandScript" == _strScriptName)
+		return new CCommandScript;
 	if ("CDragScript" == _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
@@ -143,6 +146,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
 		return new CButtonScript;
+		break;
+	case (UINT)SCRIPT_TYPE::COMMANDSCRIPT:
+		return new CCommandScript;
 		break;
 	case (UINT)SCRIPT_TYPE::DRAGSCRIPT:
 		return new CDragScript;
@@ -199,6 +205,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return L"CButtonScript";
+		break;
+
+	case SCRIPT_TYPE::COMMANDSCRIPT:
+		return L"CCommandScript";
 		break;
 
 	case SCRIPT_TYPE::DRAGSCRIPT:
@@ -261,14 +271,6 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTileScript";
 		break;
 
-	case SCRIPT_TYPE::UIICONSCRIPT:
-		return L"CUIiconScript";
-		break;
-
-	case SCRIPT_TYPE::IICONSCRIPT:
-		return L"UIiconScript";
-		break;
-
 	}
 	return nullptr;
 }
@@ -279,6 +281,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return "CButtonScript";
+		break;
+
+	case SCRIPT_TYPE::COMMANDSCRIPT:
+		return "CCommandScript";
 		break;
 
 	case SCRIPT_TYPE::DRAGSCRIPT:
@@ -339,14 +345,6 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
-		break;
-
-	case SCRIPT_TYPE::UIICONSCRIPT:
-		return "CUIiconScript";
-		break;
-
-	case SCRIPT_TYPE::IICONSCRIPT:
-		return "UIiconScript";
 		break;
 
 	}

@@ -184,6 +184,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CMissileScript2.h" />
     <ClInclude Include="CMonsterScript.h" />
     <ClInclude Include="CMouseScript.h" />
+    <ClInclude Include="CCommandScript.h" />
     <ClInclude Include="CPlayerScript.h" />
     <ClInclude Include="CRefAniScript.h" />
     <ClInclude Include="CScriptMgr.h" />
@@ -205,6 +206,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CMissileScript2.cpp" />
     <ClCompile Include="CMonsterScript.cpp" />
     <ClCompile Include="CMouseScript.cpp" />
+    <ClCompile Include="CCommandScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
     <ClCompile Include="CRefAniScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />

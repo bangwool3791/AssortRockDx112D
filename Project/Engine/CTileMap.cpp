@@ -87,6 +87,23 @@ tTile CTileMap::GetInfo(Vec3 _vPos)
 	return m_vecInfo[index];
 }
 
+void CTileMap::SetInfo(Vec3 _vPos, UINT _iInfo)
+{
+	UINT index = 0;
+	//int i = _vPos.z / (TILECZ * 0.5f);
+	//int j = (_vPos.x - ((i % 2) * (TILECX * 0.5f))) / TILECX;
+	for (int i = 0; i < TILEZ; ++i)
+	{
+		for (int j = 0; j < TILEX; ++j)
+		{
+			index = i * TILEX + j;
+			if (Picking(_vPos, index))
+				m_vecInfo[index].iInfo = _iInfo;
+		}
+	}
+	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+}
+
 void CTileMap::SetInfo(UINT _iIndex, UINT _iInfo)
 {
 	m_vecInfo[_iIndex].iInfo = _iInfo;

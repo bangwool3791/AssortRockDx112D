@@ -36,6 +36,7 @@ void CEventMgr::tick()
 			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
 			int	iLayer = (int)iter->lParam;
 			CLevel* level = CLevelMgr::GetInst()->GetCurLevel();
+			pGameObeject->begin();
 			level->AddGameObject(pGameObeject, iLayer);
 			m_bLevelChanged = true;
 		}
@@ -45,7 +46,7 @@ void CEventMgr::tick()
 			// wParam : Child Adress, lParam : Parent Adress
 			CGameObject* pParent = (CGameObject*)iter->lParam;
 			CGameObject* pChild = (CGameObject*)iter->wParam;
-
+			pChild->begin();
 			pParent->AddChild(pChild);
 			m_bLevelChanged = true;
 		}
@@ -94,8 +95,11 @@ void CEventMgr::tick()
 			{
 			case RES_TYPE::PREFAB:
 			{
+				if (((CEntity*)iter->lParam)->GetName().empty())
+					break;
+
 				wchar_t sz_data[255] = {};
-				lstrcpy(sz_data, ((CRes*)iter->lParam)->GetName().c_str());
+				lstrcpy(sz_data, ((CEntity*)iter->lParam)->GetName().c_str());
 				wstring wstrRelativePath = lstrcat(sz_data, L"Prefab");
 				CResMgr::GetInst()->AddRes(wstrRelativePath, new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
 			}

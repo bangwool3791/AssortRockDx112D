@@ -14,3 +14,8 @@
 #include "CParticleDefault.h"
 #include "CParticleWood.h"
 #include "CParticleExplosion.h"
+
+#include "CExplosion.h"
+#include "CBlood.h"
+#include "CDust.h"
+#include "CSmoke.h"

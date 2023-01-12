@@ -105,9 +105,9 @@ void CreateTestLelvel()
 {
 	CreateDefaultPrefab();
 	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
-	//CLevelMgr::GetInst()->ChangeLevel(Level);
-	//Level->begin();
-	//return;
+	//\CLevelMgr::GetInst()->ChangeLevel(Level);
+	//\Level->begin();
+	//\return;
 	
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
@@ -378,7 +378,7 @@ void CreateInterface(CLevel* _pLevel)
 		for (size_t j{}; j < 3; ++j)
 		{
 			wstring strName = L"UIButton";
-			strName += std::to_wstring(i * 5 + j);
+			strName += std::to_wstring(i * 3 + j);
 
 			pObj = new CGameObject;
 			pObj->SetName(strName);
@@ -395,7 +395,7 @@ void CreateInterface(CLevel* _pLevel)
 			pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
 			pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
 
-			pObj->GetScript<CButtonScript>()->SetTapIndex(i * 3 + j);
+			pObj->GetScript<CButtonScript>()->SetRow(i * 3 + j);
 			pParent->AddChild(pObj);
 		}
 	}

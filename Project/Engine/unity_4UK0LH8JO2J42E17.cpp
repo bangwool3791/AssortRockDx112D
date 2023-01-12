@@ -6,6 +6,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CAnimator2D.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CBlood.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CCamera.cpp"
 
 
@@ -27,6 +30,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CDevice.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CDust.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CEngine.cpp"
 
 
@@ -36,6 +42,12 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CEventMgr.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CExplosion.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CInterfaceMgr.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CParticleExplosion.cpp"
 
 
@@ -43,10 +55,4 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CGraphicsShader.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CKeyMgr.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLayer.cpp"
 

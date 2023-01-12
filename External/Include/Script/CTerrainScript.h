@@ -25,6 +25,7 @@ public:
 public:
     void    SetTileInfo(UINT _ibyOption);
     void    Initialize(void* _pAddr);
+
     CLONE(CTerrainScript);
 public:
     CTerrainScript();

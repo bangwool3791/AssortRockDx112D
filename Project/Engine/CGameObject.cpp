@@ -55,8 +55,7 @@ CGameObject::CGameObject(const CGameObject& rhs)
 	{
 		AddChild(rhs.m_vecChild[i]->Clone());
 	}
-
-	begin();
+	//복사 생성자에서 비긴 삭제
 }
 
 CGameObject::~CGameObject()
@@ -284,11 +283,11 @@ void CGameObject::DisconnectFromParent()
 {
 	vector<CGameObject*>::iterator iter = m_pParent->m_vecChild.begin();
 
-	for (; iter != m_vecChild.end(); ++iter)
+	for (; iter != m_pParent->m_vecChild.end(); ++iter)
 	{
 		if ((*iter) == this)
 		{
-			m_vecChild.erase(iter);
+			m_pParent->m_vecChild.erase(iter);
 			m_pParent = nullptr;
 			return;
 		}

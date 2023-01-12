@@ -12,6 +12,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CShader.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CSmoke.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CSound.cpp"
 
 
@@ -49,4 +52,7 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\JPSCollision.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\JPSPath.cpp"
 

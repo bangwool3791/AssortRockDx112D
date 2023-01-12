@@ -39,6 +39,8 @@ ContentUI::ContentUI()
 	m_Tree->AddDynamic_DragDrop_World(this, (FUNC_1)&ContentUI::SetDragObject);
 
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MouseObject");
+	m_pLevelTerrain  = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"LevelTerrain");
+	m_pLevelCamera = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
 }
 
 ContentUI::~ContentUI()
@@ -146,7 +148,31 @@ void ContentUI::render_update()
 	{
 		if (KEY_RELEASE(KEY::LBTN))
 		{
-			Vec3 vMousePos = m_pLevelMouseObject->GetScript<CMouseScript>()->GetMousePos();
+			Ray ray{};
+
+			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+			//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+			//vResolution = vResolution * fScale;
+
+			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+			XMVECTOR det; //Determinant, needed for matrix inverse function call
+			Vector3 origin = Vector3(p.x, p.y, -1);
+			Vector3 faraway = Vector3(p.x, p.y, 1);
+
+			const Matrix& matView = m_pLevelCamera->Camera()->GetViewMat();
+			const Matrix& matProj = m_pLevelCamera->Camera()->GetProjMat();
+			XMMATRIX invViewProj = XMMatrixInverse(&det, matView * matProj);
+			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+			Vector3 raydirection = rayend - rayorigin;
+			raydirection.Normalize();
+			ray.position = rayorigin;
+			ray.direction = raydirection;
+
+			Vec3 vMousePos = m_pLevelTerrain->Terrain()->GetMesh()->GetPosition(ray);
 
 			if (vMousePos.x != -1 && vMousePos.y != -1 && vMousePos.z != -1)
 			{

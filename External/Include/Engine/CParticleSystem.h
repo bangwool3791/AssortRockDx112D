@@ -57,6 +57,7 @@ public:
 	void LoadFromFile(FILE* _File);
 public :
 	CParticleSystem();
+	CParticleSystem(COMPONENT_TYPE _type);
 	CParticleSystem(const CParticleSystem& _Rhs);
 	virtual ~CParticleSystem();
 };

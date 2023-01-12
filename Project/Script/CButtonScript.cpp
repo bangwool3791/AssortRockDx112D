@@ -8,15 +8,16 @@
 #include <Engine\CTransform.h>
 #include <Engine\CTerrain.h>
 
+#include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
 CButtonScript::CButtonScript()
 	:CScript{ SCRIPT_TYPE::BUTTONSCRIPT }
 	, m_vMousePos{}
 	, m_bClicked{false}
+	, m_iColumn{}
 {
 	SetName(L"CButtonScript");
-	m_iColum = 0;
 }
 
 CButtonScript::~CButtonScript()
@@ -122,17 +123,18 @@ void CButtonScript::begin()
 	m_arrTab[1][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
 	m_arrTab[1][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
+	CInterfaceMgr::GetInst()->AddTapButton(GetOwner());
 }
 
 void CButtonScript::tick()
 {
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_arrTab[1][m_iIndex].Texture);
+	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_arrTab[m_iColumn][m_iRow].Texture);
 	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_1, m_IconAtlas);
 	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_2, m_AtlasAlpha);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_arrTab[1][m_iIndex].vUV);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &m_arrTab[1][m_iIndex].vSlice);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_2, &m_arrTab[1][m_iIndex].vUV2);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_3, &m_arrTab[1][m_iIndex].vSlice2);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_arrTab[m_iColumn][m_iRow].vUV);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &m_arrTab[m_iColumn][m_iRow].vSlice);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_2, &m_arrTab[m_iColumn][m_iRow].vUV2);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_3, &m_arrTab[m_iColumn][m_iRow].vSlice2);
 }
 
 void CButtonScript::finaltick()
@@ -157,3 +159,15 @@ void CButtonScript::Overlap(CCollider2D* _pOther)
 void CButtonScript::EndOverlap(CCollider2D* _pOther)
 {
 }
+void CButtonScript::SaveToFile(FILE* _File)
+{
+	CScript::SaveToFile(_File);
+	fwrite(&m_iRow, sizeof(float), 1, _File);
+}
+
+void CButtonScript::LoadFromFile(FILE* _File)
+{
+	CScript::LoadFromFile(_File);
+	fread(&m_iRow, sizeof(float), 1, _File);
+}
+
