@@ -7,12 +7,15 @@
 
 #include "CTransform.h"
 #include "CCamera.h"
+#include "CConstBuffer.h"
 #include "CStructuredBuffer.h"
 
 #include "Base.h"
+#include "CDevice.h"
 
 CTileMap::CTileMap()
 	: CRenderComponent(COMPONENT_TYPE::TILEMAP)
+	, m_iAlive{}
 {
 	SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"TileMesh"));
 	SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"UiTileMtrl"));
@@ -62,7 +65,7 @@ void CTileMap::render()
 	m_TileBuffer->UpdateData(56, PIPELINE_STAGE::VS | PIPELINE_STAGE::PS);
 
 	GetCurMaterial()->SetTexParam(TEX_0, m_AtlasTex);
-
+	GetCurMaterial()->SetScalarParam(INT_0, &m_iAlive);
 	GetCurMaterial()->UpdateData();
 
 	GetMesh()->render_particle(1);
@@ -70,38 +73,51 @@ void CTileMap::render()
 	CMaterial::Clear();
 }
 
+tTile CTileMap::GetInfo(UINT _iIndex)
+{
+	return m_vecInfo[_iIndex];
+}
+
 tTile CTileMap::GetInfo(Vec3 _vPos)
 {
+	//cout << "GetInfo" << endl;
 	UINT index = 0;
 	int i = _vPos.z / (TILECZ * 0.5f);
-	//int j = (_vPos.x - ((i % 2) * (TILECX * 0.5f))) / TILECX;
-	for (; i < TILEX; ++i)
+
+	for (; i < TILEZ; ++i)
 	{
-		for (int j = 0; j < TILEZ; ++j)
-		{
-			index = i * TILEZ + j;
-			if(Picking(_vPos, index))
-				return m_vecInfo[index];
-		}
+		int left = i * TILEX;
+		int right = left + TILEX - 1;
+
+		index = Find(_vPos, left, right);
+
+		if (-1 != index)
+			return m_vecInfo[index];
 	}
-	return m_vecInfo[index];
+	return m_vecInfo[0];
 }
 
 void CTileMap::SetInfo(Vec3 _vPos, UINT _iInfo)
 {
+	//cout << "SetInfo" << endl;
 	UINT index = 0;
-	//int i = _vPos.z / (TILECZ * 0.5f);
-	//int j = (_vPos.x - ((i % 2) * (TILECX * 0.5f))) / TILECX;
-	for (int i = 0; i < TILEZ; ++i)
+
+	int i = _vPos.z / (TILECZ * 0.5f);
+
+	for (; i < TILEZ; ++i)
 	{
-		for (int j = 0; j < TILEX; ++j)
+		int left = i * TILEX;
+		int right = left + TILEX - 1;
+
+		index = Find(_vPos, left, right);
+
+		if (-1 != index)
 		{
-			index = i * TILEX + j;
-			if (Picking(_vPos, index))
-				m_vecInfo[index].iInfo = _iInfo;
+			m_vecInfo[index].iInfo = _iInfo;
+			m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+			return;
 		}
 	}
-	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
 }
 
 void CTileMap::SetInfo(UINT _iIndex, UINT _iInfo)
@@ -109,6 +125,25 @@ void CTileMap::SetInfo(UINT _iIndex, UINT _iInfo)
 	m_vecInfo[_iIndex].iInfo = _iInfo;
 	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
 }
+
+int CTileMap::Find(Vec3 vPos, int left, int right)
+{
+	if (left > right)
+		return -1;
+
+	UINT mid = (left + right) / 2;
+
+	//cout << mid << endl;
+
+	if (Picking(vPos, mid))
+		return mid;
+
+	if (vPos.x < m_vecInfo[mid].vPos.x)
+		return Find(vPos, left, mid -1);
+	else
+		return Find(vPos, mid + 1, right);
+}
+
 
 bool CTileMap::Picking(Vec3 vPos, UINT& iIndex)
 {
@@ -171,4 +206,14 @@ void CTileMap::SaveToFile(FILE* _File)
 void CTileMap::LoadFromFile(FILE* _File)
 {
 	CRenderComponent::LoadFromFile(_File);
+}
+
+void CTileMap::On()
+{
+	m_iAlive = 1;
+}
+
+void CTileMap::Off()
+{
+	m_iAlive = 0;
 }

@@ -118,8 +118,11 @@ void OutlinerUI::render_update()
 			evn.eType = EVENT_TYPE::DELETE_OBJECT;
 			evn.wParam = m_Node->GetData();
 			CEventMgr::GetInst()->AddEvent(evn);
-
 			m_Tree->DeleteNode(m_Node);
+
+			//인스펙터 타겟 오브젝트 삭제 시 
+			InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+			Inspector->SetTargetObject(nullptr);
 
 		}
 	}

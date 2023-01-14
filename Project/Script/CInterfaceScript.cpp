@@ -72,16 +72,79 @@ void CInterfaceScript::tick()
 
 				if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
 				{
-					if (0 == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					if (COMMAND_CENTER == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
 					{
-						for (size_t j{}; j < 6; ++j)
-							m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(1);
+						switch (i)
+						{
+						case 0:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COLONISTS);
+							break;
+						case 1:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(RESOURCE);
+							break;
+						case 2:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(INDUSTRY);
+							break;
+						case 3:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(DEFENSE);
+							break;
+						}
 					}
-					else if (1 == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					else if (COLONISTS == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
 					{
-						//객체 끌어오기
+						switch (i)
+						{
+						case 0:
+						{
+							cout << "생성" << endl;
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+							break;
+						case 5:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+							break;
+						}
 					}
+					else if (RESOURCE == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					{
+						switch (i)
+						{
+						case 5:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+							break;
+						}
+					}
+					else if (INDUSTRY == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					{
+						switch (i)
+						{
+						case 5:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+							break;
+						}
+					}
+					else if (DEFENSE == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					{
+						switch (i)
+						{
+						case 5:
+							for (size_t j{}; j < 6; ++j)
+								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+							break;
+						}
+					}
+					cout << "해지" << endl;
+					m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
 				}
+				//버튼 토글
 			}
 		}
 	}

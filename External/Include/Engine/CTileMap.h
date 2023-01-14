@@ -10,9 +10,10 @@ class CGameObject;
 class CTileMap :
     public CRenderComponent
 {
-public:
-    enum class TILE_MODE { INGAME, EDIT };
 private:
+    int                     m_iAlive;
+private:
+    tMtrlConst				m_tConst;
     Ptr<CTexture>           m_AtlasTex;     // 타일맵이 사용하는 아틀라스 이미지   
     CStructuredBuffer*      m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
     vector<tTile>           m_vecInfo;
@@ -28,9 +29,13 @@ public:
     virtual void SaveToFile(FILE* _File) override;
     virtual void LoadFromFile(FILE* _File) override;
 
+    tTile    GetInfo(UINT _iIndex);
     tTile    GetInfo(Vec3 _vPos);
     void     SetInfo(UINT _iIndex, UINT _iInfo);
     void     SetInfo(Vec3 _vPos, UINT _iInfo);
+    int      Find(Vec3 _vPos, int left, int right);
+    void     On();
+    void     Off();
     CLONE(CTileMap);
 public:
     CTileMap();

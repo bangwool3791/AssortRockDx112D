@@ -47,6 +47,8 @@ void CCommandScript::begin()
 	SetTileInfo(que, result,1);
 	SetTileInfo(que, result,1);
 	SetTileInfo(que, result,1);
+	SetTileInfo(que, result,1);
+	SetTileInfo(que, result,1);
 
 	while (!result.empty())
 		result.pop();
@@ -57,6 +59,9 @@ void CCommandScript::begin()
 	result.push(ttile.iIndex);
 	SetTileInfo(que, result, 0);
 	SetTileInfo(que, result, 0);
+	SetTileInfo(que, result, 0);
+
+	GetOwner()->Transform()->SetRelativePos(ttile.vPos);
 	//if ((ttile.iIndex / TILEX) % 2 == 0)
 	//{
 	//	result.push(ttile.iIndex);
@@ -134,9 +139,6 @@ void CCommandScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT val
 		UINT data = que.front();
 		que.pop();
 
-		if (m_bCheck[data])
-			continue;
-
 		m_pTileObject->TileMap()->SetInfo(data, value);
 		m_bCheck[data] = true;
 
@@ -144,69 +146,117 @@ void CCommandScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT val
 		{
 			if (0 <= data - 1 && data - 1 < 40000)
 				if (!m_bCheck[data - 1])
+				{
 					result.push(data - 1);
+					m_bCheck[data - 1] = true;
+				}
 
 			if (0 <= data + 1 && data + 1 < 40000)
 				if (!m_bCheck[data + 1])
+				{
 					result.push(data + 1);
+					m_bCheck[data + 1] = true;
+				}
 
 			if (0 <= data + TILEX && data + TILEX < 40000)
 				if (!m_bCheck[data + TILEX])
+				{
 					result.push(data + TILEX);
+					m_bCheck[data + TILEX] = true;
+				}
 
 			if (0 <= data + TILEX - 1 && data + TILEX - 1 < 40000)
 				if (!m_bCheck[data + TILEX - 1])
+				{
 					result.push(data + TILEX - 1);
+					m_bCheck[data + TILEX - 1] = true;
+				}
 
 			if (0 <= data + TILEX * 2 && data + TILEX * 2 < 40000)
 				if (!m_bCheck[data + TILEX * 2])
+				{
 					result.push(data + TILEX * 2);
+					m_bCheck[data + TILEX * 2] = true;
+				}
 
 			if (0 <= data - TILEX && data - TILEX < 40000)
 				if (!m_bCheck[data - TILEX])
+				{
 					result.push(data - TILEX);
+					m_bCheck[data - TILEX] = true;
+				}
 
 			if (0 <= data - TILEX - 1 && data - TILEX - 1 < 40000)
 				if (!m_bCheck[data - TILEX - 1])
+				{
 					result.push(data - TILEX - 1);
+					m_bCheck[data - TILEX - 1] = true;
+				}
 
 			if (0 <= data - TILEX * 2 && data - TILEX * 2 < 40000)
 				if (!m_bCheck[data - TILEX * 2])
+				{
 					result.push(data - TILEX * 2);
+					m_bCheck[data - TILEX * 2] = true;
+				}
 		}
 		else if ((data / TILEX) % 2 == 1)
 		{
 			if (0 <= data - 1 && data - 1 < 40000)
 				if (!m_bCheck[data - 1])
+				{
 					result.push(data - 1);
+					m_bCheck[data - 1] = true;
+				}
 
 			if (0 <= data + 1 && data + 1 < 40000)
 				if (!m_bCheck[data + 1])
+				{
 					result.push(data + 1);
+					m_bCheck[data + 1] = true;
+				}
 
 			if (0 <= data + TILEX && data + TILEX < 40000)
 				if (!m_bCheck[data + TILEX])
+				{
 					result.push(data + TILEX);
+					m_bCheck[data + TILEX] = true;
+				}
 
 			if (0 <= data + TILEX + 1 && data + TILEX + 1 < 40000)
 				if (!m_bCheck[data + TILEX + 1])
+				{
 					result.push(data + TILEX + 1);
+					m_bCheck[data + TILEX + 1] = true;
+				}
 
 			if (0 <= data + TILEX * 2 && data + TILEX * 2 < 40000)
 				if (!m_bCheck[data + TILEX * 2])
+				{
 					result.push(data + TILEX * 2);
+					m_bCheck[data + TILEX * 2] = true;
+				}
 
 			if (0 <= data - TILEX && data - TILEX < 40000)
 				if (!m_bCheck[data - TILEX])
+				{
 					result.push(data - TILEX);
+					m_bCheck[data - TILEX] = true;
+				}
 
 			if (0 <= data - TILEX + 1 && data - TILEX + 1 < 40000)
 				if (!m_bCheck[data - TILEX + 1])
+				{
 					result.push(data - TILEX + 1);
+					m_bCheck[data - TILEX + 1] = true;
+				}
 
 			if (0 <= data - TILEX * 2 && data - TILEX * 2 < 40000)
 				if (!m_bCheck[data - TILEX * 2])
+				{
 					result.push(data - TILEX * 2);
+					m_bCheck[data - TILEX * 2] = true;
+				}
 		}
 	}
 }

@@ -519,9 +519,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreatePixelShader(L"shader\\objectrenderer.fx", "PS_ObjectRender");
 
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	pShader->AddScalarParam(INT_0, "Use Atlas");
 	pShader->AddScalarParam(VEC2_0, "UV LeftTop");

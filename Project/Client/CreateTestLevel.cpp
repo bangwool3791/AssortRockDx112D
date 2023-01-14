@@ -118,6 +118,8 @@ void CreateTestLelvel()
 	pLevel->GetLayer(3)->SetName(L"Monster");
 	pLevel->GetLayer(4)->SetName(L"MonsterProjecttile");
 
+	CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
+
 	// Camera Object Ãß°¡
 	CGameObject* pCamObj = new CGameObject;
 	pCamObj->SetName(L"MainCamera");

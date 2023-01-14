@@ -317,6 +317,10 @@ void EditAnimationUI::render_update()
     if (ImGui::Button("Del##1", ImVec2(40.f, 20.f)))
     {
         m_iCurIdx = m_pAnimator->Delete_Animation2D();
+
+        if (0 > m_iCurIdx)
+            m_iCurIdx = 0;
+
         Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
     }
     ImGui::SameLine();
@@ -390,12 +394,16 @@ void EditAnimationUI::render_update()
             {
                 m_pAnimator->Play(pAnimator->GetName(), m_pAnimator->GetRepeat());
 
-                for (auto iter{ m_vecAnimation.begin() }; iter != m_vecAnimation.end(); ++iter)
+                for (auto iter{ m_vecAnimation.begin() }; iter != m_vecAnimation.end();)
                 {
                     if (*iter == m_strAnimationName)
                     {
-                        m_vecAnimation.erase(iter);
+                        iter = m_vecAnimation.erase(iter);
                         break;
+                    }
+                    else
+                    {
+                        ++iter;
                     }
                 }
 

@@ -38,6 +38,12 @@
     <Filter Include="Scripts\08. TileScript">
       <UniqueIdentifier>{aaade477-57a7-4e18-8268-7dc03f72ecb5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\09. ColonistScript">
+      <UniqueIdentifier>{4bb62241-6b17-4b08-a980-f94bc2bafc96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\09. ColonistScript\01. TentScript">
+      <UniqueIdentifier>{620f89fa-6c54-4947-8977-522de15a1552}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -100,6 +106,9 @@
     <ClInclude Include="CCommandScript.h">
       <Filter>Scripts\05. CommandCenterScript</Filter>
     </ClInclude>
+    <ClInclude Include="CTentScript.h">
+      <Filter>Scripts\09. ColonistScript\01. TentScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -161,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="CCommandScript.cpp">
       <Filter>Scripts\05. CommandCenterScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTentScript.cpp">
+      <Filter>Scripts\09. ColonistScript\01. TentScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

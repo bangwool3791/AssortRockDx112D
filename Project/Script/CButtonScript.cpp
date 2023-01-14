@@ -11,6 +11,26 @@
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
+//ºóÄ­ 
+/*
+ 	m_arrTab[RESOURCE][3].Texture = m_Atlas;
+	m_arrTab[RESOURCE][3].vUV = vLeftTop;
+	m_arrTab[RESOURCE][3].vSlice = vSlice;
+			 
+	m_arrTab[RESOURCE][4].Texture = m_Atlas;
+	m_arrTab[RESOURCE][4].vUV = vLeftTop;
+	m_arrTab[RESOURCE][4].vSlice = vSlice;
+*/
+
+//µÚ·Î °¡±â
+/*
+ 	m_arrTab[RESOURCE][5].Texture = m_IconAtlas;
+	m_arrTab[RESOURCE][5].vUV.x = 570.f / fIconWidth;
+	m_arrTab[RESOURCE][5].vUV.y = 1260.f / fIconHeight;
+	m_arrTab[RESOURCE][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[RESOURCE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[RESOURCE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+*/
 CButtonScript::CButtonScript()
 	:CScript{ SCRIPT_TYPE::BUTTONSCRIPT }
 	, m_vMousePos{}
@@ -50,78 +70,181 @@ void CButtonScript::begin()
 	float fIconWidth = m_IconAtlas->GetWidth();
 	float fIconHeight = m_IconAtlas->GetHeight();
 
-	m_arrTab[0][0].Texture = m_IconAtlas;
-	m_arrTab[0][0].vUV.x = 275.f / fIconWidth;
-	m_arrTab[0][0].vUV.y = 830.f / fIconHeight;
-	m_arrTab[0][0].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
-	m_arrTab[0][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[0][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][0].Texture = m_IconAtlas;
+	m_arrTab[COMMAND_CENTER][0].vUV.x = 275.f / fIconWidth;
+	m_arrTab[COMMAND_CENTER][0].vUV.y = 830.f / fIconHeight;
+	m_arrTab[COMMAND_CENTER][0].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
-	m_arrTab[0][1].Texture = m_IconAtlas;
-	m_arrTab[0][1].vUV.x = 0.f / fIconWidth;
-	m_arrTab[0][1].vUV.y = 970.f / height;
-	m_arrTab[0][1].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
-	m_arrTab[0][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[0][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][1].Texture = m_IconAtlas;
+	m_arrTab[COMMAND_CENTER][1].vUV.x = 0.f / fIconWidth;
+	m_arrTab[COMMAND_CENTER][1].vUV.y = 970.f / height;
+	m_arrTab[COMMAND_CENTER][1].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
-	m_arrTab[0][2].Texture = m_IconAtlas;
-	m_arrTab[0][2].vUV.x = 860.f / fIconWidth;
-	m_arrTab[0][2].vUV.y = 850.f / fIconHeight;
-	m_arrTab[0][2].vSlice = Vec2{ 140.f / fIconWidth, 140.f / fIconHeight };
-	m_arrTab[0][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[0][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][2].Texture = m_IconAtlas;
+	m_arrTab[COMMAND_CENTER][2].vUV.x = 860.f / fIconWidth;
+	m_arrTab[COMMAND_CENTER][2].vUV.y = 850.f / fIconHeight;
+	m_arrTab[COMMAND_CENTER][2].vSlice = Vec2{ 140.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
-	m_arrTab[0][3].Texture = m_IconAtlas;
-	m_arrTab[0][3].vUV.x = 560.f / fIconWidth;
-	m_arrTab[0][3].vUV.y = 860.f / fIconHeight;
-	m_arrTab[0][3].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
-	m_arrTab[0][3].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[0][3].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][3].Texture = m_IconAtlas;
+	m_arrTab[COMMAND_CENTER][3].vUV.x = 560.f / fIconWidth;
+	m_arrTab[COMMAND_CENTER][3].vUV.y = 860.f / fIconHeight;
+	m_arrTab[COMMAND_CENTER][3].vSlice = Vec2{ 150.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][3].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COMMAND_CENTER][3].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	
+	m_arrTab[COMMAND_CENTER][4].Texture = m_Atlas;
+	m_arrTab[COMMAND_CENTER][4].vUV = vLeftTop;
+	m_arrTab[COMMAND_CENTER][4].vSlice = vSlice;
+	
+	m_arrTab[COMMAND_CENTER][5].Texture = m_Atlas;
+	m_arrTab[COMMAND_CENTER][5].vUV = vLeftTop;
+	m_arrTab[COMMAND_CENTER][5].vSlice = vSlice;
 
-	m_arrTab[0][4].Texture = m_Atlas;
-	m_arrTab[0][4].vUV = vLeftTop;
-	m_arrTab[0][4].vSlice = vSlice;
+	m_arrTab[COLONISTS][0].Texture = TexPortraits;
+	m_arrTab[COLONISTS][0].vUV.x = 700.f / fPortraitWidth;
+	m_arrTab[COLONISTS][0].vUV.y = 860.f / fPortraitHeight;
+	m_arrTab[COLONISTS][0].vSlice = Vec2{ 100.f / fPortraitWidth, 100.f / fPortraitHeight };
+	m_arrTab[COLONISTS][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COLONISTS][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			 
+	m_arrTab[COLONISTS][1].Texture = m_Atlas;
+	m_arrTab[COLONISTS][1].vUV = vLeftTop;
+	m_arrTab[COLONISTS][1].vSlice = vSlice;
+			 
+	m_arrTab[COLONISTS][2].Texture = m_Atlas;
+	m_arrTab[COLONISTS][2].vUV = vLeftTop;
+	m_arrTab[COLONISTS][2].vSlice = vSlice;
+			 
+	m_arrTab[COLONISTS][3].Texture = m_Atlas;
+	m_arrTab[COLONISTS][3].vUV = vLeftTop;
+	m_arrTab[COLONISTS][3].vSlice = vSlice;
+			 
+	m_arrTab[COLONISTS][4].Texture = m_Atlas;
+	m_arrTab[COLONISTS][4].vUV = vLeftTop;
+	m_arrTab[COLONISTS][4].vSlice = vSlice;
 
-	m_arrTab[0][5].Texture = m_Atlas;
-	m_arrTab[0][5].vUV = vLeftTop;
-	m_arrTab[0][5].vSlice = vSlice;
-
+	m_arrTab[COLONISTS][5].Texture = m_IconAtlas;
+	m_arrTab[COLONISTS][5].vUV.x = 570.f / fIconWidth;
+	m_arrTab[COLONISTS][5].vUV.y = 1260.f / fIconHeight;
+	m_arrTab[COLONISTS][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[COLONISTS][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[COLONISTS][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 	//
-	m_arrTab[1][0].Texture = TexPortraits;
-	m_arrTab[1][0].vUV.x = 700.f / fPortraitWidth;
-	m_arrTab[1][0].vUV.y = 860.f / fPortraitHeight;
-	m_arrTab[1][0].vSlice = Vec2{ 100.f / fPortraitWidth, 100.f / fPortraitHeight };
-	m_arrTab[1][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[1][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[RESOURCE][0].Texture = TexPortraits;
+	m_arrTab[RESOURCE][0].vUV.x = 700.f / fPortraitWidth;
+	m_arrTab[RESOURCE][0].vUV.y = 860.f / fPortraitHeight;
+	m_arrTab[RESOURCE][0].vSlice = Vec2{ 100.f / fPortraitWidth, 100.f / fPortraitHeight };
+	m_arrTab[RESOURCE][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[RESOURCE][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 			 
-	m_arrTab[1][1].Texture = TexPortraits;
-	m_arrTab[1][1].vUV.x = 1420.f / fPortraitWidth;
-	m_arrTab[1][1].vUV.y = 0.f / fPortraitHeight;
-	m_arrTab[1][1].vSlice = Vec2{ 150.f / fPortraitWidth, 140.f / fPortraitHeight };
-	m_arrTab[1][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[1][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[RESOURCE][1].Texture = TexPortraits;
+	m_arrTab[RESOURCE][1].vUV.x = 1420.f / fPortraitWidth;
+	m_arrTab[RESOURCE][1].vUV.y = 0.f / fPortraitHeight;
+	m_arrTab[RESOURCE][1].vSlice = Vec2{ 150.f / fPortraitWidth, 140.f / fPortraitHeight };
+	m_arrTab[RESOURCE][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[RESOURCE][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 			 
-	m_arrTab[1][2].Texture = TexPortraits;
-	m_arrTab[1][2].vUV.x = 132.f / fPortraitWidth;
-	m_arrTab[1][2].vUV.y = 1360.f/ fPortraitHeight;
-	m_arrTab[1][2].vSlice = Vec2{ 150.f / fPortraitWidth, 140.f / fPortraitHeight };
-	m_arrTab[1][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[1][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[RESOURCE][2].Texture = TexPortraits;
+	m_arrTab[RESOURCE][2].vUV.x = 132.f / fPortraitWidth;
+	m_arrTab[RESOURCE][2].vUV.y = 1360.f/ fPortraitHeight;
+	m_arrTab[RESOURCE][2].vSlice = Vec2{ 150.f / fPortraitWidth, 140.f / fPortraitHeight };
+	m_arrTab[RESOURCE][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[RESOURCE][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 			 
-	m_arrTab[1][3].Texture = m_Atlas;
-	m_arrTab[1][3].vUV = vLeftTop;
-	m_arrTab[1][3].vSlice = vSlice;
+	m_arrTab[RESOURCE][3].Texture = m_Atlas;
+	m_arrTab[RESOURCE][3].vUV = vLeftTop;
+	m_arrTab[RESOURCE][3].vSlice = vSlice;
+			 
+	m_arrTab[RESOURCE][4].Texture = m_Atlas;
+	m_arrTab[RESOURCE][4].vUV = vLeftTop;
+	m_arrTab[RESOURCE][4].vSlice = vSlice;
+			 
+	m_arrTab[RESOURCE][5].Texture = m_IconAtlas;
+	m_arrTab[RESOURCE][5].vUV.x = 570.f / fIconWidth;
+	m_arrTab[RESOURCE][5].vUV.y = 1260.f / fIconHeight;
+	m_arrTab[RESOURCE][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[RESOURCE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[RESOURCE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
-	m_arrTab[1][4].Texture = m_Atlas;
-	m_arrTab[1][4].vUV = vLeftTop;
-	m_arrTab[1][4].vSlice = vSlice;
+	//Industry
+	m_arrTab[INDUSTRY][0].Texture = TexPortraits;
+	m_arrTab[INDUSTRY][0].vUV.x = 565.f / fPortraitWidth;
+	m_arrTab[INDUSTRY][0].vUV.y = 5.f / fPortraitHeight;
+	m_arrTab[INDUSTRY][0].vSlice = Vec2{ 140.f / fPortraitWidth, 120.f / fPortraitHeight };
+	m_arrTab[INDUSTRY][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[INDUSTRY][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[INDUSTRY][1].Texture = TexPortraits;
+	m_arrTab[INDUSTRY][1].vUV.x = 1130.f / fPortraitWidth;
+	m_arrTab[INDUSTRY][1].vUV.y = 5.f / fPortraitHeight;
+	m_arrTab[INDUSTRY][1].vSlice = Vec2{ 140.f / fPortraitWidth, 120.f / fPortraitHeight };
+	m_arrTab[INDUSTRY][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[INDUSTRY][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[INDUSTRY][2].Texture = TexPortraits;
+	m_arrTab[INDUSTRY][2].vUV.x = 1845.f / fPortraitWidth;
+	m_arrTab[INDUSTRY][2].vUV.y = 5.f / fPortraitHeight;
+	m_arrTab[INDUSTRY][2].vSlice = Vec2{ 140.f / fPortraitWidth, 120.f / fPortraitHeight };
+	m_arrTab[INDUSTRY][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[INDUSTRY][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[INDUSTRY][3].Texture = m_Atlas;
+	m_arrTab[INDUSTRY][3].vUV = vLeftTop;
+	m_arrTab[INDUSTRY][3].vSlice = vSlice;
 			 
-	m_arrTab[1][5].Texture = m_IconAtlas;
-	m_arrTab[1][5].vUV.x = 570.f / fIconWidth;
-	m_arrTab[1][5].vUV.y = 1260.f / fIconHeight;
-	m_arrTab[1][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
-	m_arrTab[1][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
-	m_arrTab[1][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+	m_arrTab[INDUSTRY][4].Texture = m_Atlas;
+	m_arrTab[INDUSTRY][4].vUV = vLeftTop;
+	m_arrTab[INDUSTRY][4].vSlice = vSlice;
+			 
+	m_arrTab[INDUSTRY][5].Texture = m_IconAtlas;
+	m_arrTab[INDUSTRY][5].vUV.x = 570.f / fIconWidth;
+	m_arrTab[INDUSTRY][5].vUV.y = 1260.f / fIconHeight;
+	m_arrTab[INDUSTRY][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[INDUSTRY][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[INDUSTRY][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	//defense
+	m_arrTab[DEFENSE][0].Texture = TexPortraits;
+	m_arrTab[DEFENSE][0].vUV.x = 360.f / fPortraitWidth;
+	m_arrTab[DEFENSE][0].vUV.y = 1800.f / fPortraitHeight;
+	m_arrTab[DEFENSE][0].vSlice = Vec2{ 100.f / fPortraitWidth, 140.f / fPortraitHeight };
+	m_arrTab[DEFENSE][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[DEFENSE][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			
+	m_arrTab[DEFENSE][1].Texture = TexPortraits;
+	m_arrTab[DEFENSE][1].vUV.x = 270.f / fPortraitWidth;
+	m_arrTab[DEFENSE][1].vUV.y = 1370.f / fPortraitHeight;
+	m_arrTab[DEFENSE][1].vSlice = Vec2{ 100.f / fPortraitWidth, 145.f / fPortraitHeight };
+	m_arrTab[DEFENSE][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[DEFENSE][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			 
+	m_arrTab[DEFENSE][2].Texture = TexPortraits;
+	m_arrTab[DEFENSE][2].vUV.x = 150.f / fPortraitWidth;
+	m_arrTab[DEFENSE][2].vUV.y = 970.f / fPortraitHeight;
+	m_arrTab[DEFENSE][2].vSlice = Vec2{ 100.f / fPortraitWidth, 145.f / fPortraitHeight };
+	m_arrTab[DEFENSE][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[DEFENSE][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			 
+	m_arrTab[DEFENSE][3].Texture = m_Atlas;
+	m_arrTab[DEFENSE][3].vUV = vLeftTop;
+	m_arrTab[DEFENSE][3].vSlice = vSlice;
+			 
+	m_arrTab[DEFENSE][4].Texture = m_Atlas;
+	m_arrTab[DEFENSE][4].vUV = vLeftTop;
+	m_arrTab[DEFENSE][4].vSlice = vSlice;
+			 
+	m_arrTab[DEFENSE][5].Texture = m_IconAtlas;
+	m_arrTab[DEFENSE][5].vUV.x = 570.f / fIconWidth;
+	m_arrTab[DEFENSE][5].vUV.y = 1260.f / fIconHeight;
+	m_arrTab[DEFENSE][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[DEFENSE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[DEFENSE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
 	CInterfaceMgr::GetInst()->AddTapButton(GetOwner());
 }
@@ -139,12 +262,18 @@ void CButtonScript::tick()
 
 void CButtonScript::finaltick()
 {
-	if (KEY_PRESSED(KEY::LBTN))
+	static float dt{};
+	
+	if (++dt > 360)
 	{
-		if (GetOwner()->Transform()->Picking(m_pLevelMouseObject->GetScript<CMouseScript>()->GetUiRay(), m_vMousePos))
+		if (KEY_PRESSED(KEY::LBTN))
 		{
-			m_bClicked = true;
+			if (GetOwner()->Transform()->Picking(m_pLevelMouseObject->GetScript<CMouseScript>()->GetUiRay(), m_vMousePos))
+			{
+				m_bClicked = true;
+			}
 		}
+		dt -= 360;
 	}
 }
 
