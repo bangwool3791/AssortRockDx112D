@@ -44,6 +44,9 @@
     <Filter Include="Scripts\09. ColonistScript\01. TentScript">
       <UniqueIdentifier>{620f89fa-6c54-4947-8977-522de15a1552}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\09. ColonistScript\02. HuntScript">
+      <UniqueIdentifier>{316aaaa1-3b62-4515-a969-44d85b0ea4d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -109,6 +112,12 @@
     <ClInclude Include="CTentScript.h">
       <Filter>Scripts\09. ColonistScript\01. TentScript</Filter>
     </ClInclude>
+    <ClInclude Include="CHuntScript.h">
+      <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CEditTileScript.h">
+      <Filter>Scripts\08. TileScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -173,6 +182,12 @@
     </ClCompile>
     <ClCompile Include="CTentScript.cpp">
       <Filter>Scripts\09. ColonistScript\01. TentScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CHuntScript.cpp">
+      <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CEditTileScript.cpp">
+      <Filter>Scripts\08. TileScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -100,7 +100,6 @@ void CInterfaceScript::tick()
 						{
 						case 0:
 						{
-							cout << "»ý¼º" << endl;
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
 							Instantiate(pUIPrefab->Instantiate(), 1);
 						}
@@ -108,17 +107,23 @@ void CInterfaceScript::tick()
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
-							break;
+							return;
 						}
 					}
 					else if (RESOURCE == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
 					{
 						switch (i)
 						{
+						case 0:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
-							break;
+							return;
 						}
 					}
 					else if (INDUSTRY == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())

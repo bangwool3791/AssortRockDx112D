@@ -2,6 +2,8 @@ CButtonScript
 CCommandScript
 CDragScript
 CEditorMouseScript
+CEditTileScript
+CHuntScript
 CInterfaceScript
 CLevelCameraScript
 CLightScript

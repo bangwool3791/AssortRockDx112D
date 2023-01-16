@@ -176,6 +176,8 @@ call CodeGen.exe</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CEditTileScript.h" />
+    <ClInclude Include="CHuntScript.h" />
     <ClInclude Include="CLevelCameraScript.h" />
     <ClInclude Include="CDragScript.h" />
     <ClInclude Include="CEditorMouseScript.h" />
@@ -199,6 +201,8 @@ call CodeGen.exe</Command>
     <ClInclude Include="CButtonScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CEditTileScript.cpp" />
+    <ClCompile Include="CHuntScript.cpp" />
     <ClCompile Include="CLevelCameraScript.cpp" />
     <ClCompile Include="CDragScript.cpp" />
     <ClCompile Include="CEditorMouseScript.cpp" />

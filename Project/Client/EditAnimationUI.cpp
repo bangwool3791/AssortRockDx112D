@@ -124,6 +124,8 @@ void EditAnimationUI::render_update()
 
                 const vector<wstring>& vec = m_pAnimator->GetKeys();
 
+                m_vecAnimation.clear();
+
                 for (size_t i{}; i < vec.size(); ++i)
                 {
                     m_vecAnimation.push_back(string(vec[i].begin(), vec[i].end()));

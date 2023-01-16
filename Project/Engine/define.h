@@ -46,6 +46,7 @@ typedef Vector4 Vec4;
 #define	TILECZ 64 * 2.f
 
 #define OBJECTPOOL_SIZE 1000
+
 enum class SHADER_DOMAIN
 {
 	DOMAIN_OPAQUE,		 // 불투명 단계
@@ -327,6 +328,17 @@ enum class BUILD_STATE
 	READY,
 	BUILD,
 	DESTROY,
+};
+
+enum class TILE_TYPE
+{
+	NOTUSED,
+	EMPTY,
+	BUILD,
+	COLLISION,
+	USED,
+	NOT_FOREST,
+	HUNTED,
 };
 extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END];
 extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END];

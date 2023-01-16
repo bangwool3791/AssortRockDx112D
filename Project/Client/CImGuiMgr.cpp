@@ -221,7 +221,8 @@ void CImGuiMgr::CreateUI()
     pUI = new TileMapUI;
     pUI->begin();
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));
-    ((TileMapUI*)pUI)->Initialize(CEditor::GetInst()->FindByName(L"MapTool"));
+    CGameObjectEx* arr[2] = { CEditor::GetInst()->FindByName(L"MapTool") , CEditor::GetInst()->FindByName(L"TileTool") };
+    ((TileMapUI*)pUI)->Initialize(arr);
 
     pUI = new OutlinerUI;
     m_mapUI.insert(make_pair(pUI->GetName(), pUI));

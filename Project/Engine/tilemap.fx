@@ -52,13 +52,8 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == 1)
     {
-        color1 = float4(0.0f, 0.7f, 0.0f, 0.5f);
-        color2 = float4(0.0f, 0.7f, 0.0f, 0.5f);
-    }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 4)
-    {
-        color1 = float4(0.0f, 0.7f, 0.0f, 0.5f);
-        color2 = float4(0.0f, 0.7f, 0.0f, 0.5f);
+        color1 = float4(0.0f, 0.7f, 0.0f, 1.f);
+        color2 = float4(0.0f, 0.7f, 0.0f, 1.f);
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == 2)
     {
@@ -67,8 +62,18 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == 3)
     {
-        color1 = float4(0.5f, 0.0f, 0.0f, 0.5f);
-        color2 = float4(0.5f, 0.0f, 0.0f, 0.5f);
+        color1 = float4(0.2f, 0.0f, 0.0f, 1.0f);
+        color2 = float4(0.2f, 0.0f, 0.0f, 1.0f);
+    }
+    else if (g_TileBuffer[_in.vColor.x].iInfo == 4)
+    {
+        color1 = float4(0.0f, 0.6f, 0.0f, 1.f);
+        color2 = float4(0.0f, 0.6f, 0.0f, 1.f);
+    }
+    else if (g_TileBuffer[_in.vColor.x].iInfo == 6)
+    {
+        color1 = float4(0.0f, 0.7f, 0.0f, 1.f);
+        color2 = float4(0.0f, 0.7f, 0.0f, 1.f);
     }
 
     alphaValue = g_tex_0.Sample(g_sam_1, _in.vUV);

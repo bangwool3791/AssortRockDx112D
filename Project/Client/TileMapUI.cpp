@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "TileMapUI.h"
+#include "CGameObjectEx.h"
 
 #include "CImGuiMgr.h"
 
@@ -14,6 +15,7 @@
 
 #include <Engine\CScript.h>
 #include <Script\CTerrainScript.h>
+#include <Script\CEditTileScript.h>
 
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
@@ -50,14 +52,14 @@ void TileMapUI::render_update()
 
 	if(ImGui::Button("Save"))
 	{
-		m_pEditTileObject->GetRenderComponent()->GetMesh()->Save(L"Terrain\\Terrain.dat");
+		m_pEditTerrainObject->GetRenderComponent()->GetMesh()->Save(L"Terrain\\Terrain.dat");
 	}
 
 	ImGui::SameLine();
 
 	if (ImGui::Button("Load"))
 	{
-		m_pEditTileObject->GetRenderComponent()->GetMesh()->Load(L"Terrain\\Terrain.dat");
+		m_pEditTerrainObject->GetRenderComponent()->GetMesh()->Load(L"Terrain\\Terrain.dat");
 	}
 
 	if (ImGui::Button("추후 업데이트 Apply"))
@@ -68,6 +70,22 @@ void TileMapUI::render_update()
 		pProgressUI->Open();
 	}
 
+	if (ImGui::Checkbox("Terrain", &m_bTerrain))
+	{
+		if (m_bTerrain)
+		{
+			m_pEditTerrainObject->GetScript<CTerrainScript>(L"CTerrainScript")->Deactivate();
+			m_pEditTerrainObject->GetScript<CEditTileScript>(L"CEditTileMap")->Activate();
+		}
+		else
+		{
+			m_pEditTerrainObject->GetScript<CTerrainScript>(L"CTerrainScript")->Activate();
+			m_pEditTerrainObject->GetScript<CEditTileScript>(L"CEditTileMap")->Deactivate();
+		}
+	}
+	
+
+
 	for (UINT i = 1; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
@@ -76,7 +94,7 @@ void TileMapUI::render_update()
 
 		if (ImGui::ImageButton(myImage, ImVec2(50.f, 50.f)))
 		{
-			m_pEditTileObject->GetScript<CTerrainScript>(L"CTerrainScript")->SetTileInfo(i);
+			m_pEditTerrainObject->GetScript<CTerrainScript>(L"CTerrainScript")->SetTileInfo(i);
 		}
 
 		if (i % 4 != 0)
@@ -88,8 +106,13 @@ void TileMapUI::render_update()
 
 void TileMapUI::Initialize(void* pAddr)
 {
-	m_pEditTileObject = (CGameObject*)pAddr;
-	m_pEditTileMap = static_cast<CTerrain*>(m_pEditTileObject->GetRenderComponent());
+	m_pEditTerrainObject = (CGameObject*)pAddr;
+	m_pEditTerrain = static_cast<CTerrain*>(m_pEditTerrainObject->GetRenderComponent());
+
+	CGameObjectEx* pGameObejct = (CGameObjectEx*)pAddr;
+	++pGameObejct;
+
+	m_pTileObject = pGameObejct;
 }
 
 

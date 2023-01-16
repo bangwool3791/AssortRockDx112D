@@ -5,6 +5,8 @@
 #include "CCommandScript.h"
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
+#include "CEditTileScript.h"
+#include "CHuntScript.h"
 #include "CInterfaceScript.h"
 #include "CLevelCameraScript.h"
 #include "CLightScript.h"
@@ -26,6 +28,8 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CCommandScript");
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
+	_vec.push_back(L"CEditTileScript");
+	_vec.push_back(L"CHuntScript");
 	_vec.push_back(L"CInterfaceScript");
 	_vec.push_back(L"CLevelCameraScript");
 	_vec.push_back(L"CLightScript");
@@ -49,6 +53,8 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CCommandScript");
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
+	_vec.push_back("CEditTileScript");
+	_vec.push_back("CHuntScript");
 	_vec.push_back("CInterfaceScript");
 	_vec.push_back("CLevelCameraScript");
 	_vec.push_back("CLightScript");
@@ -75,6 +81,10 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if (L"CEditTileScript" == _strScriptName)
+		return new CEditTileScript;
+	if (L"CHuntScript" == _strScriptName)
+		return new CHuntScript;
 	if (L"CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if (L"CLevelCameraScript" == _strScriptName)
@@ -116,6 +126,10 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if ("CEditTileScript" == _strScriptName)
+		return new CEditTileScript;
+	if ("CHuntScript" == _strScriptName)
+		return new CHuntScript;
 	if ("CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if ("CLevelCameraScript" == _strScriptName)
@@ -162,6 +176,12 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return new CEditorMouseScript;
+		break;
+	case (UINT)SCRIPT_TYPE::EDITTILESCRIPT:
+		return new CEditTileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::HUNTSCRIPT:
+		return new CHuntScript;
 		break;
 	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
 		return new CInterfaceScript;
@@ -227,6 +247,14 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return L"CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::EDITTILESCRIPT:
+		return L"CEditTileScript";
+		break;
+
+	case SCRIPT_TYPE::HUNTSCRIPT:
+		return L"CHuntScript";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:
@@ -307,6 +335,14 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return "CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::EDITTILESCRIPT:
+		return "CEditTileScript";
+		break;
+
+	case SCRIPT_TYPE::HUNTSCRIPT:
+		return "CHuntScript";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:

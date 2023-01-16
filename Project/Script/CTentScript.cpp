@@ -23,11 +23,25 @@ CTentScript::~CTentScript()
 {
 }
 
-
 void CTentScript::begin()
 {
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
+
+	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
+
+	int random = rand();
+
+	if (random % 4 == 0)
+		GetOwner()->Animator2D()->Play(L"Right1", false);
+	else if (random % 4 == 1)
+		GetOwner()->Animator2D()->Play(L"Right2", false);
+	else if (random % 4 == 2)
+		GetOwner()->Animator2D()->Play(L"Left1", false);
+	else if (random % 4 == 3)
+		GetOwner()->Animator2D()->Play(L"Left2", false);
 
 	m_pTileObject->TileMap()->On();
 }
@@ -39,11 +53,15 @@ void CTentScript::tick()
 
 void CTentScript::finaltick()
 {
-	static float dt = 0;
+	static float dt = DT;
+	static float dt2 = DT;
+
+	dt += DT;
+	dt2 += DT;
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
-		if (++dt > 60)
+		if (dt > 0.25f)
 		{
 			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
@@ -78,14 +96,18 @@ void CTentScript::finaltick()
 			tTile.vPos.z += TILECZ * 0.5f;
 			m_iIndex = tTile.iIndex;
 			GetOwner()->Transform()->SetRelativePos(tTile.vPos);
-			dt -= 60;
+			dt -= 0.25f;
+		}
 
+		if (dt2 > 0.5f)
+		{
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
-				SetTile(tTile.iIndex, 4);
+				SetTile(m_iIndex, 4);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 			}
+			dt2 = 0.5f;
 		}
 		//if (!Picking(vPos))
 		//{
@@ -189,17 +211,17 @@ void CTentScript::SetTileInfo(UINT _iTile)
 {
 	tTile tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
 
-	if (1 == tTile.iInfo)
+	if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo)
 	{
-		m_pTileObject->TileMap()->SetInfo(_iTile, 2);
+		m_pTileObject->TileMap()->SetInfo(_iTile, (UINT)TILE_TYPE::BUILD);
 	}
-	else if (2 == tTile.iInfo)
+	else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo)
 	{
-		m_pTileObject->TileMap()->SetInfo(_iTile, 1);
+		m_pTileObject->TileMap()->SetInfo(_iTile, (UINT)TILE_TYPE::EMPTY);
 	}
-	else if (4 == tTile.iInfo)
+	else if ((UINT)TILE_TYPE::USED == tTile.iInfo)
 	{
-		m_pTileObject->TileMap()->SetInfo(_iTile, 3);
+		m_pTileObject->TileMap()->SetInfo(_iTile, (UINT)TILE_TYPE::COLLISION);
 	}
 }
 
@@ -245,13 +267,13 @@ void CTentScript::RefreshTileInfo(UINT _iTile)
 {
 	tTile tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
 
-	if (2 == tTile.iInfo)
+	if ((UINT)TILE_TYPE::BUILD == tTile.iInfo)
 	{
-		m_pTileObject->TileMap()->SetInfo(_iTile, 1);
+		m_pTileObject->TileMap()->SetInfo(_iTile, (UINT)TILE_TYPE::EMPTY);
 	}
-	else if (3 == tTile.iInfo)
+	else if ((UINT)TILE_TYPE::COLLISION == tTile.iInfo)
 	{
-		m_pTileObject->TileMap()->SetInfo(_iTile, 4);
+		m_pTileObject->TileMap()->SetInfo(_iTile, (UINT)TILE_TYPE::USED);
 	}
 }
 
@@ -274,9 +296,16 @@ bool  CTentScript::IsBlocked(UINT _iTile)
 		vec[3] = m_pTileObject->TileMap()->GetInfo(_iTile + TILEX * 2);
 	}
 
+
 	for (size_t i{}; i < vec.size(); ++i)
 	{
-		if (4 == vec[i].iInfo)
+		if ((UINT)TILE_TYPE::NOTUSED == vec[i].iInfo)
+			return false;
+	}
+
+	for (size_t i{}; i < vec.size(); ++i)
+	{
+		if ((UINT)TILE_TYPE::COLLISION == vec[i].iInfo)
 			return false;
 	}
 

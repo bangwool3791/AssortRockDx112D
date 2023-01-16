@@ -22,7 +22,16 @@ CTileMap::CTileMap()
 	m_TileBuffer = new CStructuredBuffer;
 
 	m_AtlasTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileArea.png");
+}
 
+CTileMap::~CTileMap()
+{
+	if (nullptr != m_TileBuffer)
+		delete m_TileBuffer;
+}
+
+void CTileMap::begin()
+{
 	tTile tTile{};
 	for (int i = 0; i < TILEX; ++i)
 	{
@@ -34,24 +43,15 @@ CTileMap::CTileMap()
 			tTile.iInfo = 0;
 			tTile.vPos = Vec3{ fX, 0.f, fZ };
 			tTile.iIndex = i * TILEZ + j;
+
 			m_vecInfo.push_back(tTile);
 		}
 	}
-	m_vecInfo[TILEX * (TILECZ -1)].iInfo = 1;
+	m_vecInfo[TILEX * (TILECZ - 1)].iInfo = 1;
 
 	m_TileBuffer->Create(sizeof(tTile), TILEX * TILEZ, SB_TYPE::SRV_ONLY, m_vecInfo.data(), true);
 
 	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
-}
-
-CTileMap::~CTileMap()
-{
-	if (nullptr != m_TileBuffer)
-		delete m_TileBuffer;
-}
-
-void CTileMap::begin()
-{
 }
 
 void CTileMap::finaltick()
@@ -201,11 +201,31 @@ bool CTileMap::Picking(Vec3 vPos, UINT& iIndex)
 void CTileMap::SaveToFile(FILE* _File)
 {
 	CRenderComponent::SaveToFile(_File);
+
+	size_t size = m_vecInfo.size();
+
+	fwrite(&size, sizeof(size_t), 1, _File);
+
+	for (size_t i{}; i < size; ++i)
+	{
+		fwrite(&m_vecInfo[i], sizeof(tTile), 1, _File);
+	}
 }
 
 void CTileMap::LoadFromFile(FILE* _File)
 {
 	CRenderComponent::LoadFromFile(_File);
+
+	size_t size = 0;
+
+	fread(&size, sizeof(size_t), 1, _File);
+
+	m_vecInfo.resize(size);
+
+	for (size_t i{}; i < size; ++i)
+	{
+		fread(&m_vecInfo[i], sizeof(tTile), 1, _File);
+	}
 }
 
 void CTileMap::On()

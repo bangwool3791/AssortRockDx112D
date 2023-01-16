@@ -107,9 +107,9 @@ void CButtonScript::begin()
 	m_arrTab[COMMAND_CENTER][5].vSlice = vSlice;
 
 	m_arrTab[COLONISTS][0].Texture = TexPortraits;
-	m_arrTab[COLONISTS][0].vUV.x = 700.f / fPortraitWidth;
-	m_arrTab[COLONISTS][0].vUV.y = 860.f / fPortraitHeight;
-	m_arrTab[COLONISTS][0].vSlice = Vec2{ 100.f / fPortraitWidth, 100.f / fPortraitHeight };
+	m_arrTab[COLONISTS][0].vUV.x = 132.f / fPortraitWidth;
+	m_arrTab[COLONISTS][0].vUV.y = 145.f / fPortraitHeight;
+	m_arrTab[COLONISTS][0].vSlice = Vec2{ 138.f / fPortraitWidth, 119.f / fPortraitHeight };
 	m_arrTab[COLONISTS][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
 	m_arrTab[COLONISTS][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 			 
@@ -262,9 +262,8 @@ void CButtonScript::tick()
 
 void CButtonScript::finaltick()
 {
-	static float dt{};
-	
-	if (++dt > 360)
+	m_fDt += DT;
+	if (m_fDt > 0.25f)
 	{
 		if (KEY_PRESSED(KEY::LBTN))
 		{
@@ -272,8 +271,8 @@ void CButtonScript::finaltick()
 			{
 				m_bClicked = true;
 			}
+			m_fDt = 0.f;
 		}
-		dt -= 360;
 	}
 }
 

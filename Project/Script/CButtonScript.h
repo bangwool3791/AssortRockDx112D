@@ -16,6 +16,7 @@ class CButtonScript :
     public CScript
 {
 private:
+    float                        m_fDt = 0.f;
     Ptr<CTexture>                m_Atlas;
     Ptr<CTexture>                m_IconAtlas;
     Ptr<CTexture>                m_AtlasAlpha;

@@ -385,6 +385,8 @@ void CResMgr::CreateDefaultTexture()
 
 	Load<CTexture>(L"texture\\TILE.bmp", L"texture\\TILE.bmp");
 
+	Load<CTexture>(L"texture\\Mask\\buildmask.png", L"texture\\Mask\\buildmask.png");
+
 	for (UINT i{}; i < TEX_32; i++)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
@@ -620,6 +622,16 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 	AddRes<CGraphicsShader>(L"UiTileShader", pShader);
+
+	//Building Red, Green
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\building.fx", "VS_BuildRender");
+	pShader->CreatePixelShader(L"shader\\building.fx", "PS_BuildRender");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"BuildShader", pShader);
 }
 
 #include "CComputeShader.h"
@@ -715,6 +727,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"OpaqueShader"));
 	AddRes<CMaterial>(L"OpaqueMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"BuildShader"));
+	AddRes<CMaterial>(L"BuildMtrl", pMaterial);
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

@@ -196,6 +196,9 @@
     <Filter Include="Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke">
       <UniqueIdentifier>{93296349-73e5-45ca-9b83-4693382bcd06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HLSL\Render\Building">
+      <UniqueIdentifier>{64970417-a29d-4bab-8534-91a81697a4bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -675,6 +678,9 @@
     </FxCompile>
     <FxCompile Include="opaque.fx">
       <Filter>HLSL\Render\Default</Filter>
+    </FxCompile>
+    <FxCompile Include="building.fx">
+      <Filter>HLSL\Render\Building</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
