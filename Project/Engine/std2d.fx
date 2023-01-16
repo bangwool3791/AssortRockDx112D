@@ -4,7 +4,11 @@
 #include "register.fx"
 #include "func.fx"
 
-// HLSL 로 VertexShader 작성하기
+#define Atlas         g_int_0
+#define UVLeftTop     g_vec2_0
+#define UVSlice       g_vec2_1
+
+
 struct VTX_IN
 {
     float3 vPos         : POSITION;
@@ -52,6 +56,11 @@ float4 PS_Std2D(VTX_OUT _in) : SV_Target
         }
  
         vOutColor = g_Atals.Sample(g_sam_1, vUV);
+    }
+    else if (g_int_0)
+    {
+        float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
+        vOutColor = g_tex_0.Sample(g_sam_0, vUV);
     }
     else
     {

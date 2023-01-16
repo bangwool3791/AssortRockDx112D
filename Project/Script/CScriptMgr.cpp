@@ -3,9 +3,9 @@
 
 #include "CButtonScript.h"
 #include "CCommandScript.h"
+#include "CCrystalScript.h"
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
-#include "CEditTileScript.h"
 #include "CHuntScript.h"
 #include "CInterfaceScript.h"
 #include "CLevelCameraScript.h"
@@ -15,7 +15,9 @@
 #include "CMonsterScript.h"
 #include "CMouseScript.h"
 #include "CPlayerScript.h"
+#include "CQuarryScript.h"
 #include "CRefAniScript.h"
+#include "CSawScript.h"
 #include "CSelectUnitScript.h"
 #include "CShadowScript.h"
 #include "CTentScript.h"
@@ -26,9 +28,9 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CButtonScript");
 	_vec.push_back(L"CCommandScript");
+	_vec.push_back(L"CCrystalScript");
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
-	_vec.push_back(L"CEditTileScript");
 	_vec.push_back(L"CHuntScript");
 	_vec.push_back(L"CInterfaceScript");
 	_vec.push_back(L"CLevelCameraScript");
@@ -38,7 +40,9 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CMouseScript");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CQuarryScript");
 	_vec.push_back(L"CRefAniScript");
+	_vec.push_back(L"CSawScript");
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTentScript");
@@ -51,9 +55,9 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CButtonScript");
 	_vec.push_back("CCommandScript");
+	_vec.push_back("CCrystalScript");
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
-	_vec.push_back("CEditTileScript");
 	_vec.push_back("CHuntScript");
 	_vec.push_back("CInterfaceScript");
 	_vec.push_back("CLevelCameraScript");
@@ -63,7 +67,9 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CMonsterScript");
 	_vec.push_back("CMouseScript");
 	_vec.push_back("CPlayerScript");
+	_vec.push_back("CQuarryScript");
 	_vec.push_back("CRefAniScript");
+	_vec.push_back("CSawScript");
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTentScript");
@@ -77,12 +83,12 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CButtonScript;
 	if (L"CCommandScript" == _strScriptName)
 		return new CCommandScript;
+	if (L"CCrystalScript" == _strScriptName)
+		return new CCrystalScript;
 	if (L"CDragScript" == _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
-	if (L"CEditTileScript" == _strScriptName)
-		return new CEditTileScript;
 	if (L"CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if (L"CInterfaceScript" == _strScriptName)
@@ -101,8 +107,12 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CMouseScript;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CQuarryScript" == _strScriptName)
+		return new CQuarryScript;
 	if (L"CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
+	if (L"CSawScript" == _strScriptName)
+		return new CSawScript;
 	if (L"CSelectUnitScript" == _strScriptName)
 		return new CSelectUnitScript;
 	if (L"CShadowScript" == _strScriptName)
@@ -122,12 +132,12 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CButtonScript;
 	if ("CCommandScript" == _strScriptName)
 		return new CCommandScript;
+	if ("CCrystalScript" == _strScriptName)
+		return new CCrystalScript;
 	if ("CDragScript" == _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
-	if ("CEditTileScript" == _strScriptName)
-		return new CEditTileScript;
 	if ("CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if ("CInterfaceScript" == _strScriptName)
@@ -146,8 +156,12 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CMouseScript;
 	if ("CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if ("CQuarryScript" == _strScriptName)
+		return new CQuarryScript;
 	if ("CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
+	if ("CSawScript" == _strScriptName)
+		return new CSawScript;
 	if ("CSelectUnitScript" == _strScriptName)
 		return new CSelectUnitScript;
 	if ("CShadowScript" == _strScriptName)
@@ -171,14 +185,14 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::COMMANDSCRIPT:
 		return new CCommandScript;
 		break;
+	case (UINT)SCRIPT_TYPE::CRYSTALSCRIPT:
+		return new CCrystalScript;
+		break;
 	case (UINT)SCRIPT_TYPE::DRAGSCRIPT:
 		return new CDragScript;
 		break;
 	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return new CEditorMouseScript;
-		break;
-	case (UINT)SCRIPT_TYPE::EDITTILESCRIPT:
-		return new CEditTileScript;
 		break;
 	case (UINT)SCRIPT_TYPE::HUNTSCRIPT:
 		return new CHuntScript;
@@ -207,8 +221,14 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
 		break;
+	case (UINT)SCRIPT_TYPE::QUARRYSCRIPT:
+		return new CQuarryScript;
+		break;
 	case (UINT)SCRIPT_TYPE::REFANISCRIPT:
 		return new CRefAniScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SAWSCRIPT:
+		return new CSawScript;
 		break;
 	case (UINT)SCRIPT_TYPE::SELECTUNITSCRIPT:
 		return new CSelectUnitScript;
@@ -241,16 +261,16 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CCommandScript";
 		break;
 
+	case SCRIPT_TYPE::CRYSTALSCRIPT:
+		return L"CCrystalScript";
+		break;
+
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return L"CDragScript";
 		break;
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return L"CEditorMouseScript";
-		break;
-
-	case SCRIPT_TYPE::EDITTILESCRIPT:
-		return L"CEditTileScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
@@ -289,8 +309,16 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CPlayerScript";
 		break;
 
+	case SCRIPT_TYPE::QUARRYSCRIPT:
+		return L"CQuarryScript";
+		break;
+
 	case SCRIPT_TYPE::REFANISCRIPT:
 		return L"CRefAniScript";
+		break;
+
+	case SCRIPT_TYPE::SAWSCRIPT:
+		return L"CSawScript";
 		break;
 
 	case SCRIPT_TYPE::SELECTUNITSCRIPT:
@@ -329,16 +357,16 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CCommandScript";
 		break;
 
+	case SCRIPT_TYPE::CRYSTALSCRIPT:
+		return "CCrystalScript";
+		break;
+
 	case SCRIPT_TYPE::DRAGSCRIPT:
 		return "CDragScript";
 		break;
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return "CEditorMouseScript";
-		break;
-
-	case SCRIPT_TYPE::EDITTILESCRIPT:
-		return "CEditTileScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
@@ -377,8 +405,16 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CPlayerScript";
 		break;
 
+	case SCRIPT_TYPE::QUARRYSCRIPT:
+		return "CQuarryScript";
+		break;
+
 	case SCRIPT_TYPE::REFANISCRIPT:
 		return "CRefAniScript";
+		break;
+
+	case SCRIPT_TYPE::SAWSCRIPT:
+		return "CSawScript";
 		break;
 
 	case SCRIPT_TYPE::SELECTUNITSCRIPT:

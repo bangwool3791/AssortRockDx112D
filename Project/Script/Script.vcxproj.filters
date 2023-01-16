@@ -47,6 +47,15 @@
     <Filter Include="Scripts\09. ColonistScript\02. HuntScript">
       <UniqueIdentifier>{316aaaa1-3b62-4515-a969-44d85b0ea4d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\10. CCrystalScript">
+      <UniqueIdentifier>{87a398cf-cfa2-43dc-acf7-cfecd0061ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\09. ColonistScript\03. SawScript">
+      <UniqueIdentifier>{bb6b0e5d-dbf0-4355-9f5b-6235d9a01d30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. QuarryScript">
+      <UniqueIdentifier>{4c495ff9-5422-4b55-8f02-13eb2fc9de6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -115,8 +124,14 @@
     <ClInclude Include="CHuntScript.h">
       <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
     </ClInclude>
-    <ClInclude Include="CEditTileScript.h">
-      <Filter>Scripts\08. TileScript</Filter>
+    <ClInclude Include="CCrystalScript.h">
+      <Filter>Scripts\10. CCrystalScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CSawScript.h">
+      <Filter>Scripts\09. ColonistScript\03. SawScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CQuarryScript.h">
+      <Filter>Scripts\11. QuarryScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -186,8 +201,14 @@
     <ClCompile Include="CHuntScript.cpp">
       <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
     </ClCompile>
-    <ClCompile Include="CEditTileScript.cpp">
-      <Filter>Scripts\08. TileScript</Filter>
+    <ClCompile Include="CCrystalScript.cpp">
+      <Filter>Scripts\10. CCrystalScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CSawScript.cpp">
+      <Filter>Scripts\09. ColonistScript\03. SawScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CQuarryScript.cpp">
+      <Filter>Scripts\11. QuarryScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

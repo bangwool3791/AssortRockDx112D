@@ -349,6 +349,7 @@ call EngineCopy.bat</Command>
     <FxCompile Include="bordermap.fx" />
     <FxCompile Include="building.fx" />
     <FxCompile Include="compute.fx" />
+    <FxCompile Include="crystal.fx" />
     <FxCompile Include="debugdraw.fx" />
     <FxCompile Include="DragEffect.fx" />
     <FxCompile Include="editor.fx" />

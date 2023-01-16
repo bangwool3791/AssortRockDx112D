@@ -176,7 +176,7 @@ call CodeGen.exe</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CEditTileScript.h" />
+    <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
     <ClInclude Include="CLevelCameraScript.h" />
     <ClInclude Include="CDragScript.h" />
@@ -188,7 +188,9 @@ call CodeGen.exe</Command>
     <ClInclude Include="CMouseScript.h" />
     <ClInclude Include="CCommandScript.h" />
     <ClInclude Include="CPlayerScript.h" />
+    <ClInclude Include="CQuarryScript.h" />
     <ClInclude Include="CRefAniScript.h" />
+    <ClInclude Include="CSawScript.h" />
     <ClInclude Include="CScriptMgr.h" />
     <ClInclude Include="CSelectUnitScript.h" />
     <ClInclude Include="CShadowScript.h" />
@@ -201,7 +203,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CButtonScript.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CEditTileScript.cpp" />
+    <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />
     <ClCompile Include="CLevelCameraScript.cpp" />
     <ClCompile Include="CDragScript.cpp" />
@@ -213,7 +215,9 @@ call CodeGen.exe</Command>
     <ClCompile Include="CMouseScript.cpp" />
     <ClCompile Include="CCommandScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
+    <ClCompile Include="CQuarryScript.cpp" />
     <ClCompile Include="CRefAniScript.cpp" />
+    <ClCompile Include="CSawScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp" />
     <ClCompile Include="CShadowScript.cpp" />

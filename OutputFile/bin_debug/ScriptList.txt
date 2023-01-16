@@ -1,8 +1,8 @@
 CButtonScript
 CCommandScript
+CCrystalScript
 CDragScript
 CEditorMouseScript
-CEditTileScript
 CHuntScript
 CInterfaceScript
 CLevelCameraScript
@@ -12,7 +12,9 @@ CMissileScript2
 CMonsterScript
 CMouseScript
 CPlayerScript
+CQuarryScript
 CRefAniScript
+CSawScript
 CSelectUnitScript
 CShadowScript
 CTentScript

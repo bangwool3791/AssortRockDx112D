@@ -110,6 +110,39 @@ void CResMgr::CreateDefaultMesh()
 	vecVtx.clear();
 	vecIdx.clear();
 
+	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	v.vUV = Vec2(1090.f / 2048.f, 200.f / 2048.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(1190.f / 2048.f, 200.f / 2048.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	v.vUV = Vec2(1190.f / 2048.f, 275.f / 2048.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(1090.f / 2048.f, 275.f / 2048.f);
+	*iterVtx = v;
+
+	*iterIdx = 0;
+	*iterIdx = 2;
+	*iterIdx = 3;
+
+	*iterIdx = 0;
+	*iterIdx = 1;
+	*iterIdx = 2;
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"CrystalMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
 	// 원형메쉬 만들기
 	// 중심점	
 	v.vPos = Vec3(0.f, 0.f, 1.f);
@@ -402,6 +435,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds", L"texture\\Interface\\Atlas1_LQ.dds");
 	Load<CTexture>(L"texture\\Interface\\Icons.png", L"texture\\Interface\\Icons.png");
 	Load<CTexture>(L"texture\\Interface\\Portraits.dds", L"texture\\Interface\\Portraits.dds");
+	Load<CTexture>(L"texture\\geology\\Atlas1_LQ.dds", L"texture\\geology\\Atlas1_LQ.dds");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -632,6 +666,15 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 	AddRes<CGraphicsShader>(L"BuildShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\crystal.fx", "VS_CrystalRender");
+	pShader->CreatePixelShader(L"shader\\crystal.fx", "PS_CrystalRender");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"CrystalShader", pShader);
 }
 
 #include "CComputeShader.h"
@@ -731,6 +774,11 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"BuildShader"));
 	AddRes<CMaterial>(L"BuildMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"CrystalShader"));
+	AddRes<CMaterial>(L"CrystalMtrl", pMaterial);
+
 }
 
 int GetSizeofFormat(DXGI_FORMAT _eFormat)

@@ -103,7 +103,7 @@ void CTentScript::finaltick()
 		{
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
-				SetTile(m_iIndex, 4);
+				SetTile(m_iIndex, (UINT)TILE_TYPE::USED);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 			}

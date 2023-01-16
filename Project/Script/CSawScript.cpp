@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CHuntScript.h"
+#include "CSawScript.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
@@ -10,20 +10,20 @@
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
-CHuntScript::CHuntScript()
+CSawScript::CSawScript()
 	:CScript{ SCRIPT_TYPE::HUNTSCRIPT }
 	, m_vMousePos{}
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
-	SetName(L"CHuntScript");
+	SetName(L"CSawScript");
 }
 
-CHuntScript::~CHuntScript()
+CSawScript::~CSawScript()
 {
 }
 
-void CHuntScript::begin()
+void CSawScript::begin()
 {
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
@@ -34,12 +34,12 @@ void CHuntScript::begin()
 	m_pTileObject->TileMap()->On();
 }
 
-void CHuntScript::tick()
+void CSawScript::tick()
 {
 
 }
 
-void CHuntScript::finaltick()
+void CSawScript::finaltick()
 {
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -91,12 +91,12 @@ void CHuntScript::finaltick()
 				}
 
 				m_result.push(tTile.iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
 
 				while (!m_result.empty())
 					m_result.pop();
@@ -116,12 +116,19 @@ void CHuntScript::finaltick()
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
 				m_result.push(m_iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::NOTUSED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::NOTUSED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::NOTUSED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::NOTUSED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::NOTUSED);
+
 				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+
+				while (!m_result.empty())
+					m_result.pop();
+
+				for (size_t i{}; i < 40000; ++i)
+					m_bCheck[i] = false;
 
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
@@ -131,28 +138,28 @@ void CHuntScript::finaltick()
 	}
 }
 
-void CHuntScript::BeginOverlap(CCollider2D* _pOther)
+void CSawScript::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void CHuntScript::Overlap(CCollider2D* _pOther)
+void CSawScript::Overlap(CCollider2D* _pOther)
 {
 }
 
-void CHuntScript::EndOverlap(CCollider2D* _pOther)
+void CSawScript::EndOverlap(CCollider2D* _pOther)
 {
 }
-void CHuntScript::SaveToFile(FILE* _File)
+void CSawScript::SaveToFile(FILE* _File)
 {
 	CScript::SaveToFile(_File);
 }
 
-void CHuntScript::LoadFromFile(FILE* _File)
+void CSawScript::LoadFromFile(FILE* _File)
 {
 	CScript::LoadFromFile(_File);
 }
 
-bool  CHuntScript::IsBlocked(UINT _iTile)
+bool  CSawScript::IsBlocked(UINT _iTile)
 {
 	tTile tTile{};
 	tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
@@ -166,7 +173,7 @@ bool  CHuntScript::IsBlocked(UINT _iTile)
 	return true;
 }
 
-void CHuntScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
+void CSawScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 {
 	que = result;
 
@@ -180,9 +187,7 @@ void CHuntScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value
 
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
-		if ((UINT)TILE_TYPE::HUNTED == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
-			m_pTileObject->TileMap()->SetInfo(data, _value);
-		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::HUNTED == _value)
+		if ((UINT)TILE_TYPE::WOOD)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 
 		m_bCheck[data] = true;

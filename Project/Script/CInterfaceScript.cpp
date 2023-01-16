@@ -120,6 +120,12 @@ void CInterfaceScript::tick()
 							Instantiate(pUIPrefab->Instantiate(), 1);
 						}
 						break;
+						case 1:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);

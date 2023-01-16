@@ -15,7 +15,6 @@
 
 #include <Engine\CScript.h>
 #include <Script\CTerrainScript.h>
-#include <Script\CEditTileScript.h>
 
 #include "TransformUI.h"
 #include "MeshRenderUI.h"
@@ -70,22 +69,6 @@ void TileMapUI::render_update()
 		pProgressUI->Open();
 	}
 
-	if (ImGui::Checkbox("Terrain", &m_bTerrain))
-	{
-		if (m_bTerrain)
-		{
-			m_pEditTerrainObject->GetScript<CTerrainScript>(L"CTerrainScript")->Deactivate();
-			m_pEditTerrainObject->GetScript<CEditTileScript>(L"CEditTileMap")->Activate();
-		}
-		else
-		{
-			m_pEditTerrainObject->GetScript<CTerrainScript>(L"CTerrainScript")->Activate();
-			m_pEditTerrainObject->GetScript<CEditTileScript>(L"CEditTileMap")->Deactivate();
-		}
-	}
-	
-
-
 	for (UINT i = 1; i < TEX_32 + 1; ++i)
 	{
 		wstring str = L"texture\\Terrain\\Tile\\Tile";
@@ -108,11 +91,6 @@ void TileMapUI::Initialize(void* pAddr)
 {
 	m_pEditTerrainObject = (CGameObject*)pAddr;
 	m_pEditTerrain = static_cast<CTerrain*>(m_pEditTerrainObject->GetRenderComponent());
-
-	CGameObjectEx* pGameObejct = (CGameObjectEx*)pAddr;
-	++pGameObejct;
-
-	m_pTileObject = pGameObejct;
 }
 
 

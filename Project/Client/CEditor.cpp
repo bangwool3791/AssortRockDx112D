@@ -29,7 +29,6 @@
 #include <Script\CTileScript.h>
 #include <Script\CRefAniScript.h>
 #include <Script\CTerrainScript.h>
-#include <Script\CEditTileScript.h>
 #include <Engine\Base.h>
 
 CEditor::CEditor()
@@ -308,14 +307,6 @@ void CEditor::CreateTileMap(CGameObject* _pCamera, CGameObject* _pMouse)
 	}
 
 	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"MapTool", pGameObectEx);
-
-	pGameObectEx = new CGameObjectEx;
-	pGameObectEx->AddComponent(new CTransform);
-	pGameObectEx->AddComponent(new CTileMap);
-	pGameObectEx->AddComponent(new CEditTileScript);
-	pGameObectEx->SetName(L"EditorTileMap");
-
-	m_EditorObj[(UINT)EDIT_MODE::MAPTOOL].emplace(L"TileTool", pGameObectEx);
 }
 
 void CEditor::CreateAnimatorTool(CGameObject* _pCamera, CGameObject* _pMouse)

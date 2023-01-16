@@ -10,8 +10,6 @@ class TileMapUI :
     public UI
 {
 private:
-    bool          m_bTerrain = true;
-    CGameObject*  m_pTileObject;
     CGameObject*  m_pEditTerrainObject;
     CTerrain*     m_pEditTerrain;
     

@@ -682,5 +682,8 @@
     <FxCompile Include="building.fx">
       <Filter>HLSL\Render\Building</Filter>
     </FxCompile>
+    <FxCompile Include="crystal.fx">
+      <Filter>HLSL\Render\Tile</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

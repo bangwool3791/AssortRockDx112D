@@ -75,6 +75,15 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
         color1 = float4(0.0f, 0.7f, 0.0f, 1.f);
         color2 = float4(0.0f, 0.7f, 0.0f, 1.f);
     }
+    if (g_TileBuffer[_in.vColor.x].iInfo == 7)
+    {
+        discard;
+    }
+    if (g_TileBuffer[_in.vColor.x].iInfo == 8)
+    {
+        color1 = float4(0.0f, 0.0f, 0.7f, 1.f);
+        color2 = float4(0.0f, 0.0f, 0.7f, 1.f);
+    }
 
     alphaValue = g_tex_0.Sample(g_sam_1, _in.vUV);
     blendColor = (alphaValue * color1) + ((1.0 - alphaValue) * color2);
