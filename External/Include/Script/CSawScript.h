@@ -10,14 +10,14 @@ private:
     CGameObject* m_pTileObject;
     bool                        m_bCheck[40000]{};
     UINT                        m_iIndex = 0;
-    bool                        m_bMask = false;
-    queue<UINT> m_result{};
-    queue<UINT> m_queue{};
+    vector<tTile>               m_vecMask{};
+    vector<UINT>                m_result{};
+    vector<UINT>                m_vec{};
     float m_fDt = 0.f;
     float m_fDt2 = 0.f;
     void SetTileInfo(UINT _iTile, UINT _iValue);
     void SetTile(UINT _iTile, UINT _iValue);
-    void SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value);
+    void SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _value);
     bool IsBlocked(UINT _iTile);
     virtual void begin();
     virtual void tick();

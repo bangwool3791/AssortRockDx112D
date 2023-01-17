@@ -327,6 +327,7 @@ enum class BUILD_STATE
 {
 	READY,
 	BUILD,
+	COMPLETE,
 	DESTROY,
 };
 

@@ -11,7 +11,9 @@ private:
     CGameObject* m_pTileObject;
     bool                        m_bCheck[40000]{};
     UINT                        m_iIndex = 0;
-    UINT                        m_iGold = 0;
+
+    float                       m_fDt  = 0.f;
+    float                       m_fDt2 = 0.f;
     void SetTileInfo(UINT _iTile);
     void SetTile(UINT _iTile);
     void SetTileInfo(UINT _iTile, UINT _iValue);
@@ -26,10 +28,6 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
-
-public:
-    UINT GetGold() { return m_iGold; }
-    void SetGold(UINT _iGold) { m_iGold = _iGold; }
 public:
     virtual void SaveToFile(FILE* _File) override;
     virtual void LoadFromFile(FILE* _File) override;

@@ -21,6 +21,8 @@ CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
     , m_mapAnim{}
     , m_strKey{_rhs.m_strKey}
 {
+    SetName(L"CAnimator2D");
+
     CAnimation2D* pAnimation2D{};
     auto iter = _rhs.m_mapAnim.begin();
     for (; iter != _rhs.m_mapAnim.end(); ++iter)

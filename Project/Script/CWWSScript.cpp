@@ -28,8 +28,8 @@ void CWWSScript::begin()
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
-	//GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	//GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
 	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
 	m_pTileObject->TileMap()->On();
 }
@@ -97,21 +97,45 @@ void CWWSScript::finaltick()
 
 			m_iIndex = tTile.iIndex;
 
-			GetOwner()->Transform()->SetRelativePos(vPos);
+			GetOwner()->Transform()->SetRelativePos(tTile.vPos);
 
-			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
+			int a = 0;
+
+			if (IsBlocked(m_iIndex))
+			{
+				a = 1;
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+			}
+			else
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+
+			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
 				m_result.push(tTile.iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
 
-				GetOwner()->Transform()->SetRelativePos(tTile.vPos);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
+				m_fDt = 0.f;
 			}
+
 			m_vectoken.clear();
+			m_fDt -= 0.15f;
+		}
+	}
+	else if (m_eBuildState == BUILD_STATE::BUILD)
+	{
+		if (m_fDt > 5.f)
+		{
+			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+			m_eBuildState = BUILD_STATE::COMPLETE;
 			m_fDt = 0.f;
 		}
+	}
+	else if (m_eBuildState == BUILD_STATE::COMPLETE)
+	{
 	}
 }
 
@@ -141,9 +165,9 @@ bool  CWWSScript::IsBlocked(UINT _iTile)
 	for (size_t i{}; i < m_vectoken.size(); ++i)
 	{
 		if ((UINT)(TILE_TYPE::NOTUSED) == m_vectoken[i].iInfo)
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }
 
 void CWWSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
@@ -167,7 +191,7 @@ void CWWSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BUILD == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
-		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
+		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::USED == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 
 		m_bCheck[data] = true;

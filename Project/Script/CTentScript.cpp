@@ -53,15 +53,13 @@ void CTentScript::tick()
 
 void CTentScript::finaltick()
 {
-	static float dt = DT;
-	static float dt2 = DT;
 
-	dt += DT;
-	dt2 += DT;
+	m_fDt += DT;
+	m_fDt2 += DT;
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
-		if (dt > 0.25f)
+		if (m_fDt > 0.15f)
 		{
 			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
@@ -96,70 +94,45 @@ void CTentScript::finaltick()
 			tTile.vPos.z += TILECZ * 0.5f;
 			m_iIndex = tTile.iIndex;
 			GetOwner()->Transform()->SetRelativePos(tTile.vPos);
-			dt -= 0.25f;
+
+			int a = 0;
+
+			if (IsBlocked(m_iIndex))
+			{
+				a = 1;
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+			}
+			else
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+
+			m_fDt -= 0.25f;
 		}
 
-		if (dt2 > 0.5f)
+		if (m_fDt2 > 0.5f)
 		{
-			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
+			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
+				m_fDt = 0.f;
+				m_fDt2 = 0.f;
 			}
-			dt2 = 0.5f;
+			m_fDt2 = 0.5f;
 		}
-		//if (!Picking(vPos))
-		//{
-		//	tTile = GetOwner()->TileMap()->GetInfo(vPos);
-		//}
-		//static queue<UINT> que;
-		//static queue<UINT> result;
-
-		//if (-1 != m_iIndex)
-		//{
-		//	result.push(m_iIndex);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//	SetTileInfo(que, result, 0);
-		//}
-
-		//while (!result.empty())
-		//	result.pop();
-
-		//for (size_t i{}; i < 40000; ++i)
-		//	m_bCheck[i] = false;
-
-		//tTile ttile = m_pTileObject->TileMap()->GetInfo(m_pLevelMouseObject->Transform()->GetRelativePos());
-
-		//result.push(ttile.iIndex);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-		//SetTileInfo(que, result, 0);
-
-		//while (!result.empty())
-		//	result.pop();
-
-		//for (size_t i{}; i < 40000; ++i)
-		//	m_bCheck[i] = false;
-
-		//m_iIndex = ttile.iIndex;
-
-		//GetOwner()->Transform()->SetRelativePos(ttile.vPos);
+	}
+	else if (m_eBuildState == BUILD_STATE::BUILD)
+	{
+		if (m_fDt > 5.f)
+		{
+			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+			m_eBuildState = BUILD_STATE::COMPLETE;
+			m_fDt = 0.f;
+		}
+	}
+	else if (m_eBuildState == BUILD_STATE::COMPLETE)
+	{
 	}
 }
 
@@ -299,7 +272,7 @@ bool  CTentScript::IsBlocked(UINT _iTile)
 	for (size_t i{}; i < vec.size(); ++i)
 	{
 		if ((UINT)TILE_TYPE::BUILD != vec[i].iInfo)
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }

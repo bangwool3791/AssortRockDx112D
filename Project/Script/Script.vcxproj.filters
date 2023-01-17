@@ -74,6 +74,12 @@
     <Filter Include="Scripts\11. IndustryScript\03. POSScript">
       <UniqueIdentifier>{42a89723-3237-4cbb-ae6d-9480d032e6eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\12. WoodWall">
+      <UniqueIdentifier>{1e659385-dfbf-484d-b889-e53188e350b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\12. WoodWall\CWWCScript">
+      <UniqueIdentifier>{44762308-a9fa-4e62-8a4c-23a229609222}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -163,6 +169,12 @@
     <ClInclude Include="CPOSScript.h">
       <Filter>Scripts\11. IndustryScript\03. POSScript</Filter>
     </ClInclude>
+    <ClInclude Include="CWWallScript.h">
+      <Filter>Scripts\12. WoodWall</Filter>
+    </ClInclude>
+    <ClInclude Include="CWWCScript.h">
+      <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -251,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="CPOSScript.cpp">
       <Filter>Scripts\11. IndustryScript\03. POSScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CWWallScript.cpp">
+      <Filter>Scripts\12. WoodWall</Filter>
+    </ClCompile>
+    <ClCompile Include="CWWCScript.cpp">
+      <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

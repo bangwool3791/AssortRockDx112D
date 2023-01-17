@@ -12,6 +12,10 @@ private:
     bool                        m_bCheck[40000]{};
     UINT                        m_iIndex = 0;
     UINT                        m_iGold = 0;
+
+    float                       m_fDt = 0.f;
+    float                       m_fDt2 = 0.f;
+
     void SetTileInfo(UINT _iTile);
     void SetTile(UINT _iTile);
     void SetTileInfo(UINT _iTile, UINT _iValue);

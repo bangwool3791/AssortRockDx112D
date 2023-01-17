@@ -159,6 +159,12 @@ struct tParticleShare
 	UINT iPadding[3];
 };
 
+struct tWoodWall
+{
+	bool bChecked = false;
+	bool arr[4] = { false, };
+};
+
 extern tGlobalData g_global;
 extern  tTransform g_transform;
 extern  std::vector<tObjectRender>	g_vecInfoObject;

@@ -58,19 +58,23 @@ float4 PS_BuildRender(VS_OUT _in) : SV_Target
         }
 
         vOutColor = g_Atals.Sample(g_sam_1, vUV);
-        vOutColor.g = vOutColor.g * 3.f;
+        
+        if(0 == g_int_0)
+            vOutColor.g = vOutColor.g * 3.f;
+        else if(1 == g_int_0)
+            vOutColor.r = vOutColor.r * 3.f;
         return vOutColor;
 
     }
-    else if (g_int_0)
-    {
-        float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
-
-        vOutColor = g_tex_0.Sample(g_sam_0, vUV);
-    }
     else
     {
-        vOutColor = g_tex_0.Sample(g_sam_0, _in.vUV);
+        vOutColor = g_tex_0.Sample(g_sam_1, _in.vUV);
+
+        if (0 == g_int_0)
+            vOutColor.g = vOutColor.g * 3.f;
+        else if (1 == g_int_0)
+            vOutColor.r = vOutColor.r * 3.f;
+        return vOutColor;
     }
 
     if (0.f == vOutColor.a)

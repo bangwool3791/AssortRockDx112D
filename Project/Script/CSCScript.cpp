@@ -28,8 +28,8 @@ void CSCScript::begin()
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
-	//GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	//GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
 	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
 
 	m_pTileObject->TileMap()->On();
@@ -42,15 +42,12 @@ void CSCScript::tick()
 
 void CSCScript::finaltick()
 {
-	static float dt = DT;
-	static float dt2 = DT;
-
-	dt += DT;
-	dt2 += DT;
+	m_fDt += DT;
+	m_fDt2 += DT;
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
-		if (dt > 0.25f)
+		if (m_fDt > 0.15f)
 		{
 			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
@@ -85,19 +82,43 @@ void CSCScript::finaltick()
 			tTile.vPos.z += TILECZ * 0.5f;
 			m_iIndex = tTile.iIndex;
 			GetOwner()->Transform()->SetRelativePos(tTile.vPos);
-			dt -= 0.25f;
+
+			int a = 0;
+
+			if (IsBlocked(m_iIndex))
+			{
+				a = 1;
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+			}
+			else
+				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+
+			m_fDt -= 0.15f;
 		}
 
-		if (dt2 > 0.5f)
+		if (m_fDt2 > 0.5f)
 		{
-			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
+			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 			}
-			dt2 = 0.5f;
+			m_fDt2 = 0.5f;
 		}
+	}
+	else if (m_eBuildState == BUILD_STATE::BUILD)
+	{
+		if (m_fDt > 5.f)
+		{
+			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+			m_eBuildState = BUILD_STATE::COMPLETE;
+			m_fDt = 0.f;
+		}
+	}
+	else if (m_eBuildState == BUILD_STATE::COMPLETE)
+	{
 	}
 }
 
@@ -277,7 +298,7 @@ bool  CSCScript::IsBlocked(int _iTile)
 	for (size_t i{}; i < vec.size(); ++i)
 	{
 		if ((UINT)TILE_TYPE::BUILD != vec[i].iInfo)
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }

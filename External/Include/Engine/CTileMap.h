@@ -11,13 +11,12 @@ class CTileMap :
     public CRenderComponent
 {
 private:
-    int                     m_iAlive;
+    int                         m_iAlive;
 private:
-    tMtrlConst				m_tConst;
-    Ptr<CTexture>           m_AtlasTex;     // 타일맵이 사용하는 아틀라스 이미지   
-    CStructuredBuffer*      m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
-    vector<tTile>           m_vecInfo;
-
+    tMtrlConst				    m_tConst;
+    Ptr<CTexture>               m_AtlasTex;     // 타일맵이 사용하는 아틀라스 이미지   
+    CStructuredBuffer*          m_TileBuffer;   // 각 타일의 아틀라스 참조정보 구조체
+    vector<tTile>               m_vecInfo;
 private:
     bool Picking(Vec3 vPos, UINT& iIndex);
 public:

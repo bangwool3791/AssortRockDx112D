@@ -26,6 +26,8 @@
 #include "CTerrainScript.h"
 #include "CTileScript.h"
 #include "CTreeScript.h"
+#include "CWWallScript.h"
+#include "CWWCScript.h"
 #include "CWWSScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
@@ -55,6 +57,8 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
 	_vec.push_back(L"CTreeScript");
+	_vec.push_back(L"CWWallScript");
+	_vec.push_back(L"CWWCScript");
 	_vec.push_back(L"CWWSScript");
 }
 
@@ -86,6 +90,8 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
 	_vec.push_back("CTreeScript");
+	_vec.push_back("CWWallScript");
+	_vec.push_back("CWWCScript");
 	_vec.push_back("CWWSScript");
 }
 
@@ -141,6 +147,10 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTileScript;
 	if (L"CTreeScript" == _strScriptName)
 		return new CTreeScript;
+	if (L"CWWallScript" == _strScriptName)
+		return new CWWallScript;
+	if (L"CWWCScript" == _strScriptName)
+		return new CWWCScript;
 	if (L"CWWSScript" == _strScriptName)
 		return new CWWSScript;
 	return nullptr;
@@ -198,6 +208,10 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTileScript;
 	if ("CTreeScript" == _strScriptName)
 		return new CTreeScript;
+	if ("CWWallScript" == _strScriptName)
+		return new CWWallScript;
+	if ("CWWCScript" == _strScriptName)
+		return new CWWCScript;
 	if ("CWWSScript" == _strScriptName)
 		return new CWWSScript;
 	return nullptr;
@@ -281,6 +295,12 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TREESCRIPT:
 		return new CTreeScript;
+		break;
+	case (UINT)SCRIPT_TYPE::WWALLSCRIPT:
+		return new CWWallScript;
+		break;
+	case (UINT)SCRIPT_TYPE::WWCSCRIPT:
+		return new CWWCScript;
 		break;
 	case (UINT)SCRIPT_TYPE::WWSSCRIPT:
 		return new CWWSScript;
@@ -393,6 +413,14 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTreeScript";
 		break;
 
+	case SCRIPT_TYPE::WWALLSCRIPT:
+		return L"CWWallScript";
+		break;
+
+	case SCRIPT_TYPE::WWCSCRIPT:
+		return L"CWWCScript";
+		break;
+
 	case SCRIPT_TYPE::WWSSCRIPT:
 		return L"CWWSScript";
 		break;
@@ -503,6 +531,14 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TREESCRIPT:
 		return "CTreeScript";
+		break;
+
+	case SCRIPT_TYPE::WWALLSCRIPT:
+		return "CWWallScript";
+		break;
+
+	case SCRIPT_TYPE::WWCSCRIPT:
+		return "CWWCScript";
 		break;
 
 	case SCRIPT_TYPE::WWSSCRIPT:
