@@ -143,6 +143,40 @@ void CResMgr::CreateDefaultMesh()
 	AddRes<CMesh>(L"CrystalMesh", pMesh);
 	vecVtx.clear();
 	vecIdx.clear();
+
+	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
+	v.vUV = Vec2(0.f / 4096.f, 0.f / 4096.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(0.5f, 0.f, 0.5f);
+	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(520.f / 4096.f, 0.f / 4096.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
+	v.vUV = Vec2(520.f / 4096.f, 960.f / 4096.f);
+	*iterVtx = v;
+
+	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
+	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
+	v.vUV = Vec2(0.f / 4096.f, 960.f / 4096.f);
+	*iterVtx = v;
+
+	*iterIdx = 0;
+	*iterIdx = 2;
+	*iterIdx = 3;
+
+	*iterIdx = 0;
+	*iterIdx = 1;
+	*iterIdx = 2;
+
+	pMesh = new CMesh(true);
+	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
+	AddRes<CMesh>(L"TreeMesh", pMesh);
+	vecVtx.clear();
+	vecIdx.clear();
 	// 원형메쉬 만들기
 	// 중심점	
 	v.vPos = Vec3(0.f, 0.f, 1.f);
@@ -258,7 +292,7 @@ void CResMgr::CreateDefaultMesh()
 				else if (k % 4 == 3)
 					fZ -= TERRAINCZ * 0.5f;
 
-				v.vPos = Vec3{ fX, 0.f, fZ };
+				v.vPos = Vec3{ fX , 0.f, fZ };
 				//cout << "[x][z] " << v.vPos.x << " " << v.vPos.z << endl;
 				v.vColor = Vec4(0.f, 0.f, 0.f, 1.f);
 				*iterVtx = v;
@@ -436,7 +470,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\Interface\\Icons.png", L"texture\\Interface\\Icons.png");
 	Load<CTexture>(L"texture\\Interface\\Portraits.dds", L"texture\\Interface\\Portraits.dds");
 	Load<CTexture>(L"texture\\geology\\Atlas1_LQ.dds", L"texture\\geology\\Atlas1_LQ.dds");
-
+	Load<CTexture>(L"texture\\vegetation\\Atlas1_HQ.dds", L"texture\\vegetation\\Atlas1_HQ.dds");
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
 }

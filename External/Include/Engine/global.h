@@ -7,6 +7,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <array>
 #include <iterator>
@@ -27,6 +28,7 @@ using std::map;
 using std::make_pair;
 using std::back_insert_iterator;
 using std::stack;
+using std::unordered_map;
 using std::pair;
 using std::string;
 using std::wstring;

@@ -15,14 +15,18 @@
 #include "CMonsterScript.h"
 #include "CMouseScript.h"
 #include "CPlayerScript.h"
+#include "CPOSScript.h"
 #include "CQuarryScript.h"
 #include "CRefAniScript.h"
 #include "CSawScript.h"
+#include "CSCScript.h"
 #include "CSelectUnitScript.h"
 #include "CShadowScript.h"
 #include "CTentScript.h"
 #include "CTerrainScript.h"
 #include "CTileScript.h"
+#include "CTreeScript.h"
+#include "CWWSScript.h"
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
@@ -40,14 +44,18 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CMonsterScript");
 	_vec.push_back(L"CMouseScript");
 	_vec.push_back(L"CPlayerScript");
+	_vec.push_back(L"CPOSScript");
 	_vec.push_back(L"CQuarryScript");
 	_vec.push_back(L"CRefAniScript");
 	_vec.push_back(L"CSawScript");
+	_vec.push_back(L"CSCScript");
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
 	_vec.push_back(L"CTentScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
+	_vec.push_back(L"CTreeScript");
+	_vec.push_back(L"CWWSScript");
 }
 
 
@@ -67,14 +75,18 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CMonsterScript");
 	_vec.push_back("CMouseScript");
 	_vec.push_back("CPlayerScript");
+	_vec.push_back("CPOSScript");
 	_vec.push_back("CQuarryScript");
 	_vec.push_back("CRefAniScript");
 	_vec.push_back("CSawScript");
+	_vec.push_back("CSCScript");
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
 	_vec.push_back("CTentScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
+	_vec.push_back("CTreeScript");
+	_vec.push_back("CWWSScript");
 }
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
@@ -107,12 +119,16 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CMouseScript;
 	if (L"CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if (L"CPOSScript" == _strScriptName)
+		return new CPOSScript;
 	if (L"CQuarryScript" == _strScriptName)
 		return new CQuarryScript;
 	if (L"CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
 	if (L"CSawScript" == _strScriptName)
 		return new CSawScript;
+	if (L"CSCScript" == _strScriptName)
+		return new CSCScript;
 	if (L"CSelectUnitScript" == _strScriptName)
 		return new CSelectUnitScript;
 	if (L"CShadowScript" == _strScriptName)
@@ -123,6 +139,10 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTerrainScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
+	if (L"CTreeScript" == _strScriptName)
+		return new CTreeScript;
+	if (L"CWWSScript" == _strScriptName)
+		return new CWWSScript;
 	return nullptr;
 }
 
@@ -156,12 +176,16 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CMouseScript;
 	if ("CPlayerScript" == _strScriptName)
 		return new CPlayerScript;
+	if ("CPOSScript" == _strScriptName)
+		return new CPOSScript;
 	if ("CQuarryScript" == _strScriptName)
 		return new CQuarryScript;
 	if ("CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
 	if ("CSawScript" == _strScriptName)
 		return new CSawScript;
+	if ("CSCScript" == _strScriptName)
+		return new CSCScript;
 	if ("CSelectUnitScript" == _strScriptName)
 		return new CSelectUnitScript;
 	if ("CShadowScript" == _strScriptName)
@@ -172,6 +196,10 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTerrainScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
+	if ("CTreeScript" == _strScriptName)
+		return new CTreeScript;
+	if ("CWWSScript" == _strScriptName)
+		return new CWWSScript;
 	return nullptr;
 }
 
@@ -221,6 +249,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::PLAYERSCRIPT:
 		return new CPlayerScript;
 		break;
+	case (UINT)SCRIPT_TYPE::POSSCRIPT:
+		return new CPOSScript;
+		break;
 	case (UINT)SCRIPT_TYPE::QUARRYSCRIPT:
 		return new CQuarryScript;
 		break;
@@ -229,6 +260,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::SAWSCRIPT:
 		return new CSawScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SCSCRIPT:
+		return new CSCScript;
 		break;
 	case (UINT)SCRIPT_TYPE::SELECTUNITSCRIPT:
 		return new CSelectUnitScript;
@@ -244,6 +278,12 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::TREESCRIPT:
+		return new CTreeScript;
+		break;
+	case (UINT)SCRIPT_TYPE::WWSSCRIPT:
+		return new CWWSScript;
 		break;
 	}
 	return nullptr;
@@ -309,6 +349,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CPlayerScript";
 		break;
 
+	case SCRIPT_TYPE::POSSCRIPT:
+		return L"CPOSScript";
+		break;
+
 	case SCRIPT_TYPE::QUARRYSCRIPT:
 		return L"CQuarryScript";
 		break;
@@ -319,6 +363,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::SAWSCRIPT:
 		return L"CSawScript";
+		break;
+
+	case SCRIPT_TYPE::SCSCRIPT:
+		return L"CSCScript";
 		break;
 
 	case SCRIPT_TYPE::SELECTUNITSCRIPT:
@@ -339,6 +387,14 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return L"CTileScript";
+		break;
+
+	case SCRIPT_TYPE::TREESCRIPT:
+		return L"CTreeScript";
+		break;
+
+	case SCRIPT_TYPE::WWSSCRIPT:
+		return L"CWWSScript";
 		break;
 
 	}
@@ -405,6 +461,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CPlayerScript";
 		break;
 
+	case SCRIPT_TYPE::POSSCRIPT:
+		return "CPOSScript";
+		break;
+
 	case SCRIPT_TYPE::QUARRYSCRIPT:
 		return "CQuarryScript";
 		break;
@@ -415,6 +475,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::SAWSCRIPT:
 		return "CSawScript";
+		break;
+
+	case SCRIPT_TYPE::SCSCRIPT:
+		return "CSCScript";
 		break;
 
 	case SCRIPT_TYPE::SELECTUNITSCRIPT:
@@ -435,6 +499,14 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
+		break;
+
+	case SCRIPT_TYPE::TREESCRIPT:
+		return "CTreeScript";
+		break;
+
+	case SCRIPT_TYPE::WWSSCRIPT:
+		return "CWWSScript";
 		break;
 
 	}

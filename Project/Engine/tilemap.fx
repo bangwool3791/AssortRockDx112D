@@ -4,13 +4,19 @@
 #include "func.fx"
 #include "register.fx"
 
-// ===============
-// UITileMap Shader
-// ===============
-// mesh                 : UiTileMesh
-// Rasterizer           : CULL_NONE 
-// BlendState           : ALPHABLEND
-// DepthStencilState    : NO_WRITE
+#define NOTUSED 0
+#define EMPTY 1
+#define BUILD 2
+#define COLLISION 3
+#define USED 4
+#define NOT_FOREST 5
+#define BEFORE_HUNTED 6
+#define HUNTED  7
+#define CRYSTAL 8
+#define BEFORE_CRYSTAL 9
+#define WOOD 10
+#define BEFROE_WOOD 11
+#define HARVEST 12
 
 struct VS_IN
 {
@@ -46,43 +52,55 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     if (0 == g_int_0)
         discard;
 
-    if (g_TileBuffer[_in.vColor.x].iInfo == 0)
+    if (g_TileBuffer[_in.vColor.x].iInfo == NOTUSED)
     {
         discard;
     }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 1)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == EMPTY)
     {
         color1 = float4(0.0f, 0.7f, 0.0f, 1.f);
         color2 = float4(0.0f, 0.7f, 0.0f, 1.f);
     }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 2)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == BUILD)
     {
-        color1 = float4(0.0f, 0.5f, 0.0f, 1.f);
-        color2 = float4(0.0f, 0.5f, 0.0f, 1.f);
+        color1 = float4(0.2f, 0.5f, 0.2f, 1.f);
+        color2 = float4(0.2f, 0.5f, 0.2f, 1.f);
     }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 3)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == COLLISION)
     {
         color1 = float4(0.2f, 0.0f, 0.0f, 1.0f);
         color2 = float4(0.2f, 0.0f, 0.0f, 1.0f);
     }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 4)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == USED)
     {
-        color1 = float4(0.0f, 0.6f, 0.0f, 1.f);
-        color2 = float4(0.0f, 0.6f, 0.0f, 1.f);
+        discard;
     }
-    else if (g_TileBuffer[_in.vColor.x].iInfo == 6)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == BEFORE_HUNTED)
+    {
+        color1 = float4(0.2f, 0.7f, 0.2f, 1.f);
+        color2 = float4(0.2f, 0.7f, 0.2f, 1.f);
+    }
+    else if (g_TileBuffer[_in.vColor.x].iInfo == HUNTED)
     {
         color1 = float4(0.0f, 0.7f, 0.0f, 1.f);
         color2 = float4(0.0f, 0.7f, 0.0f, 1.f);
     }
-    if (g_TileBuffer[_in.vColor.x].iInfo == 7)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == CRYSTAL)
     {
         discard;
     }
-    if (g_TileBuffer[_in.vColor.x].iInfo == 8)
+    else if (g_TileBuffer[_in.vColor.x].iInfo == BEFORE_CRYSTAL)
     {
-        color1 = float4(0.0f, 0.0f, 0.7f, 1.f);
-        color2 = float4(0.0f, 0.0f, 0.7f, 1.f);
+        color1 = float4(0.2f, 0.1f, 0.7f, 1.f);
+        color2 = float4(0.2f, 0.1f, 0.7f, 1.f);
+    }
+    else if (g_TileBuffer[_in.vColor.x].iInfo == WOOD)
+    {
+        discard;
+    }
+    else if (g_TileBuffer[_in.vColor.x].iInfo == HARVEST)
+    {
+        discard;
     }
 
     alphaValue = g_tex_0.Sample(g_sam_1, _in.vUV);

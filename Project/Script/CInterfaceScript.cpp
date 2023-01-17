@@ -122,6 +122,12 @@ void CInterfaceScript::tick()
 						break;
 						case 1:
 						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
+						case 2:
+						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
 							Instantiate(pUIPrefab->Instantiate(), 1);
 						}
@@ -136,6 +142,24 @@ void CInterfaceScript::tick()
 					{
 						switch (i)
 						{
+						case 0:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
+						case 1:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"POSPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
+						case 2:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWorkshopPrefab");
+							Instantiate(pUIPrefab->Instantiate(), 1);
+						}
+						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);

@@ -575,7 +575,7 @@ bool EditAnimationUI::Click_Pixel_LBtn()
 
     BoundingFrustum fr(m_pCameraObject->Camera()->GetProjMat());
 
-    BoundingBox box(vMousePos - vCameraPos, Vec3(1600.f, 1600.f, 1600.f));
+    BoundingBox box(vMousePos - vCameraPos, Vec3(1400.f, 1600.f, 1600.f));
 
 
     if (!fr.Contains(box))

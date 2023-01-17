@@ -26,6 +26,7 @@ CQuarryScript::~CQuarryScript()
 void CQuarryScript::begin()
 {
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
+	m_pTileObject->TileMap()->On();
 }
 
 void CQuarryScript::tick()
@@ -81,6 +82,7 @@ void CQuarryScript::tick()
 
 					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::CRYSTAL);
 					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::CRYSTAL);
+					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::CRYSTAL);
 
 					while (!m_result.empty())
 						m_result.pop();
@@ -106,6 +108,7 @@ void CQuarryScript::tick()
 
 				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_CRYSTAL);
 				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_CRYSTAL);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_CRYSTAL);
 
 				while (!m_result.empty())
 					m_result.pop();
@@ -124,6 +127,31 @@ void CQuarryScript::tick()
 		{
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
+				if ((m_iIndex / TILEX) % 2 == 0)
+				{
+					m_result.push(m_iIndex);
+					m_result.push(m_iIndex + TILEX);
+					m_result.push(m_iIndex + TILEX - 1);
+					m_result.push(m_iIndex + TILEX * 2);
+				}
+				else if ((m_iIndex / TILEX) % 2 == 1)
+				{
+					m_result.push(m_iIndex);
+					m_result.push(m_iIndex + TILEX);
+					m_result.push(m_iIndex + TILEX + 1);
+					m_result.push(m_iIndex + TILEX * 2);
+				}
+
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+
+				while (!m_result.empty())
+					m_result.pop();
+
+				for (size_t i{}; i < 40000; ++i)
+					m_bCheck[i] = false;
+
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt2 = 0.f;
@@ -161,8 +189,13 @@ void CQuarryScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _val
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
 		if ((UINT)TILE_TYPE::CRYSTAL == tTile.iInfo && (UINT)TILE_TYPE::BEFORE_CRYSTAL == _value)
+		{
 			m_pTileObject->TileMap()->SetInfo(data, _value);
+			m_bMask = true;
+		}
 		else if ((UINT)TILE_TYPE::BEFORE_CRYSTAL == tTile.iInfo && (UINT)TILE_TYPE::CRYSTAL == _value)
+			m_pTileObject->TileMap()->SetInfo(data, _value);
+		else if ((UINT)TILE_TYPE::BEFORE_CRYSTAL == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 
 		m_bCheck[data] = true;
@@ -291,11 +324,12 @@ bool  CQuarryScript::IsBlocked(UINT _iTile)
 	tTile tTile{};
 	tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
 
-	if ((UINT)TILE_TYPE::NOTUSED == tTile.iInfo)
+	if ((UINT)TILE_TYPE::EMPTY != tTile.iInfo)
 		return false;
 
-	if ((UINT)TILE_TYPE::COLLISION == tTile.iInfo)
+	if (false == m_bMask)
 		return false;
 
+	m_bMask = false;
 	return true;
 }

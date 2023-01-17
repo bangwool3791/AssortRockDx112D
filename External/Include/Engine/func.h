@@ -22,6 +22,19 @@ void Clear_VecOfMap(map<const T1, vector<T2*>>& _map)
 	_map.clear();
 }
 
+
+template<typename T1, typename T2>
+void Clear_VecOfUnoderedMap(unordered_map<const T1, vector<T2*>>& _map)
+{
+	typename unordered_map<T1, vector<T2*>>::iterator iter = _map.begin();
+
+	for (; iter != _map.end(); ++iter)
+	{
+		iter->second.clear();
+	}
+	_map.clear();
+}
+
 template<typename T1, typename T2>
 void Safe_Del_Map(map<T1, T2*>& _map)
 {

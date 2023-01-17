@@ -29,9 +29,9 @@ public:
     virtual void SaveToFile(FILE* _File) override;
     virtual void LoadFromFile(FILE* _File) override;
 
-    tTile    GetInfo(UINT _iIndex);
+    tTile    GetInfo(int _iIndex);
     tTile    GetInfo(Vec3 _vPos);
-    void     SetInfo(UINT _iIndex, UINT _iInfo);
+    void     SetInfo(int _iIndex, UINT _iInfo);
     void     SetInfo(Vec3 _vPos, UINT _iInfo);
     int      Find(Vec3 _vPos, int left, int right);
     void     On();

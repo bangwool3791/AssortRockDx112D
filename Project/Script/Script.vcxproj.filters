@@ -47,14 +47,32 @@
     <Filter Include="Scripts\09. ColonistScript\02. HuntScript">
       <UniqueIdentifier>{316aaaa1-3b62-4515-a969-44d85b0ea4d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\10. CCrystalScript">
-      <UniqueIdentifier>{87a398cf-cfa2-43dc-acf7-cfecd0061ef0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts\09. ColonistScript\03. SawScript">
       <UniqueIdentifier>{bb6b0e5d-dbf0-4355-9f5b-6235d9a01d30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\11. QuarryScript">
+    <Filter Include="Scripts\09. ColonistScript\04. QuarryScript">
       <UniqueIdentifier>{4c495ff9-5422-4b55-8f02-13eb2fc9de6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\10. Mineral">
+      <UniqueIdentifier>{9e876adf-8e8a-48f2-be4a-3bf2424d9eab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\10. Mineral\01. CCrystalScript">
+      <UniqueIdentifier>{87a398cf-cfa2-43dc-acf7-cfecd0061ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\10. Mineral\02. TreeScript">
+      <UniqueIdentifier>{811d0f94-1459-4de0-92cb-adace6ee11cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. IndustryScript">
+      <UniqueIdentifier>{f439b675-75a4-476e-ad12-355641b70a67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. IndustryScript\01. CSCScript">
+      <UniqueIdentifier>{d31c11a9-6c12-4d05-9c78-348b58948866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. IndustryScript\02. CWWSScript">
+      <UniqueIdentifier>{3c2dcaae-0c6f-47e4-a532-18f92c1e3110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. IndustryScript\03. POSScript">
+      <UniqueIdentifier>{42a89723-3237-4cbb-ae6d-9480d032e6eb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -125,13 +143,25 @@
       <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
     </ClInclude>
     <ClInclude Include="CCrystalScript.h">
-      <Filter>Scripts\10. CCrystalScript</Filter>
+      <Filter>Scripts\10. Mineral\01. CCrystalScript</Filter>
     </ClInclude>
     <ClInclude Include="CSawScript.h">
       <Filter>Scripts\09. ColonistScript\03. SawScript</Filter>
     </ClInclude>
     <ClInclude Include="CQuarryScript.h">
-      <Filter>Scripts\11. QuarryScript</Filter>
+      <Filter>Scripts\09. ColonistScript\04. QuarryScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CTreeScript.h">
+      <Filter>Scripts\10. Mineral\02. TreeScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CSCScript.h">
+      <Filter>Scripts\11. IndustryScript\01. CSCScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CWWSScript.h">
+      <Filter>Scripts\11. IndustryScript\02. CWWSScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CPOSScript.h">
+      <Filter>Scripts\11. IndustryScript\03. POSScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,13 +232,25 @@
       <Filter>Scripts\09. ColonistScript\02. HuntScript</Filter>
     </ClCompile>
     <ClCompile Include="CCrystalScript.cpp">
-      <Filter>Scripts\10. CCrystalScript</Filter>
+      <Filter>Scripts\10. Mineral\01. CCrystalScript</Filter>
     </ClCompile>
     <ClCompile Include="CSawScript.cpp">
       <Filter>Scripts\09. ColonistScript\03. SawScript</Filter>
     </ClCompile>
     <ClCompile Include="CQuarryScript.cpp">
-      <Filter>Scripts\11. QuarryScript</Filter>
+      <Filter>Scripts\09. ColonistScript\04. QuarryScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTreeScript.cpp">
+      <Filter>Scripts\10. Mineral\02. TreeScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CSCScript.cpp">
+      <Filter>Scripts\11. IndustryScript\01. CSCScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CWWSScript.cpp">
+      <Filter>Scripts\11. IndustryScript\02. CWWSScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CPOSScript.cpp">
+      <Filter>Scripts\11. IndustryScript\03. POSScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

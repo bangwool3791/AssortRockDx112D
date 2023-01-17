@@ -73,18 +73,22 @@ void CTileMap::render()
 	CMaterial::Clear();
 }
 
-tTile CTileMap::GetInfo(UINT _iIndex)
+tTile CTileMap::GetInfo(int _iIndex)
 {
-	return m_vecInfo[_iIndex];
+	if (0 <= _iIndex && _iIndex < m_vecInfo.size())
+	{
+		return m_vecInfo[_iIndex];
+	}
+	return tTile{};
 }
 
 tTile CTileMap::GetInfo(Vec3 _vPos)
 {
 	//cout << "GetInfo" << endl;
 	UINT index = 0;
-	int i = _vPos.z / (TILECZ * 0.5f);
+	//int i = _vPos.z / (TILECZ * 0.5f);
 
-	for (; i < TILEZ; ++i)
+	for (int i = 0; i < TILEZ; ++i)
 	{
 		int left = i * TILEX;
 		int right = left + TILEX - 1;
@@ -102,9 +106,9 @@ void CTileMap::SetInfo(Vec3 _vPos, UINT _iInfo)
 	//cout << "SetInfo" << endl;
 	UINT index = 0;
 
-	int i = _vPos.z / (TILECZ * 0.5f);
+	//int i = _vPos.z / (TILECZ * 0.5f);
 
-	for (; i < TILEZ; ++i)
+	for (int i = 0; i < TILEZ; ++i)
 	{
 		int left = i * TILEX;
 		int right = left + TILEX - 1;
@@ -120,10 +124,13 @@ void CTileMap::SetInfo(Vec3 _vPos, UINT _iInfo)
 	}
 }
 
-void CTileMap::SetInfo(UINT _iIndex, UINT _iInfo)
+void CTileMap::SetInfo(int _iIndex, UINT _iInfo)
 {
-	m_vecInfo[_iIndex].iInfo = _iInfo;
-	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+	if (0 <= _iIndex && _iIndex < m_vecInfo.size())
+	{
+		m_vecInfo[_iIndex].iInfo = _iInfo;
+		m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+	}
 }
 
 int CTileMap::Find(Vec3 vPos, int left, int right)
@@ -147,14 +154,12 @@ int CTileMap::Find(Vec3 vPos, int left, int right)
 
 bool CTileMap::Picking(Vec3 vPos, UINT& iIndex)
 {
-	vPos.y = 0.f;
-
 	Vec3	vPoint[4] = {
 
-		Vec3(m_vecInfo[iIndex].vPos.x,					 0.f, m_vecInfo[iIndex].vPos.z + (TILECZ * 0.5f)),	// 12
-		Vec3(m_vecInfo[iIndex].vPos.x + (TILECX * 0.5f), 0.f, m_vecInfo[iIndex].vPos.z),					// 3
-		Vec3(m_vecInfo[iIndex].vPos.x,					 0.f, m_vecInfo[iIndex].vPos.z - (TILECZ * 0.5f)),	// 6
-		Vec3(m_vecInfo[iIndex].vPos.x - (TILECX * 0.5f), 0.f, m_vecInfo[iIndex].vPos.z),					// 9
+		Vec3(m_vecInfo[iIndex].vPos.x,					 m_vecInfo[iIndex].vPos.y, m_vecInfo[iIndex].vPos.z + (TILECZ * 0.5f)),	// 12
+		Vec3(m_vecInfo[iIndex].vPos.x + (TILECX * 0.5f), m_vecInfo[iIndex].vPos.y, m_vecInfo[iIndex].vPos.z),					// 3
+		Vec3(m_vecInfo[iIndex].vPos.x,					 m_vecInfo[iIndex].vPos.y, m_vecInfo[iIndex].vPos.z - (TILECZ * 0.5f)),	// 6
+		Vec3(m_vecInfo[iIndex].vPos.x - (TILECX * 0.5f), m_vecInfo[iIndex].vPos.y, m_vecInfo[iIndex].vPos.z),					// 9
 
 	};
 
@@ -169,10 +174,10 @@ bool CTileMap::Picking(Vec3 vPos, UINT& iIndex)
 
 	Vec3		vNormal[4] = {
 
-		Vec3(-vDir[0].z, 0.f, vDir[0].x),
-		Vec3(-vDir[1].z, 0.f, vDir[1].x),
-		Vec3(-vDir[2].z, 0.f, vDir[2].x),
-		Vec3(-vDir[3].z, 0.f, vDir[3].x)
+		Vec3(-vDir[0].z, vDir[0].y, vDir[0].x),
+		Vec3(-vDir[1].z, vDir[1].y, vDir[1].x),
+		Vec3(-vDir[2].z, vDir[2].y, vDir[2].x),
+		Vec3(-vDir[3].z, vDir[3].y, vDir[3].x)
 	};
 
 	for (int i = 0; i < 4; ++i)
@@ -185,9 +190,6 @@ bool CTileMap::Picking(Vec3 vPos, UINT& iIndex)
 		vPos - vPoint[2],
 		vPos - vPoint[3]
 	};
-
-	for (int i = 0; i < 4; ++i)
-		vNormal[i].Normalize();
 
 	for (int i = 0; i < 4; ++i)
 	{

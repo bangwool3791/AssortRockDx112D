@@ -324,7 +324,7 @@ void CreateTestLelvel()
 	CGameObject* pGameObect = new CGameObject;
 	pGameObect->AddComponent(new CTransform);
 	pGameObect->AddComponent(new CTerrain);
-	pGameObect->SetName(L"LevelTerrain");
+	pGameObect->SetName(L"LevelTerrain"); 
 
 	pGameObect->Transform()->SetRelativePos(0.f, 0.f, 0.f);
 	pGameObect->Transform()->SetRelativeScale(1.f, 1.f, 1.f);

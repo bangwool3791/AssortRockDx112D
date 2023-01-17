@@ -188,15 +188,19 @@ call CodeGen.exe</Command>
     <ClInclude Include="CMouseScript.h" />
     <ClInclude Include="CCommandScript.h" />
     <ClInclude Include="CPlayerScript.h" />
+    <ClInclude Include="CPOSScript.h" />
     <ClInclude Include="CQuarryScript.h" />
     <ClInclude Include="CRefAniScript.h" />
     <ClInclude Include="CSawScript.h" />
     <ClInclude Include="CScriptMgr.h" />
+    <ClInclude Include="CSCScript.h" />
     <ClInclude Include="CSelectUnitScript.h" />
     <ClInclude Include="CShadowScript.h" />
     <ClInclude Include="CTentScript.h" />
     <ClInclude Include="CTerrainScript.h" />
     <ClInclude Include="CTileScript.h" />
+    <ClInclude Include="CTreeScript.h" />
+    <ClInclude Include="CWWSScript.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="CInterfaceScript.h" />
     <ClInclude Include="pch.h" />
@@ -215,16 +219,20 @@ call CodeGen.exe</Command>
     <ClCompile Include="CMouseScript.cpp" />
     <ClCompile Include="CCommandScript.cpp" />
     <ClCompile Include="CPlayerScript.cpp" />
+    <ClCompile Include="CPOSScript.cpp" />
     <ClCompile Include="CQuarryScript.cpp" />
     <ClCompile Include="CRefAniScript.cpp" />
     <ClCompile Include="CSawScript.cpp" />
     <ClCompile Include="CScriptMgr.cpp" />
+    <ClCompile Include="CSCScript.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp" />
     <ClCompile Include="CShadowScript.cpp" />
     <ClCompile Include="CTentScript.cpp" />
     <ClCompile Include="CTerrainScript.cpp" />
     <ClCompile Include="CTileScript.cpp" />
     <ClCompile Include="CInterfaceScript.cpp" />
+    <ClCompile Include="CTreeScript.cpp" />
+    <ClCompile Include="CWWSScript.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

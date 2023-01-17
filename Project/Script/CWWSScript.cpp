@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CHuntScript.h"
+#include "CWWSScript.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
@@ -10,20 +10,20 @@
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
-CHuntScript::CHuntScript()
-	:CScript{ SCRIPT_TYPE::HUNTSCRIPT }
+CWWSScript::CWWSScript()
+	:CScript{ SCRIPT_TYPE::WWSSCRIPT }
 	, m_vMousePos{}
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
-	SetName(L"CHuntScript");
+	SetName(L"CWWSScript");
 }
 
-CHuntScript::~CHuntScript()
+CWWSScript::~CWWSScript()
 {
 }
 
-void CHuntScript::begin()
+void CWWSScript::begin()
 {
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
@@ -34,19 +34,18 @@ void CHuntScript::begin()
 	m_pTileObject->TileMap()->On();
 }
 
-void CHuntScript::tick()
+void CWWSScript::tick()
 {
 
 }
 
-void CHuntScript::finaltick()
+void CWWSScript::finaltick()
 {
 	m_fDt += DT;
-	m_fDt2 += DT;
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
-		if (m_fDt > 0.25f)
+		if (m_fDt > 0.15f)
 		{
 			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
 			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
@@ -78,10 +77,6 @@ void CHuntScript::finaltick()
 					m_result.push(m_iIndex);
 					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
 					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
 
 					while (!m_result.empty())
 						m_result.pop();
@@ -89,90 +84,69 @@ void CHuntScript::finaltick()
 					for (size_t i{}; i < 40000; ++i)
 						m_bCheck[i] = false;
 				}
-
-				m_result.push(tTile.iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
-
-				while (!m_result.empty())
-					m_result.pop();
-
-				for (size_t i{}; i < 40000; ++i)
-					m_bCheck[i] = false;
-
-				m_iIndex = tTile.iIndex;
-
-				GetOwner()->Transform()->SetRelativePos(tTile.vPos);
-				m_fDt = 0.f;
 			}
-		}
+			m_result.push(tTile.iIndex);
+			SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BUILD);
+			SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BUILD);
 
-		if (m_fDt2 > 0.5f)
-		{
+			while (!m_result.empty())
+				m_result.pop();
+
+			for (size_t i{}; i < 40000; ++i)
+				m_bCheck[i] = false;
+
+			m_iIndex = tTile.iIndex;
+
+			GetOwner()->Transform()->SetRelativePos(vPos);
+
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
-				m_result.push(m_iIndex);
+				m_result.push(tTile.iIndex);
 				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
 
-				while (!m_result.empty())
-					m_result.pop();
-
-				for (size_t i{}; i < 40000; ++i)
-					m_bCheck[i] = false;
-
+				GetOwner()->Transform()->SetRelativePos(tTile.vPos);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
-				m_fDt2 = 0.f;
 			}
+			m_vectoken.clear();
+			m_fDt = 0.f;
 		}
 	}
 }
 
-void CHuntScript::BeginOverlap(CCollider2D* _pOther)
+void CWWSScript::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void CHuntScript::Overlap(CCollider2D* _pOther)
+void CWWSScript::Overlap(CCollider2D* _pOther)
 {
 }
 
-void CHuntScript::EndOverlap(CCollider2D* _pOther)
+void CWWSScript::EndOverlap(CCollider2D* _pOther)
 {
 }
-void CHuntScript::SaveToFile(FILE* _File)
+void CWWSScript::SaveToFile(FILE* _File)
 {
 	CScript::SaveToFile(_File);
 }
 
-void CHuntScript::LoadFromFile(FILE* _File)
+void CWWSScript::LoadFromFile(FILE* _File)
 {
 	CScript::LoadFromFile(_File);
 }
 
-bool  CHuntScript::IsBlocked(UINT _iTile)
+bool  CWWSScript::IsBlocked(UINT _iTile)
 {
-	tTile tTile{};
-	tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
-
-	if ((UINT)TILE_TYPE::NOTUSED == tTile.iInfo)
-		return false;
-
-	if ((UINT)TILE_TYPE::COLLISION == tTile.iInfo)
-		return false;
-
+	for (size_t i{}; i < m_vectoken.size(); ++i)
+	{
+		if ((UINT)(TILE_TYPE::NOTUSED) == m_vectoken[i].iInfo)
+			return false;
+	}
 	return true;
 }
 
-void CHuntScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
+void CWWSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 {
 	que = result;
 
@@ -186,14 +160,14 @@ void CHuntScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value
 
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
+		if((UINT)TILE_TYPE::BUILD == _value)
+			m_vectoken.push_back(tTile);
 
-		if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
+		if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
-		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BEFORE_HUNTED == _value)
+		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BUILD == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
-		else if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::HUNTED == _value)
-			m_pTileObject->TileMap()->SetInfo(data, _value);
-		else if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
+		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 
 		m_bCheck[data] = true;

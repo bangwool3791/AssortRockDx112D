@@ -7,10 +7,10 @@ class CQuarryScript :
 private:
     BUILD_STATE                 m_eBuildState;
     Vec3                        m_vMousePos;
-    CGameObject* m_pTileObject;
+    CGameObject*                m_pTileObject;
     bool                        m_bCheck[40000]{};
     UINT                        m_iIndex = 0;
-
+    bool                        m_bMask = false;
     queue<UINT> m_result{};
     queue<UINT> m_queue{};
     float m_fDt = 0.f;

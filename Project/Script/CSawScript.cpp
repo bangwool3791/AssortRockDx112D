@@ -11,7 +11,7 @@
 #include <Script\CMouseScript.h>
 
 CSawScript::CSawScript()
-	:CScript{ SCRIPT_TYPE::HUNTSCRIPT }
+	:CScript{ SCRIPT_TYPE::SAWSCRIPT }
 	, m_vMousePos{}
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
@@ -25,21 +25,11 @@ CSawScript::~CSawScript()
 
 void CSawScript::begin()
 {
-	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
-
-	//GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	//GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
 	m_pTileObject->TileMap()->On();
 }
 
 void CSawScript::tick()
-{
-
-}
-
-void CSawScript::finaltick()
 {
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -75,13 +65,24 @@ void CSawScript::finaltick()
 			{
 				if (-1 != m_iIndex)
 				{
-					m_result.push(m_iIndex);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
+					if ((m_iIndex / TILEX) % 2 == 0)
+					{
+						m_result.push(m_iIndex);
+						m_result.push(m_iIndex + TILEX);
+						m_result.push(m_iIndex + TILEX - 1);
+						m_result.push(m_iIndex + TILEX * 2);
+					}
+					else if ((m_iIndex / TILEX) % 2 == 1)
+					{
+						m_result.push(m_iIndex);
+						m_result.push(m_iIndex + TILEX);
+						m_result.push(m_iIndex + TILEX + 1);
+						m_result.push(m_iIndex + TILEX * 2);
+					}
+
+					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::WOOD);
+					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::WOOD);
+					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::WOOD);
 
 					while (!m_result.empty())
 						m_result.pop();
@@ -90,13 +91,24 @@ void CSawScript::finaltick()
 						m_bCheck[i] = false;
 				}
 
-				m_result.push(tTile.iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				if ((tTile.iIndex / TILEX) % 2 == 0)
+				{
+					m_result.push(tTile.iIndex);
+					m_result.push(tTile.iIndex + TILEX);
+					m_result.push(tTile.iIndex + TILEX - 1);
+					m_result.push(tTile.iIndex + TILEX * 2);
+				}
+				else if ((tTile.iIndex / TILEX) % 2 == 1)
+				{
+					m_result.push(tTile.iIndex);
+					m_result.push(tTile.iIndex + TILEX);
+					m_result.push(tTile.iIndex + TILEX + 1);
+					m_result.push(tTile.iIndex + TILEX * 2);
+				}
+
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFROE_WOOD);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFROE_WOOD);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BEFROE_WOOD);
 
 				while (!m_result.empty())
 					m_result.pop();
@@ -115,14 +127,24 @@ void CSawScript::finaltick()
 		{
 			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
-				m_result.push(m_iIndex);
+				if ((m_iIndex / TILEX) % 2 == 0)
+				{
+					m_result.push(m_iIndex);
+					m_result.push(m_iIndex + TILEX);
+					m_result.push(m_iIndex + TILEX - 1);
+					m_result.push(m_iIndex + TILEX * 2);
+				}
+				else if ((m_iIndex / TILEX) % 2 == 1)
+				{
+					m_result.push(m_iIndex);
+					m_result.push(m_iIndex + TILEX);
+					m_result.push(m_iIndex + TILEX + 1);
+					m_result.push(m_iIndex + TILEX * 2);
+				}
 
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HUNTED);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
+				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::HARVEST);
 
 				while (!m_result.empty())
 					m_result.pop();
@@ -138,39 +160,18 @@ void CSawScript::finaltick()
 	}
 }
 
-void CSawScript::BeginOverlap(CCollider2D* _pOther)
+void CSawScript::finaltick()
 {
 }
 
-void CSawScript::Overlap(CCollider2D* _pOther)
+void CSawScript::SetTileInfo(UINT _iTile, UINT _iValue)
 {
+	m_pTileObject->TileMap()->SetInfo(_iTile, _iValue);
 }
 
-void CSawScript::EndOverlap(CCollider2D* _pOther)
+void  CSawScript::SetTile(UINT _iTile, UINT _iValue)
 {
-}
-void CSawScript::SaveToFile(FILE* _File)
-{
-	CScript::SaveToFile(_File);
-}
-
-void CSawScript::LoadFromFile(FILE* _File)
-{
-	CScript::LoadFromFile(_File);
-}
-
-bool  CSawScript::IsBlocked(UINT _iTile)
-{
-	tTile tTile{};
-	tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
-
-	if ((UINT)TILE_TYPE::NOTUSED == tTile.iInfo)
-		return false;
-
-	if ((UINT)TILE_TYPE::COLLISION == tTile.iInfo)
-		return false;
-
-	return true;
+	SetTileInfo(_iTile, _iValue);
 }
 
 void CSawScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
@@ -187,7 +188,14 @@ void CSawScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
-		if ((UINT)TILE_TYPE::WOOD)
+		if ((UINT)TILE_TYPE::WOOD == tTile.iInfo && (UINT)TILE_TYPE::BEFROE_WOOD == _value)
+		{
+			m_pTileObject->TileMap()->SetInfo(data, _value);
+			m_bMask = true;
+		}
+		else if ((UINT)TILE_TYPE::BEFROE_WOOD == tTile.iInfo && (UINT)TILE_TYPE::WOOD == _value)
+			m_pTileObject->TileMap()->SetInfo(data, _value);
+		else if ((UINT)TILE_TYPE::BEFROE_WOOD == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 
 		m_bCheck[data] = true;
@@ -309,4 +317,19 @@ void CSawScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 				}
 		}
 	}
+}
+
+bool  CSawScript::IsBlocked(UINT _iTile)
+{
+	tTile tTile{};
+	tTile = m_pTileObject->TileMap()->GetInfo(_iTile);
+
+	if ((UINT)TILE_TYPE::EMPTY != tTile.iInfo)
+		return false;
+
+	if (false == m_bMask)
+		return false;
+
+	m_bMask = false;
+	return true;
 }

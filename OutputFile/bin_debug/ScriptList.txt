@@ -12,11 +12,15 @@ CMissileScript2
 CMonsterScript
 CMouseScript
 CPlayerScript
+CPOSScript
 CQuarryScript
 CRefAniScript
 CSawScript
+CSCScript
 CSelectUnitScript
 CShadowScript
 CTentScript
 CTerrainScript
 CTileScript
+CTreeScript
+CWWSScript
