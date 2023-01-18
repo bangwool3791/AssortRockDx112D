@@ -370,6 +370,7 @@ call EngineCopy.bat</Command>
     <FxCompile Include="tile.fx" />
     <FxCompile Include="terrain.fx" />
     <FxCompile Include="tilemap.fx" />
+    <FxCompile Include="tree.fx" />
     <FxCompile Include="ui.fx" />
     <FxCompile Include="wave.fx" />
   </ItemGroup>

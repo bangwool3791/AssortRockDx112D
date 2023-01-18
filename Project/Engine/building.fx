@@ -63,8 +63,6 @@ float4 PS_BuildRender(VS_OUT _in) : SV_Target
             vOutColor.g = vOutColor.g * 3.f;
         else if(1 == g_int_0)
             vOutColor.r = vOutColor.r * 3.f;
-        return vOutColor;
-
     }
     else
     {
@@ -74,13 +72,10 @@ float4 PS_BuildRender(VS_OUT _in) : SV_Target
             vOutColor.g = vOutColor.g * 3.f;
         else if (1 == g_int_0)
             vOutColor.r = vOutColor.r * 3.f;
-        return vOutColor;
     }
 
     if (0.f == vOutColor.a)
         discard;
-
-
     // ±¤¿ø Ã³¸®
  /*   tLightColor color = (tLightColor)0.f;
 

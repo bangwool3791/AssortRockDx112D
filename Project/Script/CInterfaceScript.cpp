@@ -182,13 +182,14 @@ void CInterfaceScript::tick()
 							break;
 						}
 					}
-					cout << "해지" << endl;
-					m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
 				}
 				//버튼 토글
 			}
 		}
 	}
+	//타겟 미 선택 버튼 선택 일 경우 해지
+	for (size_t i{}; i < 6; ++i)
+		m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
 }
 
 void CInterfaceScript::BeginOverlap(CCollider2D* _pOther)

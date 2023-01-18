@@ -7,7 +7,7 @@ class CWWCScript :
 private:
     BUILD_STATE                 m_eBuildState;
     UINT                        m_iIndex = 0;
-
+    Ptr<CMesh>                  m_pMesh;
     float                       m_fDt = 0.f;
     float                       m_fDt2 = 0.f;
 public:

@@ -43,9 +43,9 @@ void CWWCScript::finaltick()
 	{
 		if (m_fDt > 5.f)
 		{
-			//GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
-			//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
-			//GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
+			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
 			m_fDt = 0.f;
 		}

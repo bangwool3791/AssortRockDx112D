@@ -162,7 +162,7 @@ struct tParticleShare
 struct tWoodWall
 {
 	bool bChecked = false;
-	bool arr[4] = { false, };
+	bool arr[8] = { false, };
 };
 
 extern tGlobalData g_global;

@@ -15,10 +15,12 @@ private:
     float                       m_fDt = 0.f;
     float                       m_fDt2 = 0.f;
 
-    static array<tWoodWall, 100 * 100> m_arr;
+    Ptr<CMesh>                  m_pMesh;
+    static array<tWoodWall, 200 * 200> m_arr;
     void SetTileInfo(UINT _iTile);
     bool IsBlocked(UINT _iTile);
     bool Node(UINT _iTile, UINT _iIndex);
+    void ChildWallProcess();
 public:
     virtual void begin();
     virtual void tick();

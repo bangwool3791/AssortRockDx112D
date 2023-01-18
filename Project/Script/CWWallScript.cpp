@@ -10,7 +10,7 @@
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
-array<tWoodWall, 100 * 100> CWWallScript::m_arr{};
+array<tWoodWall, 200 * 200> CWWallScript::m_arr{};
 
 CWWallScript::CWWallScript()
 	:CScript{ SCRIPT_TYPE::WWALLSCRIPT}
@@ -19,6 +19,16 @@ CWWallScript::CWWallScript()
 	, m_eBuildState{ BUILD_STATE::READY }
 {
 	SetName(L"CWWallScript");
+
+	for (size_t i{}; i < 200 * 200; ++i)
+	{
+		m_arr[i].bChecked = false;
+
+		for (size_t j{}; j < 8; ++j)
+		{
+			m_arr[i].arr[j] = false;
+		}
+	}
 }
 
 CWWallScript::~CWWallScript()
@@ -103,331 +113,18 @@ void CWWallScript::finaltick()
 		{
 			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
-				SetTileInfo(m_iIndex);
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
+				Instantiate(pUIPrefab->Instantiate(), 1);
+				m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
+				cout << "m_iIndex " << m_iIndex << endl;
 				m_arr[m_iIndex].bChecked = true;
 
-				//even
-				if ((m_iIndex / TILEX) % 2 == 0)
-				{
-					if (0 <= m_iIndex + TILEX - 1 && m_iIndex + TILEX - 1 < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX - 1, 1))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX - 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallLeftSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex + TILEX && m_iIndex + TILEX < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX, 2))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallRightSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX && m_iIndex - TILEX < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX, 3))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallLeftSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX - 1 && m_iIndex - TILEX - 1 < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX - 1, 4))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX - 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallRightSideMesh"));
-							pObj->begin();
-						}
-					}
-
-					if (0 <= m_iIndex + TILEX * 2 && m_iIndex + TILEX * 2 < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX * 2, 1))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX * 2);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = GetOwner()->Transform()->GetRelativeScale().x;
-							vScale.y = abs(vScale.y);
-							vScale.z = abs(vScale.z);
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallHightMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex + 1 && m_iIndex + 1 < 100 * 100)
-					{
-						if (Node(m_iIndex + 1, 2))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = abs(vScale.x);
-							vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
-							vScale.z = GetOwner()->Transform()->GetRelativeScale().z;
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallWidthMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX * 2 && m_iIndex - TILEX * 2 < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX * 2, 3))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX * 2);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallHightMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - 1 && m_iIndex - 1 < 100 * 100)
-					{
-						if (Node(m_iIndex - 1, 4))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallWidthMesh"));
-							pObj->begin();
-						}
-					}
-				}
-				//odd
-				else if ((m_iIndex / TILEX) % 2 == 1)
-				{
-					if (0 <= m_iIndex + TILEX + 1 && m_iIndex + TILEX + 1 < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX + 1, 1))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX + 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallRightSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex + TILEX && m_iIndex + TILEX < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX, 2))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallLeftSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX && m_iIndex - TILEX < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX, 3))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallRightSideMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX + 1 && m_iIndex - TILEX + 1 < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX + 1, 4))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX + 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallLeftSideMesh"));
-							pObj->begin();
-						}
-					}
-
-					if (0 <= m_iIndex + TILEX * 2 && m_iIndex + TILEX * 2 < 100 * 100)
-					{
-						if (Node(m_iIndex + TILEX * 2, 1))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX * 2);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = GetOwner()->Transform()->GetRelativeScale().x;
-							vScale.y = abs(vScale.y);
-							vScale.z = abs(vScale.z);
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallHightMesh"));
-							pObj->begin();
-						}
-					}
-
-					if (0 <= m_iIndex + 1 && m_iIndex + 1 < 100 * 100)
-					{
-						if (Node(m_iIndex + 1, 2))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = abs(vScale.x);
-							vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
-							vScale.z = GetOwner()->Transform()->GetRelativeScale().z;
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallWidthMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - TILEX * 2 && m_iIndex - TILEX * 2 < 100 * 100)
-					{
-						if (Node(m_iIndex - TILEX * 2, 3))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX * 2);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = GetOwner()->Transform()->GetRelativeScale().x;
-							vScale.y = abs(vScale.y);
-							vScale.z = abs(vScale.z);
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallHightMesh"));
-							pObj->begin();
-						}
-					}
-					if (0 <= m_iIndex - 1 && m_iIndex - 1 < 100 * 100)
-					{
-						if (Node(m_iIndex - 1, 4))
-						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallChildPrefab");
-							CGameObject* pObj{};
-							Instantiate(pObj = pUIPrefab->Instantiate(), 1);
-
-							tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
-							tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - 1);
-							Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
-							Vec3 vScale = tTile1.vPos - tTile2.vPos;
-							vScale.x = abs(vScale.x);
-							vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
-							vScale.z = GetOwner()->Transform()->GetRelativeScale().z;
-							pObj->Transform()->SetRelativePos(vPos);
-							pObj->Transform()->SetRelativeScale(vScale);
-							pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallWidthMesh"));
-							pObj->begin();
-						}
-					}
-				}
+				ChildWallProcess();
 			}
 			m_fDt2 = 0.5f;
 		}
@@ -441,10 +138,13 @@ void CWWallScript::finaltick()
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
 			m_fDt = 0.f;
+			
+			//ChildWallProcess();
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
 	{
+		//ChildWallProcess();
 	}
 }
 
@@ -507,10 +207,341 @@ bool  CWWallScript::IsBlocked(UINT _iTile)
 
 bool  CWWallScript::Node(UINT _iTile, UINT _iIndex)
 {
-	if (m_arr[_iTile].bChecked && false == (bool)(m_arr[_iTile].arr[_iIndex - 1]))
+	const static pair<UINT, UINT> index[8] = 
 	{
-		m_arr[_iTile].arr[_iIndex] = true;
+	 pair<UINT, UINT> {7,3}
+	,pair<UINT, UINT> {1,5}
+	,pair<UINT, UINT> {3,7}
+	,pair<UINT, UINT> {5,1}
+	,pair<UINT, UINT> {0,4}
+	,pair<UINT, UINT> {2,6} 
+	,pair<UINT, UINT> {4,0}
+	,pair<UINT, UINT> {6,2}
+	};
+
+	UINT i = _iIndex - 1;
+	if (m_arr[m_iIndex].bChecked && m_arr[_iTile].bChecked && !m_arr[_iTile].arr[index[i].first] && !m_arr[m_iIndex].arr[index[i].second])
+	{
+		m_arr[_iTile].arr[index[i].first] = true;
+		m_arr[m_iIndex].arr[index[i].second] = true;
 		return true;
 	}
 	return false;
+}
+
+void CWWallScript::ChildWallProcess()
+{
+
+	//even
+	if ((m_iIndex / TILEX) % 2 == 0)
+	{
+		if (0 <= m_iIndex + TILEX - 1 && m_iIndex + TILEX - 1 < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX - 1, 1))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallLeftSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX - 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex + TILEX && m_iIndex + TILEX < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX, 2))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallRightSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX && m_iIndex - TILEX < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX, 3))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallLeftSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX - 1 && m_iIndex - TILEX - 1 < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX - 1, 4))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallRightSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX - 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+
+		if (0 <= m_iIndex + TILEX * 2 && m_iIndex + TILEX * 2 < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX * 2, 5))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallHightPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX * 2);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = GetOwner()->Transform()->GetRelativeScale().x * 0.5f;
+				vScale.y = abs(vScale.y);
+				vScale.z = abs(vScale.z);
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex + 1 && m_iIndex + 1 < 100 * 100)
+		{
+			if (Node(m_iIndex + 1, 6))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallWidthPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				vPos.z -= Transform()->GetRelativeScale().z * 0.25f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = abs(vScale.x) - GetOwner()->Transform()->GetWorldScale().x;
+				vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
+				vScale.z = GetOwner()->Transform()->GetRelativeScale().z * 0.5f;
+
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX * 2 && m_iIndex - TILEX * 2 < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX * 2, 7))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallHightPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX * 2);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = GetOwner()->Transform()->GetRelativeScale().x * 0.5f;
+				vScale.y = abs(vScale.y);
+				vScale.z = abs(vScale.z);
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - 1 && m_iIndex - 1 < 100 * 100)
+		{
+			if (Node(m_iIndex - 1, 8))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallWidthPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				vPos.z -= Transform()->GetRelativeScale().z * 0.25f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = abs(vScale.x) - GetOwner()->Transform()->GetWorldScale().x;
+				vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
+				vScale.z = GetOwner()->Transform()->GetRelativeScale().z * 0.5f;
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+	}
+	//odd
+	else if ((m_iIndex / TILEX) % 2 == 1)
+	{
+		if (0 <= m_iIndex + TILEX && m_iIndex + TILEX < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX, 1))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallLeftSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex + TILEX + 1 && m_iIndex + TILEX + 1 < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX + 1, 2))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallRightSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX + 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX + 1 && m_iIndex - TILEX + 1 < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX + 1, 3))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallLeftSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX + 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX && m_iIndex - TILEX < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX, 4))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallRightSidePrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+
+		if (0 <= m_iIndex + TILEX * 2 && m_iIndex + TILEX * 2 < 100 * 100)
+		{
+			if (Node(m_iIndex + TILEX * 2, 5))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallHightPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + TILEX * 2);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = GetOwner()->Transform()->GetRelativeScale().x * 0.5f;
+				vScale.y = abs(vScale.y);
+				vScale.z = abs(vScale.z);
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+
+		if (0 <= m_iIndex + 1 && m_iIndex + 1 < 100 * 100)
+		{
+			if (Node(m_iIndex + 1, 6))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallWidthPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex + 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				vPos.z -= Transform()->GetRelativeScale().z * 0.25f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = abs(vScale.x) - GetOwner()->Transform()->GetWorldScale().x;
+				vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
+				vScale.z = GetOwner()->Transform()->GetRelativeScale().z * 0.5f;
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - TILEX * 2 && m_iIndex - TILEX * 2 < 100 * 100)
+		{
+			if (Node(m_iIndex - TILEX * 2, 7))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallHightPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - TILEX * 2);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = GetOwner()->Transform()->GetRelativeScale().x * 0.5f;
+				vScale.y = abs(vScale.y);
+				vScale.z = abs(vScale.z);
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+		if (0 <= m_iIndex - 1 && m_iIndex - 1 < 100 * 100)
+		{
+			if (Node(m_iIndex - 1, 8))
+			{
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallWidthPrefab");
+				CGameObject* pObj{};
+				Instantiate(pObj = pUIPrefab->Instantiate(), 1);
+
+				tTile tTile1 = m_pTileObject->TileMap()->GetInfo(m_iIndex);
+				tTile tTile2 = m_pTileObject->TileMap()->GetInfo(m_iIndex - 1);
+				Vec3 vPos = (tTile1.vPos + tTile2.vPos) * 0.5f;
+				vPos.z -= Transform()->GetRelativeScale().z * 0.25f;
+				Vec3 vScale = tTile1.vPos - tTile2.vPos;
+				vScale.x = abs(vScale.x) - GetOwner()->Transform()->GetWorldScale().x;
+				vScale.y = GetOwner()->Transform()->GetRelativeScale().y;
+				vScale.z = GetOwner()->Transform()->GetRelativeScale().z * 0.5f;
+				pObj->Transform()->SetRelativePos(vPos);
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->begin();
+			}
+		}
+	}
 }

@@ -180,22 +180,22 @@ void CResMgr::CreateDefaultMesh()
 
 	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(638.f / 1024.f, 918.f / 1024.f);
+	v.vUV = Vec2(640.f / 1024.f, 919.f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(680.f / 1024.f, 918.f / 1024.f);
+	v.vUV = Vec2(678.f / 1024.f, 919.f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(680.f / 1024.f, 1024.f / 1024.f);
+	v.vUV = Vec2(678.f / 1024.f, 1014.f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(638.f / 1024.f, 1024.f / 1024.f);
+	v.vUV = Vec2(640.f / 1024.f, 1014.f / 1024.f);
 	*iterVtx = v;
 
 	*iterIdx = 0;
@@ -214,22 +214,22 @@ void CResMgr::CreateDefaultMesh()
 
 	v.vPos = Vec3(-0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(1.f, 0.f, 0.f, 1.f);
-	v.vUV = Vec2(0.f / 1024.f, 945.f / 1024.f);
+	v.vUV = Vec2(2.f / 1024.f, 950.5f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(0.5f, 0.f, 0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(78.f / 1024.f, 945.f / 1024.f);
+	v.vUV = Vec2(76.f / 1024.f, 950.5f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 1.f, 0.f, 1.f);
-	v.vUV = Vec2(78.f / 1024.f, 1024.f / 1024.f);
+	v.vUV = Vec2(76.f / 1024.f, 1014.f / 1024.f);
 	*iterVtx = v;
 
 	v.vPos = Vec3(-0.5f, 0.f, -0.5f);
 	v.vColor = Vec4(0.f, 0.f, 1.f, 1.f);
-	v.vUV = Vec2(0.f / 1024.f, 1024.f / 1024.f);
+	v.vUV = Vec2(2.f / 1024.f, 1014.f / 1024.f);
 	*iterVtx = v;
 
 	*iterIdx = 0;
@@ -760,9 +760,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreatePixelShader(L"shader\\objectrenderer.fx", "PS_ObjectRender");
 
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 
 	pShader->AddScalarParam(INT_0, "Use Atlas");
 	pShader->AddScalarParam(VEC2_0, "UV LeftTop");
@@ -857,9 +857,9 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreateVertexShader(L"shader\\tilemap.fx", "VS_UiTileMap");
 	pShader->CreatePixelShader(L"shader\\tilemap.fx", "PS_UiTileMap");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	AddRes<CGraphicsShader>(L"UiTileShader", pShader);
 
 	//Building Red, Green
@@ -867,7 +867,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreateVertexShader(L"shader\\building.fx", "VS_BuildRender");
 	pShader->CreatePixelShader(L"shader\\building.fx", "PS_BuildRender");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetBSType(BS_TYPE::ONE_ONE);
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 	AddRes<CGraphicsShader>(L"BuildShader", pShader);
@@ -876,10 +876,19 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreateVertexShader(L"shader\\crystal.fx", "VS_CrystalRender");
 	pShader->CreatePixelShader(L"shader\\crystal.fx", "PS_CrystalRender");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
-	pShader->SetBSType(BS_TYPE::ALPHABLEND);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::LESS);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 	AddRes<CGraphicsShader>(L"CrystalShader", pShader);
+
+	pShader = new CGraphicsShader;
+	pShader->CreateVertexShader(L"shader\\tree.fx", "VS_TreeRender");
+	pShader->CreatePixelShader(L"shader\\tree.fx", "PS_TreeRender");
+	pShader->SetRSType(RS_TYPE::CULL_NONE);
+	pShader->SetBSType(BS_TYPE::DEFAULT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	AddRes<CGraphicsShader>(L"TreeShader", pShader);
 }
 
 #include "CComputeShader.h"
@@ -983,6 +992,10 @@ void CResMgr::CreateDefaultMaterial()
 	pMaterial = new CMaterial(true);
 	pMaterial->SetShader(FindRes<CGraphicsShader>(L"CrystalShader"));
 	AddRes<CMaterial>(L"CrystalMtrl", pMaterial);
+
+	pMaterial = new CMaterial(true);
+	pMaterial->SetShader(FindRes<CGraphicsShader>(L"TreeShader"));
+	AddRes<CMaterial>(L"TreeMtrl", pMaterial);
 
 }
 

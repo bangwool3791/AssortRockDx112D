@@ -77,8 +77,8 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == BEFORE_HUNTED)
     {
-        color1 = float4(0.2f, 0.7f, 0.2f, 1.f);
-        color2 = float4(0.2f, 0.7f, 0.2f, 1.f);
+        color1 = float4(0.0f, 2.f, 0.0f, 1.f);
+        color2 = float4(0.0f, 2.f, 0.0f, 1.f);
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == HUNTED)
     {
@@ -91,8 +91,8 @@ float4 PS_UiTileMap(VS_OUT _in) : SV_Target
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == BEFORE_CRYSTAL)
     {
-        color1 = float4(0.2f, 0.1f, 0.7f, 1.f);
-        color2 = float4(0.2f, 0.1f, 0.7f, 1.f);
+        color1 = float4(0.0f, 2.f, 0.0f, 1.f);
+        color2 = float4(0.0f, 2.f, 0.0f, 1.f);
     }
     else if (g_TileBuffer[_in.vColor.x].iInfo == WOOD)
     {

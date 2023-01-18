@@ -685,5 +685,8 @@
     <FxCompile Include="crystal.fx">
       <Filter>HLSL\Render\Tile</Filter>
     </FxCompile>
+    <FxCompile Include="tree.fx">
+      <Filter>HLSL\Render\Tile</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
