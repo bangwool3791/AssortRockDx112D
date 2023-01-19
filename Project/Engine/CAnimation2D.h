@@ -70,6 +70,7 @@ public:
 	float GetDuration(int _index) ;
 public:
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
+	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vector<tDxatlas> frames, float _FPS);
 	int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
 	int  Delete_Animation2D();
 	void Reset()

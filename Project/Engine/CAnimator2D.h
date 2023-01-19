@@ -61,6 +61,7 @@ public:
     Vec2 GetFullSize(int _index) { return m_pCurAnim->GetFullSize(_index); }
     float GetDuration(int _index) { return m_pCurAnim->GetLeftTopX(_index); }
 public:
+    void CreateAnimation();
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* FindAnimation(const wstring& _strKey);
     int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);

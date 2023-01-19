@@ -165,6 +165,23 @@ struct tWoodWall
 	bool arr[8] = { false, };
 };
 
+struct tDxatlas
+{
+	UINT  iFrame{};
+	float x = 0.f;
+	float y = 0.f;
+	float w = 0.f;
+	float h = 0.f;
+
+	float pX = 0.f;
+	float pY = 0.f;
+	float oX = 0.f;
+	float oY = 0.f;
+
+	float oW = 0.f;
+	float oH = 0.f;
+};
+
 extern tGlobalData g_global;
 extern  tTransform g_transform;
 extern  std::vector<tObjectRender>	g_vecInfoObject;

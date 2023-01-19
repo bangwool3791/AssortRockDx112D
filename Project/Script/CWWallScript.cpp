@@ -121,7 +121,6 @@ void CWWallScript::finaltick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				cout << "m_iIndex " << m_iIndex << endl;
 				m_arr[m_iIndex].bChecked = true;
 
 				ChildWallProcess();

@@ -77,6 +77,27 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 	}
 }
 
+void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vector<tDxatlas> frames, float _FPS)
+{
+	SetName(_strKey);
+
+	m_AtlasTex = _AtlasTex;
+
+	m_fWidth = (float)_AtlasTex->GetWidth();
+	m_fHeight = (float)_AtlasTex->GetHeight();
+
+	for (UINT i{ 0 }; i < (UINT)frames.size(); ++i)
+	{
+		tAnim2DFrm frm{};
+
+		frm.vLeftTop = Vec2{ (frames[i].x + (float)i) / m_fWidth, frames[i].y / m_fHeight};
+		frm.vSlice = Vec2{ frames[i].w / m_fWidth, frames[i].h / m_fHeight};
+		frm.fDuration = 1.f / _FPS;
+		frm.vFullSize = Vec2{ frames[i].w / m_fWidth, frames[i].h / m_fHeight };
+		m_vecFrm.push_back(frm);
+	}
+}
+
 void CAnimation2D::Update()
 {
 	m_AtlasTex->UpdateData(59, PIPELINE_STAGE::PS);

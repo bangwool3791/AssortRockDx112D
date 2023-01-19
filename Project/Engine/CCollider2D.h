@@ -1,8 +1,10 @@
 #pragma once
 #include "CComponent.h"
 
-class CCollider2D :
-    public CComponent
+static char CCollider2D_Key[100] = "CCollider2D";
+class CCollider2D
+    :public CComponent
+    , public SmallObjAllocator<CCollider2D, OBJECTPOOL_SIZE, CCollider2D_Key>
 {
 private:
     Vec2            m_vOffsetPos;

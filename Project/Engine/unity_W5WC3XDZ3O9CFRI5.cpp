@@ -1,17 +1,5 @@
 #include "pch.h"
 
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CResMgr.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CResMgr_init.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CScript.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CShader.cpp"
-
-
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CSmoke.cpp"
 
 
@@ -49,6 +37,21 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\QuadTree.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\smallobjallocator.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\tinystr.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\tinyxml.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\tinyxmlerror.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\tinyxmlparser.cpp"
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\JPSCollision.cpp"

@@ -9,7 +9,7 @@ private:
 	CGameObject*				   m_pTarget;
 	vector<CGameObject*>		   m_vecTapButton;
 public:
-	CGameObject* GetTarget() { return m_pTarget; }
+	CGameObject* GetTarget();
 	void SetTarget(CGameObject* _pGameObject) { m_pTarget = _pGameObject; }
 	void AddTapButton(CGameObject* _pGameObject);
 private:

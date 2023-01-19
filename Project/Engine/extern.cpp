@@ -1,11 +1,10 @@
 #include "pch.h"
-
 #include "global.h"
 
-tTransform				g_transform = {};
-tGlobalData				g_global = {};
-ChunkGroup*				pool;
-vector<tObjectRender>	g_vecInfoObject;
+tTransform									g_transform = {};
+tGlobalData									g_global = {};
+unordered_map<string, ChunkGroup*>			g_map_pool;
+vector<tObjectRender>						g_vecInfoObject;
 
 const Vector3 Vector3::Zero{ 0.f, 0.f, 0.f };
 const Vector3 Vector3::One{ 1.f, 1.f, 1.f };

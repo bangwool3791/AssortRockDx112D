@@ -199,6 +199,9 @@
     <Filter Include="HLSL\Render\Building">
       <UniqueIdentifier>{64970417-a29d-4bab-8534-91a81697a4bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\10. XML">
+      <UniqueIdentifier>{28786064-22d5-4cf0-9aa3-77dbd0edc5c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -429,6 +432,12 @@
     <ClInclude Include="CSmoke.h">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke</Filter>
     </ClInclude>
+    <ClInclude Include="tinystr.h">
+      <Filter>Engine\10. XML</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml.h">
+      <Filter>Engine\10. XML</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -604,6 +613,21 @@
     </ClCompile>
     <ClCompile Include="CSmoke.cpp">
       <Filter>Engine\06. Component\02. RenderComponent\ParticleSystem\08. Smoke</Filter>
+    </ClCompile>
+    <ClCompile Include="tinystr.cpp">
+      <Filter>Engine\10. XML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxml.cpp">
+      <Filter>Engine\10. XML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlerror.cpp">
+      <Filter>Engine\10. XML</Filter>
+    </ClCompile>
+    <ClCompile Include="tinyxmlparser.cpp">
+      <Filter>Engine\10. XML</Filter>
+    </ClCompile>
+    <ClCompile Include="smallobjallocator.cpp">
+      <Filter>Engine\09. Optimize\02. Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

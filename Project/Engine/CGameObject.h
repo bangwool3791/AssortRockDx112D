@@ -17,10 +17,11 @@ class CCollider2D;
 #define GET_COMPONENT(classname, CLASSNAME ) C##classname* classname() { return ( C##classname*)GetComponent(COMPONENT_TYPE::CLASSNAME); }
 
 
+static char CGameObjectKey[100] = "CGameObject";
 class CGameObject
 	:public CEntity
 	//template type -> map 분기 처리
-	, public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE>
+	, public SmallObjAllocator<CGameObject, OBJECTPOOL_SIZE, CGameObjectKey>
 {
 private:
 	array<CComponent*, (UINT)COMPONENT_TYPE::END> m_arrCom;

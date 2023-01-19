@@ -141,6 +141,7 @@ inline bool IsValid(CEntity* _pCom)
 	else
 		return true;
 }
+
 class CGameObject;
 void Instantiate(CGameObject* _pNewObj, int _iLayerIdx = 0);
 void Instantiate(CGameObject* _pNewObj, Vec3 _vWorldPos, int _iLayerIdx = 0);

@@ -56,3 +56,9 @@
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CGraphicsShader.cpp"
 
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CKeyMgr.cpp"
+
+
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLayer.cpp"
+

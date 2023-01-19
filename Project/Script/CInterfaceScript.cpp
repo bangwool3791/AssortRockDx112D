@@ -187,6 +187,11 @@ void CInterfaceScript::tick()
 			}
 		}
 	}
+	else
+	{ 
+		m_pTarget = nullptr;
+	}
+
 	//타겟 미 선택 버튼 선택 일 경우 해지
 	for (size_t i{}; i < 6; ++i)
 		m_arrTapButton[i]->GetScript<CButtonScript>()->Release();

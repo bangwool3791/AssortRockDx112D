@@ -58,6 +58,174 @@ void CAnimator2D::CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTe
     m_mapAnim[_strKey] = pAnimation2D;
 }
 
+
+bool SortAtlas(const tDxatlas& lhs, const tDxatlas& rhs)
+{
+    if (lhs.iFrame > rhs.iFrame)
+        return true;
+    else
+        return false;
+}
+
+void CAnimator2D::CreateAnimation()
+{
+    TiXmlDocument ReadDoc;
+
+    wstring wstrPath = CPathMgr::GetInst()->GetContentPath();
+    wstrPath.append(L"\\texture\\sprite");
+    string strPath = WStringToString(wstrPath);
+    FILE* pFile = nullptr;
+
+    unordered_map<string, unordered_map<string, vector<tDxatlas>>> map;
+
+    for (const auto& entry : fs::directory_iterator(strPath))
+    {
+        std::cout << entry.path() << std::endl;
+
+        string path = entry.path().string();
+
+        string extension = path.substr(path.size() - 8, 8);
+        string atlas{};
+
+        if (extension != ".dxatlas")
+            continue;
+
+        atlas = path.replace(path.size() - 8, path.size(), ".dds");
+        ReadDoc.LoadFile(entry.path().string().c_str());// xml 파일 로드
+        //"DB"라는 노드를 찾는다
+        TiXmlElement* ReadRoot = ReadDoc.FirstChildElement("Complex");
+        //ReadRoot("DB")노드 하위의 "class1",의 하위 "Teacher"라는 노드를 찾는다.
+        TiXmlElement* sub = ReadRoot->FirstChildElement("Properties")->FirstChildElement("SingleArray")->FirstChildElement("Items")->FirstChildElement("Complex");
+
+        while (sub)
+        {
+            TiXmlElement* pElem = sub->FirstChildElement("Properties")->FirstChildElement("Simple");
+
+            tDxatlas tData{};
+            string str{};
+            string strAnimation{};
+            string stTemp{};
+            string strFrame{};
+
+            while (pElem)
+            {
+                TiXmlAttribute* pAttrib = pElem->FirstAttribute();
+                while (pAttrib)
+                {
+                    //std::cout << pAttrib->Name() << "  " << pAttrib->Value() << std::endl;
+
+                    if (!strcmp("n", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+
+                        auto iter = map.find(pAttrib->Value());
+                        str = pAttrib->Value();
+
+
+                        //Get a Image file name
+                        //delete a number.png
+                        strAnimation = str.substr(0, str.size() - 8);
+
+                        if ('_' == strAnimation[strAnimation.size() - 1])
+                        {
+                            strAnimation = strAnimation.erase(strAnimation.size() - 1, 1);
+                        }
+
+                        stTemp = str.substr(str.size() - 8, 8);
+                        strFrame = stTemp.substr(1, 3);
+
+                        tData.iFrame = atoi(strFrame.data());
+                    }
+                    else if (!strcmp("x", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.x = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("y", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.y = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("w", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.w = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("h", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.h = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("pX", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.pX = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("pY", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.pY = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("oX", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.oX = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("oY", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.oY = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("oW", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.oW = std::stof(pAttrib->Value());
+                    }
+                    else if (!strcmp("oH", pAttrib->Value()))
+                    {
+                        pAttrib = pAttrib->Next();
+                        tData.oH = std::stof(pAttrib->Value());
+                        map[atlas][strAnimation].push_back(tData);
+
+                        sort(map[atlas][strAnimation].begin(), map[atlas][strAnimation].end(), SortAtlas);
+                    }
+
+                    pAttrib = pAttrib->Next();
+                }
+                pElem = pElem->NextSiblingElement();
+            }
+
+            sub = sub->NextSiblingElement();
+        }
+    }
+
+    for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+    {
+        
+        Ptr<CTexture> _AtlasTex = CResMgr::GetInst()->FindRes<CTexture>(StringToWString(iter->first));
+
+        assert(nullptr != _AtlasTex);
+    
+        for (auto iter2{ iter->second.begin()}; iter2 != iter->second.end(); ++iter2)
+        {
+            CAnimation2D* pAnimation2D;
+
+            wstring _strKey = StringToWString(iter2->first);
+
+            pAnimation2D = FindAnimation(StringToWString(iter2->first));
+
+            assert(nullptr == pAnimation2D);
+
+            pAnimation2D = new CAnimation2D;
+            pAnimation2D->Create(_strKey, _AtlasTex, iter2->second, 1.f/60.f);
+            pAnimation2D->SetName(_strKey);
+            pAnimation2D->m_pOwner = this;
+            m_mapAnim[_strKey] = pAnimation2D;
+        }
+    }
+}
+
+
 void CAnimator2D::finaltick()
 {
     if (!IsValid(m_pCurAnim))

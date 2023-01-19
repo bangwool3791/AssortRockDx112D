@@ -74,23 +74,21 @@ void CPOSScript::finaltick()
 			{
 				if (-1 != m_iIndex)
 				{
-					m_result.push(m_iIndex);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::EMPTY);
+					m_result.push_back(m_iIndex);
+					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
 
-					while (!m_result.empty())
-						m_result.pop();
+					m_result.clear();
 
 					for (size_t i{}; i < 40000; ++i)
 						m_bCheck[i] = false;
 				}
 			}
-			m_result.push(tTile.iIndex);
-			SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BUILD);
-			SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::BUILD);
+			m_result.push_back(tTile.iIndex);
+			SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::BUILD);
+			SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::BUILD);
 
-			while (!m_result.empty())
-				m_result.pop();
+			m_result.clear();
 
 			for (size_t i{}; i < 40000; ++i)
 				m_bCheck[i] = false;
@@ -113,9 +111,9 @@ void CPOSScript::finaltick()
 
 			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
-				m_result.push(tTile.iIndex);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
-				SetTileInfo(m_queue, m_result, (UINT)TILE_TYPE::USED);
+				m_result.push_back(tTile.iIndex);
+				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::USED);
+				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::USED);
 
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
@@ -171,17 +169,16 @@ bool  CPOSScript::IsBlocked(UINT _iTile)
 	return false;
 }
 
-void CPOSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
+void CPOSScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _value)
 {
 	que = result;
+	
+	result.clear();
 
-	while (!result.empty())
-		result.pop();
-
-	while (!que.empty())
+	for (auto iter{que.begin()}; iter != que.end(); )
 	{
 		UINT data = que.front();
-		que.pop();
+		iter = que.erase(iter);
 
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
@@ -202,56 +199,56 @@ void CPOSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 			if (0 <= data - 1 && data - 1 < 40000)
 				if (!m_bCheck[data - 1])
 				{
-					result.push(data - 1);
+					result.push_back(data - 1);
 					m_bCheck[data - 1] = true;
 				}
 
 			if (0 <= data + 1 && data + 1 < 40000)
 				if (!m_bCheck[data + 1])
 				{
-					result.push(data + 1);
+					result.push_back(data + 1);
 					m_bCheck[data + 1] = true;
 				}
 
 			if (0 <= data + TILEX && data + TILEX < 40000)
 				if (!m_bCheck[data + TILEX])
 				{
-					result.push(data + TILEX);
+					result.push_back(data + TILEX);
 					m_bCheck[data + TILEX] = true;
 				}
 
 			if (0 <= data + TILEX - 1 && data + TILEX - 1 < 40000)
 				if (!m_bCheck[data + TILEX - 1])
 				{
-					result.push(data + TILEX - 1);
+					result.push_back(data + TILEX - 1);
 					m_bCheck[data + TILEX - 1] = true;
 				}
 
 			if (0 <= data + TILEX * 2 && data + TILEX * 2 < 40000)
 				if (!m_bCheck[data + TILEX * 2])
 				{
-					result.push(data + TILEX * 2);
+					result.push_back(data + TILEX * 2);
 					m_bCheck[data + TILEX * 2] = true;
 				}
 
 			if (0 <= data - TILEX && data - TILEX < 40000)
 				if (!m_bCheck[data - TILEX])
 				{
-					result.push(data - TILEX);
+					result.push_back(data - TILEX);
 					m_bCheck[data - TILEX] = true;
 				}
 
 			if (0 <= data - TILEX - 1 && data - TILEX - 1 < 40000)
 				if (!m_bCheck[data - TILEX - 1])
 				{
-					result.push(data - TILEX - 1);
+					result.push_back(data - TILEX - 1);
 					m_bCheck[data - TILEX - 1] = true;
 				}
 
 			if (0 <= data - TILEX * 2 && data - TILEX * 2 < 40000)
 				if (!m_bCheck[data - TILEX * 2])
 				{
-					result.push(data - TILEX * 2);
+					result.push_back(data - TILEX * 2);
 					m_bCheck[data - TILEX * 2] = true;
 				}
 		}
@@ -260,56 +257,56 @@ void CPOSScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT _value)
 			if (0 <= data - 1 && data - 1 < 40000)
 				if (!m_bCheck[data - 1])
 				{
-					result.push(data - 1);
+					result.push_back(data - 1);
 					m_bCheck[data - 1] = true;
 				}
 
 			if (0 <= data + 1 && data + 1 < 40000)
 				if (!m_bCheck[data + 1])
 				{
-					result.push(data + 1);
+					result.push_back(data + 1);
 					m_bCheck[data + 1] = true;
 				}
 
 			if (0 <= data + TILEX && data + TILEX < 40000)
 				if (!m_bCheck[data + TILEX])
 				{
-					result.push(data + TILEX);
+					result.push_back(data + TILEX);
 					m_bCheck[data + TILEX] = true;
 				}
 
 			if (0 <= data + TILEX + 1 && data + TILEX + 1 < 40000)
 				if (!m_bCheck[data + TILEX + 1])
 				{
-					result.push(data + TILEX + 1);
+					result.push_back(data + TILEX + 1);
 					m_bCheck[data + TILEX + 1] = true;
 				}
 
 			if (0 <= data + TILEX * 2 && data + TILEX * 2 < 40000)
 				if (!m_bCheck[data + TILEX * 2])
 				{
-					result.push(data + TILEX * 2);
+					result.push_back(data + TILEX * 2);
 					m_bCheck[data + TILEX * 2] = true;
 				}
 
 			if (0 <= data - TILEX && data - TILEX < 40000)
 				if (!m_bCheck[data - TILEX])
 				{
-					result.push(data - TILEX);
+					result.push_back(data - TILEX);
 					m_bCheck[data - TILEX] = true;
 				}
 
 			if (0 <= data - TILEX + 1 && data - TILEX + 1 < 40000)
 				if (!m_bCheck[data - TILEX + 1])
 				{
-					result.push(data - TILEX + 1);
+					result.push_back(data - TILEX + 1);
 					m_bCheck[data - TILEX + 1] = true;
 				}
 
 			if (0 <= data - TILEX * 2 && data - TILEX * 2 < 40000)
 				if (!m_bCheck[data - TILEX * 2])
 				{
-					result.push(data - TILEX * 2);
+					result.push_back(data - TILEX * 2);
 					m_bCheck[data - TILEX * 2] = true;
 				}
 		}

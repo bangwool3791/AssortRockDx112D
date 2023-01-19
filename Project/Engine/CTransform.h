@@ -2,8 +2,10 @@
 
 #include "CComponent.h"
 
+static char CTransform_Key[100] = "CTransform";
 class CTransform
-	: public CComponent
+	:public CComponent
+	, public SmallObjAllocator<CTransform, OBJECTPOOL_SIZE, CTransform_Key>
 {
 public:
 	CTransform();

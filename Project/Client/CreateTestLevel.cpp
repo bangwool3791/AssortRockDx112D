@@ -108,7 +108,7 @@ void CreateTestLelvel()
 	//\CLevelMgr::GetInst()->ChangeLevel(Level);
 	//\Level->begin();
 	//\return;
-	
+
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
 #if true

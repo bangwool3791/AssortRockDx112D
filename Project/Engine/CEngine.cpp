@@ -14,7 +14,7 @@
 #include "CCollisionMgr.h"
 #include "CSound.h"
 
-extern ChunkGroup* pool;
+extern std::unordered_map<std::string, ChunkGroup*>			g_map_pool;
 
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
@@ -24,7 +24,10 @@ CEngine::CEngine()
 
 CEngine::~CEngine()
 {
-	delete pool;
+	for (auto iter{ g_map_pool.begin() }; iter != g_map_pool.end(); ++iter)
+	{
+		delete iter->second;
+	}
 }
 
 int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)

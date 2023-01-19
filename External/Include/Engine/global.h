@@ -21,6 +21,7 @@
 #include <filesystem>
 #include <stdint.h>
 #include "precision.h"
+#include "tinyxml.h"
 
 using std::vector;
 using std::list;

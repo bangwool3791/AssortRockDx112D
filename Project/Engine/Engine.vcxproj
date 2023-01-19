@@ -275,6 +275,8 @@ call EngineCopy.bat</Command>
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="struct.h" />
     <ClInclude Include="CTerrain.h" />
+    <ClInclude Include="tinystr.h" />
+    <ClInclude Include="tinyxml.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CAnimation2D.cpp" />
@@ -344,6 +346,11 @@ call EngineCopy.bat</Command>
     </ClCompile>
     <ClCompile Include="QuadNode.cpp" />
     <ClCompile Include="QuadTree.cpp" />
+    <ClCompile Include="smallobjallocator.cpp" />
+    <ClCompile Include="tinystr.cpp" />
+    <ClCompile Include="tinyxml.cpp" />
+    <ClCompile Include="tinyxmlerror.cpp" />
+    <ClCompile Include="tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="bordermap.fx" />
