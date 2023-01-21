@@ -48,6 +48,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CInterfaceMgr.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CJpsMgr.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CParticleExplosion.cpp"
 
 
@@ -58,7 +61,4 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CKeyMgr.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLayer.cpp"
 

@@ -11,6 +11,8 @@ private:
     CGameObject*              m_pTarget;
     CGameObject*              m_pCameraObject;
     CGameObject*              m_pMouseObject;
+
+    CGameObject*              m_pTile;
     array<CGameObject*, 6>    m_arrTapButton;
     UINT                      m_iIndex = 0;
 public:

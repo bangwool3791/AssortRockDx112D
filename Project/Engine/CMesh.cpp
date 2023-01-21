@@ -213,6 +213,30 @@ Vec3 CMesh::GetPosition(Ray _ray)
     return Vec3(-1.f, -1.f, -1.f);
 }
 
+bool CMesh::GetPosition(Ray _ray, Vec3& _vPos)
+{
+    size_t nVerts = m_tVBDesc.ByteWidth / sizeof(Vtx);
+
+    for (UINT i = 0; i < nVerts; i += 4)
+    {
+        float fDist;
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 1].vPos, m_vertices[i + 2].vPos, fDist))
+        {
+            _vPos = _ray.direction * fDist;
+            _vPos += _ray.position;
+            return true;
+        }
+
+        if (_ray.Intersects(m_vertices[i].vPos, m_vertices[i + 2].vPos, m_vertices[i + 3].vPos, fDist))
+        {
+            _vPos = _ray.direction * fDist;
+            _vPos += _ray.position;
+            return true;
+        }
+    }
+    return false;
+}
+
 void CMesh::InitializeTerrainJps(vector<Vec3>& _vec)
 {
     Read();

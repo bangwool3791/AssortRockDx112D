@@ -196,6 +196,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CSCScript.h" />
     <ClInclude Include="CSelectUnitScript.h" />
     <ClInclude Include="CShadowScript.h" />
+    <ClInclude Include="CSoldierScript.h" />
     <ClInclude Include="CTentScript.h" />
     <ClInclude Include="CTerrainScript.h" />
     <ClInclude Include="CTileScript.h" />
@@ -229,6 +230,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CSCScript.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp" />
     <ClCompile Include="CShadowScript.cpp" />
+    <ClCompile Include="CSoldierScript.cpp" />
     <ClCompile Include="CTentScript.cpp" />
     <ClCompile Include="CTerrainScript.cpp" />
     <ClCompile Include="CTileScript.cpp" />

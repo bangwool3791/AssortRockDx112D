@@ -56,6 +56,11 @@ public:
 		else
 			return m_vecCoordnate[y * m_GridWidth + x -1];
 	}
+
+	void UpdateCollision(JPSCollision::SharedPtr fiieldCollision)
+	{
+		m_fiieldCollision = fiieldCollision;
+	}
 private:
 	//--------------------------------------------------------------------
 	// Code	: IsPassable()

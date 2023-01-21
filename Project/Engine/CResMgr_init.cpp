@@ -642,6 +642,30 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\geology\\Atlas1_LQ.dds", L"texture\\geology\\Atlas1_LQ.dds");
 	Load<CTexture>(L"texture\\vegetation\\Atlas1_HQ.dds", L"texture\\vegetation\\Atlas1_HQ.dds");
 	Load<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds", L"texture\\buildings\\Atlas1_LQ.dds");
+
+	Load<CTexture>(L"texture\\sprite\\HumansA_LQ.dds", L"texture\\sprite\\HumansA_LQ.dds");
+
+	Load<CTexture>(L"texture\\sprite\\AnimalsA_HQ.dds", L"texture\\sprite\\AnimalsA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\AnimalsB_HQ.dds", L"texture\\sprite\\AnimalsB_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\BigUnitsA_HQ.dds", L"texture\\sprite\\BigUnitsA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\BuildingsA_HQ.dds", L"texture\\sprite\\BuildingsA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\BuildingsB_HQ.dds", L"texture\\sprite\\BuildingsB_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\BuildingsC_HQ.dds", L"texture\\sprite\\BuildingsC_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\Effects_A_HQ.dds", L"texture\\sprite\\Effects_A_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\EnvironmentA_HQ.dds", L"texture\\sprite\\EnvironmentA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\FortressA_HQ.dds", L"texture\\sprite\\FortressA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\HA_HQ.dds", L"texture\\sprite\\HA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\HB_HQ.dds", L"texture\\sprite\\HB_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\HumansA_HQ.dds", L"texture\\sprite\\HumansA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\HumansB_HQ.dds", L"texture\\sprite\\HumansB_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\HumansC_HQ.dds", L"texture\\sprite\\HumansC_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\InfectedA_HQ.dds", L"texture\\sprite\\InfectedA_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\InfectedB_HQ.dds", L"texture\\sprite\\InfectedB_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\InfectedC_HQ.dds", L"texture\\sprite\\InfectedC_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\InfectedD_HQ.dds", L"texture\\sprite\\InfectedD_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\InfectedGiant_HQ.dds", L"texture\\sprite\\InfectedGiant_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\TrainsA_HQ.dds", L"texture\\sprite\\TrainsA_HQ.dds");
+
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
 }

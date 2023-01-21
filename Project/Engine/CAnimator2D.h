@@ -7,12 +7,15 @@ class CAnimator2D :
     public CComponent
 
 {
+public :
+    static std::map<wstring, CAnimation2D*>& GetRef() { return m_mapRef; };
 private:
-    std::map<wstring, CAnimation2D*> m_mapAnim;
-    CAnimation2D*                    m_pCurAnim;
+    static std::map<wstring, CAnimation2D*> m_mapRef;
+    std::map<wstring, CAnimation2D*>        m_mapAnim;
+    CAnimation2D* m_pCurAnim;
 
-    bool                             m_bRepeat;
-    wstring                          m_strKey;
+    bool                                    m_bRepeat;
+    wstring                                 m_strKey;
 
 public:
     virtual void finaltick() override;
@@ -23,6 +26,7 @@ public:
     tAnim2DInfo GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
     const bool GetRepeat() { return m_bRepeat; }
+    void Add_Animation(CAnimation2D* _pAnimatnion);
     CAnimation2D* Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* Delete_Animation(const wstring& _strName);
     /*
@@ -63,6 +67,7 @@ public:
 public:
     void CreateAnimation();
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
+    void CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimation);
     CAnimation2D* FindAnimation(const wstring& _strKey);
     int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
     int  Delete_Animation2D();

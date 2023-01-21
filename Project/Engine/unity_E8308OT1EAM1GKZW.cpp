@@ -1,5 +1,8 @@
 #include "pch.h"
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLayer.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CLevel.cpp"
 
 
@@ -58,7 +61,4 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CScript.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CShader.cpp"
 

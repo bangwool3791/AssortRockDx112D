@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "CInterfaceScript.h"
 
+#include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
 #include <Engine\CLevelMgr.h>
 #include <Engine\CGameObject.h>
 #include <Engine\CInterfaceMgr.h>
 
+#include "CSoldierScript.h"
 #include "CButtonScript.h"
 
 CInterfaceScript::CInterfaceScript()
@@ -43,6 +45,8 @@ void CInterfaceScript::begin()
 			m_arrTapButton[i * 3 + j] = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(strName);
 		}
 	}
+
+	m_pTile = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 }
 
 void CInterfaceScript::tick()
@@ -185,6 +189,44 @@ void CInterfaceScript::tick()
 				}
 				//버튼 토글
 			}
+		}
+		/*
+		* 마우스 이동
+		* UI Description 표기
+		*/
+		else if (!lstrcmp(L"Soldier", wstrName.c_str()))
+		{
+			if (KEY_PRESSED(KEY::LBTN))
+			{
+				Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+				Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+
+				p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+				p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+				XMVECTOR det; //Determinant, needed for matrix inverse function call
+				Vector3 origin = Vector3(p.x, p.y, 0);
+				Vector3 faraway = Vector3(p.x, p.y, 1);
+
+				XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
+				Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+				Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+				Vector3 raydirection = rayend - rayorigin;
+				raydirection.Normalize();
+				Ray ray;
+				ray.position = rayorigin;
+				ray.direction = raydirection;
+				Vec3 vPos{};
+
+				if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
+				{
+					tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
+					Int32 x = tTile.iIndex % TILEX;
+					Int32 y = tTile.iIndex / TILEX;
+					m_pTarget->GetScript<CSoldierScript>()->JpsAlgorithm(x, y);
+				}
+			}
+
 		}
 	}
 	else

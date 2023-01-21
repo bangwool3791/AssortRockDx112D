@@ -12,7 +12,7 @@ CAnimation2D::CAnimation2D()
 	, m_fAccTime(0.f)
 	, m_fWidth{}
 	, m_fHeight{}
-	, m_eState{ANIMATION_STATE::END}
+	, m_eState{ ANIMATION_STATE::END }
 {
 	SetName(L"CAnimation2D");
 }
@@ -22,17 +22,17 @@ CAnimation2D::CAnimation2D(const CAnimation2D& _rhs)
 	, m_iCurIdx(-1)
 	, m_pOwner(nullptr)
 	, m_fAccTime(_rhs.m_fAccTime)
-	, m_fWidth{ _rhs .m_fWidth}
-	, m_fHeight{ _rhs .m_fHeight}
+	, m_fWidth{ _rhs.m_fWidth }
+	, m_fHeight{ _rhs.m_fHeight }
 	, m_eState{ _rhs.m_eState }
-	, m_vecFrm{_rhs.m_vecFrm }
+	, m_vecFrm{ _rhs.m_vecFrm }
 {
 	m_AtlasTex = _rhs.m_AtlasTex;
 }
 
 CAnimation2D::~CAnimation2D()
 {
-
+	m_AtlasTex = nullptr;
 }
 
 void CAnimation2D::finaltick()
@@ -80,7 +80,7 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 
 void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vector<tDxatlas> frames, float _FPS)
 {
 	SetName(_strKey);
-
+	 
 	m_AtlasTex = _AtlasTex;
 
 	m_fWidth = (float)_AtlasTex->GetWidth();
@@ -90,8 +90,8 @@ void CAnimation2D::Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vecto
 	{
 		tAnim2DFrm frm{};
 
-		frm.vLeftTop = Vec2{ (frames[i].x + (float)i) / m_fWidth, frames[i].y / m_fHeight};
-		frm.vSlice = Vec2{ frames[i].w / m_fWidth, frames[i].h / m_fHeight};
+		frm.vLeftTop = Vec2{ frames[i].x / m_fWidth, frames[i].y / m_fHeight };
+		frm.vSlice = Vec2{ frames[i].w / m_fWidth, frames[i].h / m_fHeight };
 		frm.fDuration = 1.f / _FPS;
 		frm.vFullSize = Vec2{ frames[i].w / m_fWidth, frames[i].h / m_fHeight };
 		m_vecFrm.push_back(frm);
@@ -229,43 +229,43 @@ void CAnimation2D::SetDuration(float _fDuration, int _index)
 	m_vecFrm[_index].fDuration = _fDuration;
 }
 
-float CAnimation2D::GetLeftTopX(int _index) 
-{ 
+float CAnimation2D::GetLeftTopX(int _index)
+{
 	return m_vecFrm[_index].vLeftTop.x * m_fWidth;
 }
-float CAnimation2D::GetLeftTopY(int _index) 
-{ 
+float CAnimation2D::GetLeftTopY(int _index)
+{
 	return m_vecFrm[_index].vLeftTop.y * m_fHeight;
 }
-Vec2 CAnimation2D::GetLeftTop(int _index) 
-{ 
+Vec2 CAnimation2D::GetLeftTop(int _index)
+{
 	return m_vecFrm[_index].vLeftTop * Vec2(m_fWidth, m_fHeight);
 }
-float CAnimation2D::GetSliceX(int _index) 
-{ 
+float CAnimation2D::GetSliceX(int _index)
+{
 	return m_vecFrm[_index].vSlice.x * m_fWidth;
 }
-float CAnimation2D::GetSliceY(int _index) 
-{ 
+float CAnimation2D::GetSliceY(int _index)
+{
 	return m_vecFrm[_index].vSlice.y * m_fHeight;
 }
-Vec2 CAnimation2D::GetSlice(int _index) 
-{ 
+Vec2 CAnimation2D::GetSlice(int _index)
+{
 	return m_vecFrm[_index].vSlice * Vec2(m_fWidth, m_fHeight);
 }
-float CAnimation2D::GetOffsetX(int _index) 
-{ 
+float CAnimation2D::GetOffsetX(int _index)
+{
 	return m_vecFrm[_index].vOffset.x / m_fWidth;
 }
-float CAnimation2D::GetOffsetY(int _index) 
-{ 
+float CAnimation2D::GetOffsetY(int _index)
+{
 	return m_vecFrm[_index].vOffset.y / m_fHeight;
 }
-Vec2 CAnimation2D::GetOffset(int _index) 
-{ 
+Vec2 CAnimation2D::GetOffset(int _index)
+{
 	return m_vecFrm[_index].vOffset * Vec2(m_fWidth, m_fHeight);
 }
-float CAnimation2D::GetFullSizeX(int _index) 
+float CAnimation2D::GetFullSizeX(int _index)
 {
 	return m_vecFrm[_index].vFullSize.x * m_fWidth;
 }
@@ -273,20 +273,20 @@ float CAnimation2D::GetFullSizeY(int _index)
 {
 	return m_vecFrm[_index].vFullSize.y * m_fHeight;
 }
-Vec2 CAnimation2D::GetFullSize(int _index) 
-{ 
+Vec2 CAnimation2D::GetFullSize(int _index)
+{
 	return m_vecFrm[_index].vFullSize * Vec2(m_fWidth, m_fHeight);
 }
-float CAnimation2D::GetDuration(int _index) 
-{ 
+float CAnimation2D::GetDuration(int _index)
+{
 	return m_vecFrm[_index].fDuration;
 }
 
 void CAnimation2D::SetTexture(Ptr<CTexture> _texture)
 {
 	m_AtlasTex = _texture;
-	m_fWidth= (float)m_AtlasTex->GetWidth();
-	m_fHeight= (float)m_AtlasTex->GetHeight();
+	m_fWidth = (float)m_AtlasTex->GetWidth();
+	m_fHeight = (float)m_AtlasTex->GetHeight();
 }
 
 void CAnimation2D::SaveToFile(FILE* _File)

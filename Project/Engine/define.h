@@ -347,6 +347,16 @@ enum class TILE_TYPE
 	BEFROE_WOOD,
 	HARVEST,
 };
+
+enum class UNIT_STATE
+{
+	NORMAL,
+	RUN,
+	ATTACK,
+	LOADATTACK,
+	DEAD,
+};
+
 extern const char* COMPONENT_TYPE_CHAR[(UINT)COMPONENT_TYPE::END];
 extern const wchar_t* COMPONENT_TYPE_WCHAR[(UINT)COMPONENT_TYPE::END];
 

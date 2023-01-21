@@ -19,6 +19,7 @@ CSawScript
 CSCScript
 CSelectUnitScript
 CShadowScript
+CSoldierScript
 CTentScript
 CTerrainScript
 CTileScript

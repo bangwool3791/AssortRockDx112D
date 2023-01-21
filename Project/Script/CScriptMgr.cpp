@@ -22,6 +22,7 @@
 #include "CSCScript.h"
 #include "CSelectUnitScript.h"
 #include "CShadowScript.h"
+#include "CSoldierScript.h"
 #include "CTentScript.h"
 #include "CTerrainScript.h"
 #include "CTileScript.h"
@@ -53,6 +54,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CSCScript");
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
+	_vec.push_back(L"CSoldierScript");
 	_vec.push_back(L"CTentScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
@@ -86,6 +88,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CSCScript");
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
+	_vec.push_back("CSoldierScript");
 	_vec.push_back("CTentScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
@@ -139,6 +142,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CSelectUnitScript;
 	if (L"CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if (L"CSoldierScript" == _strScriptName)
+		return new CSoldierScript;
 	if (L"CTentScript" == _strScriptName)
 		return new CTentScript;
 	if (L"CTerrainScript" == _strScriptName)
@@ -200,6 +205,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CSelectUnitScript;
 	if ("CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if ("CSoldierScript" == _strScriptName)
+		return new CSoldierScript;
 	if ("CTentScript" == _strScriptName)
 		return new CTentScript;
 	if ("CTerrainScript" == _strScriptName)
@@ -283,6 +290,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::SHADOWSCRIPT:
 		return new CShadowScript;
+		break;
+	case (UINT)SCRIPT_TYPE::SOLDIERSCRIPT:
+		return new CSoldierScript;
 		break;
 	case (UINT)SCRIPT_TYPE::TENTSCRIPT:
 		return new CTentScript;
@@ -395,6 +405,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::SHADOWSCRIPT:
 		return L"CShadowScript";
+		break;
+
+	case SCRIPT_TYPE::SOLDIERSCRIPT:
+		return L"CSoldierScript";
 		break;
 
 	case SCRIPT_TYPE::TENTSCRIPT:
@@ -515,6 +529,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::SHADOWSCRIPT:
 		return "CShadowScript";
+		break;
+
+	case SCRIPT_TYPE::SOLDIERSCRIPT:
+		return "CSoldierScript";
 		break;
 
 	case SCRIPT_TYPE::TENTSCRIPT:

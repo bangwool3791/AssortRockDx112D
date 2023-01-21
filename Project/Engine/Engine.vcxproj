@@ -210,6 +210,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CExplosion.h" />
     <ClInclude Include="CInterfaceMgr.h" />
+    <ClInclude Include="CJpsMgr.h" />
     <ClInclude Include="CoreTypeDef.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -295,6 +296,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CExplosion.cpp" />
     <ClCompile Include="CInterfaceMgr.cpp" />
+    <ClCompile Include="CJpsMgr.cpp" />
     <ClCompile Include="CParticleExplosion.cpp" />
     <ClCompile Include="CGameObject.cpp" />
     <ClCompile Include="CGraphicsShader.cpp" />

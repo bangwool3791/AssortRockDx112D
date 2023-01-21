@@ -14,6 +14,8 @@
 #include "CCollisionMgr.h"
 #include "CSound.h"
 
+#include "CAnimator2D.h"
+
 extern std::unordered_map<std::string, ChunkGroup*>			g_map_pool;
 
 CEngine::CEngine()
@@ -25,6 +27,11 @@ CEngine::CEngine()
 CEngine::~CEngine()
 {
 	for (auto iter{ g_map_pool.begin() }; iter != g_map_pool.end(); ++iter)
+	{
+		delete iter->second;
+	}
+
+	for (auto iter{ CAnimator2D::GetRef().begin() }; iter != CAnimator2D::GetRef().end(); ++iter)
 	{
 		delete iter->second;
 	}

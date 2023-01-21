@@ -28,6 +28,7 @@ public :
     void render_particle(UINT _iCount);
     void Read();
     void Write();
+    bool GetPosition(Ray _ray, Vec3& _vPos);
     Vec3 GetPosition(Ray _ray);
     bool SetTextureID(Ray _ray, float _id);
     Vtx* GetVertices(size_t& nVerts);

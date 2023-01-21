@@ -5,7 +5,7 @@
 
 class CAnimator2D;
 
-enum class ANIMATION_STATE 
+enum class ANIMATION_STATE
 {
 	PLAY,
 	PAUSE,
@@ -19,7 +19,7 @@ private:
 	vector<tAnim2DFrm>	m_vecFrm;
 	int					m_iCurIdx;
 
-	CAnimator2D*		m_pOwner;
+	CAnimator2D* m_pOwner;
 	Ptr<CTexture>		m_AtlasTex;
 
 	float				m_fAccTime;
@@ -30,7 +30,7 @@ private:
 	tAnim2DInfo			m_info;
 public:
 	void finaltick();
-public :
+public:
 	vector<tAnim2DFrm>& GetFamesRef() { return m_vecFrm; }
 	const vector<tAnim2DFrm>& GetFames() { return m_vecFrm; }
 	const tAnim2DInfo& GetAniInfo() { return m_info; }
@@ -38,7 +38,7 @@ public :
 	Ptr<CTexture> GetTexture() { return m_AtlasTex; }
 	void SetTexture(Ptr<CTexture> _texture);
 	void SetState(ANIMATION_STATE _eState) { m_eState = _eState; }
-//Set Get
+	//Set Get
 public:
 
 	void SetLeftTopX(float _fx, int _index);
@@ -67,9 +67,10 @@ public:
 	float GetFullSizeX(int _index);
 	float GetFullSizeY(int _index);
 	Vec2 GetFullSize(int _index);
-	float GetDuration(int _index) ;
+	float GetDuration(int _index);
 public:
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
+	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vector<tDxatlas> frames, float _FPS);
 	int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
 	int  Delete_Animation2D();
 	void Reset()

@@ -43,7 +43,7 @@ void CWWallScript::begin()
 	GetOwner()->GetRenderComponent()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"WWallMesh"));
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
 	m_pTileObject->TileMap()->On();
 }
@@ -116,7 +116,7 @@ void CWWallScript::finaltick()
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
 				Instantiate(pUIPrefab->Instantiate(), 1);
 				m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
-				m_pTileObject->TileMap()->Off();
+				//m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;

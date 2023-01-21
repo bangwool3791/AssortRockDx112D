@@ -3,8 +3,10 @@
 #include "CMesh.h"
 #include "CMaterial.h"
 
+static char CMeshRender_Key[100] = "CMeshRender";
 class CMeshRender
 	:public CRenderComponent
+	, public SmallObjAllocator<CMeshRender, OBJECTPOOL_SIZE, CMeshRender_Key>
 {
 public:
 	virtual void tick() override;

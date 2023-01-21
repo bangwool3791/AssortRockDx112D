@@ -6,6 +6,8 @@
 #include "CAnimator2D.h"
 #include "CAnimation2D.h"
 
+std::map<wstring, CAnimation2D*> CAnimator2D::m_mapRef{};
+
 CAnimator2D::CAnimator2D()
     :CComponent(COMPONENT_TYPE::ANIMATOR2D)
     , m_bRepeat(false)
@@ -19,7 +21,7 @@ CAnimator2D::CAnimator2D(const CAnimator2D& _rhs)
     :CComponent(COMPONENT_TYPE::ANIMATOR2D)
     , m_bRepeat(_rhs.m_bRepeat)
     , m_mapAnim{}
-    , m_strKey{_rhs.m_strKey}
+    , m_strKey{ _rhs.m_strKey }
 {
     SetName(L"CAnimator2D");
 
@@ -61,7 +63,7 @@ void CAnimator2D::CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTe
 
 bool SortAtlas(const tDxatlas& lhs, const tDxatlas& rhs)
 {
-    if (lhs.iFrame > rhs.iFrame)
+    if (lhs.iFrame < rhs.iFrame)
         return true;
     else
         return false;
@@ -70,9 +72,9 @@ bool SortAtlas(const tDxatlas& lhs, const tDxatlas& rhs)
 void CAnimator2D::CreateAnimation()
 {
     TiXmlDocument ReadDoc;
-
-    wstring wstrPath = CPathMgr::GetInst()->GetContentPath();
-    wstrPath.append(L"\\texture\\sprite");
+    wstring wstrContent = CPathMgr::GetInst()->GetContentPath();
+    wstring wstrPath = wstrContent;
+    wstrPath.append(L"texture\\sprite");
     string strPath = WStringToString(wstrPath);
     FILE* pFile = nullptr;
 
@@ -90,7 +92,8 @@ void CAnimator2D::CreateAnimation()
         if (extension != ".dxatlas")
             continue;
 
-        atlas = path.replace(path.size() - 8, path.size(), ".dds");
+        path = path.replace(path.size() - 8, path.size(), ".dds");
+        atlas = path.substr(wstrContent.size(), path.size() - wstrContent.size());
         ReadDoc.LoadFile(entry.path().string().c_str());// xml 파일 로드
         //"DB"라는 노드를 찾는다
         TiXmlElement* ReadRoot = ReadDoc.FirstChildElement("Complex");
@@ -118,10 +121,7 @@ void CAnimator2D::CreateAnimation()
                     {
                         pAttrib = pAttrib->Next();
 
-                        auto iter = map.find(pAttrib->Value());
                         str = pAttrib->Value();
-
-
                         //Get a Image file name
                         //delete a number.png
                         strAnimation = str.substr(0, str.size() - 8);
@@ -201,30 +201,42 @@ void CAnimator2D::CreateAnimation()
 
     for (auto iter{ map.begin() }; iter != map.end(); ++iter)
     {
-        
+
         Ptr<CTexture> _AtlasTex = CResMgr::GetInst()->FindRes<CTexture>(StringToWString(iter->first));
 
         assert(nullptr != _AtlasTex);
-    
-        for (auto iter2{ iter->second.begin()}; iter2 != iter->second.end(); ++iter2)
+
+        for (auto iter2{ iter->second.begin() }; iter2 != iter->second.end(); ++iter2)
         {
             CAnimation2D* pAnimation2D;
 
             wstring _strKey = StringToWString(iter2->first);
 
-            pAnimation2D = FindAnimation(StringToWString(iter2->first));
-
-            assert(nullptr == pAnimation2D);
-
             pAnimation2D = new CAnimation2D;
-            pAnimation2D->Create(_strKey, _AtlasTex, iter2->second, 1.f/60.f);
+            pAnimation2D->Create(_strKey, _AtlasTex, iter2->second, 10);
             pAnimation2D->SetName(_strKey);
             pAnimation2D->m_pOwner = this;
-            m_mapAnim[_strKey] = pAnimation2D;
+
+            if (auto iter = m_mapRef[_strKey])
+            {
+                delete m_mapRef[_strKey];
+            }
+
+            m_mapRef[_strKey] = pAnimation2D;
         }
     }
 }
 
+void CAnimator2D::CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimation)
+{
+    for (auto iter{ m_mapRef.begin() }; iter != m_mapRef.end(); ++iter)
+    {
+        if (iter->first.find(_strKey) != std::string::npos)
+        {
+            _pAnimation.Add_Animation(iter->second);
+        }
+    }
+}
 
 void CAnimator2D::finaltick()
 {
@@ -253,12 +265,12 @@ CAnimation2D* CAnimator2D::FindAnimation(const wstring& _strKey)
 void CAnimator2D::Play()
 {
     auto iter = m_mapAnim.begin();
-    
+
     m_strKey = iter->first;
     CAnimation2D* pAnimation = iter->second;
 
     assert(nullptr != pAnimation);
-    
+
     if (IsValid(pAnimation))
     {
         m_pCurAnim = pAnimation;
@@ -310,7 +322,7 @@ void CAnimator2D::UpdateData()
     if (!IsValid(m_pCurAnim))
         return;
 
-    if(m_bActive)
+    if (m_bActive)
         m_pCurAnim->UpdateData();
 }
 
@@ -375,7 +387,7 @@ void CAnimator2D::SetTexture(Ptr<CTexture> _AtlasTex)
 
 tAnim2DInfo CAnimator2D::GetAniInfo()
 {
-    if(m_pCurAnim)
+    if (m_pCurAnim)
         return m_pCurAnim->GetAniInfo();
     else
     {
@@ -468,6 +480,16 @@ const vector<wstring>& CAnimator2D::GetKeys()
     }
 
     return vec;
+}
+
+void CAnimator2D::Add_Animation(CAnimation2D* _pAnimatnion)
+{
+    map<wstring, CAnimation2D*>::iterator iter = m_mapAnim.find(_pAnimatnion->GetName());
+
+    if (iter != m_mapAnim.end())
+        return;
+
+    m_mapAnim.insert(make_pair(_pAnimatnion->GetName(), _pAnimatnion->Clone()));
 }
 
 CAnimation2D* CAnimator2D::Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS)

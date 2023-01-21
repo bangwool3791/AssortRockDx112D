@@ -80,6 +80,12 @@
     <Filter Include="Scripts\12. WoodWall\CWWCScript">
       <UniqueIdentifier>{44762308-a9fa-4e62-8a4c-23a229609222}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\13. UnitScript">
+      <UniqueIdentifier>{592bdacd-93c7-4d75-815d-cbef1e27505e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. CSoldierScript">
+      <UniqueIdentifier>{16d1101d-2856-4c4b-9587-fc9ba54c00a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -175,6 +181,9 @@
     <ClInclude Include="CWWCScript.h">
       <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
     </ClInclude>
+    <ClInclude Include="CSoldierScript.h">
+      <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -269,6 +278,9 @@
     </ClCompile>
     <ClCompile Include="CWWCScript.cpp">
       <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CSoldierScript.cpp">
+      <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
