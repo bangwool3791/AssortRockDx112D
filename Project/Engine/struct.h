@@ -182,6 +182,12 @@ struct tDxatlas
 	float oH = 0.f;
 };
 
+struct tBlock
+{
+	int x;
+	int z;
+};
+
 extern tGlobalData g_global;
 extern  tTransform g_transform;
 extern  std::vector<tObjectRender>	g_vecInfoObject;

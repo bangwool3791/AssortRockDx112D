@@ -8,6 +8,7 @@
 #include <Engine\CTransform.h>
 
 #include <Engine\CInterfaceMgr.h>
+#include <Engine\CJpsMgr.h>
 #include <Script\CMouseScript.h>
 
 CTentScript::CTentScript()
@@ -159,6 +160,14 @@ void CTentScript::LoadFromFile(FILE* _File)
 
 void CTentScript::SetTileInfo(UINT _iTile, UINT _iValue)
 {
+	if ((UINT)TILE_TYPE::HARVEST == _iValue)
+	{
+		Int32 x = _iTile % TILEX;
+		Int32 z = _iTile / TILEZ;
+		m_vecBlock.push_back(tBlock{ x, z });
+		CJpsMgr::GetInst()->SetCollision(x, z);
+	}
+
 	m_pTileObject->TileMap()->SetInfo(_iTile, _iValue);
 }
 

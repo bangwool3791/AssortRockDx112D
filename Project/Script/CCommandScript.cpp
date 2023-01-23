@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CCommandScript.h"
 
+#include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
 #include <Engine\CLevelMgr.h>
 #include <Engine\CGameObject.h>
@@ -8,6 +9,8 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
+
+#include <Engine\CJpsMgr.h>
 
 CCommandScript::CCommandScript()
 	:CScript{ SCRIPT_TYPE::COMMANDSCRIPT }
@@ -39,16 +42,16 @@ void CCommandScript::begin()
 	queue<UINT> result;
 
 	result.push(ttile.iIndex);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
-	SetTileInfo(que, result,1);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::EMPTY);
 
 	while (!result.empty())
 		result.pop();
@@ -57,9 +60,9 @@ void CCommandScript::begin()
 		m_bCheck[i] = false;
 
 	result.push(ttile.iIndex);
-	SetTileInfo(que, result, 0);
-	SetTileInfo(que, result, 0);
-	SetTileInfo(que, result, 0);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::NOTUSED);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::NOTUSED);
+	SetTileInfo(que, result,(UINT)TILE_TYPE::NOTUSED);
 
 	GetOwner()->Transform()->SetRelativePos(ttile.vPos);
 	//if ((ttile.iIndex / TILEX) % 2 == 0)
@@ -99,7 +102,27 @@ void CCommandScript::finaltick()
 {
 	if (KEY_PRESSED(KEY::LBTN))
 	{
-		if (GetOwner()->Transform()->Picking(m_vMousePos))
+		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+
+		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+		XMVECTOR det; //Determinant, needed for matrix inverse function call
+		Vector3 origin = Vector3(p.x, p.y, 0);
+		Vector3 faraway = Vector3(p.x, p.y, 1);
+
+		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
+		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+		Vector3 raydirection = rayend - rayorigin;
+		raydirection.Normalize();
+		Ray ray;
+		ray.position = rayorigin;
+		ray.direction = raydirection;
+		Vec3 vPos{};
+
+		if (GetOwner()->Transform()->Picking(ray, vPos))
 		{
 			CInterfaceMgr::GetInst()->SetTarget(GetOwner());
 		}
@@ -141,6 +164,14 @@ void CCommandScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT val
 
 		m_pTileObject->TileMap()->SetInfo(data, value);
 		m_bCheck[data] = true;
+
+		if (((UINT)TILE_TYPE::NOTUSED) == value)
+		{
+			Int32 x = data % TILEX;
+			Int32 z = data / TILEZ;
+			m_vecBlock.push_back(tBlock{ x, z });
+			CJpsMgr::GetInst()->SetCollision(x, z);
+		}
 
 		if ((data / TILEX) % 2 == 0)
 		{

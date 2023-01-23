@@ -38,6 +38,7 @@ public:
 	Ptr<CTexture> GetTexture() { return m_AtlasTex; }
 	void SetTexture(Ptr<CTexture> _texture);
 	void SetState(ANIMATION_STATE _eState) { m_eState = _eState; }
+	bool IsEnd();
 	//Set Get
 public:
 

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CSoldierScript.h"
+#include "CInfectedGiantScript.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLayer.h>
@@ -15,25 +15,26 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Engine\CScript.h>
-#include <Script\CInfectedGiantScript.h>
-CSoldierScript::CSoldierScript()
-	:CScript{ SOLDIERSCRIPT }
+#include "CSoldierScript.h"
+
+CInfectedGiantScript::CInfectedGiantScript()
+	:CScript{ INFECTEDGIANTSCRIPT }
 	, m_fSpeed{ 100.f }
-	, m_eState{UNIT_STATE::NORMAL}
-	, m_iHp{ 100 }
-	, m_iAttack{ 15 }
+	, m_eState{ UNIT_STATE::NORMAL }
+	, m_iHp{100}
+	, m_iAttack{15}
 {
-	SetName(L"CSoldierScript");
+	SetName(L"CInfectedGiantScript");
 
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
 }
 
-CSoldierScript::~CSoldierScript()
+CInfectedGiantScript::~CInfectedGiantScript()
 {
 }
 
 
-void CSoldierScript::begin()
+void CInfectedGiantScript::begin()
 {
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
@@ -42,14 +43,17 @@ void CSoldierScript::begin()
 
 	Animator = GetOwner()->Animator2D();
 
-	Animator->CloneAnimation(L"Soldier", *Animator);
+	Animator->CloneAnimation(L"InfectedGiant", *Animator);
 
-	m_vSource = Transform()->GetRelativePos();
+	Vec3 vPos = Transform()->GetRelativePos();
+	vPos.x += 1.f;
+	vPos.z -= 1.f;
+	SetDestPos(vPos);
 }
 
 #define OFFSET 22.5f
 
-void CSoldierScript::tick()
+void CInfectedGiantScript::tick()
 {
 	if (0 >= m_iHp)
 		m_eState = UNIT_STATE::DEAD;
@@ -87,8 +91,6 @@ void CSoldierScript::tick()
 	}
 	else if (UNIT_STATE::RUN == m_eState)
 	{
-		//적을 쫒는 Run과 마우스 이동 Run 구분
-		//밖에서 알고리즘 돌리면 타겟 nullptr
 		Vec3 vDir{};
 
 		auto iter = m_vecJps.begin();
@@ -124,20 +126,18 @@ void CSoldierScript::tick()
 			}
 		}
 
-		if(m_bAttack)
+		if (m_bAttack)
 			ProcessEnemy();
 	}
 	else if (UNIT_STATE::ATTACK == m_eState)
 	{
-		
-		if (m_pTargetObject && m_pTargetObject->IsDead())
+		if (m_pTargetObject->IsDead())
 		{
 			if (m_bActiveJps)
 				m_eState = UNIT_STATE::RUN;
 			else
 			{
 				m_eState = UNIT_STATE::NORMAL;
-				SetDestPos(m_vDest);
 				m_bAttack = false;
 			}
 
@@ -147,19 +147,14 @@ void CSoldierScript::tick()
 		if (Animator2D()->IsEnd())
 		{
 			//피깍기
-			if (m_pTargetObject)
-			{
-				wstring wstrName = m_pTargetObject->GetName();
+			wstring wstrName = m_pTargetObject->GetName();
 
-				if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
-				{
-					//UINT iHp = m_pTargetObject->GetScript< CInfectedGiantScript>()->GetHp();
-					//iHp -= m_iAttack;
-					//m_pTargetObject->GetScript< CInfectedGiantScript>()->SetHp(iHp);
-				}
+			if (!lstrcmp(L"Soldier", wstrName.c_str()))
+			{			UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
+			iHp -= m_iAttack;
+			m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
 			}
 		}
-
 
 		ChaseEnemy();
 	}
@@ -167,12 +162,9 @@ void CSoldierScript::tick()
 	{
 		if (Animator2D()->IsEnd())
 		{
-			if (m_pTargetObject)
-			{
-				Vec3 vPos = m_pTargetObject->Transform()->GetRelativePos();
-				m_eState = UNIT_STATE::ATTACK;
-				SetDestPos(vPos);
-			}
+			Vec3 vPos = m_pTargetObject->Transform()->GetRelativePos() - m_vSource;
+			m_eState = UNIT_STATE::ATTACK;
+			SetDestPos(vPos);
 		}
 
 	}
@@ -195,11 +187,11 @@ void CSoldierScript::tick()
 
 }
 
-void CSoldierScript::SetDestPos(Vec3 _vPos)
+void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
 {
 	m_vTarget = _vPos;
 	/*
-	* 방향 벡터 
+	* 방향 벡터
 	* x축 기저 벡터
 	* 내적
 	*/
@@ -211,7 +203,7 @@ void CSoldierScript::SetDestPos(Vec3 _vPos)
 
 	if (0 <= vAxis.Dot(vDir))
 	{
-		GetOwner()->Transform()->SetRelativeRotationX(XM_PI * - 0.25f);
+		GetOwner()->Transform()->SetRelativeRotationX(XM_PI * -0.25f);
 		GetOwner()->Transform()->SetRelativeRotationY(0.f);
 		GetOwner()->Transform()->SetRelativeRotationZ(0.f);
 	}
@@ -235,29 +227,22 @@ void CSoldierScript::SetDestPos(Vec3 _vPos)
 		fAngle = fAngle - XM_PI;
 		fAngle = 2.f * XM_PI - fAngle;
 	}
-	
+
 	fAngle = fAngle / XM_PI * 180;
 
 	static wstring strBackUp{};
 	wstring str{};
 
 	if (UNIT_STATE::NORMAL == m_eState)
-		str = L"Soldier_A_Normal";
+		str = L"InfectedGiant_Normal";
 	else if (UNIT_STATE::LOADATTACK == m_eState)
-		str = L"Soldier_A_LoadAttack";
+		str = L"InfectedGiant_LoadAttack";
 	else if (UNIT_STATE::ATTACK == m_eState)
-		str = L"Soldier_A_Attack";
+		str = L"InfectedGiant_Attack";
 	else if (UNIT_STATE::RUN == m_eState)
-		str = L"Soldier_A_Run";
+		str = L"InfectedGiant_Walk";
 	else if (UNIT_STATE::DEAD == m_eState)
-	{
-		str = L"Soldier_A_Die_000";
-		if (strBackUp != str)
-			GetOwner()->Animator2D()->Play(str);
-
-		strBackUp = str;
-		return;
-	}
+		str = L"InfectedGiant_Die";
 
 	if (360.f <= fAngle)
 		fAngle -= 360.f;
@@ -290,18 +275,18 @@ void CSoldierScript::SetDestPos(Vec3 _vPos)
 	{
 		str += L"_018";
 	}
-	 else if (fAngle <= 360.f - 67.5f + OFFSET && 360.f - 67.5f - OFFSET < fAngle)
+	else if (fAngle <= 360.f - 67.5f + OFFSET && 360.f - 67.5f - OFFSET < fAngle)
 		str += L"_036";
-	 else if (fAngle <= 360.f - 90.f + OFFSET && 360.f - 90.f - OFFSET < fAngle)
+	else if (fAngle <= 360.f - 90.f + OFFSET && 360.f - 90.f - OFFSET < fAngle)
 		str += L"_036";
 
-	if(strBackUp != str)
+	if (strBackUp != str)
 		GetOwner()->Animator2D()->Play(str);
 
 	strBackUp = str;
 }
 
-void CSoldierScript::JpsAlgorithm(Int32 x, Int32 z)
+void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 	tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vPos);
@@ -321,11 +306,11 @@ void CSoldierScript::JpsAlgorithm(Int32 x, Int32 z)
 	}
 }
 
-void CSoldierScript::BeginOverlap(CCollider2D* _pOther)
+void CInfectedGiantScript::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void CSoldierScript::Overlap(CCollider2D* _pOther)
+void CInfectedGiantScript::Overlap(CCollider2D* _pOther)
 {
 	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
 	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
@@ -340,11 +325,11 @@ void CSoldierScript::Overlap(CCollider2D* _pOther)
 	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
 }
 
-void CSoldierScript::EndOverlap(CCollider2D* _pOther)
+void CInfectedGiantScript::EndOverlap(CCollider2D* _pOther)
 {
 }
 
-void CSoldierScript::SaveToFile(FILE* _File)
+void CInfectedGiantScript::SaveToFile(FILE* _File)
 {
 	CScript::SaveToFile(_File);
 	fwrite(&m_fSpeed, sizeof(float), 1, _File);
@@ -352,7 +337,7 @@ void CSoldierScript::SaveToFile(FILE* _File)
 	SaveResourceRef(m_Prefab, _File);
 }
 
-void CSoldierScript::LoadFromFile(FILE* _File)
+void CInfectedGiantScript::LoadFromFile(FILE* _File)
 {
 	CScript::LoadFromFile(_File);
 	fread(&m_fSpeed, sizeof(float), 1, _File);
@@ -360,9 +345,9 @@ void CSoldierScript::LoadFromFile(FILE* _File)
 	LoadResourceRef(m_Prefab, _File);
 }
 
-void CSoldierScript::ProcessEnemy()
+void CInfectedGiantScript::ProcessEnemy()
 {
-	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(2)->GetParentObjects();
+	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
 
 	if (!vecEnemy.empty())
 	{
@@ -390,7 +375,7 @@ void CSoldierScript::ProcessEnemy()
 	}
 }
 
-void CSoldierScript::ChaseEnemy()
+void CInfectedGiantScript::ChaseEnemy()
 {
 	if (m_pTargetObject)
 	{
@@ -398,7 +383,7 @@ void CSoldierScript::ChaseEnemy()
 		Vec3 vScale1 = m_pTargetObject->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 250.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2))
 		{
 
 			tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vEnemyPos);
@@ -413,7 +398,7 @@ void CSoldierScript::ChaseEnemy()
 	}
 }
 
-void CSoldierScript::Move(Int32 _x, Int32 _z)
+void CInfectedGiantScript::Move(Int32 _x, Int32 _z)
 {
 	m_pTargetObject = nullptr;
 	m_bAttack = false;

@@ -115,6 +115,12 @@ void CWWallScript::finaltick()
 			{
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
 				Instantiate(pUIPrefab->Instantiate(), 1);
+
+				Int32 x = m_iIndex % TILEX;
+				Int32 z = m_iIndex / TILEZ;
+
+				m_vecBlock.push_back(tBlock{ x, z });
+
 				m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
 				//m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;

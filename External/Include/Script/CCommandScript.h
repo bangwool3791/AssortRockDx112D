@@ -9,6 +9,7 @@ private:
     CGameObject*                 m_pLevelMouseObject;
     CGameObject*                 m_pTileObject;
     bool                         m_bCheck[40000]{};
+    vector<tBlock>               m_vecBlock{};
     void SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT data);
 public:
     virtual void begin();

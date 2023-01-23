@@ -86,6 +86,9 @@
     <Filter Include="Scripts\13. UnitScript\01. CSoldierScript">
       <UniqueIdentifier>{16d1101d-2856-4c4b-9587-fc9ba54c00a5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. CInfectedGiantScript">
+      <UniqueIdentifier>{03cca6b9-932c-4609-83a3-f22fe7188d3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -184,6 +187,9 @@
     <ClInclude Include="CSoldierScript.h">
       <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
     </ClInclude>
+    <ClInclude Include="CInfectedGiantScript.h">
+      <Filter>Scripts\13. UnitScript\02. CInfectedGiantScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -281,6 +287,9 @@
     </ClCompile>
     <ClCompile Include="CSoldierScript.cpp">
       <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CInfectedGiantScript.cpp">
+      <Filter>Scripts\13. UnitScript\02. CInfectedGiantScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

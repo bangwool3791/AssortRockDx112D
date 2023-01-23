@@ -325,3 +325,11 @@ void CAnimation2D::LoadFromFile(FILE* _File)
 	// 참조 아틀라스 텍스쳐
 	LoadResourceRef<CTexture>(m_AtlasTex, _File);
 }
+
+bool CAnimation2D::IsEnd()
+{
+	if (ANIMATION_STATE::FINISH == m_eState)
+		return true;
+	else
+		return false;
+}

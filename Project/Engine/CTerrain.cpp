@@ -4,7 +4,6 @@
 #include "CLevel.h"
 #include "CLevelMgr.h"
 #include "CResMgr.h"
-#include "CJpsMgr.h"
 
 #include "CTransform.h"
 #include "CCamera.h"
@@ -28,7 +27,6 @@ CTerrain::~CTerrain()
 
 void CTerrain::begin()
 {
-	CJpsMgr::GetInst()->Initialize(GetMesh());
 }
 
 void CTerrain::finaltick()

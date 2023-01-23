@@ -115,7 +115,6 @@ void CAnimator2D::CreateAnimation()
                 TiXmlAttribute* pAttrib = pElem->FirstAttribute();
                 while (pAttrib)
                 {
-                    //std::cout << pAttrib->Name() << "  " << pAttrib->Value() << std::endl;
 
                     if (!strcmp("n", pAttrib->Value()))
                     {
@@ -130,6 +129,8 @@ void CAnimator2D::CreateAnimation()
                         {
                             strAnimation = strAnimation.erase(strAnimation.size() - 1, 1);
                         }
+
+                        std::cout << strAnimation << std::endl;
 
                         stTemp = str.substr(str.size() - 8, 8);
                         strFrame = stTemp.substr(1, 3);
@@ -198,6 +199,36 @@ void CAnimator2D::CreateAnimation()
             sub = sub->NextSiblingElement();
         }
     }
+
+    //adjust Full Size
+    //Vec2 FullSize{};
+
+    //for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+    //{
+
+    //    Ptr<CTexture> _AtlasTex = CResMgr::GetInst()->FindRes<CTexture>(StringToWString(iter->first));
+
+    //    assert(nullptr != _AtlasTex);
+
+    //    for (auto iter2{ iter->second.begin() }; iter2 != iter->second.end(); ++iter2)
+    //    {
+    //        for (auto iter3{ iter2->second.begin() }; iter3 != iter2->second.end(); ++iter3)
+    //        {
+    //            Vec2 vFullSize = Vec2{ iter3->w,iter3->h };
+
+    //            if (FullSize < vFullSize)
+    //            {
+    //                FullSize = vFullSize;
+    //            }
+    //        }
+
+    //        for (auto iter3{ iter2->second.begin() }; iter3 != iter2->second.end(); ++iter3)
+    //        {
+    //            iter3->w = FullSize.x;
+    //            iter3->h = FullSize.y;
+    //        }
+    //    }
+    //}
 
     for (auto iter{ map.begin() }; iter != map.end(); ++iter)
     {
@@ -527,4 +558,12 @@ CAnimation2D* CAnimator2D::Delete_Animation(const wstring& _strName)
     }
     else
         return nullptr;
+}
+
+bool CAnimator2D::IsEnd()
+{
+    if (!IsValid(m_pCurAnim))
+        return false;
+
+    return m_pCurAnim->IsEnd();  
 }

@@ -10,6 +10,7 @@ private:
     CGameObject* m_pLevelMouseObject;
     CGameObject* m_pTileObject;
     bool                        m_bCheck[40000]{};
+    vector<tBlock>              m_vecBlock{};
     UINT                        m_iIndex = 0;
 
     float                       m_fDt  = 0.f;

@@ -26,6 +26,7 @@ public:
     tAnim2DInfo GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
     const bool GetRepeat() { return m_bRepeat; }
+    bool IsEnd();
     void Add_Animation(CAnimation2D* _pAnimatnion);
     CAnimation2D* Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     CAnimation2D* Delete_Animation(const wstring& _strName);

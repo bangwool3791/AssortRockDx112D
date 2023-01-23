@@ -269,8 +269,6 @@ void CreateTestLelvel()
 	//pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"MousePrefab");
 	//Instantiate(pPrefab->Instantiate(), 31);
 
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 31);
-
 	// Particle Object
 	//CGameObject* pParticle = new CGameObject;
 	//pParticle->SetName(L"Particle");
@@ -353,6 +351,10 @@ void CreateTestLelvel()
 
 	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
+
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 	pLevel->begin();
 }
 

@@ -7,6 +7,7 @@
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
 #include "CHuntScript.h"
+#include "CInfectedGiantScript.h"
 #include "CInterfaceScript.h"
 #include "CLevelCameraScript.h"
 #include "CLightScript.h"
@@ -39,6 +40,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
 	_vec.push_back(L"CHuntScript");
+	_vec.push_back(L"CInfectedGiantScript");
 	_vec.push_back(L"CInterfaceScript");
 	_vec.push_back(L"CLevelCameraScript");
 	_vec.push_back(L"CLightScript");
@@ -73,6 +75,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
 	_vec.push_back("CHuntScript");
+	_vec.push_back("CInfectedGiantScript");
 	_vec.push_back("CInterfaceScript");
 	_vec.push_back("CLevelCameraScript");
 	_vec.push_back("CLightScript");
@@ -112,6 +115,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CEditorMouseScript;
 	if (L"CHuntScript" == _strScriptName)
 		return new CHuntScript;
+	if (L"CInfectedGiantScript" == _strScriptName)
+		return new CInfectedGiantScript;
 	if (L"CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if (L"CLevelCameraScript" == _strScriptName)
@@ -175,6 +180,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CEditorMouseScript;
 	if ("CHuntScript" == _strScriptName)
 		return new CHuntScript;
+	if ("CInfectedGiantScript" == _strScriptName)
+		return new CInfectedGiantScript;
 	if ("CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if ("CLevelCameraScript" == _strScriptName)
@@ -245,6 +252,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::HUNTSCRIPT:
 		return new CHuntScript;
+		break;
+	case (UINT)SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
+		return new CInfectedGiantScript;
 		break;
 	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
 		return new CInterfaceScript;
@@ -345,6 +355,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
 		return L"CHuntScript";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
+		return L"CInfectedGiantScript";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:
@@ -469,6 +483,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
 		return "CHuntScript";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
+		return "CInfectedGiantScript";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:

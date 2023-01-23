@@ -51,10 +51,7 @@ public:
 	bool Search(Int32 _sX, Int32 _sY, Int32 _eX, Int32 _eY, std::list<JPSCoord>& ResultNodes);
 	Vec3 GetCoord(UINT x, UINT y)
 	{
-		if(y % 2 == 0)
-			return m_vecCoordnate[y * m_GridWidth + x];
-		else
-			return m_vecCoordnate[y * m_GridWidth + x -1];
+		return m_vecCoordnate[y * m_GridWidth + x];
 	}
 
 	void UpdateCollision(JPSCollision::SharedPtr fiieldCollision)

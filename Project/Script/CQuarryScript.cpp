@@ -231,7 +231,12 @@ void CQuarryScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _v
 		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::USED == _value)
+		{
+			Int32 x = data % TILEX;
+			Int32 z = data / TILEZ;
+			m_vecBlock.push_back(tBlock{ x,z });
 			m_pTileObject->TileMap()->SetInfo(data, _value);
+		}
 
 		m_bCheck[data] = true;
 

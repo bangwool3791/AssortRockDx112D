@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "CJpsMgr.h"
+#include "CLevel.h"
+#include "CLevelMgr.h"
 
 CJpsMgr::CJpsMgr()
 {
@@ -13,6 +15,7 @@ CJpsMgr::~CJpsMgr()
 
 void CJpsMgr::Initialize(Ptr<CMesh> _Mesh)
 {
+	m_pTileObejct = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 	m_spCollision = std::make_shared<JPSCollision>();
 	if (!m_spCollision)
 		throw std::bad_alloc();
@@ -31,17 +34,16 @@ void CJpsMgr::Initialize(Ptr<CMesh> _Mesh)
 	m_JpsPath.Init(m_spCollision, _Mesh);
 }
 
-const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
+const vector<Vec3>& CJpsMgr::Update(Int32 x1, Int32 z1, Int32 x2, Int32 z2)
 {
+	m_vecResult.clear();
 	// Start, End Position (시작점, 도착점)
-	Int32 Sx = 0, Sy = 0;
-	Int32 Ex = GridWidth - 1, Ey = GridHeight - 1;
+	Int32 Sx = x1, Sy = z1;
+	Int32 Ex = x2, Ey = z2;
 
 	m_JpsPath.Search(Sx, Sy, Ex, Ey, ResultNodes);
 
 	std::string results(GridHeight * (GridWidth + 1) + 1, ' ');
-
-	vector<Vec3> vec;
 
 	for (Int32 y = 0; y < GridHeight; y++)
 	{
@@ -70,7 +72,9 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
 			for (Int32 v = y, u = x; ; v += dy, u += dx)
 			{
 				results[(GridHeight - 1 - v) * (GridWidth + 1) + u] = '#';
-				vec.push_back(m_JpsPath.GetCoord(u, v));
+				cout << "JPS 좌표 [x] " << u << " [z] " << v << endl;
+				if (u  != -1)
+					m_vecResult.push_back(m_JpsPath.GetCoord(u, v));
 
 				if (u == CurCoord.m_x && v == CurCoord.m_y)
 					break;
@@ -84,9 +88,70 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
 				}
 			}
 			results[(GridHeight - 1 - CurCoord.m_y) * (GridWidth + 1) + CurCoord.m_x] = '#';
-			vec.push_back(m_JpsPath.GetCoord(CurCoord.m_x, CurCoord.m_y));
+			cout << "JPS 좌표 [x] " << CurCoord.m_x << " [z] " << CurCoord.m_y << endl;
+
+			if (CurCoord.m_x != -1)
+				m_vecResult.push_back(m_JpsPath.GetCoord(CurCoord.m_x, CurCoord.m_y));
 		}
 
+		size_t start{}, end{};
+		bool bCheck = false;
+		for (size_t i{}; i < m_vecResult.size() && i + 1 < m_vecResult.size() && i + 2 < m_vecResult.size(); ++i)
+		{
+			float dx = abs(m_vecResult[i].x - m_vecResult[i + 1].x);
+			float dz = abs(m_vecResult[i].z - m_vecResult[i + 2].z);
+
+			if (m_vecResult[i].x == m_vecResult[i + 2].x && dx == TILECX * 0.5 && dz == TILECZ)
+			{
+				if (!bCheck)
+				{
+					bCheck = true;
+					start = i;
+				}
+			}
+			else if (bCheck && !(m_vecResult[i].x == m_vecResult[i + 2].x && dx == TILECX * 0.5 && dz == TILECZ))
+			{
+				end = i;
+			}
+		}
+		auto startiter = m_vecResult.begin();
+		vector<Vec3>::iterator enditer = m_vecResult.begin();
+		vector<Vec3> vecdata{};
+
+		for (size_t i{}; i < start; ++i)
+			++startiter;
+		for (size_t i{}; i < end; ++i)
+			++enditer;
+		cout << "A" << endl;
+		for (; startiter != enditer;)
+		{
+			++startiter;
+			if (startiter == m_vecResult.end())
+				break;
+			vecdata.push_back(*startiter);
+			if (startiter == m_vecResult.end())
+				break;
+			++startiter;
+
+			if (startiter == m_vecResult.end())
+				break;
+		}
+		cout << "b" << endl;
+		size_t i{};
+		for (auto iter{ m_vecResult.begin() }; iter != m_vecResult.end();)
+		{
+			if (i >= vecdata.size())
+				break;
+
+			if (vecdata[i] == *iter)
+			{
+				iter = m_vecResult.erase(iter);
+				++i;
+			}
+			else
+				++iter;
+		}
+		cout << "b" << endl;
 		// Mark Start & End Position ('S', 'E' 로 시작점 도착점을 표시합니다.)
 		auto	iterStart = ResultNodes.begin();
 		auto	iterEnd = ResultNodes.rbegin();
@@ -95,7 +160,6 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
 		results[(GridHeight - 1 - startCoord.m_y) * (GridWidth + 1) + startCoord.m_x] = 'S';
 		results[(GridHeight - 1 - endCoord.m_y) * (GridWidth + 1) + endCoord.m_x] = 'E';
 	}
-
 	//====================================================
 	// SAVE FILE
 	//====================================================
@@ -104,8 +168,7 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
 		FILE* pFile = nullptr;
 		fopen_s(&pFile, "result_jps(b).txt", "wt");
 
-		if (!pFile)
-			return;
+		assert(pFile);
 
 		if (pFile != NULL)
 		{
@@ -114,10 +177,12 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x, Int32 z)
 		}
 	}
 
-	for (size_t i{}; i < vec.size(); ++i)
+	for (size_t i{}; i < m_vecResult.size(); ++i)
 	{
-		cout << "[x] " << vec[i].x << " " << "[z] " << vec[i].z << endl;
+		cout << "[x] " << m_vecResult[i].x << " " << "[z] " << m_vecResult[i].z << endl;
 	}
+
+	return m_vecResult;
 }
 
 void CJpsMgr::SetCollision(Int32 x, Int32 z)

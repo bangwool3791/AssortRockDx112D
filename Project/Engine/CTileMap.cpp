@@ -4,6 +4,7 @@
 #include "CLevel.h"
 #include "CLevelMgr.h"
 #include "CResMgr.h"
+#include "CJpsMgr.h"
 
 #include "CTransform.h"
 #include "CCamera.h"
@@ -52,6 +53,8 @@ void CTileMap::begin()
 	m_TileBuffer->Create(sizeof(tTile), TILEX * TILEZ, SB_TYPE::SRV_ONLY, m_vecInfo.data(), true);
 
 	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+
+	CJpsMgr::GetInst()->Initialize(GetMesh());
 }
 
 void CTileMap::finaltick()

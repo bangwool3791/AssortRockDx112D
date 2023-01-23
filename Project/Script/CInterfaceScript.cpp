@@ -8,11 +8,17 @@
 #include <Engine\CInterfaceMgr.h>
 
 #include "CSoldierScript.h"
+#include "CInfectedGiantScript.h"
 #include "CButtonScript.h"
 
 CInterfaceScript::CInterfaceScript()
 	:CScript{ SCRIPT_TYPE::INTERFACESCRIPT }
 	, m_id{}
+	, m_pTile{}
+	, m_pTarget{}
+	, m_pMouseObject{}
+	, m_pCameraObject{}
+	, m_arrTapButton{}
 {
 	SetName(L"CInterfaceScript");
 }
@@ -194,7 +200,7 @@ void CInterfaceScript::tick()
 		* 마우스 이동
 		* UI Description 표기
 		*/
-		else if (!lstrcmp(L"Soldier", wstrName.c_str()))
+		else if (!lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CInfectedGiant", wstrName.c_str()))
 		{
 			if (KEY_PRESSED(KEY::LBTN))
 			{
@@ -223,7 +229,15 @@ void CInterfaceScript::tick()
 					tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
 					Int32 x = tTile.iIndex % TILEX;
 					Int32 y = tTile.iIndex / TILEX;
-					m_pTarget->GetScript<CSoldierScript>()->JpsAlgorithm(x, y);
+
+					if (!lstrcmp(L"Soldier", wstrName.c_str()))
+					{
+						m_pTarget->GetScript<CSoldierScript>()->Move(x, y);
+					}
+					else if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
+					{
+						m_pTarget->GetScript<CInfectedGiantScript>()->JpsAlgorithm(x, y);
+					}
 				}
 			}
 

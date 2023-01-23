@@ -9,6 +9,7 @@ private:
     Vec3                        m_vMousePos;
     CGameObject* m_pTileObject;
     bool                        m_bCheck[40000]{};
+    vector<tBlock>              m_vecBlock{};
     UINT                        m_iIndex = 0;
     vector<tTile>               m_vecMask{};
     vector<UINT>                m_result{};

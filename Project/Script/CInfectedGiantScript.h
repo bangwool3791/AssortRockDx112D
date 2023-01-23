@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine\CScript.h>
-class CSoldierScript :
+
+class CInfectedGiantScript :
     public CScript
 {
 private:
@@ -12,9 +13,11 @@ private:
     float            m_fAccTime;
     float            m_fSpeed;
     Vec3             m_vDest;
-    CGameObject*     m_pTargetObject;
+    CGameObject* m_pTargetObject;
     Ptr<CPrefab>     m_Prefab;
     vector<Vec3>     m_vecJps;
+ 
+public:
     Vec3             m_vSource;
 private:
     void SaveToFile(FILE* _File);
@@ -25,20 +28,20 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
-    CLONE(CSoldierScript);
-private:
-    bool Func(CGameObject* _lhs, CGameObject* _rhs);
-    void ChaseEnemy();
-    void ProcessEnemy();
-public :
-    void Move(Int32 x, Int32 z);
-    void Attck(Int32 x, Int32 z) {}
+    CLONE(CInfectedGiantScript);
+public:
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);
     UINT GetHp() { return m_iHp; }
     void SetHp(UINT _iHp) { m_iHp = _iHp; }
+private:
+    bool Func(CGameObject* _lhs, CGameObject* _rhs);
+    void ProcessEnemy();
+    void ChaseEnemy();
+    void Move(Int32 _x, Int32 _z);
 public:
-    CSoldierScript();
-    virtual ~CSoldierScript();
+    CInfectedGiantScript();
+    virtual ~CInfectedGiantScript();
 };
+
 

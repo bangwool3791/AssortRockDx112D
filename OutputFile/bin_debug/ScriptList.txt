@@ -4,6 +4,7 @@ CCrystalScript
 CDragScript
 CEditorMouseScript
 CHuntScript
+CInfectedGiantScript
 CInterfaceScript
 CLevelCameraScript
 CLightScript

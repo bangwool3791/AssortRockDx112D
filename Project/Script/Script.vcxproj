@@ -178,6 +178,7 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
+    <ClInclude Include="CInfectedGiantScript.h" />
     <ClInclude Include="CLevelCameraScript.h" />
     <ClInclude Include="CDragScript.h" />
     <ClInclude Include="CEditorMouseScript.h" />
@@ -212,6 +213,7 @@ call CodeGen.exe</Command>
   <ItemGroup>
     <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />
+    <ClCompile Include="CInfectedGiantScript.cpp" />
     <ClCompile Include="CLevelCameraScript.cpp" />
     <ClCompile Include="CDragScript.cpp" />
     <ClCompile Include="CEditorMouseScript.cpp" />
