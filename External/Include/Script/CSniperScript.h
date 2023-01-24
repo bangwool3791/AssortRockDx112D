@@ -1,6 +1,6 @@
 #pragma once
 #include <Engine\CScript.h>
-class CSoldierScript :
+class CSniperScript :
     public CScript
 {
 private:
@@ -14,7 +14,7 @@ private:
     float            m_fSpeed;
     Vec3             m_vDest;
     Vec3             m_vSource;
-    CGameObject*     m_pTargetObject;
+    CGameObject* m_pTargetObject;
     Ptr<CPrefab>     m_Prefab;
     vector<Vec3>     m_vecJps;
     wstring          m_strBackUp;
@@ -27,13 +27,13 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
-    CLONE(CSoldierScript);
+    CLONE(CSniperScript);
 private:
     bool Func(CGameObject* _lhs, CGameObject* _rhs);
     void ChaseEnemy();
     void ProcessEnemy();
     void SetMonsterHP();
-public :
+public:
     void Move(Int32 x, Int32 z);
     void Attck(Int32 x, Int32 z) {}
     void JpsAlgorithm(Int32 x, Int32 z);
@@ -41,7 +41,7 @@ public :
     UINT GetHp() { return m_iHp; }
     void SetHp(UINT _iHp) { m_iHp = _iHp; }
 public:
-    CSoldierScript();
-    virtual ~CSoldierScript();
+    CSniperScript();
+    virtual ~CSniperScript();
 };
 

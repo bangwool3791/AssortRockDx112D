@@ -35,6 +35,10 @@ private:
     int                   m_iCurIdx;
     int                   m_iSelectedIdx;
 
+    vector<string>        m_vecFileData;
+    wstring               m_strFileData;
+    int                   m_iFileData;
+
     bool                  m_fileDialogOpen{};
     ImFileDialogInfo      m_fileDialogInfo;
 

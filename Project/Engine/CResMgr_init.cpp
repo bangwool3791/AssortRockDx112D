@@ -95,13 +95,13 @@ void CResMgr::CreateDefaultMesh()
 	pMesh = new CMesh(true);
 	pMesh->Create(vecVtx.data(), vecVtx.size(), vecIdx.data(), vecIdx.size());
 	AddRes<CMesh>(L"RectMesh", pMesh);
-	vecIdx.clear();
+	//vecIdx.clear();
 
-	*iterIdx = 0;
-	*iterIdx = 1;
-	*iterIdx = 2;
-	*iterIdx = 3;
-	*iterIdx = 0;
+	//*iterIdx = 0;
+	//*iterIdx = 1;
+	//*iterIdx = 2;
+	//*iterIdx = 3;
+	//*iterIdx = 0;
 
 	pMesh = new CMesh(true);
 	pMesh->SetName(L"RectMesh_Debug");
@@ -643,8 +643,8 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\vegetation\\Atlas1_HQ.dds", L"texture\\vegetation\\Atlas1_HQ.dds");
 	Load<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds", L"texture\\buildings\\Atlas1_LQ.dds");
 
+	//sprite
 	Load<CTexture>(L"texture\\sprite\\HumansA_LQ.dds", L"texture\\sprite\\HumansA_LQ.dds");
-
 	Load<CTexture>(L"texture\\sprite\\AnimalsA_HQ.dds", L"texture\\sprite\\AnimalsA_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\AnimalsB_HQ.dds", L"texture\\sprite\\AnimalsB_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\BigUnitsA_HQ.dds", L"texture\\sprite\\BigUnitsA_HQ.dds");
@@ -665,6 +665,29 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\sprite\\InfectedD_HQ.dds", L"texture\\sprite\\InfectedD_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\InfectedGiant_HQ.dds", L"texture\\sprite\\InfectedGiant_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\TrainsA_HQ.dds", L"texture\\sprite\\TrainsA_HQ.dds");
+	//sprite png
+	Load<CTexture>(L"texture\\sprite\\HumansA_LQ.png", L"texture\\sprite\\HumansA_LQ.png");
+	Load<CTexture>(L"texture\\sprite\\AnimalsA_HQ.png", L"texture\\sprite\\AnimalsA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\AnimalsB_HQ.png", L"texture\\sprite\\AnimalsB_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\BigUnitsA_HQ.png", L"texture\\sprite\\BigUnitsA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\BuildingsA_HQ.png", L"texture\\sprite\\BuildingsA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\BuildingsB_HQ.png", L"texture\\sprite\\BuildingsB_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\BuildingsC_HQ.png", L"texture\\sprite\\BuildingsC_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\Effects_A_HQ.png", L"texture\\sprite\\Effects_A_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\EnvironmentA_HQ.png", L"texture\\sprite\\EnvironmentA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\FortressA_HQ.png", L"texture\\sprite\\FortressA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\HA_HQ.png", L"texture\\sprite\\HA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\HB_HQ.png", L"texture\\sprite\\HB_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\HumansA_HQ.png", L"texture\\sprite\\HumansA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\HumansB_HQ.png", L"texture\\sprite\\HumansB_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\HumansC_HQ.png", L"texture\\sprite\\HumansC_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\InfectedA_HQ.png", L"texture\\sprite\\InfectedA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\InfectedB_HQ.png", L"texture\\sprite\\InfectedB_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\InfectedC_HQ.png", L"texture\\sprite\\InfectedC_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\InfectedD_HQ.png", L"texture\\sprite\\InfectedD_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\InfectedGiant_HQ.png", L"texture\\sprite\\InfectedGiant_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\TrainsA_HQ.png", L"texture\\sprite\\TrainsA_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\Proyectiles_LQ.png", L"texture\\sprite\\Proyectiles_LQ.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -748,7 +771,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetDSType(DS_TYPE::NO_WRITE);
-	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
+	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP);
 	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
 
 	AddRes<CGraphicsShader>(L"DebugDrawShader", pShader);

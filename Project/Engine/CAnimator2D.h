@@ -7,8 +7,9 @@ class CAnimator2D :
     public CComponent
 
 {
-public :
+public:
     static std::map<wstring, CAnimation2D*>& GetRef() { return m_mapRef; };
+    static const std::map<wstring, CAnimation2D*>& GetConstRef() { return m_mapRef; };
 private:
     static std::map<wstring, CAnimation2D*> m_mapRef;
     std::map<wstring, CAnimation2D*>        m_mapAnim;
@@ -25,6 +26,7 @@ public:
     const vector<tAnim2DFrm>& GetFames() { return m_pCurAnim->GetFames(); }
     tAnim2DInfo GetAniInfo();
     const tAnim2DFrm& GetAniFrame();
+    void ActiveRepeat() { m_bRepeat = true; }
     const bool GetRepeat() { return m_bRepeat; }
     bool IsEnd();
     void Add_Animation(CAnimation2D* _pAnimatnion);

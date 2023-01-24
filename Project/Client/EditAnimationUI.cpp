@@ -329,7 +329,7 @@ void EditAnimationUI::render_update()
     if (ImGui::Button("Play", ImVec2(40.f, 20.f)))
         m_pAnimator->SetState(ANIMATION_STATE::PLAY);
 
-    ImVec2 vSize{ 200.f, 100.f };
+    ImVec2 vSize{ 200.f, 200.f };
     if (ImGui::BeginListBox("##ListBox1", vSize))
     {
         for (size_t i = 0; i < m_vecFrameIndex.size(); ++i)
@@ -418,11 +418,56 @@ void EditAnimationUI::render_update()
         }
     }
 
-    ImGui::Button("Save##1", ImVec2(80.f, 20.f));
-    ImGui::SameLine();
-    ImGui::Button("Load##1", ImVec2(80.f, 20.f));
+    if (ImGui::Button("Clone##1", ImVec2(40.f, 20.f)))
+    {
+        if (!m_strFileData.empty())
+        {
+            m_pAnimator->CloneAnimation(m_strFileData, *m_pAnimator);
+
+            string strTemp = string(m_strFileData.begin(), m_strFileData.end());
+            auto iter = m_vecAnimation.begin();
+
+            for (; iter != m_vecAnimation.end(); ++iter)
+            {
+                if (!strcmp(iter->c_str(), strTemp.c_str()))
+                    break;
+            }
+
+            if (iter == m_vecAnimation.end())
+                m_vecAnimation.push_back(strTemp);
+        }
+    }
 
     if (ImGui::BeginListBox("##ListBox2", vSize))
+    {
+        //Ref String vector
+        for (size_t i = 0; i < m_vecFileData.size(); ++i)
+        {
+            bool Selectable = (m_iFileData == i);
+            if (ImGui::Selectable(m_vecFileData[i].c_str(), Selectable))
+            {
+                //인덱스 하나더 만들고
+                m_iFileData = (int)i;
+                m_strFileData = wstring(m_vecFileData[i].begin(), m_vecFileData[i].end());
+            }
+
+            if (Selectable)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+
+            // 해당 아이템이 더블클릭 되었다.
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+            {
+            }
+        }
+
+        ImGui::EndListBox();
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::BeginListBox("##ListBox3", vSize))
     {
         for (size_t i = 0; i < m_vecAnimation.size(); ++i)
         {
@@ -433,6 +478,13 @@ void EditAnimationUI::render_update()
                 m_strAnimationName = m_vecAnimation[i];
                 strcpy_s(m_szAnimation, m_vecAnimation[i].c_str());
                 m_pAnimator->Play(wstring(m_vecAnimation[i].begin(), m_vecAnimation[i].end()), m_pAnimator->GetRepeat());
+
+                /*추가 애니메이션 텍스쳐 자동 업데이트*/
+                m_pAtlasTexture = m_pAnimator->GetTexture();
+                m_pImage = m_pAtlasTexture->GetSRV().Get();
+                CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+                pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+                Initialize_Aimation_Pixel();
 
                 decltype(m_pAnimator->GetFames()) vecFrames = m_pAnimator->GetFames();
 
@@ -887,6 +939,12 @@ void EditAnimationUI::SetTextureUI()
 void EditAnimationUI::Initialize_Animation_Info()
 {
     m_pAnimator = (CAnimator2D*)CEditor::GetInst()->GetArrComponent(COMPONENT_TYPE::ANIMATOR2D);
+    const map<wstring, CAnimation2D*> map = m_pAnimator->GetConstRef();
+
+    for (auto iter{ map.begin() }; iter != map.end(); ++iter)
+    {
+        m_vecFileData.push_back(string(iter->first.begin(), iter->first.end()));
+    }
 
     m_uvFullSize = m_pAnimator->GetAniFrame().vFullSize;
     m_uvSlice = m_pAnimator->GetAniFrame().vSlice;

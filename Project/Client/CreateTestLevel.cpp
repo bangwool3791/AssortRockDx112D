@@ -354,7 +354,8 @@ void CreateTestLelvel()
 
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 2);
 	pLevel->begin();
 }
 

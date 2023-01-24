@@ -1,3 +1,4 @@
+CArrowScript
 CButtonScript
 CCommandScript
 CCrystalScript
@@ -5,6 +6,10 @@ CDragScript
 CEditorMouseScript
 CHuntScript
 CInfectedGiantScript
+CInfectedMedium_A
+CInfectedMedium_B
+CInfectedStrong_A
+CInfectedVenom
 CInterfaceScript
 CLevelCameraScript
 CLightScript
@@ -15,15 +20,18 @@ CMouseScript
 CPlayerScript
 CPOSScript
 CQuarryScript
+CRangerScript
 CRefAniScript
 CSawScript
 CSCScript
 CSelectUnitScript
 CShadowScript
+CSniperScript
 CSoldierScript
 CTentScript
 CTerrainScript
 CTileScript
+CTitanScript
 CTreeScript
 CWWallScript
 CWWCScript

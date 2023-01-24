@@ -12,13 +12,13 @@ private:
     int              m_iAttack = 0;
     float            m_fAccTime;
     float            m_fSpeed;
+    float            m_fTick;
+    Vec3             m_vSource;
     Vec3             m_vDest;
     CGameObject* m_pTargetObject;
     Ptr<CPrefab>     m_Prefab;
     vector<Vec3>     m_vecJps;
- 
-public:
-    Vec3             m_vSource;
+    wstring          m_strBackUp{};
 private:
     void SaveToFile(FILE* _File);
     void LoadFromFile(FILE* _File);

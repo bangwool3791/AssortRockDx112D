@@ -18,7 +18,6 @@ public:
 
 public:
 	float GetDeltaTime() { return m_fDeltaTime; }
-
 private:
 	CTimeMgr();
 	virtual ~CTimeMgr();

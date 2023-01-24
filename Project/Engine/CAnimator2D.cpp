@@ -10,7 +10,7 @@ std::map<wstring, CAnimation2D*> CAnimator2D::m_mapRef{};
 
 CAnimator2D::CAnimator2D()
     :CComponent(COMPONENT_TYPE::ANIMATOR2D)
-    , m_bRepeat(false)
+    , m_bRepeat(true)
     , m_mapAnim{}
     , m_strKey{}
 {
@@ -92,7 +92,7 @@ void CAnimator2D::CreateAnimation()
         if (extension != ".dxatlas")
             continue;
 
-        path = path.replace(path.size() - 8, path.size(), ".dds");
+        path = path.replace(path.size() - 8, path.size(), ".png");
         atlas = path.substr(wstrContent.size(), path.size() - wstrContent.size());
         ReadDoc.LoadFile(entry.path().string().c_str());// xml 파일 로드
         //"DB"라는 노드를 찾는다
@@ -300,7 +300,10 @@ void CAnimator2D::Play()
     m_strKey = iter->first;
     CAnimation2D* pAnimation = iter->second;
 
-    assert(nullptr != pAnimation);
+    if (nullptr == pAnimation)
+    {
+        assert(nullptr != pAnimation);
+    }
 
     if (IsValid(pAnimation))
     {
@@ -315,7 +318,10 @@ void CAnimator2D::Play(const wstring& _strKey)
     m_strKey = _strKey;
     CAnimation2D* pAnimation = FindAnimation(_strKey);
 
-    assert(nullptr != pAnimation);
+    if (nullptr == pAnimation)
+    {
+        assert(nullptr != pAnimation);
+    }
 
     if (IsValid(pAnimation))
     {
@@ -520,7 +526,9 @@ void CAnimator2D::Add_Animation(CAnimation2D* _pAnimatnion)
     if (iter != m_mapAnim.end())
         return;
 
-    m_mapAnim.insert(make_pair(_pAnimatnion->GetName(), _pAnimatnion->Clone()));
+    CAnimation2D* pAnimation2D = _pAnimatnion->Clone();
+    pAnimation2D->SetOwner(this);
+    m_mapAnim.insert(make_pair(_pAnimatnion->GetName(), pAnimation2D));
 }
 
 CAnimation2D* CAnimator2D::Add_Animation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS)

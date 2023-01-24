@@ -151,7 +151,7 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x1, Int32 z1, Int32 x2, Int32 z2)
 			else
 				++iter;
 		}
-		cout << "b" << endl;
+		cout << "c" << endl;
 		// Mark Start & End Position ('S', 'E' 로 시작점 도착점을 표시합니다.)
 		auto	iterStart = ResultNodes.begin();
 		auto	iterEnd = ResultNodes.rbegin();
@@ -159,6 +159,7 @@ const vector<Vec3>& CJpsMgr::Update(Int32 x1, Int32 z1, Int32 x2, Int32 z2)
 		auto& endCoord = (*iterEnd);
 		results[(GridHeight - 1 - startCoord.m_y) * (GridWidth + 1) + startCoord.m_x] = 'S';
 		results[(GridHeight - 1 - endCoord.m_y) * (GridWidth + 1) + endCoord.m_x] = 'E';
+		cout << "d" << endl;
 	}
 	//====================================================
 	// SAVE FILE

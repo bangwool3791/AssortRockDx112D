@@ -1,6 +1,7 @@
 #pragma once
 #include <Engine\CScript.h>
-class CSoldierScript :
+
+class CInfectedMedium_B :
     public CScript
 {
 private:
@@ -9,15 +10,15 @@ private:
     bool             m_bAttack = false;
     int              m_iHp = 0;
     int              m_iAttack = 0;
-    float            m_fDeltaTime = 0.f;
     float            m_fAccTime;
     float            m_fSpeed;
-    Vec3             m_vDest;
+    float            m_fTick;
     Vec3             m_vSource;
-    CGameObject*     m_pTargetObject;
+    Vec3             m_vDest;
+    CGameObject* m_pTargetObject;
     Ptr<CPrefab>     m_Prefab;
     vector<Vec3>     m_vecJps;
-    wstring          m_strBackUp;
+    wstring          m_strBackUp{};
 private:
     void SaveToFile(FILE* _File);
     void LoadFromFile(FILE* _File);
@@ -27,21 +28,20 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
-    CLONE(CSoldierScript);
-private:
-    bool Func(CGameObject* _lhs, CGameObject* _rhs);
-    void ChaseEnemy();
-    void ProcessEnemy();
-    void SetMonsterHP();
-public :
-    void Move(Int32 x, Int32 z);
-    void Attck(Int32 x, Int32 z) {}
+    CLONE(CInfectedMedium_B);
+public:
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);
     UINT GetHp() { return m_iHp; }
     void SetHp(UINT _iHp) { m_iHp = _iHp; }
+private:
+    bool Func(CGameObject* _lhs, CGameObject* _rhs);
+    void ProcessEnemy();
+    void ChaseEnemy();
+    void Move(Int32 _x, Int32 _z);
 public:
-    CSoldierScript();
-    virtual ~CSoldierScript();
+    CInfectedMedium_B();
+    virtual ~CInfectedMedium_B();
 };
+
 

@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CInfectedGiantScript.h"
+#include "CSniperScript.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLayer.h>
@@ -15,28 +15,30 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Engine\CScript.h>
-#include "CSoldierScript.h"
+#include <Script\CInfectedGiantScript.h>
+#include <Script\CInfectedMedium_A.h>
+#include <Script\CInfectedMedium_B.h>
+#include <Script\CInfectedStrong_A.h>
+#include <Script\CInfectedVenom.h>
 
-CInfectedGiantScript::CInfectedGiantScript()
-	:CScript{ INFECTEDGIANTSCRIPT }
+CSniperScript::CSniperScript()
+	:CScript{ SNIPERSCRIPT }
 	, m_fSpeed{ 100.f }
 	, m_eState{ UNIT_STATE::NORMAL }
-	, m_iHp{100}
-	, m_iAttack{15}
-	, m_fTick{0.f}
-	, m_bAttack {true}
+	, m_iHp{ 100 }
+	, m_iAttack{ 15 }
 {
-	SetName(L"CInfectedGiantScript");
+	SetName(L"CSniperScript");
 
-	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
+	//AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
 }
 
-CInfectedGiantScript::~CInfectedGiantScript()
+CSniperScript::~CSniperScript()
 {
 }
 
 
-void CInfectedGiantScript::begin()
+void CSniperScript::begin()
 {
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
@@ -45,19 +47,20 @@ void CInfectedGiantScript::begin()
 
 	Animator = GetOwner()->Animator2D();
 
-	Animator->CloneAnimation(L"InfectedGiant", *Animator);
-
-	Vec3 vPos = Transform()->GetRelativePos();
-	vPos.x += 1.f;
-	vPos.z -= 1.f;
-	SetDestPos(vPos);
+	Animator->ActiveRepeat();
+	Animator->CloneAnimation(L"Sniper", *Animator);
 
 	m_vSource = Transform()->GetRelativePos();
+
+	m_vSource = Transform()->GetRelativePos();
+	m_vSource.x += 1.f;
+	m_vSource.z -= 1.f;
+	SetDestPos(m_vSource);
 }
 
 #define OFFSET 22.5f
 
-void CInfectedGiantScript::tick()
+void CSniperScript::tick()
 {
 	if (0 >= m_iHp)
 		m_eState = UNIT_STATE::DEAD;
@@ -65,7 +68,7 @@ void CInfectedGiantScript::tick()
 	if (m_pTargetObject && m_pTargetObject->IsDead())
 		m_pTargetObject = nullptr;
 
-	m_fTick += DT;
+	m_fDeltaTime += DT;
 
 	if (KEY_PRESSED(KEY::LBTN))
 	{
@@ -98,13 +101,15 @@ void CInfectedGiantScript::tick()
 	{
 		SetDestPos(m_vDest);
 		ProcessEnemy();
-		ChaseEnemy();
 	}
 	else if (UNIT_STATE::RUN == m_eState)
 	{
+		//적을 쫒는 Run과 마우스 이동 Run 구분
+		//밖에서 알고리즘 돌리면 타겟 nullptr
 		Vec3 vDir{};
 
 		auto iter = m_vecJps.begin();
+
 		if (iter == m_vecJps.end())
 		{
 			m_eState = UNIT_STATE::NORMAL;
@@ -149,25 +154,21 @@ void CInfectedGiantScript::tick()
 			else
 			{
 				m_eState = UNIT_STATE::NORMAL;
+				SetDestPos(m_vDest);
 				m_bAttack = false;
 			}
 
 			m_pTargetObject = nullptr;
 		}
 
-		if (m_fTick >= 2.f)
+		if (m_fDeltaTime >= 1.5f)
 		{
 			//피깍기
-			wstring wstrName = m_pTargetObject->GetName();
-
-			if (!lstrcmp(L"Soldier", wstrName.c_str()))
-			{			
-				UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
-				iHp -= m_iAttack;
-				m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
+			if (m_pTargetObject)
+			{
+				SetMonsterHP();
 			}
-
-			m_fTick -= 2.f;
+			m_fDeltaTime -= 1.5f;
 		}
 
 		if (m_pTargetObject)
@@ -180,12 +181,15 @@ void CInfectedGiantScript::tick()
 	}
 	else if (UNIT_STATE::LOADATTACK == m_eState)
 	{
-		if (m_fTick >= 2.f)
+		if (m_fDeltaTime >= 1.5f)
 		{
-			Vec3 vPos = m_pTargetObject->Transform()->GetRelativePos() - m_vSource;
-			m_eState = UNIT_STATE::ATTACK;
-			SetDestPos(vPos);
-			m_fTick -= 2.f;
+			if (m_pTargetObject)
+			{
+				Vec3 vPos = m_pTargetObject->Transform()->GetRelativePos();
+				m_eState = UNIT_STATE::ATTACK;
+				SetDestPos(vPos);
+			}
+			m_fDeltaTime -= 1.5f;
 		}
 
 	}
@@ -208,7 +212,7 @@ void CInfectedGiantScript::tick()
 
 }
 
-void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
+void CSniperScript::SetDestPos(Vec3 _vPos)
 {
 	m_vTarget = _vPos;
 	/*
@@ -254,16 +258,16 @@ void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
 	wstring str{};
 
 	if (UNIT_STATE::NORMAL == m_eState)
-		str = L"InfectedGiant_Normal";
+		str = L"Sniper_Normal";
 	else if (UNIT_STATE::LOADATTACK == m_eState)
-		str = L"InfectedGiant_LoadAttack";
+		str = L"Sniper_LoadAttack";
 	else if (UNIT_STATE::ATTACK == m_eState)
-		str = L"InfectedGiant_Attack";
+		str = L"Sniper_Attack";
 	else if (UNIT_STATE::RUN == m_eState)
-		str = L"InfectedGiant_Walk";
+		str = L"Sniper_Run";
 	else if (UNIT_STATE::DEAD == m_eState)
 	{
-		str = L"InfectedGiant_Die_000";
+		str = L"Sniper_Die_000";
 		if (m_strBackUp != str)
 			GetOwner()->Animator2D()->Play(str);
 
@@ -313,7 +317,7 @@ void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
 	m_strBackUp = str;
 }
 
-void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
+void CSniperScript::JpsAlgorithm(Int32 x, Int32 z)
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 	tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vPos);
@@ -333,30 +337,30 @@ void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
 	}
 }
 
-void CInfectedGiantScript::BeginOverlap(CCollider2D* _pOther)
+void CSniperScript::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void CInfectedGiantScript::Overlap(CCollider2D* _pOther)
+void CSniperScript::Overlap(CCollider2D* _pOther)
 {
-	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
-	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
-	Vec3 vDiff{};
-	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
-	vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
-	vRelativePos = vRelativePos.Normalize();
-
-	Vec3 vPos = Transform()->GetRelativePos();
-
-	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
+	//Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
+	//Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
+	//Vec3 vDiff{};
+	//vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+	//vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
+	//vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
+	//vRelativePos = vRelativePos.Normalize();
+	//
+	//Vec3 vPos = Transform()->GetRelativePos();
+	//
+	//Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
 }
 
-void CInfectedGiantScript::EndOverlap(CCollider2D* _pOther)
+void CSniperScript::EndOverlap(CCollider2D* _pOther)
 {
 }
 
-void CInfectedGiantScript::SaveToFile(FILE* _File)
+void CSniperScript::SaveToFile(FILE* _File)
 {
 	CScript::SaveToFile(_File);
 	fwrite(&m_fSpeed, sizeof(float), 1, _File);
@@ -364,7 +368,7 @@ void CInfectedGiantScript::SaveToFile(FILE* _File)
 	SaveResourceRef(m_Prefab, _File);
 }
 
-void CInfectedGiantScript::LoadFromFile(FILE* _File)
+void CSniperScript::LoadFromFile(FILE* _File)
 {
 	CScript::LoadFromFile(_File);
 	fread(&m_fSpeed, sizeof(float), 1, _File);
@@ -372,9 +376,9 @@ void CInfectedGiantScript::LoadFromFile(FILE* _File)
 	LoadResourceRef(m_Prefab, _File);
 }
 
-void CInfectedGiantScript::ProcessEnemy()
+void CSniperScript::ProcessEnemy()
 {
-	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(2)->GetParentObjects();
 
 	if (!vecEnemy.empty())
 	{
@@ -393,7 +397,7 @@ void CInfectedGiantScript::ProcessEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 500.f)
 		{
 			m_pTargetObject = vecEnemy[0];
 			m_eState = UNIT_STATE::LOADATTACK;
@@ -402,9 +406,9 @@ void CInfectedGiantScript::ProcessEnemy()
 	}
 }
 
-void CInfectedGiantScript::ChaseEnemy()
+void CSniperScript::ChaseEnemy()
 {
-	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(2)->GetParentObjects();
 
 	if (!vecEnemy.empty())
 	{
@@ -423,7 +427,7 @@ void CInfectedGiantScript::ChaseEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 500.f)
 		{
 			tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vEnemyPos);
 			Int32 x = tTile.iIndex % TILEX;
@@ -435,11 +439,69 @@ void CInfectedGiantScript::ChaseEnemy()
 			JpsAlgorithm(x, z);
 		}
 	}
+
+	//if (m_pTargetObject)
+	//{
+	//	Vec3 vEnemyPos = m_pTargetObject->Transform()->GetRelativePos();
+	//	Vec3 vScale1 = m_pTargetObject->Transform()->GetRelativeScale() * 0.5f;
+	//	Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
+
+	//	if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 250.f)
+	//	{
+
+	//		tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vEnemyPos);
+	//		Int32 x = tTile.iIndex % TILEX;
+	//		Int32 z = tTile.iIndex / TILEX;
+
+	//		m_eState = UNIT_STATE::RUN;
+	//		SetDestPos(vEnemyPos);
+
+	//		JpsAlgorithm(x, z);
+	//	}
+	//}
 }
 
-void CInfectedGiantScript::Move(Int32 _x, Int32 _z)
+void CSniperScript::Move(Int32 _x, Int32 _z)
 {
 	m_pTargetObject = nullptr;
 	m_bAttack = false;
 	JpsAlgorithm(_x, _z);
+}
+
+void CSniperScript::SetMonsterHP()
+{
+	wstring wstrName = m_pTargetObject->GetName();
+
+	UINT iHp{};
+
+	if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript< CInfectedGiantScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CInfectedGiantScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CInfectedMedium_A_", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript< CInfectedMedium_A>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CInfectedMedium_A>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CInfectedMedium_B_", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript< CInfectedMedium_B>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CInfectedMedium_B>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CInfectedStrong_A_", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript< CInfectedStrong_A>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CInfectedStrong_A>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CInfectedVenom", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript< CInfectedVenom>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CInfectedVenom>()->SetHp(iHp);
+	}
 }

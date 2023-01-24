@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "CInfectedGiantScript.h"
+#include "CInfectedMedium_B.h"
 
 #include <Engine\CDevice.h>
 #include <Engine\CLayer.h>
@@ -17,26 +17,26 @@
 #include <Engine\CScript.h>
 #include "CSoldierScript.h"
 
-CInfectedGiantScript::CInfectedGiantScript()
-	:CScript{ INFECTEDGIANTSCRIPT }
+CInfectedMedium_B::CInfectedMedium_B()
+	:CScript{ INFECTEDMEDIUM_B }
 	, m_fSpeed{ 100.f }
 	, m_eState{ UNIT_STATE::NORMAL }
-	, m_iHp{100}
-	, m_iAttack{15}
-	, m_fTick{0.f}
-	, m_bAttack {true}
+	, m_iHp{ 100 }
+	, m_iAttack{ 15 }
+	, m_fTick{ 0.f }
+	, m_bAttack{ true }
 {
-	SetName(L"CInfectedGiantScript");
+	SetName(L"CInfectedMedium_B");
 
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
 }
 
-CInfectedGiantScript::~CInfectedGiantScript()
+CInfectedMedium_B::~CInfectedMedium_B()
 {
 }
 
 
-void CInfectedGiantScript::begin()
+void CInfectedMedium_B::begin()
 {
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
@@ -45,7 +45,7 @@ void CInfectedGiantScript::begin()
 
 	Animator = GetOwner()->Animator2D();
 
-	Animator->CloneAnimation(L"InfectedGiant", *Animator);
+	Animator->CloneAnimation(L"InfectedMedium_B", *Animator);
 
 	Vec3 vPos = Transform()->GetRelativePos();
 	vPos.x += 1.f;
@@ -57,7 +57,7 @@ void CInfectedGiantScript::begin()
 
 #define OFFSET 22.5f
 
-void CInfectedGiantScript::tick()
+void CInfectedMedium_B::tick()
 {
 	if (0 >= m_iHp)
 		m_eState = UNIT_STATE::DEAD;
@@ -161,7 +161,7 @@ void CInfectedGiantScript::tick()
 			wstring wstrName = m_pTargetObject->GetName();
 
 			if (!lstrcmp(L"Soldier", wstrName.c_str()))
-			{			
+			{
 				UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
 				iHp -= m_iAttack;
 				m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
@@ -177,17 +177,6 @@ void CInfectedGiantScript::tick()
 		}
 
 		ChaseEnemy();
-	}
-	else if (UNIT_STATE::LOADATTACK == m_eState)
-	{
-		if (m_fTick >= 2.f)
-		{
-			Vec3 vPos = m_pTargetObject->Transform()->GetRelativePos() - m_vSource;
-			m_eState = UNIT_STATE::ATTACK;
-			SetDestPos(vPos);
-			m_fTick -= 2.f;
-		}
-
 	}
 	else if (UNIT_STATE::DEAD == m_eState)
 	{
@@ -208,7 +197,7 @@ void CInfectedGiantScript::tick()
 
 }
 
-void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
+void CInfectedMedium_B::SetDestPos(Vec3 _vPos)
 {
 	m_vTarget = _vPos;
 	/*
@@ -254,16 +243,14 @@ void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
 	wstring str{};
 
 	if (UNIT_STATE::NORMAL == m_eState)
-		str = L"InfectedGiant_Normal";
-	else if (UNIT_STATE::LOADATTACK == m_eState)
-		str = L"InfectedGiant_LoadAttack";
+		str = L"InfectedMedium_B_Normal";
 	else if (UNIT_STATE::ATTACK == m_eState)
-		str = L"InfectedGiant_Attack";
+		str = L"InfectedMedium_B_Attack";
 	else if (UNIT_STATE::RUN == m_eState)
-		str = L"InfectedGiant_Walk";
+		str = L"InfectedMedium_B_Walk";
 	else if (UNIT_STATE::DEAD == m_eState)
 	{
-		str = L"InfectedGiant_Die_000";
+		str = L"InfectedMedium_B_Die_000";
 		if (m_strBackUp != str)
 			GetOwner()->Animator2D()->Play(str);
 
@@ -313,7 +300,7 @@ void CInfectedGiantScript::SetDestPos(Vec3 _vPos)
 	m_strBackUp = str;
 }
 
-void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
+void CInfectedMedium_B::JpsAlgorithm(Int32 x, Int32 z)
 {
 	Vec3 vPos = Transform()->GetRelativePos();
 	tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vPos);
@@ -333,11 +320,11 @@ void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
 	}
 }
 
-void CInfectedGiantScript::BeginOverlap(CCollider2D* _pOther)
+void CInfectedMedium_B::BeginOverlap(CCollider2D* _pOther)
 {
 }
 
-void CInfectedGiantScript::Overlap(CCollider2D* _pOther)
+void CInfectedMedium_B::Overlap(CCollider2D* _pOther)
 {
 	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
 	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
@@ -352,11 +339,11 @@ void CInfectedGiantScript::Overlap(CCollider2D* _pOther)
 	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
 }
 
-void CInfectedGiantScript::EndOverlap(CCollider2D* _pOther)
+void CInfectedMedium_B::EndOverlap(CCollider2D* _pOther)
 {
 }
 
-void CInfectedGiantScript::SaveToFile(FILE* _File)
+void CInfectedMedium_B::SaveToFile(FILE* _File)
 {
 	CScript::SaveToFile(_File);
 	fwrite(&m_fSpeed, sizeof(float), 1, _File);
@@ -364,7 +351,7 @@ void CInfectedGiantScript::SaveToFile(FILE* _File)
 	SaveResourceRef(m_Prefab, _File);
 }
 
-void CInfectedGiantScript::LoadFromFile(FILE* _File)
+void CInfectedMedium_B::LoadFromFile(FILE* _File)
 {
 	CScript::LoadFromFile(_File);
 	fread(&m_fSpeed, sizeof(float), 1, _File);
@@ -372,7 +359,7 @@ void CInfectedGiantScript::LoadFromFile(FILE* _File)
 	LoadResourceRef(m_Prefab, _File);
 }
 
-void CInfectedGiantScript::ProcessEnemy()
+void CInfectedMedium_B::ProcessEnemy()
 {
 	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
 
@@ -396,13 +383,13 @@ void CInfectedGiantScript::ProcessEnemy()
 		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 100.f)
 		{
 			m_pTargetObject = vecEnemy[0];
-			m_eState = UNIT_STATE::LOADATTACK;
+			m_eState = UNIT_STATE::ATTACK;
 			SetDestPos(vEnemyPos);
 		}
 	}
 }
 
-void CInfectedGiantScript::ChaseEnemy()
+void CInfectedMedium_B::ChaseEnemy()
 {
 	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
 
@@ -437,7 +424,7 @@ void CInfectedGiantScript::ChaseEnemy()
 	}
 }
 
-void CInfectedGiantScript::Move(Int32 _x, Int32 _z)
+void CInfectedMedium_B::Move(Int32 _x, Int32 _z)
 {
 	m_pTargetObject = nullptr;
 	m_bAttack = false;

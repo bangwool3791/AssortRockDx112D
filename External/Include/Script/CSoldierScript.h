@@ -9,13 +9,15 @@ private:
     bool             m_bAttack = false;
     int              m_iHp = 0;
     int              m_iAttack = 0;
+    float            m_fDeltaTime = 0.f;
     float            m_fAccTime;
     float            m_fSpeed;
     Vec3             m_vDest;
+    Vec3             m_vSource;
     CGameObject*     m_pTargetObject;
     Ptr<CPrefab>     m_Prefab;
     vector<Vec3>     m_vecJps;
-    Vec3             m_vSource;
+    wstring          m_strBackUp;
 private:
     void SaveToFile(FILE* _File);
     void LoadFromFile(FILE* _File);
@@ -30,6 +32,7 @@ private:
     bool Func(CGameObject* _lhs, CGameObject* _rhs);
     void ChaseEnemy();
     void ProcessEnemy();
+    void SetMonsterHP();
 public :
     void Move(Int32 x, Int32 z);
     void Attck(Int32 x, Int32 z) {}

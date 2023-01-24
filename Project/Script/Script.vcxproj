@@ -176,9 +176,15 @@ call CodeGen.exe</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CArrowScript.h" />
+    <ClInclude Include="CRangerScript.h" />
     <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
     <ClInclude Include="CInfectedGiantScript.h" />
+    <ClInclude Include="CInfectedMedium_A.h" />
+    <ClInclude Include="CInfectedMedium_B.h" />
+    <ClInclude Include="CInfectedStrong_A.h" />
+    <ClInclude Include="CInfectedVenom.h" />
     <ClInclude Include="CLevelCameraScript.h" />
     <ClInclude Include="CDragScript.h" />
     <ClInclude Include="CEditorMouseScript.h" />
@@ -197,10 +203,12 @@ call CodeGen.exe</Command>
     <ClInclude Include="CSCScript.h" />
     <ClInclude Include="CSelectUnitScript.h" />
     <ClInclude Include="CShadowScript.h" />
+    <ClInclude Include="CSniperScript.h" />
     <ClInclude Include="CSoldierScript.h" />
     <ClInclude Include="CTentScript.h" />
     <ClInclude Include="CTerrainScript.h" />
     <ClInclude Include="CTileScript.h" />
+    <ClInclude Include="CTitanScript.h" />
     <ClInclude Include="CTreeScript.h" />
     <ClInclude Include="CWWallScript.h" />
     <ClInclude Include="CWWCScript.h" />
@@ -211,9 +219,15 @@ call CodeGen.exe</Command>
     <ClInclude Include="CButtonScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CArrowScript.cpp" />
+    <ClCompile Include="CRangerScript.cpp" />
     <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />
     <ClCompile Include="CInfectedGiantScript.cpp" />
+    <ClCompile Include="CInfectedMedium_A.cpp" />
+    <ClCompile Include="CInfectedMedium_B.cpp" />
+    <ClCompile Include="CInfectedStrong_A.cpp" />
+    <ClCompile Include="CInfectedVenom.cpp" />
     <ClCompile Include="CLevelCameraScript.cpp" />
     <ClCompile Include="CDragScript.cpp" />
     <ClCompile Include="CEditorMouseScript.cpp" />
@@ -232,11 +246,13 @@ call CodeGen.exe</Command>
     <ClCompile Include="CSCScript.cpp" />
     <ClCompile Include="CSelectUnitScript.cpp" />
     <ClCompile Include="CShadowScript.cpp" />
+    <ClCompile Include="CSniperScript.cpp" />
     <ClCompile Include="CSoldierScript.cpp" />
     <ClCompile Include="CTentScript.cpp" />
     <ClCompile Include="CTerrainScript.cpp" />
     <ClCompile Include="CTileScript.cpp" />
     <ClCompile Include="CInterfaceScript.cpp" />
+    <ClCompile Include="CTitanScript.cpp" />
     <ClCompile Include="CTreeScript.cpp" />
     <ClCompile Include="CWWallScript.cpp" />
     <ClCompile Include="CWWCScript.cpp" />

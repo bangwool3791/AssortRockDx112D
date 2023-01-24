@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CScriptMgr.h"
 
+#include "CArrowScript.h"
 #include "CButtonScript.h"
 #include "CCommandScript.h"
 #include "CCrystalScript.h"
@@ -8,6 +9,10 @@
 #include "CEditorMouseScript.h"
 #include "CHuntScript.h"
 #include "CInfectedGiantScript.h"
+#include "CInfectedMedium_A.h"
+#include "CInfectedMedium_B.h"
+#include "CInfectedStrong_A.h"
+#include "CInfectedVenom.h"
 #include "CInterfaceScript.h"
 #include "CLevelCameraScript.h"
 #include "CLightScript.h"
@@ -18,15 +23,18 @@
 #include "CPlayerScript.h"
 #include "CPOSScript.h"
 #include "CQuarryScript.h"
+#include "CRangerScript.h"
 #include "CRefAniScript.h"
 #include "CSawScript.h"
 #include "CSCScript.h"
 #include "CSelectUnitScript.h"
 #include "CShadowScript.h"
+#include "CSniperScript.h"
 #include "CSoldierScript.h"
 #include "CTentScript.h"
 #include "CTerrainScript.h"
 #include "CTileScript.h"
+#include "CTitanScript.h"
 #include "CTreeScript.h"
 #include "CWWallScript.h"
 #include "CWWCScript.h"
@@ -34,6 +42,7 @@
 
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
+	_vec.push_back(L"CArrowScript");
 	_vec.push_back(L"CButtonScript");
 	_vec.push_back(L"CCommandScript");
 	_vec.push_back(L"CCrystalScript");
@@ -41,6 +50,10 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CEditorMouseScript");
 	_vec.push_back(L"CHuntScript");
 	_vec.push_back(L"CInfectedGiantScript");
+	_vec.push_back(L"CInfectedMedium_A");
+	_vec.push_back(L"CInfectedMedium_B");
+	_vec.push_back(L"CInfectedStrong_A");
+	_vec.push_back(L"CInfectedVenom");
 	_vec.push_back(L"CInterfaceScript");
 	_vec.push_back(L"CLevelCameraScript");
 	_vec.push_back(L"CLightScript");
@@ -51,15 +64,18 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CPlayerScript");
 	_vec.push_back(L"CPOSScript");
 	_vec.push_back(L"CQuarryScript");
+	_vec.push_back(L"CRangerScript");
 	_vec.push_back(L"CRefAniScript");
 	_vec.push_back(L"CSawScript");
 	_vec.push_back(L"CSCScript");
 	_vec.push_back(L"CSelectUnitScript");
 	_vec.push_back(L"CShadowScript");
+	_vec.push_back(L"CSniperScript");
 	_vec.push_back(L"CSoldierScript");
 	_vec.push_back(L"CTentScript");
 	_vec.push_back(L"CTerrainScript");
 	_vec.push_back(L"CTileScript");
+	_vec.push_back(L"CTitanScript");
 	_vec.push_back(L"CTreeScript");
 	_vec.push_back(L"CWWallScript");
 	_vec.push_back(L"CWWCScript");
@@ -69,6 +85,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 
 void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
+	_vec.push_back("CArrowScript");
 	_vec.push_back("CButtonScript");
 	_vec.push_back("CCommandScript");
 	_vec.push_back("CCrystalScript");
@@ -76,6 +93,10 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CEditorMouseScript");
 	_vec.push_back("CHuntScript");
 	_vec.push_back("CInfectedGiantScript");
+	_vec.push_back("CInfectedMedium_A");
+	_vec.push_back("CInfectedMedium_B");
+	_vec.push_back("CInfectedStrong_A");
+	_vec.push_back("CInfectedVenom");
 	_vec.push_back("CInterfaceScript");
 	_vec.push_back("CLevelCameraScript");
 	_vec.push_back("CLightScript");
@@ -86,15 +107,18 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CPlayerScript");
 	_vec.push_back("CPOSScript");
 	_vec.push_back("CQuarryScript");
+	_vec.push_back("CRangerScript");
 	_vec.push_back("CRefAniScript");
 	_vec.push_back("CSawScript");
 	_vec.push_back("CSCScript");
 	_vec.push_back("CSelectUnitScript");
 	_vec.push_back("CShadowScript");
+	_vec.push_back("CSniperScript");
 	_vec.push_back("CSoldierScript");
 	_vec.push_back("CTentScript");
 	_vec.push_back("CTerrainScript");
 	_vec.push_back("CTileScript");
+	_vec.push_back("CTitanScript");
 	_vec.push_back("CTreeScript");
 	_vec.push_back("CWWallScript");
 	_vec.push_back("CWWCScript");
@@ -103,6 +127,8 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 
 CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
+	if (L"CArrowScript" == _strScriptName)
+		return new CArrowScript;
 	if (L"CButtonScript" == _strScriptName)
 		return new CButtonScript;
 	if (L"CCommandScript" == _strScriptName)
@@ -117,6 +143,14 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CHuntScript;
 	if (L"CInfectedGiantScript" == _strScriptName)
 		return new CInfectedGiantScript;
+	if (L"CInfectedMedium_A" == _strScriptName)
+		return new CInfectedMedium_A;
+	if (L"CInfectedMedium_B" == _strScriptName)
+		return new CInfectedMedium_B;
+	if (L"CInfectedStrong_A" == _strScriptName)
+		return new CInfectedStrong_A;
+	if (L"CInfectedVenom" == _strScriptName)
+		return new CInfectedVenom;
 	if (L"CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if (L"CLevelCameraScript" == _strScriptName)
@@ -137,6 +171,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CPOSScript;
 	if (L"CQuarryScript" == _strScriptName)
 		return new CQuarryScript;
+	if (L"CRangerScript" == _strScriptName)
+		return new CRangerScript;
 	if (L"CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
 	if (L"CSawScript" == _strScriptName)
@@ -147,6 +183,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CSelectUnitScript;
 	if (L"CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if (L"CSniperScript" == _strScriptName)
+		return new CSniperScript;
 	if (L"CSoldierScript" == _strScriptName)
 		return new CSoldierScript;
 	if (L"CTentScript" == _strScriptName)
@@ -155,6 +193,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTerrainScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
+	if (L"CTitanScript" == _strScriptName)
+		return new CTitanScript;
 	if (L"CTreeScript" == _strScriptName)
 		return new CTreeScript;
 	if (L"CWWallScript" == _strScriptName)
@@ -168,6 +208,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 
 CScript * CScriptMgr::GetScript(const string& _strScriptName)
 {
+	if ("CArrowScript" == _strScriptName)
+		return new CArrowScript;
 	if ("CButtonScript" == _strScriptName)
 		return new CButtonScript;
 	if ("CCommandScript" == _strScriptName)
@@ -182,6 +224,14 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CHuntScript;
 	if ("CInfectedGiantScript" == _strScriptName)
 		return new CInfectedGiantScript;
+	if ("CInfectedMedium_A" == _strScriptName)
+		return new CInfectedMedium_A;
+	if ("CInfectedMedium_B" == _strScriptName)
+		return new CInfectedMedium_B;
+	if ("CInfectedStrong_A" == _strScriptName)
+		return new CInfectedStrong_A;
+	if ("CInfectedVenom" == _strScriptName)
+		return new CInfectedVenom;
 	if ("CInterfaceScript" == _strScriptName)
 		return new CInterfaceScript;
 	if ("CLevelCameraScript" == _strScriptName)
@@ -202,6 +252,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CPOSScript;
 	if ("CQuarryScript" == _strScriptName)
 		return new CQuarryScript;
+	if ("CRangerScript" == _strScriptName)
+		return new CRangerScript;
 	if ("CRefAniScript" == _strScriptName)
 		return new CRefAniScript;
 	if ("CSawScript" == _strScriptName)
@@ -212,6 +264,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CSelectUnitScript;
 	if ("CShadowScript" == _strScriptName)
 		return new CShadowScript;
+	if ("CSniperScript" == _strScriptName)
+		return new CSniperScript;
 	if ("CSoldierScript" == _strScriptName)
 		return new CSoldierScript;
 	if ("CTentScript" == _strScriptName)
@@ -220,6 +274,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTerrainScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
+	if ("CTitanScript" == _strScriptName)
+		return new CTitanScript;
 	if ("CTreeScript" == _strScriptName)
 		return new CTreeScript;
 	if ("CWWallScript" == _strScriptName)
@@ -235,6 +291,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 {
 	switch (_iScriptType)
 	{
+	case (UINT)SCRIPT_TYPE::ARROWSCRIPT:
+		return new CArrowScript;
+		break;
 	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
 		return new CButtonScript;
 		break;
@@ -255,6 +314,18 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
 		return new CInfectedGiantScript;
+		break;
+	case (UINT)SCRIPT_TYPE::INFECTEDMEDIUM_A:
+		return new CInfectedMedium_A;
+		break;
+	case (UINT)SCRIPT_TYPE::INFECTEDMEDIUM_B:
+		return new CInfectedMedium_B;
+		break;
+	case (UINT)SCRIPT_TYPE::INFECTEDSTRONG_A:
+		return new CInfectedStrong_A;
+		break;
+	case (UINT)SCRIPT_TYPE::INFECTEDVENOM:
+		return new CInfectedVenom;
 		break;
 	case (UINT)SCRIPT_TYPE::INTERFACESCRIPT:
 		return new CInterfaceScript;
@@ -286,6 +357,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::QUARRYSCRIPT:
 		return new CQuarryScript;
 		break;
+	case (UINT)SCRIPT_TYPE::RANGERSCRIPT:
+		return new CRangerScript;
+		break;
 	case (UINT)SCRIPT_TYPE::REFANISCRIPT:
 		return new CRefAniScript;
 		break;
@@ -301,6 +375,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::SHADOWSCRIPT:
 		return new CShadowScript;
 		break;
+	case (UINT)SCRIPT_TYPE::SNIPERSCRIPT:
+		return new CSniperScript;
+		break;
 	case (UINT)SCRIPT_TYPE::SOLDIERSCRIPT:
 		return new CSoldierScript;
 		break;
@@ -312,6 +389,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
+		break;
+	case (UINT)SCRIPT_TYPE::TITANSCRIPT:
+		return new CTitanScript;
 		break;
 	case (UINT)SCRIPT_TYPE::TREESCRIPT:
 		return new CTreeScript;
@@ -333,6 +413,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::ARROWSCRIPT:
+		return L"CArrowScript";
+		break;
+
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return L"CButtonScript";
 		break;
@@ -359,6 +443,22 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
 		return L"CInfectedGiantScript";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDMEDIUM_A:
+		return L"CInfectedMedium_A";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDMEDIUM_B:
+		return L"CInfectedMedium_B";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDSTRONG_A:
+		return L"CInfectedStrong_A";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDVENOM:
+		return L"CInfectedVenom";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:
@@ -401,6 +501,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CQuarryScript";
 		break;
 
+	case SCRIPT_TYPE::RANGERSCRIPT:
+		return L"CRangerScript";
+		break;
+
 	case SCRIPT_TYPE::REFANISCRIPT:
 		return L"CRefAniScript";
 		break;
@@ -421,6 +525,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CShadowScript";
 		break;
 
+	case SCRIPT_TYPE::SNIPERSCRIPT:
+		return L"CSniperScript";
+		break;
+
 	case SCRIPT_TYPE::SOLDIERSCRIPT:
 		return L"CSoldierScript";
 		break;
@@ -435,6 +543,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return L"CTileScript";
+		break;
+
+	case SCRIPT_TYPE::TITANSCRIPT:
+		return L"CTitanScript";
 		break;
 
 	case SCRIPT_TYPE::TREESCRIPT:
@@ -461,6 +573,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 {
 	switch ((SCRIPT_TYPE)_pScript->GetScriptType())
 	{
+	case SCRIPT_TYPE::ARROWSCRIPT:
+		return "CArrowScript";
+		break;
+
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return "CButtonScript";
 		break;
@@ -487,6 +603,22 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::INFECTEDGIANTSCRIPT:
 		return "CInfectedGiantScript";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDMEDIUM_A:
+		return "CInfectedMedium_A";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDMEDIUM_B:
+		return "CInfectedMedium_B";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDSTRONG_A:
+		return "CInfectedStrong_A";
+		break;
+
+	case SCRIPT_TYPE::INFECTEDVENOM:
+		return "CInfectedVenom";
 		break;
 
 	case SCRIPT_TYPE::INTERFACESCRIPT:
@@ -529,6 +661,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CQuarryScript";
 		break;
 
+	case SCRIPT_TYPE::RANGERSCRIPT:
+		return "CRangerScript";
+		break;
+
 	case SCRIPT_TYPE::REFANISCRIPT:
 		return "CRefAniScript";
 		break;
@@ -549,6 +685,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CShadowScript";
 		break;
 
+	case SCRIPT_TYPE::SNIPERSCRIPT:
+		return "CSniperScript";
+		break;
+
 	case SCRIPT_TYPE::SOLDIERSCRIPT:
 		return "CSoldierScript";
 		break;
@@ -563,6 +703,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
+		break;
+
+	case SCRIPT_TYPE::TITANSCRIPT:
+		return "CTitanScript";
 		break;
 
 	case SCRIPT_TYPE::TREESCRIPT:
