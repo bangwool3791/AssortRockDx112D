@@ -4,18 +4,20 @@
 
 
 CInterfaceMgr::CInterfaceMgr()
+	:m_pBuildObj{}
+	, m_pTarget{}
 {
 
 }
 
 CInterfaceMgr::~CInterfaceMgr()
 {
-
+	Safe_Delete(m_pBuildObj);
 }
 
 CGameObject* CInterfaceMgr::GetTarget()
 {
-	if(m_pTarget)
+	if (m_pTarget)
 		if (m_pTarget->IsDead())
 			m_pTarget = nullptr;
 

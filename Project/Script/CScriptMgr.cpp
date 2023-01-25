@@ -3,6 +3,7 @@
 
 #include "CArrowScript.h"
 #include "CButtonScript.h"
+#include "CCircleArrowScript.h"
 #include "CCommandScript.h"
 #include "CCrystalScript.h"
 #include "CDragScript.h"
@@ -44,6 +45,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CArrowScript");
 	_vec.push_back(L"CButtonScript");
+	_vec.push_back(L"CCircleArrowScript");
 	_vec.push_back(L"CCommandScript");
 	_vec.push_back(L"CCrystalScript");
 	_vec.push_back(L"CDragScript");
@@ -87,6 +89,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CArrowScript");
 	_vec.push_back("CButtonScript");
+	_vec.push_back("CCircleArrowScript");
 	_vec.push_back("CCommandScript");
 	_vec.push_back("CCrystalScript");
 	_vec.push_back("CDragScript");
@@ -131,6 +134,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CArrowScript;
 	if (L"CButtonScript" == _strScriptName)
 		return new CButtonScript;
+	if (L"CCircleArrowScript" == _strScriptName)
+		return new CCircleArrowScript;
 	if (L"CCommandScript" == _strScriptName)
 		return new CCommandScript;
 	if (L"CCrystalScript" == _strScriptName)
@@ -212,6 +217,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CArrowScript;
 	if ("CButtonScript" == _strScriptName)
 		return new CButtonScript;
+	if ("CCircleArrowScript" == _strScriptName)
+		return new CCircleArrowScript;
 	if ("CCommandScript" == _strScriptName)
 		return new CCommandScript;
 	if ("CCrystalScript" == _strScriptName)
@@ -296,6 +303,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
 		return new CButtonScript;
+		break;
+	case (UINT)SCRIPT_TYPE::CIRCLEARROWSCRIPT:
+		return new CCircleArrowScript;
 		break;
 	case (UINT)SCRIPT_TYPE::COMMANDSCRIPT:
 		return new CCommandScript;
@@ -419,6 +429,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return L"CButtonScript";
+		break;
+
+	case SCRIPT_TYPE::CIRCLEARROWSCRIPT:
+		return L"CCircleArrowScript";
 		break;
 
 	case SCRIPT_TYPE::COMMANDSCRIPT:
@@ -579,6 +593,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return "CButtonScript";
+		break;
+
+	case SCRIPT_TYPE::CIRCLEARROWSCRIPT:
+		return "CCircleArrowScript";
 		break;
 
 	case SCRIPT_TYPE::COMMANDSCRIPT:

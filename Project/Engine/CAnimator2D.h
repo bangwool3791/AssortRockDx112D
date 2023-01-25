@@ -17,8 +17,8 @@ private:
 
     bool                                    m_bRepeat;
     wstring                                 m_strKey;
-
 public:
+    virtual void begin() override;
     virtual void finaltick() override;
 public:
     const wstring& GetKey();
@@ -72,8 +72,10 @@ public:
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
     void CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimation);
     CAnimation2D* FindAnimation(const wstring& _strKey);
+    CAnimation2D* EditAnimation(const wstring& _origin, const wstring& _dest);
     int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
     int  Delete_Animation2D();
+    int  Delete_Animation2D(int _iIndex);
     void Play();
     void Play(const wstring& _strKey);
     void Play(const wstring& _strKey, bool _bRepeat);

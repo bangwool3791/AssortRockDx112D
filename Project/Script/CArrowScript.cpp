@@ -103,33 +103,33 @@ void CArrowScript::Overlap(CCollider2D* _pOther)
 
 	if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
 	{
-		iHp = m_pTargetObject->GetScript< CInfectedGiantScript>()->GetHp();
+		iHp = _pOther->GetOwner()->GetScript< CInfectedGiantScript>()->GetHp();
 		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedGiantScript>()->SetHp(iHp);
+		_pOther->GetOwner()->GetScript< CInfectedGiantScript>()->SetHp(iHp);
 	}
 	else if (!lstrcmp(L"CInfectedMedium_A_", wstrName.c_str()))
 	{
-		iHp = m_pTargetObject->GetScript< CInfectedMedium_A>()->GetHp();
+		iHp = _pOther->GetOwner()->GetScript< CInfectedMedium_A>()->GetHp();
 		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedMedium_A>()->SetHp(iHp);
+		_pOther->GetOwner()->GetScript< CInfectedMedium_A>()->SetHp(iHp);
 	}
 	else if (!lstrcmp(L"CInfectedMedium_B_", wstrName.c_str()))
 	{
-		iHp = m_pTargetObject->GetScript< CInfectedMedium_B>()->GetHp();
+		iHp = _pOther->GetOwner()->GetScript< CInfectedMedium_B>()->GetHp();
 		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedMedium_B>()->SetHp(iHp);
+		_pOther->GetOwner()->GetScript< CInfectedMedium_B>()->SetHp(iHp);
 	}
 	else if (!lstrcmp(L"CInfectedStrong_A_", wstrName.c_str()))
 	{
-		iHp = m_pTargetObject->GetScript< CInfectedStrong_A>()->GetHp();
+		iHp = _pOther->GetOwner()->GetScript< CInfectedStrong_A>()->GetHp();
 		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedStrong_A>()->SetHp(iHp);
+		_pOther->GetOwner()->GetScript< CInfectedStrong_A>()->SetHp(iHp);
 	}
 	else if (!lstrcmp(L"CInfectedVenom", wstrName.c_str()))
 	{
-		iHp = m_pTargetObject->GetScript< CInfectedVenom>()->GetHp();
+		iHp = _pOther->GetOwner()->GetScript< CInfectedVenom>()->GetHp();
 		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedVenom>()->SetHp(iHp);
+		_pOther->GetOwner()->GetScript< CInfectedVenom>()->SetHp(iHp);
 	}
 
 	Destroy();

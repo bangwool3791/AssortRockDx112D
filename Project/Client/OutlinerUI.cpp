@@ -156,7 +156,6 @@ void OutlinerUI::render_update()
 		{
 			if (((CGameObject*)(m_Node->GetData()))->DeleteComponent(m_strComponentName))
 			{
-
 			}
 			else
 			{
@@ -171,7 +170,9 @@ void OutlinerUI::render_update()
 		{
 			if (((CGameObject*)(m_Node->GetData()))->DeleteScript(m_strScriptName))
 			{
-
+				//인스펙터 타겟 오브젝트 삭제 시 
+				InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
+				Inspector->InitializeScriptUI();
 			}
 			else
 			{

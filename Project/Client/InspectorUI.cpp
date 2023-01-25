@@ -199,6 +199,41 @@ void InspectorUI::SetTargetObject(CGameObject* _Target)
 	//}
 }
 
+void InspectorUI::InitializeScriptUI()
+{
+	if (nullptr == m_TargetObj)
+	{
+		for (UINT i{}; i < m_vecScriptUI.size(); ++i)
+		{
+			m_vecScriptUI[i]->Close();
+		}
+	}
+	else
+	{
+		for (UINT i{}; i < m_vecScriptUI.size(); ++i)
+			m_vecScriptUI[i]->Close();
+
+
+		const vector<CScript*>& scripts = m_TargetObj->GetScripts();
+
+		if (m_vecScriptUI.size() < scripts.size())
+		{
+			for (UINT i{}; i < scripts.size() - m_vecScriptUI.size(); ++i)
+			{
+				ScriptUI* pScript = new ScriptUI;
+				pScript->Close();
+				AddChild(pScript);
+				m_vecScriptUI.push_back(pScript);
+			}
+		}
+
+		for (UINT i{}; i < scripts.size(); ++i)
+		{
+			m_vecScriptUI[i]->Open();
+			m_vecScriptUI[i]->SetTargetScript(scripts[i]);
+		}
+	}
+}
 void InspectorUI::SetTargetResource(CRes* _Resource)
 {
 	if (nullptr != m_TargetObj)

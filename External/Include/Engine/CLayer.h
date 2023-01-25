@@ -27,7 +27,7 @@ private :
 public :
 	const vector<CGameObject*>& GetParentObjects() { return m_vecParent; }
 	const vector<CGameObject*>& GetObjects() { return m_vecObjects; }
-
+	CGameObject* FindParent(const wstring& _name);
 	void RegisterObject(auto _pObj) { m_vecObjects.push_back(_pObj); }
 	void clear()					{ m_vecObjects.clear(); }
 	CLONE_DUMMY(CLayer);

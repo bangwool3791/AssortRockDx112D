@@ -15,6 +15,7 @@ CSCScript::CSCScript()
 	, m_vMousePos{}
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
+	, m_pGameObject{}
 {
 	SetName(L"CSCScript");
 }
@@ -68,9 +69,9 @@ void CSCScript::finaltick()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vPos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
+			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
-			tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
+			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
 			if (-1 != m_iIndex)
 			{
@@ -103,6 +104,11 @@ void CSCScript::finaltick()
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
+
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
+				CGameObject* pObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				Instantiate(pObj, m_vMousePos, 0);
 			}
 			m_fDt2 = 0.5f;
 		}
@@ -119,6 +125,54 @@ void CSCScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
 	{
+		if (KEY_PRESSED(KEY::LBTN))
+		{
+			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+
+			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+			XMVECTOR det; //Determinant, needed for matrix inverse function call
+			Vector3 origin = Vector3(p.x, p.y, 0);
+			Vector3 faraway = Vector3(p.x, p.y, 1);
+
+			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
+			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+			Vector3 raydirection = rayend - rayorigin;
+			raydirection.Normalize();
+			Ray ray;
+			ray.position = rayorigin;
+			ray.direction = raydirection;
+			Vec3 vPos{};
+
+			if (GetOwner()->Transform()->Picking(ray, vPos))
+			{
+				CInterfaceMgr::GetInst()->SetTarget(GetOwner());
+			}
+		}
+	}
+	else if (m_eBuildState == BUILD_STATE::CREATE_UNIT)
+	{
+		if (m_fDt >= 10.f)
+		{
+			Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(m_strPrefab);
+			CGameObject* pUnit = prefab->Instantiate();
+			Vec3 vPos = Transform()->GetRelativePos();
+			vPos.z -= (Transform()->GetRelativeScale().z + pUnit->Transform()->GetRelativePos().z) * 0.5f;
+
+			Instantiate(pUnit, vPos, 1);
+
+			m_strPrefab.clear();
+			m_strPrefab.shrink_to_fit();
+
+			m_eBuildState = BUILD_STATE::COMPLETE;
+			m_fDt = 0.f;
+
+			m_pCircleArrow->Destroy();
+			m_pCircleArrow = nullptr;
+		}
 	}
 }
 
@@ -307,4 +361,41 @@ bool  CSCScript::IsBlocked(int _iTile)
 			return true;
 	}
 	return false;
+}
+
+void CSCScript::CreateUnit(const wstring& _str)
+{
+	if (BUILD_STATE::COMPLETE == m_eBuildState && m_strPrefab.empty())
+	{
+		CGameObject* pButton{};
+
+		if (!lstrcmp(_str.data(), L"CRangerPrefab"))
+		{
+			pButton = CInterfaceMgr::GetInst()->GetBtn(0);
+		}
+		else if (!lstrcmp(_str.data(), L"SoldierPrefab"))
+		{
+			pButton = CInterfaceMgr::GetInst()->GetBtn(1);
+		}
+		else if (!lstrcmp(_str.data(), L"CSniperPrefab"))
+		{
+			pButton = CInterfaceMgr::GetInst()->GetBtn(2);
+		}
+		
+		Ptr<CPrefab> pCircleArrowPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CCircleArrowPrefab");
+
+		CGameObject* pParent = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(31)->FindParent(L"Interface");
+
+		assert(pParent);
+
+		m_pCircleArrow = pCircleArrowPrefab->Instantiate();
+
+		m_pCircleArrow->Transform()->SetRelativePos(pButton->Transform()->GetRelativePos());
+
+		Instantiate(m_pCircleArrow, pParent, 31);
+
+		m_eBuildState = BUILD_STATE::CREATE_UNIT;
+		m_strPrefab = _str;
+		m_fDt = 0.f;
+	}
 }

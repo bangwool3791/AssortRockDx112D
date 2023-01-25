@@ -74,6 +74,7 @@ public:
 	void Create(const wstring& _strKey, Ptr<CTexture> _AtlasTex, vector<tDxatlas> frames, float _FPS);
 	int  Add_Animation2D(Vec2 _vLeftTop, Vec2 _vSlice, float _fDuration, Vec2 _vFullSize);
 	int  Delete_Animation2D();
+	int  Delete_Animation2D(int _iIndex);
 	void Reset()
 	{
 		m_fAccTime = 0.f;

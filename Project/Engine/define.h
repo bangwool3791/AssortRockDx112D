@@ -321,6 +321,7 @@ enum TAP_CATEGORY
 	RESOURCE,
 	INDUSTRY,
 	DEFENSE,
+	SOLDIER_CMD,
 };
 
 enum class BUILD_STATE
@@ -329,6 +330,7 @@ enum class BUILD_STATE
 	BUILD,
 	COMPLETE,
 	DESTROY,
+	CREATE_UNIT,
 };
 
 enum class TILE_TYPE

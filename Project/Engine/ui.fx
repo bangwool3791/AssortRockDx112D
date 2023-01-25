@@ -46,7 +46,27 @@ float4 PS_UI(VS_OUT _in) : SV_Target
 
     float2 vUV = (UVLeftTop + UVSlice * _in.vUV);
 
-    if (0 < UVSlice2.x && 0 < UVSlice2.y)
+    if (g_iAnim2DUse)
+    {
+        float2 vDiff = (g_vFullSize - g_vSlice) / 2.f;
+        float2 vUV = (g_vLeftTop - vDiff - g_vOffset) + (g_vFullSize * _in.vUV);
+
+        if (vUV.x < g_vLeftTop.x || g_vLeftTop.x + g_vSlice.x < vUV.x
+            || vUV.y < g_vLeftTop.y || g_vLeftTop.y + g_vSlice.y < vUV.y)
+        {
+            discard;
+        }
+
+        float2 vUV2 = (UVLeftTop2 + UVSlice2 * _in.vUV);
+
+        color1 = g_Atals.Sample(g_sam_0, vUV);
+        color2 = g_tex_1.Sample(g_sam_0, vUV2);
+        alphaValue = g_tex_2.Sample(g_sam_0, _in.vUV);
+
+        float4 blendColor = (alphaValue * color1) + ((1.0 - alphaValue) * color2);
+        return blendColor;
+    }
+    else if (0 < UVSlice2.x && 0 < UVSlice2.y)
     {
         float2 vUV2 = (UVLeftTop2 + UVSlice2 * _in.vUV);
         //if (vUV.x < UVLeftTop.x

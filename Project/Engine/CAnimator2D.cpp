@@ -269,6 +269,10 @@ void CAnimator2D::CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimatio
     }
 }
 
+void CAnimator2D::begin()
+{
+}
+
 void CAnimator2D::finaltick()
 {
     if (!IsValid(m_pCurAnim))
@@ -382,11 +386,33 @@ int CAnimator2D::Delete_Animation2D()
     return m_pCurAnim->Delete_Animation2D();
 }
 
+int CAnimator2D::Delete_Animation2D(int _iIndex)
+{
+    return m_pCurAnim->Delete_Animation2D(_iIndex);
+}
+
+CAnimation2D* CAnimator2D::EditAnimation(const wstring& _origin, const wstring& _dest)
+{
+    auto iter{ m_mapAnim.begin() };
+    CAnimation2D* pAnimation2D = iter->second;
+
+    for (; iter != m_mapAnim.end(); ++iter)
+    {
+        if (!lstrcmp(iter->first.c_str(), _origin.c_str()))
+        {
+            m_mapAnim.erase(iter);
+            break;
+        }
+    }
+    pAnimation2D->SetName(_dest);
+    m_mapAnim.insert(make_pair(_dest, pAnimation2D));
+    return pAnimation2D;
+}
+
 void CAnimator2D::SaveToFile(FILE* _File)
 {
     COMPONENT_TYPE type = GetType();
     fwrite(&type, sizeof(UINT), 1, _File);
-
     // Animation ÀúÀå
     size_t iAnimCount = m_mapAnim.size();
     fwrite(&iAnimCount, sizeof(size_t), 1, _File);
@@ -395,6 +421,7 @@ void CAnimator2D::SaveToFile(FILE* _File)
     {
         pair.second->SaveToFile(_File);
     }
+
 }
 
 void CAnimator2D::LoadFromFile(FILE* _File)
@@ -547,9 +574,6 @@ CAnimation2D* CAnimator2D::Add_Animation(const wstring& _strKey, Ptr<CTexture> _
 
 CAnimation2D* CAnimator2D::Delete_Animation(const wstring& _strName)
 {
-    if (m_mapAnim.size() <= 1)
-        return nullptr;
-
     auto iter = m_mapAnim.find(_strName);
 
     if (iter == m_mapAnim.end())
@@ -559,9 +583,13 @@ CAnimation2D* CAnimator2D::Delete_Animation(const wstring& _strName)
 
     iter = m_mapAnim.erase(iter);
 
-    if (m_mapAnim.size() > 0)
+    if (iter == m_mapAnim.end() && m_mapAnim.size() > 0)
     {
         --iter;
+        return iter->second;
+    }
+    else if(m_mapAnim.size() > 0)
+    {
         return iter->second;
     }
     else

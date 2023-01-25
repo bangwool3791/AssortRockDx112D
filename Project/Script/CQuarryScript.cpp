@@ -62,9 +62,9 @@ void CQuarryScript::tick()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vPos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
+			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
-			tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
+			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
 			if (m_iIndex != tTile.iIndex)
 			{
@@ -173,6 +173,11 @@ void CQuarryScript::tick()
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
+
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
+				CGameObject* pObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				Instantiate(pObj, m_vMousePos , 0);
 			}
 		}
 	}

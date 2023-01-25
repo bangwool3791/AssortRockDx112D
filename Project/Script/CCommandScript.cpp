@@ -65,33 +65,6 @@ void CCommandScript::begin()
 	SetTileInfo(que, result,(UINT)TILE_TYPE::NOTUSED);
 
 	GetOwner()->Transform()->SetRelativePos(ttile.vPos);
-	//if ((ttile.iIndex / TILEX) % 2 == 0)
-	//{
-	//	result.push(ttile.iIndex);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	SetTileInfo(que, result);
-	//	//SetTileInfoEven(que, result);
-	//}
-	//else if ((ttile.iIndex / TILEX) % 2 == 1)
-	//{
-	//	result.push(ttile.iIndex);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	SetTileInfoOdd(que, result);
-	//	//SetTileInfoOdd(que, result);
-	//}
-
 }
 
 void CCommandScript::tick()

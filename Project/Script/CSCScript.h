@@ -5,10 +5,13 @@ class CSCScript :
     public CScript
 {
 private:
+    wstring                     m_strPrefab;
     BUILD_STATE                 m_eBuildState;
     Vec3                        m_vMousePos;
     CGameObject* m_pLevelMouseObject;
     CGameObject* m_pTileObject;
+    CGameObject* m_pGameObject;
+    CGameObject* m_pCircleArrow{};
     bool                        m_bCheck[40000]{};
     vector<tBlock>              m_vecBlock{};
     UINT                        m_iIndex = 0;
@@ -32,6 +35,8 @@ public:
 public:
     virtual void SaveToFile(FILE* _File) override;
     virtual void LoadFromFile(FILE* _File) override;
+public :
+    void CreateUnit(const wstring& _str);
 public:
     CLONE(CSCScript);
 public:

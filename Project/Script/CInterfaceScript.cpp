@@ -8,6 +8,7 @@
 #include <Engine\CInterfaceMgr.h>
 
 #include "CSoldierScript.h"
+#include "CSCScript.h"
 #include "CInfectedGiantScript.h"
 #include "CButtonScript.h"
 
@@ -66,14 +67,22 @@ void CInterfaceScript::tick()
 		{
 			if (lstrcmp(m_pTarget->GetName().c_str(), wstrName.c_str()))
 			{
-				for (size_t i{}; i < 6; ++i)
-					m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn(0);
+				if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
+				{
+					for (size_t i{}; i < 6; ++i)
+						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)COMMAND_CENTER);
+				}				
+				else if (!lstrcmp(L"SC", wstrName.c_str()))
+				{
+					for (size_t i{}; i < 6; ++i)
+						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)SOLDIER_CMD);
+				}
 			}
 		}
 		
 		m_pTarget = pGameObject;
 
-		if (!lstrcmp(L"CommandCenter", wstrName.c_str()))
+		if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
 		{
 			for (size_t i{}; i < 6; ++i)
 			{
@@ -111,13 +120,21 @@ void CInterfaceScript::tick()
 						case 0:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 							break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
-							return;
+
+							if (CInterfaceMgr::GetInst()->GetBuildObj())
+							{
+								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+							}
+							break;
 						}
 					}
 					else if (RESOURCE == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
@@ -127,25 +144,37 @@ void CInterfaceScript::tick()
 						case 0:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 1:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 2:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
-							return;
+
+							if (CInterfaceMgr::GetInst()->GetBuildObj())
+							{
+								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+							}
+							break;
 						}
 					}
 					else if (INDUSTRY == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
@@ -155,24 +184,36 @@ void CInterfaceScript::tick()
 						case 0:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 1:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"POSPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 2:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWorkshopPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+
+							if (CInterfaceMgr::GetInst()->GetBuildObj())
+							{
+								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+							}
 							break;
 						}
 					}
@@ -183,12 +224,20 @@ void CInterfaceScript::tick()
 						case 0:
 						{
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
-							Instantiate(pUIPrefab->Instantiate(), 1);
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 0);
 						}
 						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+
+							if (CInterfaceMgr::GetInst()->GetBuildObj())
+							{
+								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+							}
 							break;
 						}
 					}
@@ -200,6 +249,38 @@ void CInterfaceScript::tick()
 		* 마우스 이동
 		* UI Description 표기
 		*/
+		else if (!lstrcmp(L"SC", wstrName.c_str()))
+		{
+		for (size_t i{}; i < 6; ++i)
+		{
+			if (nullptr == m_arrTapButton[i])
+				continue;
+
+			if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
+			{
+				if (SOLDIER_CMD == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+				{
+					switch (i)
+					{
+					case 0:
+						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CRangerPrefab");
+						break;
+					case 1:
+						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"SoldierPrefab");
+						break;
+					case 2:
+						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CSniperPrefab");
+						break;
+						//끝
+					case 3:
+
+						break;
+					}
+				}
+			}
+			//버튼 토글
+		}
+		}
 		else if (!lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CInfectedGiant", wstrName.c_str()))
 		{
 			if (KEY_PRESSED(KEY::LBTN))

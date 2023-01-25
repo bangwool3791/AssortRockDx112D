@@ -177,6 +177,7 @@ call CodeGen.exe</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CArrowScript.h" />
+    <ClInclude Include="CCircleArrowScript.h" />
     <ClInclude Include="CRangerScript.h" />
     <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
@@ -220,6 +221,7 @@ call CodeGen.exe</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CArrowScript.cpp" />
+    <ClCompile Include="CCircleArrowScript.cpp" />
     <ClCompile Include="CRangerScript.cpp" />
     <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />

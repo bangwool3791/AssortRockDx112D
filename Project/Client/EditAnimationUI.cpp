@@ -312,13 +312,13 @@ void EditAnimationUI::render_update()
     }
 
     ImGui::SameLine();
-    if (ImGui::Button("Edit", ImVec2(40.f, 20.f)))
+    if (ImGui::Button("Edit##1", ImVec2(40.f, 20.f)))
         m_pAnimator->SetState(ANIMATION_STATE::PAUSE);
 
     ImGui::SameLine();
     if (ImGui::Button("Del##1", ImVec2(40.f, 20.f)))
     {
-        m_iCurIdx = m_pAnimator->Delete_Animation2D();
+        m_iCurIdx = m_pAnimator->Delete_Animation2D(m_iCurIdx);
 
         if (0 > m_iCurIdx)
             m_iCurIdx = 0;
@@ -363,7 +363,7 @@ void EditAnimationUI::render_update()
     Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "Animation");
 
     if (ImGui::InputText("##5", m_szAnimation, IM_ARRAYSIZE(m_szAnimation)))
-        m_strAnimationName = m_szAnimation;
+        m_strEditName = m_szAnimation;
 
     ImGui::SameLine();
     if (ImGui::Button("Add##2", ImVec2(40.f, 20.f)))
@@ -412,9 +412,35 @@ void EditAnimationUI::render_update()
                 m_strAnimationName = string(pAnimator->GetName().begin(), pAnimator->GetName().end());
                 strcpy_s(m_szAnimation, m_strAnimationName.c_str());
 
-                if (m_vecAnimation.size() > 0)
+                if (m_vecAnimation.size() > 0 && m_iSelectedIdx != 0)
                     --m_iSelectedIdx;
             }
+        }
+    }
+
+    ImGui::SameLine();
+    if (ImGui::Button("Edit##2", ImVec2(40.f, 20.f)))
+    {
+        if (!m_strEditName.empty())
+        {
+            CAnimation2D* pAnimator = m_pAnimator->EditAnimation(wstring(m_strAnimationName.begin(), m_strAnimationName.end()), wstring(m_strEditName.begin(), m_strEditName.end()));
+            
+            for (auto iter{ m_vecAnimation.begin() }; iter != m_vecAnimation.end();)
+            {
+                if (!strcmp(m_strAnimationName.data(), iter->data()))
+                {
+                    iter = m_vecAnimation.erase(iter);
+                    break;
+                }
+                else
+                {
+                    ++iter;
+                }
+            }
+
+            m_strAnimationName = string(pAnimator->GetName().begin(), pAnimator->GetName().end());
+            m_vecAnimation.push_back(m_strAnimationName);
+            strcpy_s(m_szAnimation, m_strAnimationName.c_str());
         }
     }
 
@@ -503,7 +529,11 @@ void EditAnimationUI::render_update()
                         m_vecFrameIndex.push_back(std::to_string(i));
                     }
                 }
-                m_iCurIdx = (int)vecFrames.size() - 1;
+
+                if (vecFrames.size() > 0)
+                    m_iCurIdx = (int)vecFrames.size() - 1;
+                else
+                    m_iCurIdx = 0;
             }
 
             if (Selectable)

@@ -331,8 +331,8 @@ void CRangerScript::JpsAlgorithm(Int32 x, Int32 z)
 	Int32 z1 = tTile.iIndex / TILEX;
 	m_vecJps.clear();
 
-	cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
-	cout << "종료 타일 인덱스 " << x << " " << z << endl;
+	//cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
+	//cout << "종료 타일 인덱스 " << x << " " << z << endl;
 	if (x1 != x || z1 != z)
 	{
 		m_vecJps = CJpsMgr::GetInst()->Update(x1, z1, x, z);
@@ -349,17 +349,17 @@ void CRangerScript::BeginOverlap(CCollider2D* _pOther)
 
 void CRangerScript::Overlap(CCollider2D* _pOther)
 {
-	//Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
-	//Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
-	//Vec3 vDiff{};
-	//vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	//vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
-	//vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
-	//vRelativePos = vRelativePos.Normalize();
-	//
-	//Vec3 vPos = Transform()->GetRelativePos();
-	//
-	//Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
+	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
+	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
+	Vec3 vDiff{};
+	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+	vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
+	vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
+	vRelativePos = vRelativePos.Normalize();
+
+	Vec3 vPos = Transform()->GetRelativePos();
+
+	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
 }
 
 void CRangerScript::EndOverlap(CCollider2D* _pOther)

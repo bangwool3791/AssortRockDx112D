@@ -91,3 +91,19 @@ void CLayer::DeregisterObject(CGameObject* _pObj)
 	}
 	assert(nullptr);
 }
+
+
+CGameObject* CLayer::FindParent(const wstring& _name)
+{
+
+	auto iter{ m_vecParent.cbegin() };
+
+	for (; iter != m_vecParent.cend(); ++iter)
+	{
+		if (!lstrcmp((*iter)->GetName().data(), L"Interface"))
+		{
+			return *iter;
+		}
+	}
+	return nullptr;
+}

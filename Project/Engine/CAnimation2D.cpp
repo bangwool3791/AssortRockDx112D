@@ -164,6 +164,23 @@ int  CAnimation2D::Delete_Animation2D()
 	return m_iCurIdx;
 }
 
+int  CAnimation2D::Delete_Animation2D(int _iIndex)
+{
+	int iCur = 0;
+
+	for (auto iter{ m_vecFrm.begin() }; iter != m_vecFrm.end(); ++iter)
+	{
+		if (iCur == _iIndex)
+		{
+			iter = m_vecFrm.erase(iter);
+			m_iCurIdx = m_vecFrm.size() - 1;
+			break;
+		}
+		++iCur;
+	}
+	return m_iCurIdx;
+}
+
 void CAnimation2D::SetLeftTopX(float _fx, int _index)
 {
 	m_vecFrm[_index].vLeftTop.x = _fx / m_fWidth;

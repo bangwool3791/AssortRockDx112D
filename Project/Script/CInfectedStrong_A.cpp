@@ -158,13 +158,16 @@ void CInfectedStrong_A::tick()
 		if (m_fTick >= 2.f)
 		{
 			//피깍기
-			wstring wstrName = m_pTargetObject->GetName();
-
-			if (!lstrcmp(L"Soldier", wstrName.c_str()))
+			if (m_pTargetObject)
 			{
-				UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
-				iHp -= m_iAttack;
-				m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
+				wstring wstrName = m_pTargetObject->GetName();
+
+				if (!lstrcmp(L"Soldier", wstrName.c_str()))
+				{
+					UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
+					iHp -= m_iAttack;
+					m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
+				}
 			}
 
 			m_fTick -= 2.f;
@@ -308,8 +311,8 @@ void CInfectedStrong_A::JpsAlgorithm(Int32 x, Int32 z)
 	Int32 z1 = tTile.iIndex / TILEX;
 	m_vecJps.clear();
 
-	cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
-	cout << "종료 타일 인덱스 " << x << " " << z << endl;
+	//cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
+	//cout << "종료 타일 인덱스 " << x << " " << z << endl;
 	if (x1 != x || z1 != z)
 	{
 		m_vecJps = CJpsMgr::GetInst()->Update(x1, z1, x, z);

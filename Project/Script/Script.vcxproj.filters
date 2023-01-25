@@ -29,9 +29,6 @@
     <Filter Include="Scripts\05. CommandCenterScript">
       <UniqueIdentifier>{bda46d3b-75c4-4b08-b705-59aae8fa3f85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\06. TapButtonScript">
-      <UniqueIdentifier>{2abe6ad2-9ecd-4729-9305-cee8a8251b9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts\07. TerrainScript">
       <UniqueIdentifier>{013d2409-0d9c-4196-a1a7-719c8d67df0d}</UniqueIdentifier>
     </Filter>
@@ -113,6 +110,12 @@
     <Filter Include="Scripts\13. UnitScript\09. CTitanScript">
       <UniqueIdentifier>{c8433df0-7213-4c2b-b909-36266e46dd99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\02. InterfaceScript\14. CircleArrowScript">
+      <UniqueIdentifier>{fdff9788-c38b-44b2-b612-4149fa4f9b78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\02. InterfaceScript\06. TapButtonScript">
+      <UniqueIdentifier>{2abe6ad2-9ecd-4729-9305-cee8a8251b9e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -167,7 +170,7 @@
       <Filter>Scripts\02. InterfaceScript</Filter>
     </ClInclude>
     <ClInclude Include="CButtonScript.h">
-      <Filter>Scripts\06. TapButtonScript</Filter>
+      <Filter>Scripts\02. InterfaceScript\06. TapButtonScript</Filter>
     </ClInclude>
     <ClInclude Include="CMouseScript.h">
       <Filter>Scripts\04. MouseScript</Filter>
@@ -238,6 +241,9 @@
     <ClInclude Include="CTitanScript.h">
       <Filter>Scripts\13. UnitScript\09. CTitanScript</Filter>
     </ClInclude>
+    <ClInclude Include="CCircleArrowScript.h">
+      <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -292,7 +298,7 @@
       <Filter>Scripts\02. InterfaceScript</Filter>
     </ClCompile>
     <ClCompile Include="CButtonScript.cpp">
-      <Filter>Scripts\06. TapButtonScript</Filter>
+      <Filter>Scripts\02. InterfaceScript\06. TapButtonScript</Filter>
     </ClCompile>
     <ClCompile Include="CMouseScript.cpp">
       <Filter>Scripts\04. MouseScript</Filter>
@@ -362,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="CTitanScript.cpp">
       <Filter>Scripts\13. UnitScript\09. CTitanScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CCircleArrowScript.cpp">
+      <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

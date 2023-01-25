@@ -81,9 +81,9 @@ void CTentScript::finaltick()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vPos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
+			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
-			tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
+			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
 			if (-1 != m_iIndex)
 			{
@@ -118,6 +118,12 @@ void CTentScript::finaltick()
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
+
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
+				CGameObject* pObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				Instantiate(pObj, m_vMousePos, 0);
+
 			}
 			m_fDt2 = 0.5f;
 		}

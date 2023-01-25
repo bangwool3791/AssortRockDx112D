@@ -95,11 +95,11 @@ void CEventMgr::tick()
 			{
 			case RES_TYPE::PREFAB:
 			{
-				if (((CEntity*)iter->lParam)->GetName().empty())
+				if (((CRes*)iter->lParam)->GetName().empty())
 					break;
 
 				wchar_t sz_data[255] = {};
-				lstrcpy(sz_data, ((CEntity*)iter->lParam)->GetName().c_str());
+				lstrcpy(sz_data, ((CRes*)iter->lParam)->GetName().c_str());
 				wstring wstrRelativePath = lstrcat(sz_data, L"Prefab");
 				CResMgr::GetInst()->AddRes(wstrRelativePath, new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
 			}

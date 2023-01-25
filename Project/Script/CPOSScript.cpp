@@ -66,9 +66,9 @@ void CPOSScript::finaltick()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vPos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
+			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
-			tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
+			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
 			if (m_iIndex != tTile.iIndex)
 			{
@@ -118,6 +118,11 @@ void CPOSScript::finaltick()
 				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
+
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"POSPrefab");
+				CGameObject* pObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				Instantiate(pObj, m_vMousePos, 0);
 			}
 			m_vectoken.clear();
 			m_fDt -= 0.15f;

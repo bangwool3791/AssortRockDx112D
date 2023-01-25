@@ -82,9 +82,9 @@ void CWWallScript::finaltick()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vPos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
+			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
-			tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
+			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
 			if (-1 != m_iIndex)
 			{
@@ -113,8 +113,6 @@ void CWWallScript::finaltick()
 		{
 			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
-				Instantiate(pUIPrefab->Instantiate(), 1);
 
 				Int32 x = m_iIndex % TILEX;
 				Int32 z = m_iIndex / TILEZ;
@@ -128,6 +126,11 @@ void CWWallScript::finaltick()
 				m_fDt2 = 0.f;
 
 				m_arr[m_iIndex].bChecked = true;
+
+				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
+				CGameObject* pObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				Instantiate(pObj, m_vMousePos, 0);
 
 				ChildWallProcess();
 			}

@@ -26,7 +26,7 @@ public:
     void SetTargetObject(CGameObject* _Target);
     void SetTargetResource(CRes* _Resource);
     void SetLight(CGameObject* _Light);
-
+    void InitializeScriptUI();
     CGameObject* GetTargetObject() { return m_TargetObj; }
 private:
     virtual void update() override;

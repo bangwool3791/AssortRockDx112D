@@ -12,6 +12,8 @@ private:
     float            m_fDeltaTime = 0.f;
     float            m_fAccTime;
     float            m_fSpeed;
+    Int32            m_x;
+    Int32            m_z;
     Vec3             m_vDest;
     Vec3             m_vSource;
     CGameObject*     m_pTargetObject;

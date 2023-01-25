@@ -18,6 +18,12 @@ ScriptUI::~ScriptUI()
 
 void ScriptUI::render_update()
 {
+    if (!m_bOpen)
+        return;
+
+    if (nullptr == m_pTargetScript->GetOwner())
+        return;
+
     const char* name = CScriptMgr::GetScriptName(m_pTargetScript);
     if(nullptr != name)
     if (0 < strlen(name))
@@ -35,37 +41,40 @@ void ScriptUI::render_update()
 
 void ScriptUI::render_scriptparam()
 {
+    if (!m_bOpen)
+        return;
+
     if (nullptr == m_pTargetScript->GetOwner())
         return;
 
-    const vector<tScriptParam>& vecParam = m_pTargetScript->GetScriptParam();
+    //const vector<tScriptParam>& vecParam = m_pTargetScript->GetScriptParam();
 
-    for (size_t i = 0; i < vecParam.size(); ++i)
-    {
-        switch (vecParam[i].Type)
-        {
-        case SCRIPT_PARAM::INT:
-            break;
-        case SCRIPT_PARAM::FLOAT:
-            ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
-            break;
-        case SCRIPT_PARAM::VEC2:
-            break;
-        case SCRIPT_PARAM::VEC3:
-            break;
-        case SCRIPT_PARAM::VEC4:
-            break;
-        case SCRIPT_PARAM::TEXTURE:
-            break;
-        case SCRIPT_PARAM::MATERIAL:
-            break;
-        case SCRIPT_PARAM::PREFAB:
-            break;
-        case SCRIPT_PARAM::SOUND:
-            break;
-        default:
-            break;
-        }
+    //for (size_t i = 0; i < vecParam.size(); ++i)
+    //{
+    //    switch (vecParam[i].Type)
+    //    {
+    //    case SCRIPT_PARAM::INT:
+    //        break;
+    //    case SCRIPT_PARAM::FLOAT:
+    //        ParamUI::Param_Float(vecParam[i].strParamName, (float*)vecParam[i].pParam);
+    //        break;
+    //    case SCRIPT_PARAM::VEC2:
+    //        break;
+    //    case SCRIPT_PARAM::VEC3:
+    //        break;
+    //    case SCRIPT_PARAM::VEC4:
+    //        break;
+    //    case SCRIPT_PARAM::TEXTURE:
+    //        break;
+    //    case SCRIPT_PARAM::MATERIAL:
+    //        break;
+    //    case SCRIPT_PARAM::PREFAB:
+    //        break;
+    //    case SCRIPT_PARAM::SOUND:
+    //        break;
+    //    default:
+    //        break;
+    //    }
 
-    }
+    //}
 }

@@ -321,8 +321,8 @@ void CInfectedGiantScript::JpsAlgorithm(Int32 x, Int32 z)
 	Int32 z1 = tTile.iIndex / TILEX;
 	m_vecJps.clear();
 
-	cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
-	cout << "종료 타일 인덱스 " << x << " " << z << endl;
+	//cout << "시작 타일 인덱스 " << x1 << " " << z1 << endl;
+	//cout << "종료 타일 인덱스 " << x << " " << z << endl;
 	if (x1 != x || z1 != z)
 	{
 		m_vecJps = CJpsMgr::GetInst()->Update(x1, z1, x, z);

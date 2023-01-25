@@ -1,5 +1,6 @@
 CArrowScript
 CButtonScript
+CCircleArrowScript
 CCommandScript
 CCrystalScript
 CDragScript

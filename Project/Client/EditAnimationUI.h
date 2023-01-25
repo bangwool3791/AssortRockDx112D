@@ -27,6 +27,7 @@ private:
     EDIT_ANIMATION_MODE   m_eEditMode;
     char                  m_szAnimation[128];
     string                m_strAnimationName;
+    string                m_strEditName;
     Ptr<CTexture>         m_pAtlasTexture;
 
     vector<tAnim2DFrm>    m_vecFrames;

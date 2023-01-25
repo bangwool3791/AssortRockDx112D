@@ -12,9 +12,10 @@ private:
 	ImVec2			m_vSize;
 
 	bool			m_bSeperator;
-	bool			m_bOpen;
 	bool			m_bModal;
 
+protected:
+	bool			m_bOpen;
 public:	
 	const string& GetName() { return m_strName; }
 	UI* GetParent() { return m_ParentUI; }

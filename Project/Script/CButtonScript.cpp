@@ -246,6 +246,45 @@ void CButtonScript::begin()
 	m_arrTab[DEFENSE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
 	m_arrTab[DEFENSE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
+	m_arrTab[SOLDIER_CMD][0].Texture = TexPortraits;
+	m_arrTab[SOLDIER_CMD][0].vUV.x = 401.f / fPortraitWidth;
+	m_arrTab[SOLDIER_CMD][0].vUV.y = 498.f / fPortraitHeight;
+	m_arrTab[SOLDIER_CMD][0].vSlice = Vec2{ 130.f / fPortraitWidth, 175 / fPortraitHeight };
+	m_arrTab[SOLDIER_CMD][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[SOLDIER_CMD][1].Texture = TexPortraits;
+	m_arrTab[SOLDIER_CMD][1].vUV.x = 933.f / fPortraitWidth;
+	m_arrTab[SOLDIER_CMD][1].vUV.y = 635.f / fPortraitHeight;
+	m_arrTab[SOLDIER_CMD][1].vSlice = Vec2{ 130.f / fPortraitWidth, 175 / fPortraitHeight };
+	m_arrTab[SOLDIER_CMD][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[SOLDIER_CMD][2].Texture = TexPortraits;
+	m_arrTab[SOLDIER_CMD][2].vUV.x = 800.f / fPortraitWidth;
+	m_arrTab[SOLDIER_CMD][2].vUV.y = 498.f / fPortraitHeight;
+	m_arrTab[SOLDIER_CMD][2].vSlice = Vec2{ 130.f / fPortraitWidth, 175 / fPortraitHeight };
+	m_arrTab[SOLDIER_CMD][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[SOLDIER_CMD][3].Texture = m_IconAtlas;
+	m_arrTab[SOLDIER_CMD][3].vUV.x = 869.f / fIconWidth;
+	m_arrTab[SOLDIER_CMD][3].vUV.y = 295.f / fIconHeight;
+	m_arrTab[SOLDIER_CMD][3].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][3].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][3].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[SOLDIER_CMD][4].Texture = m_Atlas;
+	m_arrTab[SOLDIER_CMD][4].vUV = vLeftTop;
+	m_arrTab[SOLDIER_CMD][4].vSlice = vSlice;
+
+	m_arrTab[SOLDIER_CMD][5].Texture = m_IconAtlas;
+	m_arrTab[SOLDIER_CMD][5].vUV.x = 300.f / fIconWidth;
+	m_arrTab[SOLDIER_CMD][5].vUV.y = 710.f / fIconHeight;
+	m_arrTab[SOLDIER_CMD][5].vSlice = Vec2{ 100.f / fIconWidth, 120.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[SOLDIER_CMD][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
 	CInterfaceMgr::GetInst()->AddTapButton(GetOwner());
 }
 
