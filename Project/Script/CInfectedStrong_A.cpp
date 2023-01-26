@@ -15,7 +15,22 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Engine\CScript.h>
+
 #include "CSoldierScript.h"
+#include "CRangerScript.h"
+#include "CSniperScript.h"
+#include "CTitanScript.h"
+
+#include "CCommandScript.h"
+#include "CTentScript.h"
+#include "CHuntScript.h"
+#include "CSawScript.h"
+#include "CQuarryScript.h"
+#include "CSCScript.h"
+#include "CWWSScript.h"
+#include "CPOSScript.h"
+#include "CWWCScript.h"
+#include "CWWallScript.h"
 
 CInfectedStrong_A::CInfectedStrong_A()
 	:CScript{ INFECTEDSTRONG_A }
@@ -160,14 +175,7 @@ void CInfectedStrong_A::tick()
 			//ÇÇ±ï±â
 			if (m_pTargetObject)
 			{
-				wstring wstrName = m_pTargetObject->GetName();
-
-				if (!lstrcmp(L"Soldier", wstrName.c_str()))
-				{
-					UINT iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
-					iHp -= m_iAttack;
-					m_pTargetObject->GetScript< CSoldierScript>()->SetHp(iHp);
-				}
+				SetPlayerHP();
 			}
 
 			m_fTick -= 2.f;
@@ -315,7 +323,7 @@ void CInfectedStrong_A::JpsAlgorithm(Int32 x, Int32 z)
 	//cout << "Á¾·á Å¸ÀÏ ÀÎµ¦½º " << x << " " << z << endl;
 	if (x1 != x || z1 != z)
 	{
-		m_vecJps = CJpsMgr::GetInst()->Update(x1, z1, x, z);
+		m_vecJps = CJpsMgr::GetInst()->UpdateMonsterPath(x1, z1, x, z);
 
 		m_bActiveJps = true;
 
@@ -329,17 +337,20 @@ void CInfectedStrong_A::BeginOverlap(CCollider2D* _pOther)
 
 void CInfectedStrong_A::Overlap(CCollider2D* _pOther)
 {
-	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
-	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
+	if (UNIT_STATE::RUN == m_eState)
+		return;
+
+	Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+	Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
 	Vec3 vDiff{};
 	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
-	vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
-	vRelativePos = vRelativePos.Normalize();
+	vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+	Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+	vDir = vDir.Normalize();
 
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
+	Transform()->SetRelativePos(vPos + vDiff * vDir);
 }
 
 void CInfectedStrong_A::EndOverlap(CCollider2D* _pOther)
@@ -364,7 +375,7 @@ void CInfectedStrong_A::LoadFromFile(FILE* _File)
 
 void CInfectedStrong_A::ProcessEnemy()
 {
-	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(2)->GetParentObjects();
 
 	if (!vecEnemy.empty())
 	{
@@ -394,7 +405,7 @@ void CInfectedStrong_A::ProcessEnemy()
 
 void CInfectedStrong_A::ChaseEnemy()
 {
-	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+	vector<CGameObject*> vecEnemy = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(2)->GetParentObjects();
 
 	if (!vecEnemy.empty())
 	{
@@ -432,4 +443,87 @@ void CInfectedStrong_A::Move(Int32 _x, Int32 _z)
 	m_pTargetObject = nullptr;
 	m_bAttack = false;
 	JpsAlgorithm(_x, _z);
+}
+
+
+void CInfectedStrong_A::SetPlayerHP()
+{
+	wstring wstrName = m_pTargetObject->GetName();
+
+	UINT iHp{};
+
+	if (!lstrcmp(L"Soldier", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CSoldierScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CSniper", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript<CSniperScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript< CSniperScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CRanger", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript<CRangerScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CRangerScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(L"CTitan", wstrName.c_str()))
+	{
+		iHp = m_pTargetObject->GetScript<CTitanScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CTitanScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"CmdCenter"))
+	{
+		iHp = m_pTargetObject->GetScript<CCommandScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CCommandScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"Tent"))
+	{
+		iHp = m_pTargetObject->GetScript<CTentScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CTentScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"HuntHouse"))
+	{
+		iHp = m_pTargetObject->GetScript<CHuntScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CHuntScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"SawMill"))
+	{
+		iHp = m_pTargetObject->GetScript<CSawScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CSawScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"Quarry"))
+	{
+		iHp = m_pTargetObject->GetScript<CQuarryScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CQuarryScript>()->SetHp(iHp);
+
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"SC"))
+	{
+		iHp = m_pTargetObject->GetScript<CSCScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CSCScript>()->SetHp(iHp);
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"WoodWorkshop"))
+	{
+		iHp = m_pTargetObject->GetScript<CWWSScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CWWSScript>()->SetHp(iHp);
+
+	}
+	else if (!lstrcmp(wstrName.c_str(), L"POS"))
+	{
+		iHp = m_pTargetObject->GetScript<CPOSScript>()->GetHp();
+		iHp -= m_iAttack;
+		m_pTargetObject->GetScript<CPOSScript>()->SetHp(iHp);
+	}
 }

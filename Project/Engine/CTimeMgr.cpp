@@ -2,6 +2,8 @@
 #include "CTimeMgr.h"
 #include "CEngine.h"
 
+#include "CFontMgr.h"
+
 CTimeMgr::CTimeMgr()
 	: m_llFrequence{}
 	, m_llCurCount{}
@@ -54,11 +56,13 @@ void CTimeMgr::render()
 
 	// 1 초에 한번
 	m_fAccTime += m_fDeltaTime;
+
+	static wchar_t szFloat[50] = {};
+
 	if (1.f < m_fAccTime)
 	{
 		HWND hWnd = CEngine::GetInst()->GetMainHwnd();
 
-		wchar_t szFloat[50] = {};
 		float FPS = 1.f / m_fDeltaTime;
 		swprintf_s(szFloat, 50, L"DeltaTime : %d", iCount);
 		int iLen = (int)wcsnlen_s(szFloat, 50);
@@ -70,4 +74,6 @@ void CTimeMgr::render()
 		m_fAccTime = 0.f;
 		iCount = 0;
 	}
+
+	CFontMgr::GetInst()->DrawFont(szFloat, 10.f, 30.f, 20, FONT_RGBA(255, 20, 20, 127));
 }

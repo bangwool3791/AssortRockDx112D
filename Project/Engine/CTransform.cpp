@@ -221,7 +221,7 @@ bool CTransform::Picking(Ray _ray, Vec3& _vPos)
 	static vector<Vec3> vec{};
 
 	vec.clear();
-
+	vec.shrink_to_fit();
 	finaltick();
 
 	Vec3 vPos{};
@@ -253,6 +253,47 @@ bool CTransform::Picking(Ray _ray, Vec3& _vPos)
 	return false;
 }
 
+bool CTransform::Picking(Ray _ray, float& _fDist)
+{
+
+	Ptr<CMesh> pMesh = GetOwner()->MeshRender()->GetMesh();
+	Vec3 vResult{ -1.f, -1.f, -1.f };
+	size_t verts;
+	Vtx* vertices = pMesh->GetVertices(verts);
+
+	static vector<Vec3> vec{};
+
+	vec.clear();
+	vec.shrink_to_fit();
+
+	finaltick();
+
+	Vec3 vPos{};
+
+	for (size_t i{}; i < verts; ++i)
+	{
+		vPos = XMVector3TransformCoord(vertices[i].vPos, m_matWorld);
+		vec.push_back(vPos);
+	}
+
+	for (UINT i = 0; i < verts; i += 4)
+	{
+		float fDist;
+		if (_ray.Intersects(vec[i], vec[i + 1], vec[i + 2], fDist))
+		{
+			_fDist = fDist;
+			return true;
+		}
+
+		if (_ray.Intersects(vec[i], vec[i + 2], vec[i + 3], fDist))
+		{
+			_fDist = fDist;
+			return true;
+		}
+	}
+
+	return false;
+}
 
 bool CTransform::Picking(Vec3& _vPos)
 {

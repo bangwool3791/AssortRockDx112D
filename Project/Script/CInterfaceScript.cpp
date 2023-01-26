@@ -12,6 +12,17 @@
 #include "CInfectedGiantScript.h"
 #include "CButtonScript.h"
 
+#include "CCommandScript.h"
+#include "CTentScript.h"
+#include "CHuntScript.h"
+#include "CSawScript.h"
+#include "CQuarryScript.h"
+#include "CSCScript.h"
+#include "CWWSScript.h"
+#include "CWWCScript.h"
+#include "CWWallScript.h"
+#include "CPOSScript.h"
+
 CInterfaceScript::CInterfaceScript()
 	:CScript{ SCRIPT_TYPE::INTERFACESCRIPT }
 	, m_id{}
@@ -58,6 +69,10 @@ void CInterfaceScript::begin()
 
 void CInterfaceScript::tick()
 {
+	/*
+	* 
+	*/
+
 	if (CInterfaceMgr::GetInst()->GetTarget())
 	{
 		CGameObject* pGameObject =  CInterfaceMgr::GetInst()->GetTarget();
@@ -69,17 +84,38 @@ void CInterfaceScript::tick()
 			{
 				if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
 				{
+					m_pTile->TileMap()->On();
 					for (size_t i{}; i < 6; ++i)
 						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)COMMAND_CENTER);
 				}				
 				else if (!lstrcmp(L"SC", wstrName.c_str()))
 				{
+					m_pTile->TileMap()->Off();
 					for (size_t i{}; i < 6; ++i)
 						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)SOLDIER_CMD);
-				}
+				}else
+					m_pTile->TileMap()->Off();
 			}
 		}
 		
+		if (!m_pTarget)
+		{
+			if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
+			{
+				m_pTile->TileMap()->On();
+				for (size_t i{}; i < 6; ++i)
+					m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)COMMAND_CENTER);
+			}
+			else if (!lstrcmp(L"SC", wstrName.c_str()))
+			{
+				m_pTile->TileMap()->Off();
+				for (size_t i{}; i < 6; ++i)
+					m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)SOLDIER_CMD);
+			}
+			else
+				m_pTile->TileMap()->Off();
+		}
+
 		m_pTarget = pGameObject;
 
 		if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
@@ -122,7 +158,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 							break;
 						case 5:
@@ -146,7 +182,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 1:
@@ -154,7 +190,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 2:
@@ -162,7 +198,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 5:
@@ -186,7 +222,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 1:
@@ -194,7 +230,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"POSPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 2:
@@ -202,7 +238,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWorkshopPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 5:
@@ -226,7 +262,7 @@ void CInterfaceScript::tick()
 							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
 							CGameObject* pObj = pUIPrefab->Instantiate();
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 0);
+							Instantiate(pObj, 1);
 						}
 						break;
 						case 5:
@@ -235,8 +271,8 @@ void CInterfaceScript::tick()
 
 							if (CInterfaceMgr::GetInst()->GetBuildObj())
 							{
-								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
-								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+							CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+							CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
 							}
 							break;
 						}
@@ -283,55 +319,147 @@ void CInterfaceScript::tick()
 		}
 		else if (!lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CInfectedGiant", wstrName.c_str()))
 		{
-			if (KEY_PRESSED(KEY::LBTN))
+		if (KEY_PRESSED(KEY::LBTN))
+		{
+			const Ray& ray = GetRay();
+			Vec3 vPos{};
+
+			if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
 			{
-				Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-				Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+				tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
+				Int32 x = tTile.iIndex % TILEX;
+				Int32 y = tTile.iIndex / TILEX;
 
-				p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-				p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-				XMVECTOR det; //Determinant, needed for matrix inverse function call
-				Vector3 origin = Vector3(p.x, p.y, 0);
-				Vector3 faraway = Vector3(p.x, p.y, 1);
-
-				XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-				Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-				Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-				Vector3 raydirection = rayend - rayorigin;
-				raydirection.Normalize();
-				Ray ray;
-				ray.position = rayorigin;
-				ray.direction = raydirection;
-				Vec3 vPos{};
-
-				if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
+				if (!lstrcmp(L"Soldier", wstrName.c_str()))
 				{
-					tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
-					Int32 x = tTile.iIndex % TILEX;
-					Int32 y = tTile.iIndex / TILEX;
-
-					if (!lstrcmp(L"Soldier", wstrName.c_str()))
-					{
-						m_pTarget->GetScript<CSoldierScript>()->Move(x, y);
-					}
-					else if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
-					{
-						m_pTarget->GetScript<CInfectedGiantScript>()->JpsAlgorithm(x, y);
-					}
+					m_pTarget->GetScript<CSoldierScript>()->Move(x, y);
+				}
+				else if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
+				{
+					m_pTarget->GetScript<CInfectedGiantScript>()->JpsAlgorithm(x, y);
 				}
 			}
+		}
 
 		}
 	}
 	else
-	{ 
-		m_pTarget = nullptr;
+	{
+	m_pTarget = nullptr;
 	}
 
 	//타겟 미 선택 버튼 선택 일 경우 해지
 	for (size_t i{}; i < 6; ++i)
 		m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
+}
+
+void CInterfaceScript::finaltick()
+{
+	if (CInterfaceMgr::GetInst()->GetBuildObj())
+	{
+		CGameObject* pObj = CInterfaceMgr::GetInst()->GetBuildObj();
+		if (KEY_PRESSED(KEY::RBTN))
+		{
+			if (!lstrcmp(pObj->GetName().data(), L"Tent"))
+				pObj->GetScript<CTentScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"HuntHouse"))
+				pObj->GetScript<CHuntScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"SawMill"))
+				pObj->GetScript<CSawScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"Quarry"))
+				pObj->GetScript<CQuarryScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"SC"))
+				pObj->GetScript<CSCScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"WoodWorkshop"))
+				pObj->GetScript<CWWSScript>()->clear();
+			else if (!lstrcmp(pObj->GetName().data(), L"POS"))
+				pObj->GetScript<CPOSScript>()->clear();
+
+			for (size_t j{}; j < 6; ++j)
+				m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+
+			pObj->Destroy();
+			CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+		}
+	}
+
+	if (KEY_PRESSED(KEY::LBTN))
+	{
+		static int iChecked = 0;
+		float fDist{};
+		const Ray& ray = GetRay();
+		Vec3 vPos{};
+
+		vector<pair<CGameObject*, float>> vecPair{};
+
+		const vector<CGameObject*>& vecObj = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+
+		for (size_t i{}; i < vecObj.size(); ++i)
+		{
+			if (vecObj[i]->Transform()->Picking(ray, fDist))
+			{
+				BUILD_STATE eState{BUILD_STATE::END};
+
+				if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
+					eState = vecObj[i]->GetScript<CCommandScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
+					eState = vecObj[i]->GetScript<CTentScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
+					eState = vecObj[i]->GetScript<CHuntScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
+					eState = vecObj[i]->GetScript<CSawScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
+					eState = vecObj[i]->GetScript<CQuarryScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
+					eState = vecObj[i]->GetScript<CSCScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
+					eState = vecObj[i]->GetScript<CWWSScript>()->GetState();
+				else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
+					eState = vecObj[i]->GetScript<CPOSScript>()->GetState();
+
+				if ((BUILD_STATE::COMPLETE == eState) || (BUILD_STATE::CREATE_UNIT == eState))
+				{
+					vecPair.push_back(make_pair(vecObj[i], fDist));
+				}
+			}
+		}
+
+		const vector<CGameObject*>& vecUnit = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+
+		for (size_t i{}; i < vecUnit.size(); ++i)
+		{
+			if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
+				continue;
+			else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
+				continue;
+
+			if (vecUnit[i]->Transform()->Picking(ray, fDist))
+				vecPair.push_back(make_pair(vecUnit[i], fDist));
+		}
+
+		sort(vecPair.begin(), vecPair.end(), [&](pair<CGameObject*, float> lhs, pair<CGameObject*, float> rhs)
+		{
+			if (lhs.second < rhs.second)
+				return true;
+			else
+				return false;
+		});
+
+		if(!vecPair.empty())
+			CInterfaceMgr::GetInst()->SetTarget(vecPair[0].first);
+	}
 }
 
 void CInterfaceScript::BeginOverlap(CCollider2D* _pOther)

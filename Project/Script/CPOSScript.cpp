@@ -7,6 +7,7 @@
 #include <Engine\CGameObject.h>
 #include <Engine\CTransform.h>
 
+#include <Engine\CJpsMgr.h>
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
@@ -30,8 +31,6 @@ void CPOSScript::begin()
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
-	m_pTileObject->TileMap()->On();
 }
 
 void CPOSScript::tick()
@@ -41,30 +40,16 @@ void CPOSScript::tick()
 
 void CPOSScript::finaltick()
 {
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
+
 	m_fDt += DT;
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
@@ -72,17 +57,7 @@ void CPOSScript::finaltick()
 
 			if (m_iIndex != tTile.iIndex)
 			{
-				if (-1 != m_iIndex)
-				{
-					m_result.push_back(m_iIndex);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-
-					m_result.clear();
-
-					for (size_t i{}; i < 40000; ++i)
-						m_bCheck[i] = false;
-				}
+				clear();
 			}
 			m_result.push_back(tTile.iIndex);
 			SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::BUILD);
@@ -115,7 +90,6 @@ void CPOSScript::finaltick()
 				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::USED);
 				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::USED);
 
-				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 
@@ -199,6 +173,7 @@ void CPOSScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _valu
 			Int32 x = data % TILEX;
 			Int32 z = data / TILEZ;
 			m_vecBlock.push_back(tBlock{ x, z });
+			CJpsMgr::GetInst()->SetCollision(x, z);
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		}
 
@@ -320,5 +295,20 @@ void CPOSScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _valu
 					m_bCheck[data - TILEX * 2] = true;
 				}
 		}
+	}
+}
+
+void CPOSScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		m_result.push_back(m_iIndex);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+
+		m_result.clear();
+
+		for (size_t i{}; i < 40000; ++i)
+			m_bCheck[i] = false;
 	}
 }

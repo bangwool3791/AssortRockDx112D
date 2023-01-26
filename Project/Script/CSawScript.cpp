@@ -30,8 +30,6 @@ void CSawScript::begin()
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-
-	m_pTileObject->TileMap()->On();
 }
 
 void CSawScript::tick()
@@ -43,24 +41,8 @@ void CSawScript::tick()
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
 
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
@@ -68,33 +50,7 @@ void CSawScript::tick()
 
 			if (m_iIndex != tTile.iIndex)
 			{
-				if (-1 != m_iIndex)
-				{
-					if ((m_iIndex / TILEX) % 2 == 0)
-					{
-						m_result.push_back(m_iIndex);
-						m_result.push_back(m_iIndex + TILEX);
-						m_result.push_back(m_iIndex + TILEX - 1);
-						m_result.push_back(m_iIndex + TILEX * 2);
-					}
-					else if ((m_iIndex / TILEX) % 2 == 1)
-					{
-						m_result.push_back(m_iIndex);
-						m_result.push_back(m_iIndex + TILEX);
-						m_result.push_back(m_iIndex + TILEX + 1);
-						m_result.push_back(m_iIndex + TILEX * 2);
-					}
-
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::WOOD);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::WOOD);
-
-					m_vecMask.clear();
-					m_result.clear();
-
-					for (size_t i{}; i < 40000; ++i)
-						m_bCheck[i] = false;
-				}
+				clear();
 			}
 
 			if ((tTile.iIndex / TILEX) % 2 == 0)
@@ -166,7 +122,6 @@ void CSawScript::tick()
 				for (size_t i{}; i < 40000; ++i)
 					m_bCheck[i] = false;
 
-				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
@@ -174,7 +129,7 @@ void CSawScript::tick()
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
 				CGameObject* pObj = pUIPrefab->Instantiate();
 				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 0);
+				Instantiate(pObj, m_vMousePos, 1);
 			}
 		}
 	}
@@ -195,6 +150,8 @@ void CSawScript::tick()
 
 void CSawScript::finaltick()
 {
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
 }
 
 void CSawScript::SetTileInfo(UINT _iTile, UINT _iValue)
@@ -397,5 +354,37 @@ bool  CSawScript::IsBlocked(UINT _iTile)
 			cout << "나무가 있어서 false" << endl;
 			return false;
 		}
+	}
+}
+
+
+void CSawScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		if ((m_iIndex / TILEX) % 2 == 0)
+		{
+			m_result.push_back(m_iIndex);
+			m_result.push_back(m_iIndex + TILEX);
+			m_result.push_back(m_iIndex + TILEX - 1);
+			m_result.push_back(m_iIndex + TILEX * 2);
+		}
+		else if ((m_iIndex / TILEX) % 2 == 1)
+		{
+			m_result.push_back(m_iIndex);
+			m_result.push_back(m_iIndex + TILEX);
+			m_result.push_back(m_iIndex + TILEX + 1);
+			m_result.push_back(m_iIndex + TILEX * 2);
+		}
+
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::WOOD);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::WOOD);
+
+		m_vecMask.clear();
+		m_result.clear();
+
+		for (size_t i{}; i < 40000; ++i)
+			m_bCheck[i] = false;
 	}
 }

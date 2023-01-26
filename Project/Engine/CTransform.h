@@ -56,6 +56,7 @@ public:
 	bool Picking(Vec3& _vPos);
 	Vec3 Picking(Ray _ray);
 	bool Picking(Ray _ray, Vec3& _vPos);
+	bool Picking(Ray _ray, float& _vPos);
 public:
 	void tick();
 	void finaltick();

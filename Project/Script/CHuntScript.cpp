@@ -32,13 +32,10 @@ void CHuntScript::begin()
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-	
-	m_pTileObject->TileMap()->On();
 }
 
 void CHuntScript::tick()
 {
-
 }
 
 void CHuntScript::finaltick()
@@ -46,28 +43,14 @@ void CHuntScript::finaltick()
 	m_fDt += DT;
 	m_fDt2 += DT;
 
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
+
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
@@ -75,21 +58,7 @@ void CHuntScript::finaltick()
 
 			if (m_iIndex != tTile.iIndex)
 			{
-				if (-1 != m_iIndex)
-				{
-					m_result.push_back(m_iIndex);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-					SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
-
-					m_result.clear();
-
-					for (size_t i{}; i < 40000; ++i)
-						m_bCheck[i] = false;
-				}
+				clear();
 
 				m_result.push_back(tTile.iIndex);
 				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::BEFORE_HUNTED);
@@ -139,7 +108,6 @@ void CHuntScript::finaltick()
 				for (size_t i{}; i < 40000; ++i)
 					m_bCheck[i] = false;
 
-				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
@@ -147,7 +115,7 @@ void CHuntScript::finaltick()
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
 				CGameObject* pObj = pUIPrefab->Instantiate();
 				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 0);
+				Instantiate(pObj, m_vMousePos, 1);
 			}
 		}
 	}
@@ -351,5 +319,24 @@ void CHuntScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _val
 				}
 		}
 		iter = que.erase(iter);
+	}
+}
+
+void CHuntScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		m_result.push_back(m_iIndex);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
+
+		m_result.clear();
+
+		for (size_t i{}; i < 40000; ++i)
+			m_bCheck[i] = false;
 	}
 }

@@ -209,6 +209,7 @@ call EngineCopy.bat</Command>
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CEventMgr.h" />
     <ClInclude Include="CExplosion.h" />
+    <ClInclude Include="CFontMgr.h" />
     <ClInclude Include="CInterfaceMgr.h" />
     <ClInclude Include="CJpsMgr.h" />
     <ClInclude Include="CoreTypeDef.h">
@@ -295,6 +296,7 @@ call EngineCopy.bat</Command>
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CEventMgr.cpp" />
     <ClCompile Include="CExplosion.cpp" />
+    <ClCompile Include="CFontMgr.cpp" />
     <ClCompile Include="CInterfaceMgr.cpp" />
     <ClCompile Include="CJpsMgr.cpp" />
     <ClCompile Include="CParticleExplosion.cpp" />

@@ -43,8 +43,6 @@ void CTentScript::begin()
 		GetOwner()->Animator2D()->Play(L"Left1", false);
 	else if (random % 4 == 3)
 		GetOwner()->Animator2D()->Play(L"Left2", false);
-
-	m_pTileObject->TileMap()->On();
 }
 
 void CTentScript::tick()
@@ -54,6 +52,8 @@ void CTentScript::tick()
 
 void CTentScript::finaltick()
 {
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
 
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -62,33 +62,13 @@ void CTentScript::finaltick()
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
 			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
-			if (-1 != m_iIndex)
-			{
-				RefreshTile(m_iIndex);
-			}
+			clear();
 
 			SetTile(tTile.iIndex);
 
@@ -114,7 +94,6 @@ void CTentScript::finaltick()
 			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
-				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
@@ -122,7 +101,7 @@ void CTentScript::finaltick()
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
 				CGameObject* pObj = pUIPrefab->Instantiate();
 				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 0);
+				Instantiate(pObj, m_vMousePos, 1);
 
 			}
 			m_fDt2 = 0.5f;
@@ -290,4 +269,12 @@ bool  CTentScript::IsBlocked(UINT _iTile)
 			return true;
 	}
 	return false;
+}
+
+void CTentScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		RefreshTile(m_iIndex);
+	}
 }

@@ -4,7 +4,6 @@ typedef Vector2 Vec2;
 typedef Vector3 Vec3;
 typedef Vector4 Vec4;
 
-
 #define SINGLE(type) public:\
 						static type* GetInst()\
 						{\
@@ -331,6 +330,7 @@ enum class BUILD_STATE
 	COMPLETE,
 	DESTROY,
 	CREATE_UNIT,
+	END,
 };
 
 enum class TILE_TYPE

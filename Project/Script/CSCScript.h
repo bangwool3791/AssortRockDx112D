@@ -12,6 +12,7 @@ private:
     CGameObject* m_pTileObject;
     CGameObject* m_pGameObject;
     CGameObject* m_pCircleArrow{};
+    CGameObject* m_pBuildObj{};
     bool                        m_bCheck[40000]{};
     vector<tBlock>              m_vecBlock{};
     UINT                        m_iIndex = 0;
@@ -37,6 +38,13 @@ public:
     virtual void LoadFromFile(FILE* _File) override;
 public :
     void CreateUnit(const wstring& _str);
+    BUILD_STATE GetState() { return m_eBuildState; }
+    void clear();
+private:
+    int m_iHp = 100;
+public:
+    int GetHp() { return m_iHp; }
+    void SetHp(int _iHp) { m_iHp = _iHp; }
 public:
     CLONE(CSCScript);
 public:

@@ -39,6 +39,7 @@ private:
     void ProcessEnemy();
     void ChaseEnemy();
     void Move(Int32 _x, Int32 _z);
+    void SetPlayerHP();
 public:
     CInfectedVenom();
     virtual ~CInfectedVenom();

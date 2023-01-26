@@ -352,11 +352,13 @@ void CreateTestLelvel()
 	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
 
-	CCollisionMgr::GetInst()->CollisionLayerCheck(0, 1);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 1);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 2);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 3);
+	
+	//CCollisionMgr::GetInst()->CollisionLayerCheck(4, 3);
 	pLevel->begin();
 }
 

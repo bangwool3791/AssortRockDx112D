@@ -45,6 +45,9 @@
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CExplosion.cpp"
 
 
+#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CFontMgr.cpp"
+
+
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CInterfaceMgr.cpp"
 
 
@@ -58,7 +61,4 @@
 
 
 #include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CGraphicsShader.cpp"
-
-
-#include "C:\Development\MyEngine\AssortRockDx112D-master\Project\Engine\CKeyMgr.cpp"
 

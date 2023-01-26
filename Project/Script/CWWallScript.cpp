@@ -7,6 +7,7 @@
 #include <Engine\CGameObject.h>
 #include <Engine\CTransform.h>
 
+#include <Engine\CJpsMgr.h>
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
 
@@ -44,8 +45,6 @@ void CWWallScript::begin()
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
-
-	m_pTileObject->TileMap()->On();
 }
 
 void CWWallScript::tick()
@@ -55,6 +54,8 @@ void CWWallScript::tick()
 
 void CWWallScript::finaltick()
 {
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
 
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -63,33 +64,13 @@ void CWWallScript::finaltick()
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
 			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
-
-			if (-1 != m_iIndex)
-			{
-				SetTileInfo(m_iIndex);
-			}
+			
+			clear();
 
 			SetTileInfo(tTile.iIndex);
 
@@ -118,9 +99,9 @@ void CWWallScript::finaltick()
 				Int32 z = m_iIndex / TILEZ;
 
 				m_vecBlock.push_back(tBlock{ x, z });
+				CJpsMgr::GetInst()->SetCollision(x, z);
 
 				m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
-				//m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
@@ -551,5 +532,13 @@ void CWWallScript::ChildWallProcess()
 				pObj->begin();
 			}
 		}
+	}
+}
+
+void CWWallScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		SetTileInfo(m_iIndex);
 	}
 }

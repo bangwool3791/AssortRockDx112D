@@ -29,8 +29,6 @@ CSniperScript::CSniperScript()
 	, m_iAttack{ 15 }
 {
 	SetName(L"CSniperScript");
-
-	//AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
 }
 
 CSniperScript::~CSniperScript()
@@ -69,33 +67,6 @@ void CSniperScript::tick()
 		m_pTargetObject = nullptr;
 
 	m_fDeltaTime += DT;
-
-	if (KEY_PRESSED(KEY::LBTN))
-	{
-		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-		Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-		p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-		p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-		XMVECTOR det; //Determinant, needed for matrix inverse function call
-		Vector3 origin = Vector3(p.x, p.y, 0);
-		Vector3 faraway = Vector3(p.x, p.y, 1);
-
-		XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-		Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-		Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-		Vector3 raydirection = rayend - rayorigin;
-		raydirection.Normalize();
-		Ray ray;
-		ray.position = rayorigin;
-		ray.direction = raydirection;
-
-		if (GetOwner()->Transform()->Picking(ray, m_vDest))
-		{
-			CInterfaceMgr::GetInst()->SetTarget(GetOwner());
-		}
-	}
 
 	if (UNIT_STATE::NORMAL == m_eState)
 	{
@@ -343,17 +314,20 @@ void CSniperScript::BeginOverlap(CCollider2D* _pOther)
 
 void CSniperScript::Overlap(CCollider2D* _pOther)
 {
-	Vec3 vRelativePos = Transform()->GetRelativePos() - _pOther->Transform()->GetRelativePos();
-	Vec3 vScale = (Transform()->GetRelativeScale() + _pOther->Transform()->GetRelativeScale()) * 0.5f;
+	if (UNIT_STATE::RUN == m_eState)
+		return;
+
+	Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+	Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
 	Vec3 vDiff{};
 	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	vDiff.y = fabsf(vScale.y - fabsf(vRelativePos.y));
-	vDiff.z = fabsf(vScale.z - fabsf(vRelativePos.z));
-	vRelativePos = vRelativePos.Normalize();
+	vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+	Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+	vDir = vDir.Normalize();
 
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	Transform()->SetRelativePos(vPos + vDiff * vRelativePos);
+	Transform()->SetRelativePos(vPos + vDiff * vDir);
 }
 
 void CSniperScript::EndOverlap(CCollider2D* _pOther)

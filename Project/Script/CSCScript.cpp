@@ -3,12 +3,12 @@
 
 #include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
+#include <Engine\CJpsMgr.h>
 #include <Engine\CLevelMgr.h>
 #include <Engine\CGameObject.h>
 #include <Engine\CTransform.h>
 
 #include <Engine\CInterfaceMgr.h>
-#include <Script\CMouseScript.h>
 
 CSCScript::CSCScript()
 	:CScript{ SCRIPT_TYPE::SCSCRIPT }
@@ -31,9 +31,6 @@ void CSCScript::begin()
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
-
-	m_pTileObject->TileMap()->On();
 }
 
 void CSCScript::tick()
@@ -43,6 +40,9 @@ void CSCScript::tick()
 
 void CSCScript::finaltick()
 {
+	if (0 >= m_iHp)
+		GetOwner()->Destroy();
+
 	m_fDt += DT;
 	m_fDt2 += DT;
 
@@ -50,33 +50,13 @@ void CSCScript::finaltick()
 	{
 		if (m_fDt > 0.15f)
 		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
+			const Ray& ray = GetRay();
 
 			m_vMousePos = m_pTileObject->GetRenderComponent()->GetMesh()->GetPosition(ray);
 
 			tTile tTile = m_pTileObject->TileMap()->GetInfo(m_vMousePos);
 
-			if (-1 != m_iIndex)
-			{
-				RefreshTile(m_iIndex);
-			}
+			clear();
 
 			SetTile(tTile.iIndex);
 
@@ -102,13 +82,12 @@ void CSCScript::finaltick()
 			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 			{
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
-				m_pTileObject->TileMap()->Off();
 				m_eBuildState = BUILD_STATE::BUILD;
 
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 0);
+				m_pBuildObj = pUIPrefab->Instantiate();
+				CInterfaceMgr::GetInst()->SetBuildObj(m_pBuildObj);
+				Instantiate(m_pBuildObj, m_vMousePos, 1);
 			}
 			m_fDt2 = 0.5f;
 		}
@@ -125,33 +104,6 @@ void CSCScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
 	{
-		if (KEY_PRESSED(KEY::LBTN))
-		{
-			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
-			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-
-			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
-			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
-
-			XMVECTOR det; //Determinant, needed for matrix inverse function call
-			Vector3 origin = Vector3(p.x, p.y, 0);
-			Vector3 faraway = Vector3(p.x, p.y, 1);
-
-			XMMATRIX invViewProj = XMMatrixInverse(&det, g_transform.matView * g_transform.matProj);
-			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
-			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
-			Vector3 raydirection = rayend - rayorigin;
-			raydirection.Normalize();
-			Ray ray;
-			ray.position = rayorigin;
-			ray.direction = raydirection;
-			Vec3 vPos{};
-
-			if (GetOwner()->Transform()->Picking(ray, vPos))
-			{
-				CInterfaceMgr::GetInst()->SetTarget(GetOwner());
-			}
-		}
 	}
 	else if (m_eBuildState == BUILD_STATE::CREATE_UNIT)
 	{
@@ -160,7 +112,7 @@ void CSCScript::finaltick()
 			Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(m_strPrefab);
 			CGameObject* pUnit = prefab->Instantiate();
 			Vec3 vPos = Transform()->GetRelativePos();
-			vPos.z -= (Transform()->GetRelativeScale().z + pUnit->Transform()->GetRelativePos().z) * 0.5f;
+			vPos.z -= (Transform()->GetRelativeScale().z + pUnit->Transform()->GetRelativeScale().z);
 
 			Instantiate(pUnit, vPos, 1);
 
@@ -204,6 +156,7 @@ void CSCScript::SetTileInfo(UINT _iTile, UINT _iValue)
 		Int32 x = _iTile % TILEX;
 		Int32 z = _iTile / TILEZ;
 		m_vecBlock.push_back(tBlock{x, z});
+		CJpsMgr::GetInst()->SetCollision(x, z);
 	}
 	m_pTileObject->TileMap()->SetInfo(_iTile, _iValue);
 }
@@ -397,5 +350,13 @@ void CSCScript::CreateUnit(const wstring& _str)
 		m_eBuildState = BUILD_STATE::CREATE_UNIT;
 		m_strPrefab = _str;
 		m_fDt = 0.f;
+	}
+}
+
+void CSCScript::clear()
+{
+	if (-1 != m_iIndex)
+	{
+		RefreshTile(m_iIndex);
 	}
 }

@@ -31,7 +31,6 @@ private:
     Ray                     m_Ray;
 public :
     const Ray& GetUiRay() { return m_uiRay; }
-    const Ray& GetRay() { return m_Ray; }
     Vec3  GetMousePos() { return m_vMousePos; }
 public:
     CMouseScript();

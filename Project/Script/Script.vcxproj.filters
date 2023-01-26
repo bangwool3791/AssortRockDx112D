@@ -80,41 +80,47 @@
     <Filter Include="Scripts\13. UnitScript">
       <UniqueIdentifier>{592bdacd-93c7-4d75-815d-cbef1e27505e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Scripts\13. UnitScript\01. CSoldierScript">
-      <UniqueIdentifier>{16d1101d-2856-4c4b-9587-fc9ba54c00a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\02. CInfectedGiantScript">
-      <UniqueIdentifier>{03cca6b9-932c-4609-83a3-f22fe7188d3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\03. CInfectedMedium_A">
-      <UniqueIdentifier>{9a1f36d5-0ddb-415c-921d-2843a9144051}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\04. CInfectedMedium_B">
-      <UniqueIdentifier>{b150eaa9-ee36-4bad-89ad-abeba1185911}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\05. CInfectedString_A">
-      <UniqueIdentifier>{2bbfe8aa-a9da-49f3-827d-c5f6ae18a78a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\06. CInfectedVenom">
-      <UniqueIdentifier>{7b5c5c26-8f1e-47f3-8cdc-87ae43c1d055}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\07. CSniperScript">
-      <UniqueIdentifier>{96f4559b-0c16-47c3-94d0-287fdedca88e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\08. CRangerScript">
-      <UniqueIdentifier>{7d48cd0d-800d-4c7e-a5c3-b95652a3ddfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\08. CRangerScript\01. CArrowScript">
-      <UniqueIdentifier>{541bc8d6-7a11-443d-92ae-047112c5f324}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scripts\13. UnitScript\09. CTitanScript">
-      <UniqueIdentifier>{c8433df0-7213-4c2b-b909-36266e46dd99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scripts\02. InterfaceScript\14. CircleArrowScript">
       <UniqueIdentifier>{fdff9788-c38b-44b2-b612-4149fa4f9b78}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scripts\02. InterfaceScript\06. TapButtonScript">
       <UniqueIdentifier>{2abe6ad2-9ecd-4729-9305-cee8a8251b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player">
+      <UniqueIdentifier>{be925e4b-ee70-472a-b11e-cab02875e97a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player\01. CSoldierScript">
+      <UniqueIdentifier>{16d1101d-2856-4c4b-9587-fc9ba54c00a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player\09. CTitanScript">
+      <UniqueIdentifier>{c8433df0-7213-4c2b-b909-36266e46dd99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player\08. CRangerScript">
+      <UniqueIdentifier>{7d48cd0d-800d-4c7e-a5c3-b95652a3ddfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player\08. CRangerScript\01. CArrowScript">
+      <UniqueIdentifier>{541bc8d6-7a11-443d-92ae-047112c5f324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\01. Player\07. CSniperScript">
+      <UniqueIdentifier>{96f4559b-0c16-47c3-94d0-287fdedca88e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy">
+      <UniqueIdentifier>{762007c3-ad43-4073-8b7f-8cfa68d2d167}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy\02. CInfectedGiantScript">
+      <UniqueIdentifier>{03cca6b9-932c-4609-83a3-f22fe7188d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy\03. CInfectedMedium_A">
+      <UniqueIdentifier>{9a1f36d5-0ddb-415c-921d-2843a9144051}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy\04. CInfectedMedium_B">
+      <UniqueIdentifier>{b150eaa9-ee36-4bad-89ad-abeba1185911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy\05. CInfectedString_A">
+      <UniqueIdentifier>{2bbfe8aa-a9da-49f3-827d-c5f6ae18a78a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\13. UnitScript\02. Enemy\06. CInfectedVenom">
+      <UniqueIdentifier>{7b5c5c26-8f1e-47f3-8cdc-87ae43c1d055}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -212,34 +218,34 @@
       <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
     </ClInclude>
     <ClInclude Include="CSoldierScript.h">
-      <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\01. CSoldierScript</Filter>
     </ClInclude>
     <ClInclude Include="CInfectedGiantScript.h">
-      <Filter>Scripts\13. UnitScript\02. CInfectedGiantScript</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\02. CInfectedGiantScript</Filter>
     </ClInclude>
     <ClInclude Include="CInfectedMedium_A.h">
-      <Filter>Scripts\13. UnitScript\03. CInfectedMedium_A</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\03. CInfectedMedium_A</Filter>
     </ClInclude>
     <ClInclude Include="CInfectedMedium_B.h">
-      <Filter>Scripts\13. UnitScript\04. CInfectedMedium_B</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\04. CInfectedMedium_B</Filter>
     </ClInclude>
     <ClInclude Include="CInfectedStrong_A.h">
-      <Filter>Scripts\13. UnitScript\05. CInfectedString_A</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\05. CInfectedString_A</Filter>
     </ClInclude>
     <ClInclude Include="CInfectedVenom.h">
-      <Filter>Scripts\13. UnitScript\06. CInfectedVenom</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\06. CInfectedVenom</Filter>
     </ClInclude>
     <ClInclude Include="CSniperScript.h">
-      <Filter>Scripts\13. UnitScript\07. CSniperScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\07. CSniperScript</Filter>
     </ClInclude>
     <ClInclude Include="CRangerScript.h">
-      <Filter>Scripts\13. UnitScript\08. CRangerScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\08. CRangerScript</Filter>
     </ClInclude>
     <ClInclude Include="CArrowScript.h">
-      <Filter>Scripts\13. UnitScript\08. CRangerScript\01. CArrowScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\08. CRangerScript\01. CArrowScript</Filter>
     </ClInclude>
     <ClInclude Include="CTitanScript.h">
-      <Filter>Scripts\13. UnitScript\09. CTitanScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\09. CTitanScript</Filter>
     </ClInclude>
     <ClInclude Include="CCircleArrowScript.h">
       <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>
@@ -340,34 +346,34 @@
       <Filter>Scripts\12. WoodWall\CWWCScript</Filter>
     </ClCompile>
     <ClCompile Include="CSoldierScript.cpp">
-      <Filter>Scripts\13. UnitScript\01. CSoldierScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\01. CSoldierScript</Filter>
     </ClCompile>
     <ClCompile Include="CInfectedGiantScript.cpp">
-      <Filter>Scripts\13. UnitScript\02. CInfectedGiantScript</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\02. CInfectedGiantScript</Filter>
     </ClCompile>
     <ClCompile Include="CInfectedMedium_A.cpp">
-      <Filter>Scripts\13. UnitScript\03. CInfectedMedium_A</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\03. CInfectedMedium_A</Filter>
     </ClCompile>
     <ClCompile Include="CInfectedMedium_B.cpp">
-      <Filter>Scripts\13. UnitScript\04. CInfectedMedium_B</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\04. CInfectedMedium_B</Filter>
     </ClCompile>
     <ClCompile Include="CInfectedStrong_A.cpp">
-      <Filter>Scripts\13. UnitScript\05. CInfectedString_A</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\05. CInfectedString_A</Filter>
     </ClCompile>
     <ClCompile Include="CInfectedVenom.cpp">
-      <Filter>Scripts\13. UnitScript\06. CInfectedVenom</Filter>
+      <Filter>Scripts\13. UnitScript\02. Enemy\06. CInfectedVenom</Filter>
     </ClCompile>
     <ClCompile Include="CSniperScript.cpp">
-      <Filter>Scripts\13. UnitScript\07. CSniperScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\07. CSniperScript</Filter>
     </ClCompile>
     <ClCompile Include="CRangerScript.cpp">
-      <Filter>Scripts\13. UnitScript\08. CRangerScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\08. CRangerScript</Filter>
     </ClCompile>
     <ClCompile Include="CArrowScript.cpp">
-      <Filter>Scripts\13. UnitScript\08. CRangerScript\01. CArrowScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\08. CRangerScript\01. CArrowScript</Filter>
     </ClCompile>
     <ClCompile Include="CTitanScript.cpp">
-      <Filter>Scripts\13. UnitScript\09. CTitanScript</Filter>
+      <Filter>Scripts\13. UnitScript\01. Player\09. CTitanScript</Filter>
     </ClCompile>
     <ClCompile Include="CCircleArrowScript.cpp">
       <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>

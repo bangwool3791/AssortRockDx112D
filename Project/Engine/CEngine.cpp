@@ -9,6 +9,7 @@
 #include "CResMgr.h"
 #include "CLevelMgr.h"
 #include "CRenderMgr.h"
+#include "CFontMgr.h"
 #include "CDevice.h"
 #include "CEventMgr.h"
 #include "CCollisionMgr.h"
@@ -63,6 +64,7 @@ int CEngine::init(HWND _hWnd, UINT _iWidth, UINT _iHeight)
 	CResMgr::GetInst()->init();
 	CRenderMgr::GetInst()->init();
 	CLevelMgr::GetInst()->init();
+	CFontMgr::GetInst()->init();
 	return S_OK;
 }
 

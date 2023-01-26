@@ -5,6 +5,7 @@ class CCommandScript :
     public CScript
 {
 private:
+    BUILD_STATE                  m_eBuildState;
     Vec3                         m_vMousePos;
     CGameObject*                 m_pLevelMouseObject;
     CGameObject*                 m_pTileObject;
@@ -22,6 +23,13 @@ public:
 public:
     virtual void SaveToFile(FILE* _File) override;
     virtual void LoadFromFile(FILE* _File) override;
+private:
+    int m_iHp = 100;
+public:
+    int GetHp() { return m_iHp; }
+    void SetHp(int _iHp) { m_iHp = _iHp; }
+public:
+    BUILD_STATE GetState() { return m_eBuildState; }
 public:
     CLONE(CCommandScript);
 public:

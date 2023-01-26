@@ -20,6 +20,15 @@ private:
     void SetTile(UINT _iTile, UINT _iValue);
     void SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _value);
     bool IsBlocked(UINT _iTile);
+public :
+    BUILD_STATE GetState() { return m_eBuildState; }
+    void clear();
+private:
+    int m_iHp = 100;
+public:
+    int GetHp() { return m_iHp; }
+    void SetHp(int _iHp) { m_iHp = _iHp; }
+public:
     virtual void begin();
     virtual void tick();
     virtual void finaltick();
