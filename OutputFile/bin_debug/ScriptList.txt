@@ -1,10 +1,12 @@
 CArrowScript
+CAssistScript
 CButtonScript
 CCircleArrowScript
 CCommandScript
 CCrystalScript
 CDragScript
 CEditorMouseScript
+CEffectScript
 CHuntScript
 CInfectedGiantScript
 CInfectedMedium_A
@@ -31,9 +33,11 @@ CSniperScript
 CSoldierScript
 CTentScript
 CTerrainScript
+CTeslaTowerScript
 CTileScript
 CTitanScript
 CTreeScript
+CUiScript
 CWWallScript
 CWWCScript
 CWWSScript

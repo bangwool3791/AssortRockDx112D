@@ -36,11 +36,12 @@ CInfectedStrong_A::CInfectedStrong_A()
 	:CScript{ INFECTEDSTRONG_A }
 	, m_fSpeed{ 100.f }
 	, m_eState{ UNIT_STATE::NORMAL }
-	, m_iHp{ 100 }
-	, m_iAttack{ 15 }
 	, m_fTick{ 0.f }
 	, m_bAttack{ true }
 {
+	m_fHP = 100.f;
+	m_iAttack = 15.f;
+
 	SetName(L"CInfectedStrong_A");
 
 	AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);
@@ -74,7 +75,7 @@ void CInfectedStrong_A::begin()
 
 void CInfectedStrong_A::tick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
 		m_eState = UNIT_STATE::DEAD;
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
@@ -337,9 +338,6 @@ void CInfectedStrong_A::BeginOverlap(CCollider2D* _pOther)
 
 void CInfectedStrong_A::Overlap(CCollider2D* _pOther)
 {
-	if (UNIT_STATE::RUN == m_eState)
-		return;
-
 	Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
 	Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
 	Vec3 vDiff{};
@@ -350,7 +348,7 @@ void CInfectedStrong_A::Overlap(CCollider2D* _pOther)
 
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	Transform()->SetRelativePos(vPos + vDiff * vDir);
+	Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
 }
 
 void CInfectedStrong_A::EndOverlap(CCollider2D* _pOther)
@@ -448,82 +446,12 @@ void CInfectedStrong_A::Move(Int32 _x, Int32 _z)
 
 void CInfectedStrong_A::SetPlayerHP()
 {
-	wstring wstrName = m_pTargetObject->GetName();
+	if (m_pTargetObject)
+	{
+		wstring wstrName = m_pTargetObject->GetName();
 
-	UINT iHp{};
-
-	if (!lstrcmp(L"Soldier", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript<CSoldierScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CSoldierScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CSniper", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript<CSniperScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CSniperScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CRanger", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript<CRangerScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CRangerScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CTitan", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript<CTitanScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CTitanScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"CmdCenter"))
-	{
-		iHp = m_pTargetObject->GetScript<CCommandScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CCommandScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"Tent"))
-	{
-		iHp = m_pTargetObject->GetScript<CTentScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CTentScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"HuntHouse"))
-	{
-		iHp = m_pTargetObject->GetScript<CHuntScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CHuntScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"SawMill"))
-	{
-		iHp = m_pTargetObject->GetScript<CSawScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CSawScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"Quarry"))
-	{
-		iHp = m_pTargetObject->GetScript<CQuarryScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CQuarryScript>()->SetHp(iHp);
-
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"SC"))
-	{
-		iHp = m_pTargetObject->GetScript<CSCScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CSCScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"WoodWorkshop"))
-	{
-		iHp = m_pTargetObject->GetScript<CWWSScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CWWSScript>()->SetHp(iHp);
-
-	}
-	else if (!lstrcmp(wstrName.c_str(), L"POS"))
-	{
-		iHp = m_pTargetObject->GetScript<CPOSScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript<CPOSScript>()->SetHp(iHp);
+		float fHp = m_pTargetObject->GetScripts()[0]->GetHp();
+		fHp -= m_iAttack;
+		m_pTargetObject->GetScripts()[0]->SetHp(fHp);
 	}
 }

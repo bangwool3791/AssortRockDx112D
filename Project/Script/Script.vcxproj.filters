@@ -122,6 +122,21 @@
     <Filter Include="Scripts\13. UnitScript\02. Enemy\06. CInfectedVenom">
       <UniqueIdentifier>{7b5c5c26-8f1e-47f3-8cdc-87ae43c1d055}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\02. InterfaceScript\15. CUiScript">
+      <UniqueIdentifier>{1a44fd7d-b5d9-4747-9b15-1e133f816e7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\11. IndustryScript\04. TeslaTower">
+      <UniqueIdentifier>{61e4561f-317b-460c-974c-5e1b7cc210c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\14. EffectScript">
+      <UniqueIdentifier>{a9baccde-08e9-4aaa-87e4-7e94be40cf26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\15. AssistScript">
+      <UniqueIdentifier>{a12749ec-0247-4a8e-a217-721d4b07e3b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts\15. AssistScript\01. AssistScript">
+      <UniqueIdentifier>{a6605f71-f95d-4b9d-9546-823ddb81a158}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -250,6 +265,18 @@
     <ClInclude Include="CCircleArrowScript.h">
       <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>
     </ClInclude>
+    <ClInclude Include="CUiScript.h">
+      <Filter>Scripts\02. InterfaceScript\15. CUiScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CTeslaTowerScript.h">
+      <Filter>Scripts\11. IndustryScript\04. TeslaTower</Filter>
+    </ClInclude>
+    <ClInclude Include="CEffectScript.h">
+      <Filter>Scripts\14. EffectScript</Filter>
+    </ClInclude>
+    <ClInclude Include="CAssistScript.h">
+      <Filter>Scripts\15. AssistScript\01. AssistScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -377,6 +404,18 @@
     </ClCompile>
     <ClCompile Include="CCircleArrowScript.cpp">
       <Filter>Scripts\02. InterfaceScript\14. CircleArrowScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CUiScript.cpp">
+      <Filter>Scripts\02. InterfaceScript\15. CUiScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CTeslaTowerScript.cpp">
+      <Filter>Scripts\11. IndustryScript\04. TeslaTower</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffectScript.cpp">
+      <Filter>Scripts\14. EffectScript</Filter>
+    </ClCompile>
+    <ClCompile Include="AssistScript.cpp">
+      <Filter>Scripts\15. AssistScript\01. AssistScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

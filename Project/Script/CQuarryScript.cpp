@@ -16,7 +16,29 @@ CQuarryScript::CQuarryScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+
+	m_fFullHp = 125;
+
 	SetName(L"CQuarryScript");
+
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageQuarryPrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescGoldPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
 }
 
 CQuarryScript::~CQuarryScript()
@@ -28,13 +50,25 @@ void CQuarryScript::begin()
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }
 
 void CQuarryScript::tick()
 {
+	__super::tick();
+
 	m_fDt += DT;
 	m_fDt2 += DT;
+
+	if (0 > m_fHP)
+	{
+		//CEffectWoodPrefab
+		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
+		Instantiate(pObj, Transform()->GetRelativePos(), 3);
+		GetOwner()->Destroy();
+	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
@@ -135,8 +169,11 @@ void CQuarryScript::tick()
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		if (m_fDt > 5.f)
+		m_fHP += DT * 10.f;
+
+		if (m_fHP > m_fFullHp)
 		{
+			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
@@ -150,8 +187,6 @@ void CQuarryScript::tick()
 
 void CQuarryScript::finaltick()
 {
-	if (0 >= m_iHp)
-		GetOwner()->Destroy();
 }
 
 void CQuarryScript::SetTileInfo(UINT _iTile, UINT _iValue)
@@ -184,7 +219,10 @@ void CQuarryScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _v
 		else if ((UINT)TILE_TYPE::BEFORE_CRYSTAL == tTile.iInfo && (UINT)TILE_TYPE::CRYSTAL == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BEFORE_CRYSTAL == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
+		{
+			++m_iIron;
 			m_pTileObject->TileMap()->SetInfo(data, _value);
+		}
 		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BUILD == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
@@ -382,4 +420,47 @@ void CQuarryScript::clear()
 
 		m_vecMask.clear();
 	}
+}
+
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include "CButtonScript.h"
+
+void CQuarryScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"Quarry");
+
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iIron, 0);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CQuarryScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

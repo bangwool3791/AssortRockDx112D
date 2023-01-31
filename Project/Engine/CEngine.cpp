@@ -18,6 +18,9 @@
 #include "CAnimator2D.h"
 
 extern std::unordered_map<std::string, ChunkGroup*>			g_map_pool;
+wchar_t CEngine::g_szHp[255];
+wchar_t CEngine::g_szFullName[255];
+vector<pair<wstring, Vec2>> CEngine::g_IconText;
 
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
@@ -96,10 +99,20 @@ void CEngine::render()
 {
 	CDevice::GetInst()->TargetClear();
 
-	CTimeMgr::GetInst()->render();
-
 	CRenderMgr::GetInst()->render();
 
+	CTimeMgr::GetInst()->render();
+
+	CFontMgr::GetInst()->DrawFont(g_szFullName, 685.f, 790.f, 17.f, FONT_RGBA(20, 255, 20, 200));
+	CFontMgr::GetInst()->DrawFont(g_szHp, 685.f, 850.f, 12.f, FONT_RGBA(20, 255, 20, 200));
+
+	for (size_t i{}; i < CEngine::g_IconText.size(); ++i)
+	{
+		if('+' == g_IconText[i].first[0])
+			CFontMgr::GetInst()->DrawFont(g_IconText[i].first.c_str(), g_IconText[i].second.x, g_IconText[i].second.y, 17.f, FONT_RGBA(20, 255, 20, 200));
+		else
+			CFontMgr::GetInst()->DrawFont(g_IconText[i].first.c_str(), g_IconText[i].second.x, g_IconText[i].second.y, 17.f, FONT_RGBA(255, 20, 20, 200));
+	}
 	/*
 	* 1 Tick
 	* Present

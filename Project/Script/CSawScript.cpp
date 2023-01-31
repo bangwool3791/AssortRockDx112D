@@ -17,7 +17,28 @@ CSawScript::CSawScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+	m_fFullHp = 125;
+
 	SetName(L"CSawScript");
+
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageSawmillPrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescWoodPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
 }
 
 CSawScript::~CSawScript()
@@ -26,16 +47,28 @@ CSawScript::~CSawScript()
 
 void CSawScript::begin()
 {
+	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
-	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }
 
 void CSawScript::tick()
 {
+	__super::tick();
+
 	m_fDt += DT;
 	m_fDt2 += DT;
+
+	if (0 > m_fHP)
+	{
+		//CEffectWoodPrefab
+		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
+		Instantiate(pObj, Transform()->GetRelativePos(), 3);
+		GetOwner()->Destroy();
+	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
@@ -135,13 +168,15 @@ void CSawScript::tick()
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-	if (m_fDt > 5.f)
-	{
-		GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
-		GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
-		m_eBuildState = BUILD_STATE::COMPLETE;
-		m_fDt = 0.f;
-	}
+		m_fHP += DT * 10.f;
+
+		if (m_fHP > m_fFullHp)
+		{
+			m_fHP = m_fFullHp;
+			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+			m_eBuildState = BUILD_STATE::COMPLETE;
+		}
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
 	{
@@ -150,7 +185,7 @@ void CSawScript::tick()
 
 void CSawScript::finaltick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
 		GetOwner()->Destroy();
 }
 
@@ -184,7 +219,10 @@ void CSawScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _valu
 		else if ((UINT)TILE_TYPE::BEFROE_WOOD == tTile.iInfo && (UINT)TILE_TYPE::WOOD == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BEFROE_WOOD == tTile.iInfo && (UINT)TILE_TYPE::HARVEST == _value)
+		{
+			++m_iWood;
 			m_pTileObject->TileMap()->SetInfo(data, _value);
+		}
 		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BUILD == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BUILD == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
@@ -387,4 +425,47 @@ void CSawScript::clear()
 		for (size_t i{}; i < 40000; ++i)
 			m_bCheck[i] = false;
 	}
+}
+
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include "CButtonScript.h"
+
+void CSawScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"SawMill");
+
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iWood, 0);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CSawScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

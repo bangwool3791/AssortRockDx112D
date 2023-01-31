@@ -70,6 +70,7 @@ public:
 public:
     void CreateAnimation();
     void CreateAnimation(const wstring& _strKey, Ptr<CTexture> _AtlasTex, Vec2 _vLeftTop, Vec2 _vSlice, float _fStep, int _iMaxFrm, float _FPS);
+    void CopyAnimation(const wstring& _strKey, CAnimator2D& _pAnimation);
     void CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimation);
     CAnimation2D* FindAnimation(const wstring& _strKey);
     CAnimation2D* EditAnimation(const wstring& _origin, const wstring& _dest);

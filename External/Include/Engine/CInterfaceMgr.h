@@ -10,6 +10,7 @@ private:
 	CGameObject* m_pBuildObj;
 	vector<CGameObject*>		   m_vecTapButton;
 public:
+	const vector<CGameObject*>& GetTapButtons() { return m_vecTapButton; }
 	CGameObject* GetBtn(UINT idx) { return m_vecTapButton[idx]; }
 	CGameObject* GetBuildObj() { return m_pBuildObj; }
 	void SetBuildObj(CGameObject* _pGameObject) { m_pBuildObj = _pGameObject; }

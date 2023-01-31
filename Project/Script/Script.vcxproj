@@ -177,7 +177,9 @@ call CodeGen.exe</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CArrowScript.h" />
+    <ClInclude Include="CAssistScript.h" />
     <ClInclude Include="CCircleArrowScript.h" />
+    <ClInclude Include="CEffectScript.h" />
     <ClInclude Include="CRangerScript.h" />
     <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
@@ -208,9 +210,11 @@ call CodeGen.exe</Command>
     <ClInclude Include="CSoldierScript.h" />
     <ClInclude Include="CTentScript.h" />
     <ClInclude Include="CTerrainScript.h" />
+    <ClInclude Include="CTeslaTowerScript.h" />
     <ClInclude Include="CTileScript.h" />
     <ClInclude Include="CTitanScript.h" />
     <ClInclude Include="CTreeScript.h" />
+    <ClInclude Include="CUiScript.h" />
     <ClInclude Include="CWWallScript.h" />
     <ClInclude Include="CWWCScript.h" />
     <ClInclude Include="CWWSScript.h" />
@@ -220,8 +224,10 @@ call CodeGen.exe</Command>
     <ClInclude Include="CButtonScript.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AssistScript.cpp" />
     <ClCompile Include="CArrowScript.cpp" />
     <ClCompile Include="CCircleArrowScript.cpp" />
+    <ClCompile Include="CEffectScript.cpp" />
     <ClCompile Include="CRangerScript.cpp" />
     <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />
@@ -252,10 +258,12 @@ call CodeGen.exe</Command>
     <ClCompile Include="CSoldierScript.cpp" />
     <ClCompile Include="CTentScript.cpp" />
     <ClCompile Include="CTerrainScript.cpp" />
+    <ClCompile Include="CTeslaTowerScript.cpp" />
     <ClCompile Include="CTileScript.cpp" />
     <ClCompile Include="CInterfaceScript.cpp" />
     <ClCompile Include="CTitanScript.cpp" />
     <ClCompile Include="CTreeScript.cpp" />
+    <ClCompile Include="CUiScript.cpp" />
     <ClCompile Include="CWWallScript.cpp" />
     <ClCompile Include="CWWCScript.cpp" />
     <ClCompile Include="CWWSScript.cpp" />

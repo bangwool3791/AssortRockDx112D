@@ -30,7 +30,7 @@ void CPOSScript::begin()
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 }
 
 void CPOSScript::tick()
@@ -40,7 +40,7 @@ void CPOSScript::tick()
 
 void CPOSScript::finaltick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
 		GetOwner()->Destroy();
 
 	m_fDt += DT;

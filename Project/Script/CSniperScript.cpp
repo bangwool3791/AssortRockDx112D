@@ -21,13 +21,65 @@
 #include <Script\CInfectedStrong_A.h>
 #include <Script\CInfectedVenom.h>
 
+#include <Script\\CButtonScript.h>
+
 CSniperScript::CSniperScript()
 	:CScript{ SNIPERSCRIPT }
 	, m_fSpeed{ 100.f }
 	, m_eState{ UNIT_STATE::NORMAL }
-	, m_iHp{ 100 }
-	, m_iAttack{ 15 }
 {
+	m_fHP = 100;
+	m_fFullHp = 100;
+	m_iAttack = 15;
+
+	m_iArmor = 1;
+	m_iSpeed = 4;
+	m_iAttackSpeed = 4;
+	m_iAttackRange = 6;
+	m_iGold = 1;
+	m_iWorker = 1;
+
+
+	//Desc
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageSniperPrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescAttackDamagePrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescArmorPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescSpeedPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescAttackSpeedPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescAttackSpeedPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescAttackRangePrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescGoldPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescWorkerPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+	m_vecIcon[1]->Transform()->SetRelativePos(120.f, 0.f, -500.f);
+	m_vecIcon[2]->Transform()->SetRelativePos(190.f, 0.f, -500.f);
+	m_vecIcon[3]->Transform()->SetRelativePos(260.f, 0.f, -500.f);
+	m_vecIcon[4]->Transform()->SetRelativePos(50.f, 0.f, -580.f);
+	m_vecIcon[5]->Transform()->SetRelativePos(120.f, 0.f, -580.f);
+	m_vecIcon[6]->Transform()->SetRelativePos(190.f, 0.f, -580.f);
+	m_vecIcon[7]->Transform()->SetRelativePos(260.f, 0.f, -580.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
 	SetName(L"CSniperScript");
 }
 
@@ -54,13 +106,17 @@ void CSniperScript::begin()
 	m_vSource.x += 1.f;
 	m_vSource.z -= 1.f;
 	SetDestPos(m_vSource);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }
 
 #define OFFSET 22.5f
 
 void CSniperScript::tick()
 {
-	if (0 >= m_iHp)
+	__super::tick();
+
+	if (0 > m_fHP)
 		m_eState = UNIT_STATE::DEAD;
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
@@ -96,7 +152,9 @@ void CSniperScript::tick()
 		SetDestPos(vDest);
 		m_vSource = Transform()->GetRelativePos();
 
-		if (m_vDest.Distance(m_vSource, *iter) < 10)
+		Vec3 vScale = GetOwner()->Transform()->GetRelativeScale();
+
+		if (m_vSource.Distance(m_vSource, *iter) < vScale.Length() * 0.5f)
 			m_vecJps.erase(iter);
 
 		if (m_vecJps.empty())
@@ -327,7 +385,7 @@ void CSniperScript::Overlap(CCollider2D* _pOther)
 
 	Vec3 vPos = Transform()->GetRelativePos();
 
-	Transform()->SetRelativePos(vPos + vDiff * vDir);
+	Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
 }
 
 void CSniperScript::EndOverlap(CCollider2D* _pOther)
@@ -446,36 +504,58 @@ void CSniperScript::SetMonsterHP()
 {
 	wstring wstrName = m_pTargetObject->GetName();
 
-	UINT iHp{};
+	float fHp{};
 
-	if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript< CInfectedGiantScript>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedGiantScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedMedium_A_", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript< CInfectedMedium_A>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedMedium_A>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedMedium_B_", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript< CInfectedMedium_B>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedMedium_B>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedStrong_A_", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript< CInfectedStrong_A>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedStrong_A>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedVenom", wstrName.c_str()))
-	{
-		iHp = m_pTargetObject->GetScript< CInfectedVenom>()->GetHp();
-		iHp -= m_iAttack;
-		m_pTargetObject->GetScript< CInfectedVenom>()->SetHp(iHp);
-	}
+	fHp = m_pTargetObject->GetScripts()[0]->GetHp();
+	fHp -= m_iAttack;
+	m_pTargetObject->GetScripts()[0]->SetHp(fHp);
+}
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include <Script\\CButtonScript.h>
+
+void CSniperScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"Soldier");
+
+	//lstrcpy(g_szHp, to_wstring(m_fHP));
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iAttack, 0);
+	SetIconUI(m_iArmor, 1);
+	SetIconUI(m_iSpeed, 2);
+	SetIconUI(m_iAttackSpeed, 3);
+	SetIconUI(m_iAttackRange, 4);
+	SetIconUI(m_iGold, 5);
+	SetIconUI(m_iWorker, 6);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)UNIT);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CSniperScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

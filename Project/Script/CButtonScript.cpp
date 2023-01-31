@@ -285,21 +285,100 @@ void CButtonScript::begin()
 	m_arrTab[SOLDIER_CMD][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
 	m_arrTab[SOLDIER_CMD][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
 
+	m_arrTab[UNIT][0].Texture = m_IconAtlas;
+	m_arrTab[UNIT][0].vUV.x = 428.f / fIconWidth;
+	m_arrTab[UNIT][0].vUV.y = 570.f / fIconHeight;
+	m_arrTab[UNIT][0].vSlice = Vec2{ 140.f / fIconWidth, 131.f / fIconHeight };
+	m_arrTab[UNIT][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[UNIT][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			 
+	m_arrTab[UNIT][1].Texture = m_IconAtlas;
+	m_arrTab[UNIT][1].vUV.x = 2.f / fIconWidth;
+	m_arrTab[UNIT][1].vUV.y = 428.f / height;
+	m_arrTab[UNIT][1].vSlice = Vec2{ 140.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[UNIT][1].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[UNIT][1].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+			 
+	m_arrTab[UNIT][2].Texture = m_IconAtlas;
+	m_arrTab[UNIT][2].vUV.x = 144.f / fIconWidth;
+	m_arrTab[UNIT][2].vUV.y = 2.f / fIconHeight;
+	m_arrTab[UNIT][2].vSlice = Vec2{ 140.f / fIconWidth, 140.f / fIconHeight };
+	m_arrTab[UNIT][2].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[UNIT][2].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[UNIT][3].Texture = m_Atlas;
+	m_arrTab[UNIT][3].vUV = vLeftTop;
+	m_arrTab[UNIT][3].vSlice = vSlice;
+			 
+	m_arrTab[UNIT][4].Texture = m_Atlas;
+	m_arrTab[UNIT][4].vUV = vLeftTop;
+	m_arrTab[UNIT][4].vSlice = vSlice;
+
+	m_arrTab[UNIT][5].Texture = m_Atlas;
+	m_arrTab[UNIT][5].vUV = vLeftTop;
+	m_arrTab[UNIT][5].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].Texture = m_IconAtlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].vUV.x = 564.f / fIconWidth;
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].vUV.y = 989.f / fIconHeight;
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].vSlice = Vec2{ 135.f / fIconWidth, 136.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_UPGRADE][0].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][1].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][1].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_UPGRADE][1].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][2].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][2].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_UPGRADE][2].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][3].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][3].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_UPGRADE][3].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][4].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][4].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_UPGRADE][4].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].Texture = m_IconAtlas;
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].vUV.x = 288.f / fIconWidth;
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].vUV.y = 703.f / fIconHeight;
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].vSlice = Vec2{ 140.f / fIconWidth, 125.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_UPGRADE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][0].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][0].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_COMPLETE][0].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][1].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][1].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_COMPLETE][1].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][2].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][2].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_COMPLETE][2].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][3].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][3].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_COMPLETE][3].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][4].Texture = m_Atlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][4].vUV = vLeftTop;
+	m_arrTab[TAP_CATEGORY_COMPLETE][4].vSlice = vSlice;
+
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].Texture = m_IconAtlas;
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].vUV.x = 288.f / fIconWidth;
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].vUV.y = 703.f / fIconHeight;
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].vSlice = Vec2{ 140.f / fIconWidth, 125.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].vUV2 = Vec2{ 640.f / fIconWidth, 1400.f / fIconHeight };
+	m_arrTab[TAP_CATEGORY_COMPLETE][5].vSlice2 = Vec2{ 60.f / fIconWidth, 60.f / fIconHeight };
+
 	CInterfaceMgr::GetInst()->AddTapButton(GetOwner());
 }
 
 void CButtonScript::tick()
-{
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_arrTab[m_iColumn][m_iRow].Texture);
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_1, m_IconAtlas);
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_2, m_AtlasAlpha);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_arrTab[m_iColumn][m_iRow].vUV);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &m_arrTab[m_iColumn][m_iRow].vSlice);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_2, &m_arrTab[m_iColumn][m_iRow].vUV2);
-	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_3, &m_arrTab[m_iColumn][m_iRow].vSlice2);
-}
-
-void CButtonScript::finaltick()
 {
 	m_fDt += DT;
 	if (m_fDt > 0.25f)
@@ -313,6 +392,20 @@ void CButtonScript::finaltick()
 			m_fDt = 0.f;
 		}
 	}
+
+	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_arrTab[m_iColumn][m_iRow].Texture);
+	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_1, m_IconAtlas);
+	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_2, m_AtlasAlpha);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_0, &m_arrTab[m_iColumn][m_iRow].vUV);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &m_arrTab[m_iColumn][m_iRow].vSlice);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_2, &m_arrTab[m_iColumn][m_iRow].vUV2);
+	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_3, &m_arrTab[m_iColumn][m_iRow].vSlice2);
+}
+
+void CButtonScript::finaltick()
+{
+	if (m_bClicked)
+		m_bClicked = false;
 }
 
 void CButtonScript::BeginOverlap(CCollider2D* _pOther)

@@ -9,8 +9,8 @@ class CTerrainScript :
 {
 private:
     UINT                m_id;
-    CGameObject* m_pCameraObject;
-    CGameObject* m_pMouseObject;
+    CGameObject*        m_pCameraObject;
+    CGameObject*        m_pMouseObject;
     Vec3                m_vCameraPos;
     Vec3			    m_vMousePos;
     Vec2                m_vRenderResolution;
@@ -23,9 +23,8 @@ public:
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
 public:
-    void    SetTileInfo(UINT _ibyOption);
-    void    Initialize(void* _pAddr);
-
+    void SetTileInfo(UINT _ibyOption);
+    void Initialize(void* _pAddr);
     CLONE(CTerrainScript);
 public:
     CTerrainScript();

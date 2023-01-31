@@ -321,6 +321,10 @@ enum TAP_CATEGORY
 	INDUSTRY,
 	DEFENSE,
 	SOLDIER_CMD,
+	UNIT,
+	TAP_CATEGORY_UPGRADE,
+	TAP_CATEGORY_COMPLETE,
+	TAP_CATEGORY_END,
 };
 
 enum class BUILD_STATE
@@ -367,3 +371,6 @@ extern const wchar_t* OBJECT_TYPE_WCHAR[(UINT)OBJECT_TYPE::END];
 
 extern const char* RES_TYPE_CHAR[(UINT)RES_TYPE::END];
 extern const wchar_t* RES_TYPE_WCHAR[(UINT)RES_TYPE::END];
+
+class CEngine;
+typedef void (CEngine::* PRINT_FUNC)(void);

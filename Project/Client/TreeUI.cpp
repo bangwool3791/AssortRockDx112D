@@ -300,7 +300,8 @@ TreeNode* TreeUI::GetNode(CGameObjectEx* _pObj)
 
 void TreeUI::DeleteNode(TreeNode* _pNode)
 {
-	m_RootNode->DeleteChild(_pNode);
+	if(_pNode)
+		m_RootNode->DeleteChild(_pNode);
 }
 
 void TreeUI::Clear()

@@ -82,7 +82,7 @@ void CAnimator2D::CreateAnimation()
 
     for (const auto& entry : fs::directory_iterator(strPath))
     {
-        std::cout << entry.path() << std::endl;
+        //std::cout << entry.path() << std::endl;
 
         string path = entry.path().string();
 
@@ -123,19 +123,27 @@ void CAnimator2D::CreateAnimation()
                         str = pAttrib->Value();
                         //Get a Image file name
                         //delete a number.png
-                        strAnimation = str.substr(0, str.size() - 8);
 
-                        if ('_' == strAnimation[strAnimation.size() - 1])
+                        auto bHasDigit = std::any_of(str.begin(), str.end(), [](auto& elem) {return std::isdigit(elem); });
+
+                        if (bHasDigit)
                         {
-                            strAnimation = strAnimation.erase(strAnimation.size() - 1, 1);
+                            strAnimation = str.substr(0, str.size() - 8);
+
+                            if ('_' == strAnimation[strAnimation.size() - 1])
+                            {
+                                strAnimation = strAnimation.erase(strAnimation.size() - 1, 1);
+                            }
+                            stTemp = str.substr(str.size() - 8, 8);
+                            strFrame = stTemp.substr(1, 3);
+
+                            tData.iFrame = atoi(strFrame.data());
                         }
-
-                        std::cout << strAnimation << std::endl;
-
-                        stTemp = str.substr(str.size() - 8, 8);
-                        strFrame = stTemp.substr(1, 3);
-
-                        tData.iFrame = atoi(strFrame.data());
+                        else
+                        {
+                            strAnimation = str.substr(0, str.size() - 4);
+                            tData.iFrame = 0;
+                        }
                     }
                     else if (!strcmp("x", pAttrib->Value()))
                     {
@@ -257,6 +265,18 @@ void CAnimator2D::CreateAnimation()
         }
     }
 }
+
+void CAnimator2D::CopyAnimation(const wstring& _strKey, CAnimator2D& _pAnimation)
+{
+    for (auto iter{ m_mapRef.begin() }; iter != m_mapRef.end(); ++iter)
+    {
+        if (iter->first == _strKey)
+        {
+            _pAnimation.Add_Animation(iter->second);
+        }
+    }
+}
+
 
 void CAnimator2D::CloneAnimation(const wstring& _strKey, CAnimator2D& _pAnimation)
 {

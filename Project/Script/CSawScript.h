@@ -21,13 +21,10 @@ private:
     void SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _value);
     bool IsBlocked(UINT _iTile);
 public :
-    BUILD_STATE GetState() { return m_eBuildState; }
+    
     void clear();
-private:
-    int m_iHp = 100;
-public:
-    int GetHp() { return m_iHp; }
-    void SetHp(int _iHp) { m_iHp = _iHp; }
+    void PhaseEventOn();
+    void PhaseEventOff();
 public:
     virtual void begin();
     virtual void tick();

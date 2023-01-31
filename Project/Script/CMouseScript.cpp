@@ -50,10 +50,7 @@ void CMouseScript::tick()
 	//m_vTarget += m_vCameraPos;
 
 	//GetOwner()->Transform()->SetRelativePos(Vec3{ m_vTarget.x, m_vTarget.y, 1.f });
-}
 
-void CMouseScript::finaltick()
-{
 	if (KEY_PRESSED(KEY::LBTN))
 	{
 		Vec2 p = CKeyMgr::GetInst()->GetMousePos();
@@ -159,6 +156,10 @@ void CMouseScript::finaltick()
 		//bClicked = false;
 		//CUIMgr::GetInst()->DeleteUI(UI_TYPE::DRAG);
 	}
+}
+
+void CMouseScript::finaltick()
+{
 }
 
 void CMouseScript::BeginOverlap(CCollider2D* _pOther)

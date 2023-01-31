@@ -3,17 +3,27 @@
 
 class CGameObjectEx;
 
+
+
 class CInterfaceScript :
     public CScript
 {
 private:
+    bool                      m_bUiClicked = false;
+    bool                      m_bActiveDrag = false;
+    bool                      m_bActiveMouse = false;
+    bool                      m_bChecked = false;
     UINT                      m_id;
     CGameObject*              m_pTarget;
     CGameObject*              m_pCameraObject;
     CGameObject*              m_pMouseObject;
     CGameObject*              m_pDestObject;
+    CGameObject*              m_pRallyPoint{};
     CGameObject*              m_pTile;
+    vector<CGameObject*>	  m_vecDragObj;
+    CGameObject*              m_pDragObj;
     array<CGameObject*, 6>    m_arrTapButton;
+    pair<Vec3, Vec3>          m_pairPoint;
     UINT                      m_iIndex = 0;
 public:
     virtual void begin();

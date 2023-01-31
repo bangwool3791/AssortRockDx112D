@@ -263,6 +263,8 @@ void CGameObject::DestroyComponent(COMPONENT_TYPE _eComType)
 		m_arrCom[(UINT)_eComType] = nullptr;
 	}
 
+	if (COMPONENT_TYPE::MESHRENDER == _eComType)
+		m_pRenderComponent = nullptr;
 }
 
 CComponent* CGameObject::GetComponent(COMPONENT_TYPE _eComType)

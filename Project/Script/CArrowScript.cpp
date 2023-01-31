@@ -24,8 +24,6 @@
 CArrowScript::CArrowScript()
 	:CScript{ ARROWSCRIPT }
 	, m_fSpeed{ 100.f }
-	, m_iHp{ 100 }
-	, m_iAttack{ 15 }
 {
 	SetName(L"CArrowScript");
 
@@ -97,40 +95,13 @@ void CArrowScript::BeginOverlap(CCollider2D* _pOther)
 
 void CArrowScript::Overlap(CCollider2D* _pOther)
 {
-	wstring wstrName = _pOther->GetOwner()->GetName();
+	wstring wstrName = m_pTargetObject->GetName();
 
-	UINT iHp{};
+	float fHp{};
 
-	if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
-	{
-		iHp = _pOther->GetOwner()->GetScript< CInfectedGiantScript>()->GetHp();
-		iHp -= m_iAttack;
-		_pOther->GetOwner()->GetScript< CInfectedGiantScript>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedMedium_A_", wstrName.c_str()))
-	{
-		iHp = _pOther->GetOwner()->GetScript< CInfectedMedium_A>()->GetHp();
-		iHp -= m_iAttack;
-		_pOther->GetOwner()->GetScript< CInfectedMedium_A>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedMedium_B_", wstrName.c_str()))
-	{
-		iHp = _pOther->GetOwner()->GetScript< CInfectedMedium_B>()->GetHp();
-		iHp -= m_iAttack;
-		_pOther->GetOwner()->GetScript< CInfectedMedium_B>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedStrong_A_", wstrName.c_str()))
-	{
-		iHp = _pOther->GetOwner()->GetScript< CInfectedStrong_A>()->GetHp();
-		iHp -= m_iAttack;
-		_pOther->GetOwner()->GetScript< CInfectedStrong_A>()->SetHp(iHp);
-	}
-	else if (!lstrcmp(L"CInfectedVenom", wstrName.c_str()))
-	{
-		iHp = _pOther->GetOwner()->GetScript< CInfectedVenom>()->GetHp();
-		iHp -= m_iAttack;
-		_pOther->GetOwner()->GetScript< CInfectedVenom>()->SetHp(iHp);
-	}
+	fHp = m_pTargetObject->GetScripts()[0]->GetHp();
+	fHp -= m_iAttack;
+	m_pTargetObject->GetScripts()[0]->SetHp(fHp);
 
 	Destroy();
 }

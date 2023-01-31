@@ -12,7 +12,6 @@ CInterfaceMgr::CInterfaceMgr()
 
 CInterfaceMgr::~CInterfaceMgr()
 {
-	Safe_Delete(m_pBuildObj);
 }
 
 CGameObject* CInterfaceMgr::GetTarget()

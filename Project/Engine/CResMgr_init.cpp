@@ -360,7 +360,7 @@ void CResMgr::CreateDefaultMesh()
 
 	for (int i = 0; i < iSlice; ++i)
 	{
-		v.vPos = Vec3(fRadius * cosf(fTheta * (float)i), fRadius * sinf(fTheta * (float)i), 1.f);
+		v.vPos = Vec3(fRadius * cosf(fTheta * (float)i), 0.f, fRadius * sinf(fTheta * (float)i));
 		v.vColor = Vec4(1.f, 1.f, 1.f, 1.f);
 		*iterVtx = v;
 	}
@@ -666,7 +666,9 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\sprite\\InfectedGiant_HQ.dds", L"texture\\sprite\\InfectedGiant_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\TrainsA_HQ.dds", L"texture\\sprite\\TrainsA_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\Icons_HQ.dds", L"texture\\sprite\\Icons_HQ.dds");
-	Load<CTexture>(L"texture\\sprite\\Interface_HQ.png", L"texture\\sprite\\Interface_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\Interface_HQ.dds", L"texture\\sprite\\Interface_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\Portraits_HQ.dds", L"texture\\sprite\\Portraits_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\Geology_HQ.dds", L"texture\\sprite\\Geology_HQ.dds");
 	//sprite png
 	Load<CTexture>(L"texture\\sprite\\HumansA_LQ.png", L"texture\\sprite\\HumansA_LQ.png");
 	Load<CTexture>(L"texture\\sprite\\AnimalsA_HQ.png", L"texture\\sprite\\AnimalsA_HQ.png");
@@ -692,6 +694,8 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\sprite\\Proyectiles_LQ.png", L"texture\\sprite\\Proyectiles_LQ.png");
 	Load<CTexture>(L"texture\\sprite\\Icons_HQ.png", L"texture\\sprite\\Icons_HQ.png");
 	Load<CTexture>(L"texture\\sprite\\Interface_HQ.png", L"texture\\sprite\\Interface_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\Portraits_HQ.png", L"texture\\sprite\\Portraits_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\Geology_HQ.png", L"texture\\sprite\\Geology_HQ.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
@@ -899,8 +903,8 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->CreatePixelShader(L"shader\\bordermap.fx", "PS_Border");
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
-	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_TRANSPARENT);
+	pShader->SetDSType(DS_TYPE::LESS);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	AddRes<CGraphicsShader>(L"BorderShader", pShader);
 

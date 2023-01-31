@@ -8,11 +8,17 @@ private:
     wstring                     m_strPrefab;
     BUILD_STATE                 m_eBuildState;
     Vec3                        m_vMousePos;
-    CGameObject* m_pLevelMouseObject;
-    CGameObject* m_pTileObject;
-    CGameObject* m_pGameObject;
-    CGameObject* m_pCircleArrow{};
-    CGameObject* m_pBuildObj{};
+    CGameObject*     m_pLevelMouseObject;
+    CGameObject*     m_pTileObject;
+    CGameObject*     m_pGameObject;
+    CGameObject*     m_pCircleArrow{};
+    CGameObject*     m_pBuildObj{};
+    CGameObject* m_pCreateUnit{};
+    CGameObject* m_pRallyPoint{};
+    queue<CGameObject*> m_queUnit;
+    CGameObject* m_pProgressBar{};
+    bool                        m_IsRallyPoint = false;
+    bool                        m_bRallyPoint = false;
     bool                        m_bCheck[40000]{};
     vector<tBlock>              m_vecBlock{};
     UINT                        m_iIndex = 0;
@@ -26,6 +32,7 @@ private:
     void RefreshTile(UINT _iTile);
     void RefreshTileInfo(UINT _iTile);
     bool IsBlocked(int _iTile);
+    void CreateEnd();
 public:
     virtual void begin();
     virtual void tick();
@@ -38,13 +45,10 @@ public:
     virtual void LoadFromFile(FILE* _File) override;
 public :
     void CreateUnit(const wstring& _str);
-    BUILD_STATE GetState() { return m_eBuildState; }
+    void PhaseEventOn();
+    void PhaseEventOff();
     void clear();
-private:
-    int m_iHp = 100;
-public:
-    int GetHp() { return m_iHp; }
-    void SetHp(int _iHp) { m_iHp = _iHp; }
+    void RallyEvent();
 public:
     CLONE(CSCScript);
 public:

@@ -18,6 +18,40 @@ CHuntScript::CHuntScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+	m_fFullHp = 75;
+
+	m_iGold = 200;
+	m_iWorker = 10;
+	m_iFood = 20;
+	m_iStorage = 50;
+
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageHunterCottagePrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescGoldPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescWorkerPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescFoodPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescStoragePrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+	m_vecIcon[1]->Transform()->SetRelativePos(120.f, 0.f, -500.f);
+	m_vecIcon[2]->Transform()->SetRelativePos(190.f, 0.f, -500.f);
+	m_vecIcon[3]->Transform()->SetRelativePos(260.f, 0.f, -500.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
 	SetName(L"CHuntScript");
 }
 
@@ -31,11 +65,15 @@ void CHuntScript::begin()
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+
 }
 
 void CHuntScript::tick()
 {
+	__super::tick();
 }
 
 void CHuntScript::finaltick()
@@ -43,8 +81,13 @@ void CHuntScript::finaltick()
 	m_fDt += DT;
 	m_fDt2 += DT;
 
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
+	{
+		//CEffectWoodPrefab
+		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
+		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
 	{
@@ -80,12 +123,12 @@ void CHuntScript::finaltick()
 				int a = 0;
 
 				if (IsBlocked(m_iIndex))
+					GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				else
 				{
 					a = 1;
 					GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 				}
-				else
-					GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 
 				m_fDt = 0.f;
 			}
@@ -93,7 +136,7 @@ void CHuntScript::finaltick()
 
 		if (m_fDt2 > 0.5f)
 		{
-			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
+			if (KEY_PRESSED(KEY::LBTN) && IsBlocked(m_iIndex))
 			{
 				m_result.push_back(m_iIndex);
 				SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::USED);
@@ -121,12 +164,14 @@ void CHuntScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		if (m_fDt > 5.f)
+		m_fHP += DT * 10.f;
+
+		if (m_fHP > m_fFullHp)
 		{
+			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
-			m_fDt = 0.f;
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
@@ -164,9 +209,9 @@ bool  CHuntScript::IsBlocked(UINT _iTile)
 		return false;
 
 	if ((UINT)TILE_TYPE::COLLISION == tTile.iInfo)
-		return true;
+		return false;
 
-	if ((UINT)TILE_TYPE::HUNTED == tTile.iInfo)
+	if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo)
 		return true;
 
 	return false;
@@ -326,6 +371,7 @@ void CHuntScript::clear()
 {
 	if (-1 != m_iIndex)
 	{
+
 		m_result.push_back(m_iIndex);
 		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
 		SetTileInfo(m_vec, m_result, (UINT)TILE_TYPE::EMPTY);
@@ -339,4 +385,51 @@ void CHuntScript::clear()
 		for (size_t i{}; i < 40000; ++i)
 			m_bCheck[i] = false;
 	}
+}
+
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include "CButtonScript.h"
+
+void CHuntScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"HuntHouse");
+
+	//lstrcpy(g_szHp, to_wstring(m_fHP));
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iGold, 0);
+	SetIconUI(m_iWorker, 1);
+	SetIconUI(m_iFood, 2);
+	SetIconUI(m_iStorage, 3);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_COMPLETE);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CHuntScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

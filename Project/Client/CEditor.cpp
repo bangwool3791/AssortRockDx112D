@@ -143,6 +143,9 @@ void CEditor::progress()
 
 void CEditor::tick()
 {
+	if (m_pAnimationObject && m_pAnimationObject->IsDead())
+		m_pAnimationObject = nullptr;
+
 	m_pCameraObject->tick();
 	m_MouseObject->tick();
 

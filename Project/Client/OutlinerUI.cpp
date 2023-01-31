@@ -7,6 +7,7 @@
 #include <Engine\CLevelMgr.h>
 #include <Engine\CEventMgr.h>
 
+#include "CEditor.h"
 #include "PopupUI.h"
 #include "TreeUI.h"
 #include "InspectorUI.h"
@@ -47,6 +48,9 @@ void OutlinerUI::update()
 
 void OutlinerUI::render_update()
 {
+	if (EDIT_MODE::ANIMATOR == CEditor::GetInst()->GetEditMode())
+		return;
+
 	static int IobjectIndex = 0;
 	static int ILayerIndex = 0;
 
@@ -108,6 +112,7 @@ void OutlinerUI::render_update()
 		}
 		pGameObject->SetName(StringToWString(m_strName));
 		CEventMgr::GetInst()->AddEvent(evn);
+		m_Node = nullptr;
 	}
 		break;
 	case 1:
@@ -123,7 +128,7 @@ void OutlinerUI::render_update()
 			//인스펙터 타겟 오브젝트 삭제 시 
 			InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 			Inspector->SetTargetObject(nullptr);
-
+			m_Node = nullptr;
 		}
 	}
 		break;
@@ -136,6 +141,7 @@ void OutlinerUI::render_update()
 			evn.wParam = (DWORD_PTR)RES_TYPE::PREFAB;
 			evn.lParam = (DWORD_PTR)(m_Node->GetData());
 			CEventMgr::GetInst()->AddEvent(evn);
+			m_Node = nullptr;
 		}
 	}
 		break;
@@ -147,6 +153,7 @@ void OutlinerUI::render_update()
 			m_Node->SetNodeName(m_strName);
 			wstring lstrname = wstring(m_strName.begin(), m_strName.end());
 			((CGameObject*)(m_Node->GetData()))->SetName(lstrname);
+			m_Node = nullptr;
 		}
 	}
 	break;
@@ -156,6 +163,7 @@ void OutlinerUI::render_update()
 		{
 			if (((CGameObject*)(m_Node->GetData()))->DeleteComponent(m_strComponentName))
 			{
+				m_Node = nullptr;
 			}
 			else
 			{
@@ -173,6 +181,7 @@ void OutlinerUI::render_update()
 				//인스펙터 타겟 오브젝트 삭제 시 
 				InspectorUI* Inspector = (InspectorUI*)CImGuiMgr::GetInst()->FindUI("Inspector");
 				Inspector->InitializeScriptUI();
+				m_Node = nullptr;
 			}
 			else
 			{

@@ -27,14 +27,14 @@ void CEventMgr::tick()
 	}
 	m_vecGarbage.clear();
 
-	for (auto iter{ m_vecEvent.begin()}; iter != m_vecEvent.end(); ++iter)
+	for (UINT i{}; i < m_vecEvent.size(); ++i)
 	{
-		switch (iter->eType)
+		switch (m_vecEvent[i].eType)
 		{
 		case EVENT_TYPE::CREATE_OBJECT:
 		{
-			CGameObject* pGameObeject = (CGameObject*)iter->wParam;
-			int	iLayer = (int)iter->lParam;
+			CGameObject* pGameObeject = (CGameObject*)m_vecEvent[i].wParam;
+			int	iLayer = (int)m_vecEvent[i].lParam;
 			CLevel* level = CLevelMgr::GetInst()->GetCurLevel();
 			pGameObeject->begin();
 			level->AddGameObject(pGameObeject, iLayer);
@@ -44,8 +44,8 @@ void CEventMgr::tick()
 		case EVENT_TYPE::ADD_CHILD:
 		{
 			// wParam : Child Adress, lParam : Parent Adress
-			CGameObject* pParent = (CGameObject*)iter->lParam;
-			CGameObject* pChild = (CGameObject*)iter->wParam;
+			CGameObject* pParent = (CGameObject*)m_vecEvent[i].lParam;
+			CGameObject* pChild = (CGameObject*)m_vecEvent[i].wParam;
 			pChild->begin();
 			pParent->AddChild(pChild);
 			m_bLevelChanged = true;
@@ -54,7 +54,7 @@ void CEventMgr::tick()
 		case EVENT_TYPE::DELETE_OBJECT:
 		{
 			static queue<CGameObject*> que;
-			CGameObject* pGameObj = (CGameObject*)iter->wParam;
+			CGameObject* pGameObj = (CGameObject*)m_vecEvent[i].wParam;
 			if (!pGameObj->IsDead())
 			{
 				que.push(pGameObj);
@@ -67,9 +67,9 @@ void CEventMgr::tick()
 
 					vector<CGameObject*> vecChild = pObj->GetChilds();
 
-					for (auto iter{ vecChild.begin() }; iter != vecChild.end(); ++iter)
+					for (UINT j{}; j <  vecChild.size(); ++j)
 					{
-						que.push(*iter);
+						que.push(vecChild[j]);
 					}
 
 					pObj->m_bDead = true;
@@ -85,36 +85,36 @@ void CEventMgr::tick()
 		case EVENT_TYPE::CHANGE_LEVEL_STATE:
 		{
 			m_bLevelChanged = true;
-			CLevelMgr::GetInst()->ChangeLevelState((LEVEL_STATE)iter->wParam);
+			CLevelMgr::GetInst()->ChangeLevelState((LEVEL_STATE)m_vecEvent[i].wParam);
 		}
 			break;
 
 		case EVENT_TYPE::EDIT_RES:
 		{
-			switch ((RES_TYPE)iter->wParam)
+			switch ((RES_TYPE)m_vecEvent[i].wParam)
 			{
 			case RES_TYPE::PREFAB:
 			{
-				if (((CRes*)iter->lParam)->GetName().empty())
+				if (((CRes*)m_vecEvent[i].lParam)->GetName().empty())
 					break;
 
 				wchar_t sz_data[255] = {};
-				lstrcpy(sz_data, ((CRes*)iter->lParam)->GetName().c_str());
+				lstrcpy(sz_data, ((CRes*)m_vecEvent[i].lParam)->GetName().c_str());
 				wstring wstrRelativePath = lstrcat(sz_data, L"Prefab");
-				CResMgr::GetInst()->AddRes(wstrRelativePath, new CPrefab(((CGameObject*)iter->lParam)->Clone(), false));
+				CResMgr::GetInst()->AddRes(wstrRelativePath, new CPrefab(((CGameObject*)m_vecEvent[i].lParam)->Clone(), false));
 			}
 				break;
 			case RES_TYPE::COMPUTE_SHADER:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CComputeShader*)iter->lParam);
+				CResMgr::GetInst()->AddRes(((CRes*)m_vecEvent[i].lParam)->GetName(), (CComputeShader*)m_vecEvent[i].lParam);
 				break;
 			case RES_TYPE::MATERIAL:
-				CResMgr::GetInst()->AddRes<CMaterial>(((CRes*)iter->lParam)->GetName(), (CMaterial*)(iter->lParam));
+				CResMgr::GetInst()->AddRes<CMaterial>(((CRes*)m_vecEvent[i].lParam)->GetName(), (CMaterial*)(m_vecEvent[i].lParam));
 				break;
 			case RES_TYPE::MESH:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CMesh*)iter->lParam);
+				CResMgr::GetInst()->AddRes(((CRes*)m_vecEvent[i].lParam)->GetName(), (CMesh*)m_vecEvent[i].lParam);
 				break;
 			case RES_TYPE::TEXTURE:
-				CResMgr::GetInst()->AddRes(((CRes*)iter->lParam)->GetName(), (CTexture*)iter->lParam);
+				CResMgr::GetInst()->AddRes(((CRes*)m_vecEvent[i].lParam)->GetName(), (CTexture*)m_vecEvent[i].lParam);
 				break;
 			default:
 				break;
@@ -124,7 +124,7 @@ void CEventMgr::tick()
 		case EVENT_TYPE::DELETE_RES:
 		{
 			// wParam : RES_TYPE, lParam : Resource Adress
-			if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)iter->wParam, ((CRes*)iter->lParam)->GetKey()))
+			if (!CResMgr::GetInst()->DeleteRes((RES_TYPE)m_vecEvent[i].wParam, ((CRes*)m_vecEvent[i].lParam)->GetKey()))
 			{
 				MessageBox(nullptr, L"리소스 삭제 실패", L"에러", MB_OK);
 			}

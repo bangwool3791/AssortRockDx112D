@@ -17,7 +17,7 @@ enum class SCRIPT_PARAM
     MATERIAL,
     PREFAB,
     SOUND,
-}; 
+};
 
 struct tScriptParam
 {
@@ -29,15 +29,37 @@ struct tScriptParam
 class CScript :
     public CComponent
 {
-private :
+private:
     const int               m_iScriptType;
     vector<tScriptParam>    m_vecParam;
-public :
+protected:
+    bool m_bDesc = false;
+    BUILD_STATE m_eBuildState;
+    CGameObject* m_pPortrait;
+    vector<CGameObject*>    m_vecIcon;
+public:
     int GetScriptType() { return m_iScriptType; }
 protected:
     bool                    m_bActive;
     Vec3                    m_vTarget;
-public :
+    int                     m_iGold;
+    int                     m_iWorker;
+    int                     m_iFood;
+    int                     m_iStorage;
+    int                     m_iWood;
+    int                     m_iColony;
+    int                     m_iIron;
+
+    int                     m_iAttack;
+    int                     m_iArmor;
+    int                     m_iSpeed;
+    int                     m_iAttackSpeed;
+    int                     m_iAttackRange;
+    float                     m_fHP;
+    float                     m_fFullHp;
+protected:
+    void SetIconUI(int iValue, UINT idx);
+public:
     void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
     void AddScriptParam(SCRIPT_PARAM _eParam, const string& _name, void* _pParam)
     {
@@ -48,12 +70,21 @@ public :
     void Activate() { m_bActive = true; }
     void Deactivate() { m_bActive = false; }
     bool IsActive() { return m_bActive; }
-public :
-    virtual void tick() = 0;
+
+    float GetHp() { return m_fHP; }
+    void SetHp(float _iHp) { m_fHP = _iHp; }
+
+    UINT GetGold() { return m_iGold; }
+    void SetHp(UINT _iGold) { m_iGold = _iGold; }
+
+    float GetFullHp() { return m_fFullHp; }
+    void SetFullHp(float _iGold) { m_fFullHp = _iGold; }
+public:
+    virtual void tick();
     virtual void finaltick() {};
 
     virtual CScript* Clone() = 0;
-public :
+public:
     CScript(int _iScript);
     virtual ~CScript();
 
@@ -61,5 +92,11 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther) = 0;
     virtual void Overlap(CCollider2D* _pOther) = 0;
     virtual void EndOverlap(CCollider2D* _pOther) = 0;
+    void ActiveIcon();
+    void DeactiveIcon();
+    virtual void PhaseEventOn();
+    virtual void PhaseEventOff();
+    virtual void Move(Int32 x, Int32 z) {};
+    virtual void clear() {};
 };
 

@@ -7,6 +7,7 @@ class CCircleArrowScript :
 private:
     Ptr<CTexture>                m_IconAtlas;
     Ptr<CTexture>                m_AtlasAlpha;
+    float                        m_fDeltaTime{};
 public:
     virtual void begin();
     virtual void tick();

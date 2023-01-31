@@ -48,7 +48,6 @@ void CTileMap::begin()
 			m_vecInfo.push_back(tTile);
 		}
 	}
-	m_vecInfo[TILEX * (TILECZ - 1)].iInfo = 1;
 
 	m_TileBuffer->Create(sizeof(tTile), TILEX * TILEZ, SB_TYPE::SRV_ONLY, m_vecInfo.data(), true);
 

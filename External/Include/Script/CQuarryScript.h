@@ -27,14 +27,10 @@ public :
     virtual void BeginOverlap(CCollider2D* _pOther) {}
     virtual void Overlap(CCollider2D* _pOther) {}
     virtual void EndOverlap(CCollider2D* _pOther) {}
-private:
-    int m_iHp = 100;
-public:
-    int GetHp() { return m_iHp; }
-    void SetHp(int _iHp) { m_iHp = _iHp; }
 public:
     void clear();
-    BUILD_STATE GetState() { return m_eBuildState; }
+    void PhaseEventOn();
+    void PhaseEventOff();
 public:
     CLONE(CQuarryScript);
 public:

@@ -17,6 +17,7 @@ CWWSScript::CWWSScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+	m_fFullHp = 125.f;
 	SetName(L"CWWSScript");
 }
 
@@ -30,7 +31,7 @@ void CWWSScript::begin()
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 }
 
 void CWWSScript::tick()
@@ -40,7 +41,7 @@ void CWWSScript::tick()
 
 void CWWSScript::finaltick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
 		GetOwner()->Destroy();
 
 	m_fDt += DT;
@@ -103,12 +104,14 @@ void CWWSScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		if (m_fDt > 5.f)
+		m_fHP += DT * 10.f;
+		if (m_fHP > m_fFullHp)
 		{
+			m_fHP = m_fFullHp;
+
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
-			m_fDt = 0.f;
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)

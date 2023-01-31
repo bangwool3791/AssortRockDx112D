@@ -4,8 +4,6 @@ class CArrowScript :
     public CScript
 {
 private:
-    int              m_iHp = 0;
-    int              m_iAttack = 0;
     float            m_fDeltaTime = 0.f;
     float            m_fAccTime;
     float            m_fSpeed;

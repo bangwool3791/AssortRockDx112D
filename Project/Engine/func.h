@@ -84,11 +84,11 @@ void Safe_Del_Array(T& arr)
 template<typename T>
 void Safe_Del_Vec(vector<T*>& _vec)
 {
-	typename vector<T*>::iterator iter = _vec.begin();
-	for (; iter != _vec.end(); ++iter)
+	//typename vector<T*>::iterator iter = _vec.begin();
+	for (size_t i{}; i <  _vec.size(); ++i)
 	{
-		if (nullptr != (*iter))
-			delete (*iter);
+		if (nullptr != (_vec[i]))
+			delete (_vec[i]);
 	}
 	_vec.clear();
 }

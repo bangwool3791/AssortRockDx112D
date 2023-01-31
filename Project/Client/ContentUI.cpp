@@ -141,6 +141,7 @@ void ContentUI::render_update()
 	if (ImGui::Button("Load", Vec2(100.f, 50.f)))
 	{
 		CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
+		m_pTargetPrefab = nullptr;
 		ResetContent();
 	}
 
@@ -172,9 +173,9 @@ void ContentUI::render_update()
 			ray.position = rayorigin;
 			ray.direction = raydirection;
 
-			Vec3 vMousePos = m_pLevelTerrain->Terrain()->GetMesh()->GetPosition(ray);
+			Vec3 vMousePos{};
 
-			if (vMousePos.x != -1 && vMousePos.y != -1 && vMousePos.z != -1)
+			if (m_pLevelTerrain->Terrain()->GetMesh()->GetPosition(ray, vMousePos))
 			{
 				CGameObject* pGameObject = m_pTargetPrefab->Instantiate();
 				Instantiate(pGameObject, vMousePos, iLayer);

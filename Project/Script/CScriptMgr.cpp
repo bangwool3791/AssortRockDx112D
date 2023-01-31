@@ -2,12 +2,14 @@
 #include "CScriptMgr.h"
 
 #include "CArrowScript.h"
+#include "CAssistScript.h"
 #include "CButtonScript.h"
 #include "CCircleArrowScript.h"
 #include "CCommandScript.h"
 #include "CCrystalScript.h"
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
+#include "CEffectScript.h"
 #include "CHuntScript.h"
 #include "CInfectedGiantScript.h"
 #include "CInfectedMedium_A.h"
@@ -34,9 +36,11 @@
 #include "CSoldierScript.h"
 #include "CTentScript.h"
 #include "CTerrainScript.h"
+#include "CTeslaTowerScript.h"
 #include "CTileScript.h"
 #include "CTitanScript.h"
 #include "CTreeScript.h"
+#include "CUiScript.h"
 #include "CWWallScript.h"
 #include "CWWCScript.h"
 #include "CWWSScript.h"
@@ -44,12 +48,14 @@
 void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 {
 	_vec.push_back(L"CArrowScript");
+	_vec.push_back(L"CAssistScript");
 	_vec.push_back(L"CButtonScript");
 	_vec.push_back(L"CCircleArrowScript");
 	_vec.push_back(L"CCommandScript");
 	_vec.push_back(L"CCrystalScript");
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
+	_vec.push_back(L"CEffectScript");
 	_vec.push_back(L"CHuntScript");
 	_vec.push_back(L"CInfectedGiantScript");
 	_vec.push_back(L"CInfectedMedium_A");
@@ -76,9 +82,11 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CSoldierScript");
 	_vec.push_back(L"CTentScript");
 	_vec.push_back(L"CTerrainScript");
+	_vec.push_back(L"CTeslaTowerScript");
 	_vec.push_back(L"CTileScript");
 	_vec.push_back(L"CTitanScript");
 	_vec.push_back(L"CTreeScript");
+	_vec.push_back(L"CUiScript");
 	_vec.push_back(L"CWWallScript");
 	_vec.push_back(L"CWWCScript");
 	_vec.push_back(L"CWWSScript");
@@ -88,12 +96,14 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 {
 	_vec.push_back("CArrowScript");
+	_vec.push_back("CAssistScript");
 	_vec.push_back("CButtonScript");
 	_vec.push_back("CCircleArrowScript");
 	_vec.push_back("CCommandScript");
 	_vec.push_back("CCrystalScript");
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
+	_vec.push_back("CEffectScript");
 	_vec.push_back("CHuntScript");
 	_vec.push_back("CInfectedGiantScript");
 	_vec.push_back("CInfectedMedium_A");
@@ -120,9 +130,11 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CSoldierScript");
 	_vec.push_back("CTentScript");
 	_vec.push_back("CTerrainScript");
+	_vec.push_back("CTeslaTowerScript");
 	_vec.push_back("CTileScript");
 	_vec.push_back("CTitanScript");
 	_vec.push_back("CTreeScript");
+	_vec.push_back("CUiScript");
 	_vec.push_back("CWWallScript");
 	_vec.push_back("CWWCScript");
 	_vec.push_back("CWWSScript");
@@ -132,6 +144,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 {
 	if (L"CArrowScript" == _strScriptName)
 		return new CArrowScript;
+	if (L"CAssistScript" == _strScriptName)
+		return new CAssistScript;
 	if (L"CButtonScript" == _strScriptName)
 		return new CButtonScript;
 	if (L"CCircleArrowScript" == _strScriptName)
@@ -144,6 +158,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CDragScript;
 	if (L"CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if (L"CEffectScript" == _strScriptName)
+		return new CEffectScript;
 	if (L"CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if (L"CInfectedGiantScript" == _strScriptName)
@@ -196,12 +212,16 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CTentScript;
 	if (L"CTerrainScript" == _strScriptName)
 		return new CTerrainScript;
+	if (L"CTeslaTowerScript" == _strScriptName)
+		return new CTeslaTowerScript;
 	if (L"CTileScript" == _strScriptName)
 		return new CTileScript;
 	if (L"CTitanScript" == _strScriptName)
 		return new CTitanScript;
 	if (L"CTreeScript" == _strScriptName)
 		return new CTreeScript;
+	if (L"CUiScript" == _strScriptName)
+		return new CUiScript;
 	if (L"CWWallScript" == _strScriptName)
 		return new CWWallScript;
 	if (L"CWWCScript" == _strScriptName)
@@ -215,6 +235,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 {
 	if ("CArrowScript" == _strScriptName)
 		return new CArrowScript;
+	if ("CAssistScript" == _strScriptName)
+		return new CAssistScript;
 	if ("CButtonScript" == _strScriptName)
 		return new CButtonScript;
 	if ("CCircleArrowScript" == _strScriptName)
@@ -227,6 +249,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CDragScript;
 	if ("CEditorMouseScript" == _strScriptName)
 		return new CEditorMouseScript;
+	if ("CEffectScript" == _strScriptName)
+		return new CEffectScript;
 	if ("CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if ("CInfectedGiantScript" == _strScriptName)
@@ -279,12 +303,16 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CTentScript;
 	if ("CTerrainScript" == _strScriptName)
 		return new CTerrainScript;
+	if ("CTeslaTowerScript" == _strScriptName)
+		return new CTeslaTowerScript;
 	if ("CTileScript" == _strScriptName)
 		return new CTileScript;
 	if ("CTitanScript" == _strScriptName)
 		return new CTitanScript;
 	if ("CTreeScript" == _strScriptName)
 		return new CTreeScript;
+	if ("CUiScript" == _strScriptName)
+		return new CUiScript;
 	if ("CWWallScript" == _strScriptName)
 		return new CWWallScript;
 	if ("CWWCScript" == _strScriptName)
@@ -300,6 +328,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	{
 	case (UINT)SCRIPT_TYPE::ARROWSCRIPT:
 		return new CArrowScript;
+		break;
+	case (UINT)SCRIPT_TYPE::ASSISTSCRIPT:
+		return new CAssistScript;
 		break;
 	case (UINT)SCRIPT_TYPE::BUTTONSCRIPT:
 		return new CButtonScript;
@@ -318,6 +349,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return new CEditorMouseScript;
+		break;
+	case (UINT)SCRIPT_TYPE::EFFECTSCRIPT:
+		return new CEffectScript;
 		break;
 	case (UINT)SCRIPT_TYPE::HUNTSCRIPT:
 		return new CHuntScript;
@@ -397,6 +431,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 	case (UINT)SCRIPT_TYPE::TERRAINSCRIPT:
 		return new CTerrainScript;
 		break;
+	case (UINT)SCRIPT_TYPE::TESLATOWERSCRIPT:
+		return new CTeslaTowerScript;
+		break;
 	case (UINT)SCRIPT_TYPE::TILESCRIPT:
 		return new CTileScript;
 		break;
@@ -405,6 +442,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::TREESCRIPT:
 		return new CTreeScript;
+		break;
+	case (UINT)SCRIPT_TYPE::UISCRIPT:
+		return new CUiScript;
 		break;
 	case (UINT)SCRIPT_TYPE::WWALLSCRIPT:
 		return new CWWallScript;
@@ -425,6 +465,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 	{
 	case SCRIPT_TYPE::ARROWSCRIPT:
 		return L"CArrowScript";
+		break;
+
+	case SCRIPT_TYPE::ASSISTSCRIPT:
+		return L"CAssistScript";
 		break;
 
 	case SCRIPT_TYPE::BUTTONSCRIPT:
@@ -449,6 +493,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return L"CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::EFFECTSCRIPT:
+		return L"CEffectScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
@@ -555,6 +603,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 		return L"CTerrainScript";
 		break;
 
+	case SCRIPT_TYPE::TESLATOWERSCRIPT:
+		return L"CTeslaTowerScript";
+		break;
+
 	case SCRIPT_TYPE::TILESCRIPT:
 		return L"CTileScript";
 		break;
@@ -565,6 +617,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TREESCRIPT:
 		return L"CTreeScript";
+		break;
+
+	case SCRIPT_TYPE::UISCRIPT:
+		return L"CUiScript";
 		break;
 
 	case SCRIPT_TYPE::WWALLSCRIPT:
@@ -591,6 +647,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CArrowScript";
 		break;
 
+	case SCRIPT_TYPE::ASSISTSCRIPT:
+		return "CAssistScript";
+		break;
+
 	case SCRIPT_TYPE::BUTTONSCRIPT:
 		return "CButtonScript";
 		break;
@@ -613,6 +673,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EDITORMOUSESCRIPT:
 		return "CEditorMouseScript";
+		break;
+
+	case SCRIPT_TYPE::EFFECTSCRIPT:
+		return "CEffectScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
@@ -719,6 +783,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 		return "CTerrainScript";
 		break;
 
+	case SCRIPT_TYPE::TESLATOWERSCRIPT:
+		return "CTeslaTowerScript";
+		break;
+
 	case SCRIPT_TYPE::TILESCRIPT:
 		return "CTileScript";
 		break;
@@ -729,6 +797,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::TREESCRIPT:
 		return "CTreeScript";
+		break;
+
+	case SCRIPT_TYPE::UISCRIPT:
+		return "CUiScript";
 		break;
 
 	case SCRIPT_TYPE::WWALLSCRIPT:

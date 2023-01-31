@@ -8,8 +8,6 @@ private:
     UNIT_STATE       m_eState;
     bool             m_bActiveJps = false;
     bool             m_bAttack = false;
-    int              m_iHp = 0;
-    int              m_iAttack = 0;
     float            m_fAccTime;
     float            m_fSpeed;
     float            m_fTick;
@@ -32,8 +30,8 @@ public:
 public:
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);
-    UINT GetHp() { return m_iHp; }
-    void SetHp(UINT _iHp) { m_iHp = _iHp; }
+   float GetHp() { return m_fHP; }
+    void SetHp(UINT _iHp) { m_fHP = _iHp; }
 private:
     bool Func(CGameObject* _lhs, CGameObject* _rhs);
     void ProcessEnemy();

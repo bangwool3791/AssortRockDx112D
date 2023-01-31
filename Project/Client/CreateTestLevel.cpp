@@ -25,6 +25,7 @@
 #include <Script\CTileScript.h>
 #include <Script\CInterfaceScript.h>
 #include <Script\CButtonScript.h>
+#include <Script\CAssistScript.h>
 
 void CreateDefaultPrefab()
 {
@@ -352,6 +353,26 @@ void CreateTestLelvel()
 	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
 	CLevelMgr::GetInst()->ChangeLevel(pLevel);
 
+	//보조 Mesh 추가
+
+	pGameObect = new CGameObject;
+	pGameObect->SetName(L"Grid Object");
+	
+	pGameObect->AddComponent(new CTransform);
+	pGameObect->AddComponent(new CMeshRender);
+	pGameObect->AddComponent(new CAssistScript);
+	
+	pGameObect->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"BorderMesh"));
+	pGameObect->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BorderMtrl"));
+	
+	pGameObect->GetScript<CAssistScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	pGameObect->GetScript<CAssistScript>()->SetGridInterval(100.f);
+	pGameObect->GetScript<CAssistScript>()->SetThickness(2.f);
+	
+	pGameObect->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	pLevel->GetLayer(L"Terrain")->AddGameObject(pGameObect);
+
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 1);
@@ -364,49 +385,51 @@ void CreateTestLelvel()
 
 void CreateInterface(CLevel* _pLevel)
 {
-	CGameObject* pParent = new CGameObject;
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"InterfacePrefab");
+
+	CGameObject* pParent = prefab->Instantiate();
 	CGameObject* pObj{};
 
 	pParent->SetName(L"Interface");
 
-	pParent->AddComponent(new CTransform);
-	pParent->AddComponent(new CInterfaceScript);
-	pParent->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	//pParent->AddComponent(new CTransform);
+	//pParent->AddComponent(new CInterfaceScript);
+	//pParent->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
 
 	pParent->Transform()->SetRelativePos(Vec3(0.f, 0.f, -500.f));
 	pParent->Transform()->SetRelativeScale(Vec3(1600.f, 0.f, 300.f));
 	pParent->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 
-	pParent->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-	pParent->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"OpaqueMtrl"));
+	//pParent->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//pParent->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"OpaqueMtrl"));
 	_pLevel->AddGameObject(pParent, 31);
 
-	for (size_t i{}; i < 2; ++i)
-	{
-		for (size_t j{}; j < 3; ++j)
-		{
-			wstring strName = L"UIButton";
-			strName += std::to_wstring(i * 3 + j);
+	//for (size_t i{}; i < 2; ++i)
+	//{
+	//	for (size_t j{}; j < 3; ++j)
+	//	{
+	//		wstring strName = L"UIButton";
+	//		strName += std::to_wstring(i * 3 + j);
 
-			pObj = new CGameObject;
-			pObj->SetName(strName);
+	//		pObj = new CGameObject;
+	//		pObj->SetName(strName);
 
-			pObj->AddComponent(new CTransform);
-			pObj->AddComponent(new CButtonScript);
-			pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
+	//		pObj->AddComponent(new CTransform);
+	//		pObj->AddComponent(new CButtonScript);
+	//		pObj->AddComponent(new CMeshRender(INSTANCING_TYPE::NONE));
 
-			pObj->Transform()->SetRelativePos(Vec3(332.f + 60.f * j, 0.f, 0.f + -85.f * i));
-			pObj->Transform()->SetRelativeScale(Vec3(60.f, 1.f, 90.f));
-			pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
+	//		pObj->Transform()->SetRelativePos(Vec3(332.f + 60.f * j, 0.f, 0.f + -85.f * i));
+	//		pObj->Transform()->SetRelativeScale(Vec3(60.f, 1.f, 90.f));
+	//		pObj->Transform()->SetRelativeRotation(Vec3(0.f, 0.f, 0.f));
 
-			pObj->Transform()->SetIgnoreParentScale(true);
-			pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
-			pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
+	//		pObj->Transform()->SetIgnoreParentScale(true);
+	//		pObj->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"RectMesh"));
+	//		pObj->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"InterfaceMtrl"));
 
-			pObj->GetScript<CButtonScript>()->SetRow(i * 3 + j);
-			pParent->AddChild(pObj);
-		}
-	}
+	//		pObj->GetScript<CButtonScript>()->SetRow(i * 3 + j);
+	//		pParent->AddChild(pObj);
+	//	}
+	//}
 
 	//pObj = new CGameObject;
 	//pObj->SetName(L"UIButton2");

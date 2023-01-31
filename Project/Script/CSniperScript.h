@@ -7,8 +7,6 @@ private:
     UNIT_STATE       m_eState;
     bool             m_bActiveJps = false;
     bool             m_bAttack = false;
-    int              m_iHp = 0;
-    int              m_iAttack = 0;
     float            m_fDeltaTime = 0.f;
     float            m_fAccTime;
     float            m_fSpeed;
@@ -34,12 +32,12 @@ private:
     void ProcessEnemy();
     void SetMonsterHP();
 public:
-    void Move(Int32 x, Int32 z);
+    virtual void PhaseEventOn() override;
+    virtual void PhaseEventOff() override;
+    virtual void Move(Int32 x, Int32 z) override;
     void Attck(Int32 x, Int32 z) {}
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);
-    UINT GetHp() { return m_iHp; }
-    void SetHp(UINT _iHp) { m_iHp = _iHp; }
 public:
     CSniperScript();
     virtual ~CSniperScript();

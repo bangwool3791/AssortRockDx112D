@@ -17,7 +17,41 @@ CTentScript::CTentScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+	m_fFullHp = 60;
+
+	m_iGold = 4;
+	m_iWorker = 4;
+	m_iFood = -4;
+	m_iColony = 4;
+
 	SetName(L"CTentScript");
+
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageTenthousePrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescGoldPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescWorkerPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescFoodPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescColonyPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+	m_vecIcon[1]->Transform()->SetRelativePos(120.f, 0.f, -500.f);
+	m_vecIcon[2]->Transform()->SetRelativePos(190.f, 0.f, -500.f);
+	m_vecIcon[3]->Transform()->SetRelativePos(260.f, 0.f, -500.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
 }
 
 CTentScript::~CTentScript()
@@ -26,12 +60,15 @@ CTentScript::~CTentScript()
 
 void CTentScript::begin()
 {
+	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
+
+
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
-	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
-	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::NONE);
-	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 
 	int random = rand();
 
@@ -47,13 +84,18 @@ void CTentScript::begin()
 
 void CTentScript::tick()
 {
-
+	__super::tick();
 }
 
 void CTentScript::finaltick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
+	{
+		//CEffectWoodPrefab
+		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
+		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+	}
 
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -109,12 +151,14 @@ void CTentScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		if (m_fDt > 5.f)
+		m_fHP += DT * 10.f;
+
+		if (m_fHP > m_fFullHp)
 		{
+			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
-			m_fDt = 0.f;
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::COMPLETE)
@@ -277,4 +321,51 @@ void CTentScript::clear()
 	{
 		RefreshTile(m_iIndex);
 	}
+}
+
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include "CButtonScript.h"
+
+void CTentScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"TentHose");
+
+	//lstrcpy(g_szHp, to_wstring(m_fHP));
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iGold, 0);
+	SetIconUI(m_iWorker, 1);
+	SetIconUI(m_iFood, 2);
+	SetIconUI(m_iColony, 3);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CTentScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->GetRenderComponent()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

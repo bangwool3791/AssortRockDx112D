@@ -366,7 +366,7 @@ int CMesh::Load(const wstring& _strFilePath)
 
     Write();
 
-    MessageBox(nullptr, L"CMesh Load ", L"Success", MB_OK);
+    //MessageBox(nullptr, L"CMesh Load ", L"Success", MB_OK);
 
     return S_OK;
 }

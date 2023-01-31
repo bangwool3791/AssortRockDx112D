@@ -22,6 +22,7 @@
 #include "CWWCScript.h"
 #include "CWWallScript.h"
 #include "CPOSScript.h"
+#include "CCircleArrowScript.h"
 
 CInterfaceScript::CInterfaceScript()
 	:CScript{ SCRIPT_TYPE::INTERFACESCRIPT }
@@ -31,8 +32,18 @@ CInterfaceScript::CInterfaceScript()
 	, m_pMouseObject{}
 	, m_pCameraObject{}
 	, m_arrTapButton{}
+	, m_bActiveMouse{false}
 {
 	SetName(L"CInterfaceScript");
+
+	m_pCameraObject = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"MainCamera");
+	m_pDragObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CDragObjectPrefab")->Instantiate();
+
+	Instantiate(m_pDragObj, 0);
+	
+	m_pRallyPoint = CResMgr::GetInst()->FindRes<CPrefab>(L"CRallypointPrefab")->Instantiate();
+	m_pRallyPoint->GetRenderComponent()->Deactivate();
+	Instantiate(m_pRallyPoint, 0);
 }
 
 CInterfaceScript::~CInterfaceScript()
@@ -69,54 +80,167 @@ void CInterfaceScript::begin()
 
 void CInterfaceScript::tick()
 {
-	/*
-	* 
-	*/
-
-	if (CInterfaceMgr::GetInst()->GetTarget())
+	if (CInterfaceMgr::GetInst()->GetBuildObj())
 	{
-		CGameObject* pGameObject =  CInterfaceMgr::GetInst()->GetTarget();
-		wstring wstrName = pGameObject->GetName();
+		CGameObject* pObj = CInterfaceMgr::GetInst()->GetBuildObj();
 
-		if (m_pTarget)
+		m_bChecked = false;
+
+		if (KEY_PRESSED(KEY::RBTN))
 		{
-			if (lstrcmp(m_pTarget->GetName().c_str(), wstrName.c_str()))
+			pObj->GetScripts()[0]->clear();
+
+			for (size_t j{}; j < 6; ++j)
+				m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+
+			m_bChecked = true;
+
+			pObj->Destroy();
+			CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+		}
+	}
+	else
+	{
+		if (m_bUiClicked)
+		{
+		}
+		else if (KEY_PRESSED(KEY::LBTN))
+		{
+			const Ray& ray = GetRay();
+			Vec3 vPos{};
+
+			if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
 			{
-				if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
+				if (m_bActiveMouse)
 				{
-					m_pTile->TileMap()->On();
-					for (size_t i{}; i < 6; ++i)
-						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)COMMAND_CENTER);
-				}				
-				else if (!lstrcmp(L"SC", wstrName.c_str()))
+					Vec3 vPos2 = (m_pairPoint.first + vPos) * 0.5f;
+					Vec3 vScale = Vec3(fabsf(m_pairPoint.first.x - vPos.x), 
+						fabsf(m_pairPoint.first.y - vPos.y),
+						fabsf(m_pairPoint.first.z - vPos.z));
+					m_pDragObj->Transform()->SetRelativePos(vPos2);
+					m_pDragObj->Transform()->SetRelativeScale(vScale);
+				}
+
+				if (!m_bActiveMouse)
 				{
-					m_pTile->TileMap()->Off();
-					for (size_t i{}; i < 6; ++i)
-						m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)SOLDIER_CMD);
-				}else
-					m_pTile->TileMap()->Off();
+					m_pDragObj->GetRenderComponent()->Activate();
+					m_pairPoint.first = vPos;
+					m_bActiveMouse = true;
+
+					for (size_t i{}; i < m_vecDragObj.size(); ++i)
+						m_vecDragObj[i]->GetChilds()[0]->GetRenderComponent()->Deactivate();
+
+					m_vecDragObj.clear();
+					m_vecDragObj.shrink_to_fit();
+				}
 			}
 		}
-		
-		if (!m_pTarget)
+		else if (KEY_RELEASE(KEY::LBTN))
 		{
-			if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
+			const Ray& ray = GetRay();
+			Vec3 vPos{};
+
+			if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
 			{
-				m_pTile->TileMap()->On();
-				for (size_t i{}; i < 6; ++i)
-					m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)COMMAND_CENTER);
-			}
-			else if (!lstrcmp(L"SC", wstrName.c_str()))
-			{
-				m_pTile->TileMap()->Off();
-				for (size_t i{}; i < 6; ++i)
-					m_arrTapButton[i]->GetScript<CButtonScript>()->SetColumn((UINT)SOLDIER_CMD);
+				if (m_bActiveMouse)
+				{
+					m_pDragObj->GetRenderComponent()->Deactivate();
+					Vec3 vScale{ 0.f, 0.f, 0.f };
+					m_pDragObj->Transform()->SetRelativeScale(vScale);
+					m_bActiveDrag = true;
+					m_pairPoint.second = vPos;
+					m_bActiveMouse = false;
+				}
 			}
 			else
-				m_pTile->TileMap()->Off();
+			{
+				if (m_bActiveMouse)
+				{
+					m_pDragObj->GetRenderComponent()->Deactivate();
+					Vec3 vScale{ 0.f, 0.f, 0.f };
+					m_pDragObj->Transform()->SetRelativeScale(vScale);
+					m_bActiveDrag = false;
+					m_bActiveMouse = false;
+				}
+			}
 		}
 
-		m_pTarget = pGameObject;
+	}
+}
+
+void CInterfaceScript::finaltick()
+{
+	if (m_bActiveDrag)
+	{
+		const vector<CGameObject*>& vecObj = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+
+		Vec3 vPos{};
+
+		for (size_t i{}; i < vecObj.size(); ++i)
+		{
+			const wstring& wstrName = vecObj[i]->GetName();
+			if (!lstrcmp(L"CTitan", wstrName.c_str()) || !lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CSniper", wstrName.c_str()) || !lstrcmp(L"CRanger", wstrName.c_str()))
+			{
+				vPos = vecObj[i]->Transform()->GetRelativePos();
+
+				if ((m_pairPoint.first.x <= vPos.x
+					&& vPos.x <= m_pairPoint.second.x
+					&& vPos.z <= m_pairPoint.first.z
+					&& m_pairPoint.second.z <= vPos.z))
+				{
+					vecObj[i]->GetScripts()[0]->ActiveIcon();
+					m_vecDragObj.push_back(vecObj[i]);
+				}
+				else if ((m_pairPoint.second.x <= vPos.x
+					&& vPos.x <= m_pairPoint.first.x
+					&& vPos.z <= m_pairPoint.second.z
+					&& m_pairPoint.first.z <= vPos.z))
+				{
+					vecObj[i]->GetScripts()[0]->ActiveIcon();
+					m_vecDragObj.push_back(vecObj[i]);
+				}
+			}
+		}
+		m_bActiveDrag = false;
+	}
+	else if (!m_vecDragObj.empty())
+	{
+		if (KEY_TAP(KEY::RBTN))
+		{
+			const Ray& ray = GetRay();
+			Vec3 vPos{};
+
+			if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
+			{
+				tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
+				Int32 x = tTile.iIndex % TILEX;
+				Int32 y = tTile.iIndex / TILEX;
+
+				for (size_t i{}; i < m_vecDragObj.size(); ++i)
+				{
+					m_vecDragObj[i]->GetScripts()[0]->Move(x, y);
+				}
+				m_pRallyPoint->Transform()->SetRelativePos(vPos);
+				m_pRallyPoint->GetRenderComponent()->Activate();
+			}
+		}
+	}
+	 else if (CInterfaceMgr::GetInst()->GetTarget())
+	{
+		static wstring wstrName{};
+
+		if (m_pTarget != CInterfaceMgr::GetInst()->GetTarget() && m_bChecked)
+		{
+			CGameObject* pObj = m_pTarget;
+
+			if (pObj)
+				pObj->GetScripts()[0]->PhaseEventOff();
+
+			m_pTarget = CInterfaceMgr::GetInst()->GetTarget();
+			m_pTarget->GetScripts()[0]->PhaseEventOn();
+
+			wstrName = m_pTarget->GetName();
+		}
 
 		if (!lstrcmp(L"CmdCenter", wstrName.c_str()))
 		{
@@ -127,6 +251,8 @@ void CInterfaceScript::tick()
 
 				if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
 				{
+					m_bUiClicked = true;
+
 					if (COMMAND_CENTER == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
 					{
 						switch (i)
@@ -160,7 +286,7 @@ void CInterfaceScript::tick()
 							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
 							Instantiate(pObj, 1);
 						}
-							break;
+						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
@@ -265,14 +391,22 @@ void CInterfaceScript::tick()
 							Instantiate(pObj, 1);
 						}
 						break;
+						case 1:
+						{
+							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CTeslaTowerPrefab");
+							CGameObject* pObj = pUIPrefab->Instantiate();
+							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+							Instantiate(pObj, 1);
+						}
+						break;
 						case 5:
 							for (size_t j{}; j < 6; ++j)
 								m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
 
 							if (CInterfaceMgr::GetInst()->GetBuildObj())
 							{
-							CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
-							CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+								CInterfaceMgr::GetInst()->GetBuildObj()->Destroy();
+								CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
 							}
 							break;
 						}
@@ -285,105 +419,99 @@ void CInterfaceScript::tick()
 		* 마우스 이동
 		* UI Description 표기
 		*/
-		else if (!lstrcmp(L"SC", wstrName.c_str()))
+		else if (!lstrcmp(L"Tent", wstrName.c_str()))
 		{
-		for (size_t i{}; i < 6; ++i)
-		{
-			if (nullptr == m_arrTapButton[i])
-				continue;
-
-			if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
+			for (size_t i{}; i < 6; ++i)
 			{
-				if (SOLDIER_CMD == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
-				{
-					switch (i)
-					{
-					case 0:
-						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CRangerPrefab");
-						break;
-					case 1:
-						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"SoldierPrefab");
-						break;
-					case 2:
-						m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CSniperPrefab");
-						break;
-						//끝
-					case 3:
+				if (nullptr == m_arrTapButton[i])
+					continue;
 
-						break;
+				if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
+				{
+					if (SOLDIER_CMD == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					{
+						switch (i)
+						{
+						case 0:
+							//Upgrade
+							break;;
+						case 6:
+							m_pTarget->Destroy();
+							break;
+							//끝
+						}
 					}
 				}
+				//버튼 토글
 			}
-			//버튼 토글
 		}
-		}
-		else if (!lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CInfectedGiant", wstrName.c_str()))
+		else if (!lstrcmp(L"SC", wstrName.c_str()))
 		{
-		if (KEY_PRESSED(KEY::LBTN))
-		{
-			const Ray& ray = GetRay();
-			Vec3 vPos{};
-
-			if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
+			for (size_t i{}; i < 6; ++i)
 			{
-				tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
-				Int32 x = tTile.iIndex % TILEX;
-				Int32 y = tTile.iIndex / TILEX;
+				if (nullptr == m_arrTapButton[i])
+					continue;
 
-				if (!lstrcmp(L"Soldier", wstrName.c_str()))
+				if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
 				{
-					m_pTarget->GetScript<CSoldierScript>()->Move(x, y);
+					if (SOLDIER_CMD == m_arrTapButton[i]->GetScript<CButtonScript>()->GetColumn())
+					{
+						switch (i)
+						{
+						case 0:
+							m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CRangerPrefab");
+							break;
+						case 1:
+							m_pTarget->GetScript<CSCScript>()->CreateUnit(L"SoldierPrefab");
+							break;
+						case 2:
+							m_pTarget->GetScript<CSCScript>()->CreateUnit(L"CSniperPrefab");
+							break;
+							//끝
+						case 3:
+							/*
+							* SCScript 랠리 포인트 객체 생성
+							* 이벤트 발생 시 해당 위치로 이동
+							*/
+							m_pTarget->GetScript<CSCScript>()->RallyEvent();
+							break;
+						}
+					}
 				}
-				else if (!lstrcmp(L"CInfectedGiant", wstrName.c_str()))
-				{
-					m_pTarget->GetScript<CInfectedGiantScript>()->JpsAlgorithm(x, y);
-				}
+				//버튼 토글
 			}
 		}
+		else if (!lstrcmp(L"CTitan", wstrName.c_str()) || !lstrcmp(L"Soldier", wstrName.c_str()) || !lstrcmp(L"CSniper", wstrName.c_str()) || !lstrcmp(L"CRanger", wstrName.c_str()))
+		{
+			if (KEY_TAP(KEY::RBTN))
+			{
+				const Ray& ray = GetRay();
+				Vec3 vPos{};
+
+				if (m_pTile->TileMap()->GetMesh()->GetPosition(ray, vPos))
+				{
+					tTile tTile = m_pTile->TileMap()->GetInfo(vPos);
+					Int32 x = tTile.iIndex % TILEX;
+					Int32 y = tTile.iIndex / TILEX;
+
+					m_pTarget->GetScripts()[0]->Move(x, y);
+					m_pRallyPoint->Transform()->SetRelativePos(vPos);
+					m_pRallyPoint->GetRenderComponent()->Activate();
+				}
+			}
 
 		}
 	}
 	else
 	{
-	m_pTarget = nullptr;
+		m_pTarget = nullptr;
 	}
 
-	//타겟 미 선택 버튼 선택 일 경우 해지
-	for (size_t i{}; i < 6; ++i)
-		m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
-}
-
-void CInterfaceScript::finaltick()
-{
-	if (CInterfaceMgr::GetInst()->GetBuildObj())
+	if (m_bUiClicked)
 	{
-		CGameObject* pObj = CInterfaceMgr::GetInst()->GetBuildObj();
-		if (KEY_PRESSED(KEY::RBTN))
-		{
-			if (!lstrcmp(pObj->GetName().data(), L"Tent"))
-				pObj->GetScript<CTentScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"HuntHouse"))
-				pObj->GetScript<CHuntScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"SawMill"))
-				pObj->GetScript<CSawScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"Quarry"))
-				pObj->GetScript<CQuarryScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"SC"))
-				pObj->GetScript<CSCScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"WoodWorkshop"))
-				pObj->GetScript<CWWSScript>()->clear();
-			else if (!lstrcmp(pObj->GetName().data(), L"POS"))
-				pObj->GetScript<CPOSScript>()->clear();
-
-			for (size_t j{}; j < 6; ++j)
-				m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
-
-			pObj->Destroy();
-			CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
-		}
+		m_bUiClicked = false;
 	}
-
-	if (KEY_PRESSED(KEY::LBTN))
+	else if (KEY_TAP(KEY::LBTN))
 	{
 		static int iChecked = 0;
 		float fDist{};
@@ -398,56 +526,57 @@ void CInterfaceScript::finaltick()
 		{
 			if (vecObj[i]->Transform()->Picking(ray, fDist))
 			{
-				BUILD_STATE eState{BUILD_STATE::END};
+				//BUILD_STATE eState{};
 
-				if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
-					eState = vecObj[i]->GetScript<CCommandScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
-					eState = vecObj[i]->GetScript<CTentScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
-					eState = vecObj[i]->GetScript<CHuntScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
-					eState = vecObj[i]->GetScript<CSawScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
-					eState = vecObj[i]->GetScript<CQuarryScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
-					eState = vecObj[i]->GetScript<CSCScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
-					eState = vecObj[i]->GetScript<CWWSScript>()->GetState();
-				else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
-					eState = vecObj[i]->GetScript<CPOSScript>()->GetState();
+				//if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
+				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
+				//	eState = vecObj[i]->GetScripts()[0]->GetState();
 
-				if ((BUILD_STATE::COMPLETE == eState) || (BUILD_STATE::CREATE_UNIT == eState))
-				{
-					vecPair.push_back(make_pair(vecObj[i], fDist));
-				}
+				//if ((BUILD_STATE::COMPLETE == eState) || (BUILD_STATE::CREATE_UNIT == eState))
+				//{
+				//	vecPair.push_back(make_pair(vecObj[i], fDist));
+				//}
+				vecPair.push_back(make_pair(vecObj[i], fDist));
 			}
 		}
 
-		const vector<CGameObject*>& vecUnit = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+		//const vector<CGameObject*>& vecUnit = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
 
-		for (size_t i{}; i < vecUnit.size(); ++i)
-		{
-			if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
-				continue;
-			else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
-				continue;
+		//for (size_t i{}; i < vecUnit.size(); ++i)
+		//{
+		//	if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
+		//		continue;
+		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
+		//		continue;
 
-			if (vecUnit[i]->Transform()->Picking(ray, fDist))
-				vecPair.push_back(make_pair(vecUnit[i], fDist));
-		}
+		//	if (vecUnit[i]->Transform()->Picking(ray, fDist))
+		//		vecPair.push_back(make_pair(vecUnit[i], fDist));
+		//}
 
 		sort(vecPair.begin(), vecPair.end(), [&](pair<CGameObject*, float> lhs, pair<CGameObject*, float> rhs)
 		{
@@ -457,9 +586,24 @@ void CInterfaceScript::finaltick()
 				return false;
 		});
 
-		if(!vecPair.empty())
+		if (!vecPair.empty())
+		{
 			CInterfaceMgr::GetInst()->SetTarget(vecPair[0].first);
+
+			for (size_t i{}; i < m_vecDragObj.size(); ++i)
+				m_vecDragObj[i]->GetChilds()[0]->GetRenderComponent()->Deactivate();
+
+			m_vecDragObj.clear();
+			m_vecDragObj.shrink_to_fit();
+
+			m_bChecked = true;
+		}
 	}
+
+
+	////타겟 미 선택 버튼 선택 일 경우 해지
+	//for (size_t i{}; i < 6; ++i)
+	//	m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
 }
 
 void CInterfaceScript::BeginOverlap(CCollider2D* _pOther)

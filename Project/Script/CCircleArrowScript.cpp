@@ -44,14 +44,12 @@ CCircleArrowScript::~CCircleArrowScript()
 
 void CCircleArrowScript::begin()
 {
-	m_IconAtlas = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Icons.png");
-	m_AtlasAlpha = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
 }
 
 void CCircleArrowScript::tick()
 {
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_1, m_IconAtlas);
-	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_2, m_AtlasAlpha);
+	if(GetOwner()->GetRenderComponent()->IsActive())
+		m_fDeltaTime += DT;
 
 	float fAngle = Transform()->GetRelativeRotation().y;
 	fAngle += DT;
@@ -60,6 +58,11 @@ void CCircleArrowScript::tick()
 
 void CCircleArrowScript::finaltick()
 {
+	if (m_fDeltaTime > 5.f)
+	{
+		GetOwner()->GetRenderComponent()->Deactivate();
+		m_fDeltaTime = 0.f;
+	}
 }
 
 void CCircleArrowScript::BeginOverlap(CCollider2D* _pOther)

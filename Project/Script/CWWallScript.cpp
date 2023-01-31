@@ -19,6 +19,7 @@ CWWallScript::CWWallScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
+
 	SetName(L"CWWallScript");
 
 	for (size_t i{}; i < 200 * 200; ++i)
@@ -30,6 +31,29 @@ CWWallScript::CWWallScript()
 			m_arr[i].arr[j] = false;
 		}
 	}
+
+	m_fFullHp = 125.f;
+
+	m_iArmor = 10.f;
+
+	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageWallWoodPrefab");
+
+	m_pPortrait = prefab->Instantiate();
+	m_pPortrait->Transform()->SetRelativePos(-220.f, 0.f, -550.f);
+	m_pPortrait->MeshRender()->Deactivate();
+	Instantiate(m_pPortrait, 31);
+
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescArmorPrefab");
+	m_vecIcon.push_back(prefab->Instantiate());
+
+	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		Instantiate(m_vecIcon[i], 31);
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
 }
 
 CWWallScript::~CWWallScript()
@@ -45,17 +69,24 @@ void CWWallScript::begin()
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }
 
 void CWWallScript::tick()
 {
-
+	__super::tick();
 }
 
 void CWWallScript::finaltick()
 {
-	if (0 >= m_iHp)
+	if (0 > m_fHP)
+	{
+		//CEffectWoodPrefab
+		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectExplosionPrefab")->Instantiate();
+		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+	}
 
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -90,37 +121,35 @@ void CWWallScript::finaltick()
 			m_fDt -= 0.25f;
 		}
 
-		if (m_fDt2 > 0.5f)
+		if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
 		{
-			if (KEY_PRESSED(KEY::LBTN) && !IsBlocked(m_iIndex))
-			{
 
-				Int32 x = m_iIndex % TILEX;
-				Int32 z = m_iIndex / TILEZ;
+			Int32 x = m_iIndex % TILEX;
+			Int32 z = m_iIndex / TILEZ;
 
-				m_vecBlock.push_back(tBlock{ x, z });
-				CJpsMgr::GetInst()->SetCollision(x, z);
+			m_vecBlock.push_back(tBlock{ x, z });
+			CJpsMgr::GetInst()->SetCollision(x, z);
 
-				m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
-				m_eBuildState = BUILD_STATE::BUILD;
-				m_fDt = 0.f;
-				m_fDt2 = 0.f;
+			m_pTileObject->TileMap()->SetInfo(m_iIndex, (UINT)TILE_TYPE::USED);
+			m_eBuildState = BUILD_STATE::BUILD;
+			m_fDt = 0.f;
+			m_fDt2 = 0.f;
 
-				m_arr[m_iIndex].bChecked = true;
+			m_arr[m_iIndex].bChecked = true;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 0);
+			Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
+			CGameObject* pObj = pUIPrefab->Instantiate();
+			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+			Instantiate(pObj, m_vMousePos, 1);
 
-				ChildWallProcess();
-			}
-			m_fDt2 = 0.5f;
+			ChildWallProcess();
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		if (m_fDt > 5.f)
+		m_fHP += DT * 10.f;
+
+		if (m_fHP > m_fFullHp)
 		{
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
@@ -541,4 +570,48 @@ void CWWallScript::clear()
 	{
 		SetTileInfo(m_iIndex);
 	}
+}
+
+
+#include <Engine\CEngine.h>
+#include <Engine\CFontMgr.h>
+#include "CButtonScript.h"
+
+void CWWallScript::PhaseEventOn()
+{
+	__super::PhaseEventOn();
+
+	lstrcpy(CEngine::g_szFullName, L"Woodwall");
+
+	wchar_t sz[200];
+
+	lstrcpy(sz, to_wstring(m_fHP).c_str());
+	lstrcat(sz, L"/");
+	lstrcat(sz, to_wstring(m_fFullHp).c_str());
+
+	lstrcpy(CEngine::g_szHp, sz);
+
+	m_pPortrait->MeshRender()->Activate();
+
+	CEngine::g_IconText.clear();
+
+	SetIconUI(m_iArmor, 0);
+
+	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
+	for (size_t i{}; i < 6; ++i)
+		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+}
+
+void CWWallScript::PhaseEventOff()
+{
+	__super::PhaseEventOff();
+
+	m_pPortrait->MeshRender()->Deactivate();
+
+	for (size_t i{}; i < m_vecIcon.size(); ++i)
+		m_vecIcon[i]->MeshRender()->Deactivate();
+
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }

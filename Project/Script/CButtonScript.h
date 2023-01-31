@@ -20,7 +20,7 @@ private:
     Ptr<CTexture>                m_Atlas;
     Ptr<CTexture>                m_IconAtlas;
     Ptr<CTexture>                m_AtlasAlpha;
-    array<array<tTapInfo, 6>, 6> m_arrTab;
+    array<array<tTapInfo, 6>, (UINT)TAP_CATEGORY_END> m_arrTab;
     UINT                         m_iColumn;
     UINT                         m_iRow;
     CGameObject*                 m_pUiCameraObject;

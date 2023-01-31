@@ -87,6 +87,9 @@ void EditAnimationUI::begin()
 
 void EditAnimationUI::update()
 {
+    if (m_pGameObject && m_pGameObject->IsDead())
+        m_pGameObject = nullptr;
+
     ComponentUI::update();
 }
 
@@ -101,13 +104,29 @@ void EditAnimationUI::render_update()
             TreeNode* pNode = (TreeNode*)payload->Data;
             m_pGameObject = (CGameObject*)pNode->GetData();
 
+            if (!m_pGameObject->Transform())
+            {
+                m_pGameObject = nullptr;
+                return;
+            }
+            if (!m_pGameObject->Animator2D())
+            {
+                m_pGameObject = nullptr;
+                return;
+            }
+            if (!m_pGameObject->MeshRender())
+            {
+                m_pGameObject = nullptr;
+                return;
+            }
+
             if (dynamic_cast<CGameObject*>(m_pGameObject))
             {
                 m_pAnimator = dynamic_cast<CGameObject*>(m_pGameObject)->Animator2D();
 
                 if (nullptr == m_pAnimator)
                 {
-                    cout << "Dummy Object has not Animation2D Component" << endl;
+                   // cout << "Dummy Object has not Animation2D Component" << endl;
                     ImGui::EndDragDropTarget();
                     return;
                 }
@@ -134,16 +153,6 @@ void EditAnimationUI::render_update()
             }
         }
         ImGui::EndDragDropTarget();
-    }
-
-    if (m_pGameObject)
-    {
-        Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
-        Vec3 vCameraPos = m_pCameraObject->Transform()->GetRelativePos();
-        Vec3 vPos = vCameraPos;
-        vPos.x += vResolution.x * 0.5f;
-        m_pGameObject->Transform()->SetRelativePos(vPos);
-        m_pGameObject->Transform()->SetRelativeScale(Vec3(500.f, 500.f, 0.f));
     }
 
     Render_Text(HSV_SKY_GREY, Vec2(230.f, 30.f), "Texture");
@@ -318,10 +327,8 @@ void EditAnimationUI::render_update()
     ImGui::SameLine();
     if (ImGui::Button("Del##1", ImVec2(40.f, 20.f)))
     {
-        m_iCurIdx = m_pAnimator->Delete_Animation2D(m_iCurIdx);
-
-        if (0 > m_iCurIdx)
-            m_iCurIdx = 0;
+        if(m_iCurIdx > 0)
+            m_iCurIdx = m_pAnimator->Delete_Animation2D(m_iCurIdx);
 
         Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());
     }
@@ -378,9 +385,13 @@ void EditAnimationUI::render_update()
             {
                 m_pAnimator->Play(pAnimator->GetName(), m_pAnimator->GetRepeat());
                 m_strAnimationName = string(pAnimator->GetName().begin(), pAnimator->GetName().end());
-                strcpy_s(m_szAnimation, m_strAnimationName.c_str());
-                m_vecAnimation.push_back(m_strAnimationName);
-                ++m_iSelectedIdx;
+
+                if (!m_strAnimationName.empty())
+                {
+                    strcpy_s(m_szAnimation, m_strAnimationName.c_str());
+                    m_vecAnimation.push_back(m_strAnimationName);
+                    ++m_iSelectedIdx;
+                }
             }
         }
     }
@@ -388,7 +399,7 @@ void EditAnimationUI::render_update()
     ImGui::SameLine();
     if (ImGui::Button("Del##2", ImVec2(40.f, 20.f)))
     {
-        if (!m_strAnimationName.empty())
+        if (!m_strAnimationName.empty() && 1 < m_vecAnimation.size())
         {
             CAnimation2D* pAnimator = m_pAnimator->Delete_Animation(wstring(m_strAnimationName.begin(), m_strAnimationName.end()));
 
@@ -409,11 +420,43 @@ void EditAnimationUI::render_update()
                     }
                 }
 
-                m_strAnimationName = string(pAnimator->GetName().begin(), pAnimator->GetName().end());
-                strcpy_s(m_szAnimation, m_strAnimationName.c_str());
+                /*추가 애니메이션 텍스쳐 자동 업데이트*/
+                m_pAtlasTexture = m_pAnimator->GetTexture();
+                m_pImage = m_pAtlasTexture->GetSRV().Get();
+                CGameObjectEx* pGameObject = CEditor::GetInst()->FindByName(L"AnimationTool");
+                pGameObject->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_pAtlasTexture);
+                Initialize_Aimation_Pixel();
 
-                if (m_vecAnimation.size() > 0 && m_iSelectedIdx != 0)
-                    --m_iSelectedIdx;
+                decltype(m_pAnimator->GetFames()) vecFrames = m_pAnimator->GetFames();
+
+                assert(vecFrames.size());
+
+                m_vecFrameIndex.clear();
+
+                for (int i{}; i < vecFrames.size(); ++i)
+                {
+                    if (10 > i)
+                    {
+                        m_vecFrameIndex.push_back("0" + std::to_string(i));
+                    }
+                    else
+                    {
+                        m_vecFrameIndex.push_back(std::to_string(i));
+                    }
+                }
+
+                if (vecFrames.size() > 0)
+                    m_iCurIdx = (int)vecFrames.size() - 1;
+                else
+                    m_iCurIdx = 0;
+
+                if (!m_strAnimationName.empty())
+                {
+                    strcpy_s(m_szAnimation, m_strAnimationName.c_str());
+
+                    if (m_vecAnimation.size() > 0 && m_iSelectedIdx != 0)
+                        --m_iSelectedIdx;
+                }
             }
         }
     }
@@ -439,8 +482,12 @@ void EditAnimationUI::render_update()
             }
 
             m_strAnimationName = string(pAnimator->GetName().begin(), pAnimator->GetName().end());
-            m_vecAnimation.push_back(m_strAnimationName);
-            strcpy_s(m_szAnimation, m_strAnimationName.c_str());
+
+            if (!m_strAnimationName.empty())
+            {
+                m_vecAnimation.push_back(m_strAnimationName);
+                strcpy_s(m_szAnimation, m_strAnimationName.c_str());
+            }
         }
     }
 
@@ -449,6 +496,24 @@ void EditAnimationUI::render_update()
         if (!m_strFileData.empty())
         {
             m_pAnimator->CloneAnimation(m_strFileData, *m_pAnimator);
+
+            m_vecAnimation.clear();
+            const vector<wstring> vec =  m_pAnimator->GetKeys();
+
+            for (size_t i{}; i < vec.size(); ++i)
+            {
+                m_vecAnimation.push_back(string(vec[i].begin(), vec[i].end()));
+            }
+        }
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Copy##1", ImVec2(40.f, 20.f)))
+    {
+        if (!m_strFileData.empty())
+        {
+            m_pAnimator->CopyAnimation(m_strFileData, *m_pAnimator);
 
             string strTemp = string(m_strFileData.begin(), m_strFileData.end());
             auto iter = m_vecAnimation.begin();
