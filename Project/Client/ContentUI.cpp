@@ -174,11 +174,20 @@ void ContentUI::render_update()
 			ray.direction = raydirection;
 
 			Vec3 vMousePos{};
+			Vec3 vCameraPos = m_pLevelCamera->Transform()->GetRelativePos();
+
+			BoundingFrustum fr(m_pLevelCamera->Camera()->GetProjMat());
 
 			if (m_pLevelTerrain->Terrain()->GetMesh()->GetPosition(ray, vMousePos))
 			{
-				CGameObject* pGameObject = m_pTargetPrefab->Instantiate();
-				Instantiate(pGameObject, vMousePos, iLayer);
+				BoundingBox box(vMousePos - vCameraPos, Vec3(1400.f, 1600.f, 1600.f));
+				BoundingFrustum fr(m_pLevelCamera->Camera()->GetProjMat());
+
+				if (fr.Contains(box))
+				{
+					CGameObject* pGameObject = m_pTargetPrefab->Instantiate();
+					Instantiate(pGameObject, vMousePos, iLayer);
+				}
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CInterfaceScript.h"
 
+#include <Engine\CEngine.h>
 #include <Engine\CDevice.h>
 #include <Engine\CLevel.h>
 #include <Engine\CLevelMgr.h>
@@ -76,10 +77,22 @@ void CInterfaceScript::begin()
 	}
 
 	m_pTile = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
+
+	m_pGoldBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressGold");
+	m_pWoodBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressWood");
+	m_pIronBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressIron");
 }
 
 void CInterfaceScript::tick()
 {
+	Resource();
+
+	if (m_pTarget && m_pTarget->IsDead())
+	{
+		CInterfaceMgr::GetInst()->SetTarget(nullptr);
+		m_pTarget = nullptr;
+	}
+
 	if (CInterfaceMgr::GetInst()->GetBuildObj())
 	{
 		CGameObject* pObj = CInterfaceMgr::GetInst()->GetBuildObj();
@@ -281,10 +294,7 @@ void CInterfaceScript::finaltick()
 						{
 						case 0:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"TentPrefab");
 						}
 						break;
 						case 5:
@@ -305,26 +315,17 @@ void CInterfaceScript::finaltick()
 						{
 						case 0:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"HuntHousePrefab");
 						}
 						break;
 						case 1:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"SawMillPrefab");
 						}
 						break;
 						case 2:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"QuarryPrefab");
 						}
 						break;
 						case 5:
@@ -345,26 +346,17 @@ void CInterfaceScript::finaltick()
 						{
 						case 0:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"SCPrefab");
 						}
 						break;
 						case 1:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"POSPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"POSPrefab");
 						}
 						break;
 						case 2:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWorkshopPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"WoodWorkshopPrefab");
 						}
 						break;
 						case 5:
@@ -385,18 +377,12 @@ void CInterfaceScript::finaltick()
 						{
 						case 0:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"WoodWallPrefab");
 						}
 						break;
 						case 1:
 						{
-							Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CTeslaTowerPrefab");
-							CGameObject* pObj = pUIPrefab->Instantiate();
-							CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-							Instantiate(pObj, 1);
+							Create(L"CTeslaTowerPrefab");
 						}
 						break;
 						case 5:
@@ -616,4 +602,150 @@ void CInterfaceScript::Overlap(CCollider2D* _pOther)
 
 void CInterfaceScript::EndOverlap(CCollider2D* _pOther)
 {
+}
+
+void CInterfaceScript::Resource()
+{
+	m_fDeltaTime += DT;
+
+	if (m_fDeltaTime >= 10.f)
+	{
+		if(g_iGold < m_iGoldTotal)
+			g_iGold += g_iGoldInc;
+		else
+			g_iGold = m_iGoldTotal;
+
+		if (g_iWood < m_iWoodTotal)
+			g_iWood += g_iWoodInc;
+		else
+			g_iWood = m_iWoodTotal;
+
+		if (g_iIron < m_iIronTotal)
+			g_iIron += g_iIronInc;
+		else
+			g_iIron = m_iIronTotal;
+
+		CEngine::g_vecUiText.clear();
+		CEngine::g_vecUiText.shrink_to_fit();
+
+		tTextInfo tInfo{};
+
+		lstrcat(tInfo.sz, std::to_wstring(g_iColony).c_str());
+		tInfo.vPos = Vec2{ 1392.f, 813.f };
+		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+		tInfo.fSize = 14.f;
+		CEngine::g_vecUiText.push_back(tInfo);
+
+		memset(&tInfo, 0, sizeof(tTextInfo));
+
+		lstrcat(tInfo.sz, std::to_wstring(g_iWorker).c_str());
+		tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f };
+		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+		tInfo.fSize = 14.f;
+		CEngine::g_vecUiText.push_back(tInfo);
+
+		memset(&tInfo, 0, sizeof(tTextInfo));
+
+		lstrcat(tInfo.sz, std::to_wstring(g_iGold).c_str());
+		tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f * 2.f };
+		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+		tInfo.fSize = 14.f;
+		CEngine::g_vecUiText.push_back(tInfo);
+
+		BarText();
+
+		IncText();
+		//Progress bar
+
+		ProgressBar(g_iGold, m_iGoldTotal, m_pGoldBar);
+		ProgressBar(g_iWood, m_iWoodTotal, m_pWoodBar);
+		ProgressBar(g_iIron, m_iIronTotal, m_pIronBar);
+
+
+		m_fDeltaTime = 0;
+
+	}
+}
+
+void CInterfaceScript::ProgressBar(int _iValue, int iTotal, CGameObject* pProObj)
+{
+	float x{}, fCX{};
+	CGameObject* pObj{};
+	Vec3 vScale{};
+
+	pObj = pProObj->GetChilds()[0];
+	vScale = pObj->Transform()->GetRelativeScale();
+
+	x = (float)_iValue / iTotal * pProObj->Transform()->GetRelativeScale().x;
+
+	vScale.x = x;
+
+	fCX = pProObj->Transform()->GetRelativeScale().x;
+
+	pObj->Transform()->SetRelativePos(Vec3(-0.5f * fCX + x * 0.5f, 0.f, 0.f));
+	pObj->Transform()->SetRelativeScale(vScale);
+}
+
+void CInterfaceScript::BarText()
+{
+	tTextInfo tInfo{};
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iGold).c_str());
+	tInfo.vPos = Vec2{ 1592.f - 100.f, 813.f - 2.f };
+	tInfo.vColor = Vec4{ 255.f, 255.f, 255.f, 255.f };
+	tInfo.fSize = 15.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iWood).c_str());
+	tInfo.vPos = Vec2{ 1592.f - 100.f, 813.f + 29.f - 2.f };
+	tInfo.vColor = Vec4{ 255.f, 255.f, 255.f, 255.f };
+	tInfo.fSize = 15.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iIron).c_str());
+	tInfo.vPos = Vec2{ 1592.f - 100.f, 813.f + 29.f * 2.f - 2.f };
+	tInfo.vColor = Vec4{ 255.f, 255.f, 255.f, 255.f };
+	tInfo.fSize = 15.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+}
+
+void CInterfaceScript::IncText()
+{
+	tTextInfo tInfo{};
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iGoldInc).c_str());
+	tInfo.vPos = Vec2{ 1550.f, 813.f + 2.f };
+	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f};
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iWoodInc).c_str());
+	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f + 2.f };
+	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f};
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iIronInc).c_str());
+	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f * 2.f + 2.f };
+	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f };
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+}
+
+bool CInterfaceScript::Create(const wstring& _str)
+{
+	if (!__super::Create(_str))
+	{
+		for (size_t j{}; j < 6; ++j)
+			m_arrTapButton[j]->GetScript<CButtonScript>()->SetColumn(COMMAND_CENTER);
+	}
+	return true;
 }

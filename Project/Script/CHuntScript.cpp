@@ -11,6 +11,7 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
+#include <Script\CInterfaceScript.h>
 
 CHuntScript::CHuntScript()
 	:CScript{ SCRIPT_TYPE::HUNTSCRIPT }
@@ -18,12 +19,19 @@ CHuntScript::CHuntScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
-	m_fFullHp = 75;
+	m_fFullHp = 160.f;
 
-	m_iGold = 200;
-	m_iWorker = 10;
-	m_iFood = 20;
-	m_iStorage = 50;
+	m_iGold = -2;
+	m_iWorker = 0;
+	m_iFood = 0;
+	m_iColony = 2;
+
+	m_iGoldOut = 80;
+	m_iWoodOut = 0;
+	m_iIronOut = 0;
+
+	int m_iWoodOut;
+	int m_iIronOut;
 
 	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageHunterCottagePrefab");
 
@@ -38,7 +46,7 @@ CHuntScript::CHuntScript()
 	m_vecIcon.push_back(prefab->Instantiate());
 	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescFoodPrefab");
 	m_vecIcon.push_back(prefab->Instantiate());
-	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescStoragePrefab");
+	prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescColonyPrefab");
 	m_vecIcon.push_back(prefab->Instantiate());
 
 	m_vecIcon[0]->Transform()->SetRelativePos(50.f, 0.f, -500.f);
@@ -68,7 +76,6 @@ void CHuntScript::begin()
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
 	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
-
 }
 
 void CHuntScript::tick()
@@ -87,6 +94,9 @@ void CHuntScript::finaltick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
 	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
@@ -155,10 +165,7 @@ void CHuntScript::finaltick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"HuntHousePrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 1);
+				Create(L"HuntHousePrefab", m_vMousePos);
 			}
 		}
 	}
@@ -413,7 +420,7 @@ void CHuntScript::PhaseEventOn()
 	SetIconUI(m_iGold, 0);
 	SetIconUI(m_iWorker, 1);
 	SetIconUI(m_iFood, 2);
-	SetIconUI(m_iStorage, 3);
+	SetIconUI(m_iColony, 3);
 
 	const vector<CGameObject*> vec = CInterfaceMgr::GetInst()->GetTapButtons();
 	for (size_t i{}; i < 6; ++i)

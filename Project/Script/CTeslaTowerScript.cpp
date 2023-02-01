@@ -22,6 +22,10 @@ CTeslaTowerScript::CTeslaTowerScript()
 
 	m_iArmor = 10;
 
+	m_iGoldOut = 200;
+	m_iWoodOut = 10;
+	m_iIronOut = 0;
+
 	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageTeslaTowerPrefab");
 
 	m_pPortrait = prefab->Instantiate();
@@ -74,6 +78,9 @@ void CTeslaTowerScript::finaltick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectExplosionPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
 	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
@@ -145,6 +152,7 @@ void CTeslaTowerScript::finaltick()
 				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CTeslaTowerPrefab");
 				CGameObject* pObj = pUIPrefab->Instantiate();
 				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				m_vMousePos.z += Transform()->GetRelativeScale().z * 0.5f;
 				Instantiate(pObj, m_vMousePos, 1);
 			}
 		}

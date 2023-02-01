@@ -137,6 +137,9 @@
     <Filter Include="Scripts\15. AssistScript\01. AssistScript">
       <UniqueIdentifier>{a6605f71-f95d-4b9d-9546-823ddb81a158}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts\10. Mineral\03. CHillScript">
+      <UniqueIdentifier>{2cec1170-f356-4964-ad0d-c37f073688ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDragScript.h">
@@ -277,6 +280,9 @@
     <ClInclude Include="CAssistScript.h">
       <Filter>Scripts\15. AssistScript\01. AssistScript</Filter>
     </ClInclude>
+    <ClInclude Include="CHillScript.h">
+      <Filter>Scripts\10. Mineral\03. CHillScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CDragScript.cpp">
@@ -416,6 +422,9 @@
     </ClCompile>
     <ClCompile Include="AssistScript.cpp">
       <Filter>Scripts\15. AssistScript\01. AssistScript</Filter>
+    </ClCompile>
+    <ClCompile Include="CHillScript.cpp">
+      <Filter>Scripts\10. Mineral\03. CHillScript</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

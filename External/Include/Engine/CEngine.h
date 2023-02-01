@@ -28,6 +28,7 @@ public :
 	static wchar_t g_szHp[255];
 	static wchar_t g_szFullName[255];
 	static vector<pair<wstring, Vec2>> g_IconText;
+	static vector<tTextInfo> g_vecUiText;
 public:
 	HWND GetMainHwnd() { return m_hMainWnd; }
 };

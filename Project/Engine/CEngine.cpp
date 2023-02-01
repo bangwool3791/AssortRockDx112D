@@ -21,7 +21,7 @@ extern std::unordered_map<std::string, ChunkGroup*>			g_map_pool;
 wchar_t CEngine::g_szHp[255];
 wchar_t CEngine::g_szFullName[255];
 vector<pair<wstring, Vec2>> CEngine::g_IconText;
-
+vector<tTextInfo> CEngine::g_vecUiText;
 CEngine::CEngine()
 	: m_hMainWnd(nullptr)
 {
@@ -113,6 +113,11 @@ void CEngine::render()
 		else
 			CFontMgr::GetInst()->DrawFont(g_IconText[i].first.c_str(), g_IconText[i].second.x, g_IconText[i].second.y, 17.f, FONT_RGBA(255, 20, 20, 200));
 	}
+
+	for (size_t i{}; i < CEngine::g_vecUiText.size(); ++i)
+		CFontMgr::GetInst()->DrawFont(g_vecUiText[i].sz, g_vecUiText[i].vPos.x, g_vecUiText[i].vPos.y, g_vecUiText[i].fSize, 
+			FONT_RGBA(g_vecUiText[i].vColor.x, g_vecUiText[i].vColor.y,
+				g_vecUiText[i].vColor.z, g_vecUiText[i].vColor.w));
 	/*
 	* 1 Tick
 	* Present

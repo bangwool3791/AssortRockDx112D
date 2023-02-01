@@ -3,6 +3,7 @@
 
 #include "CEngine.h"
 #include "CDevice.h"
+#include "CInterfaceMgr.h"
 
 CScript::CScript(int _iScriptType)
 	:CComponent(COMPONENT_TYPE::SCRIPT)
@@ -76,4 +77,105 @@ void CScript::PhaseEventOn()
 void CScript::PhaseEventOff()
 {
 	m_bDesc = false;
+}
+
+
+bool CScript::Create(const wstring& _str)
+{
+	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(_str);
+	CGameObject* pObj = pUIPrefab->Instantiate();
+
+	int _iGold = pObj->GetScripts()[0]->GetGoldOut();
+	int _iWood = pObj->GetScripts()[0]->GetWoodOut();
+	int _iIron = pObj->GetScripts()[0]->GetIronOut();
+
+	int _iGoldInc = pObj->GetScripts()[0]->GetGold();
+
+	int _iWorker = pObj->GetScripts()[0]->GetWorker();
+	int _iFood = pObj->GetScripts()[0]->GetFood();
+	int _iColony = pObj->GetScripts()[0]->GetColony();
+
+	if (g_iGold >= _iGold && g_iWood >= _iWood && g_iIron >= _iIron)
+	{
+		if (0 > g_iGoldInc && 0 >= g_iGoldInc - _iGoldInc)
+		{
+			delete pObj;
+			return false;
+		}
+		else if (0 > g_iFood && 0 >= g_iFood - _iFood)
+		{
+			delete pObj;
+			return false;
+		}
+		else if (0 > g_iColony && 0 >= g_iColony - _iColony)
+		{
+			delete pObj;
+			return false;
+		}
+		else
+		{
+			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+			Instantiate(pObj, 1);
+			return true;
+		}
+	}
+	else
+	{
+		delete pObj;
+		return false;
+	}
+}
+
+bool CScript::Create(const wstring& _str, Vec3 vPos)
+{
+	CInterfaceMgr::GetInst()->SetBuildObj(nullptr);
+
+	Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(_str);
+	CGameObject* pObj = pUIPrefab->Instantiate();
+
+	int _iGold = pObj->GetScripts()[0]->GetGoldOut();
+	int _iWood = pObj->GetScripts()[0]->GetWoodOut();
+	int _iIron = pObj->GetScripts()[0]->GetIronOut();
+
+	int _iGoldInc = pObj->GetScripts()[0]->GetGold();
+
+	int _iWorker = pObj->GetScripts()[0]->GetWorker();
+	int _iFood = pObj->GetScripts()[0]->GetFood();
+	int _iColony = pObj->GetScripts()[0]->GetColony();
+
+	if (g_iGold >= _iGold && g_iWood >= _iWood && g_iIron >= _iIron)
+	{
+		if (0 > g_iGoldInc && 0 >= g_iGoldInc - _iGoldInc)
+		{
+			delete pObj;
+			return false;
+		}
+		else if (0 > g_iFood && 0 >= g_iFood - _iFood)
+		{
+			delete pObj;
+			return false;
+		}
+		else if (0 > g_iColony && 0 >= g_iColony - _iColony)
+		{
+			delete pObj;
+			return false;
+		}
+		else
+		{
+			g_iGoldInc -= _iGoldInc;
+			g_iFood += _iFood;
+			g_iColony += _iColony;
+			g_iGold -= _iGold;
+			g_iWood -= _iWood;
+			g_iIron -= _iIron;
+			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+			Instantiate(pObj, vPos, 1);
+			return true;
+		}
+	}
+	else
+	{
+		delete pObj;
+		return false;
+	}
 }

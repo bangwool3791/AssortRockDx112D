@@ -55,10 +55,16 @@ protected:
     int                     m_iSpeed;
     int                     m_iAttackSpeed;
     int                     m_iAttackRange;
-    float                     m_fHP;
-    float                     m_fFullHp;
+    float                   m_fHP;
+    float                   m_fFullHp;
+
+    int                     m_iGoldOut;
+    int                     m_iWoodOut;
+    int                     m_iIronOut;
 protected:
     void SetIconUI(int iValue, UINT idx);
+    virtual bool Create(const wstring& _str);
+    virtual bool Create(const wstring& _str, Vec3 vPos);
 public:
     void Set_Target(Vec3 _vTarget) { m_vTarget = _vTarget; }
     void AddScriptParam(SCRIPT_PARAM _eParam, const string& _name, void* _pParam)
@@ -74,11 +80,21 @@ public:
     float GetHp() { return m_fHP; }
     void SetHp(float _iHp) { m_fHP = _iHp; }
 
-    UINT GetGold() { return m_iGold; }
+    int GetGold() { return m_iGold; }
+    int GetWood() { return m_iWood; }
+    int GetIron() { return m_iIron; }
     void SetHp(UINT _iGold) { m_iGold = _iGold; }
 
     float GetFullHp() { return m_fFullHp; }
     void SetFullHp(float _iGold) { m_fFullHp = _iGold; }
+
+    int GetGoldOut() { return m_iGoldOut; }
+    int GetWoodOut() { return m_iWoodOut; }
+    int GetIronOut() { return m_iIronOut; }
+
+    int GetWorker() { return m_iWorker; }
+    int GetFood() { return m_iFood; }
+    int GetColony() { return m_iColony; }
 public:
     virtual void tick();
     virtual void finaltick() {};

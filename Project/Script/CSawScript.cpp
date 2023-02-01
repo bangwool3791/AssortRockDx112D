@@ -10,6 +10,7 @@
 #include <Engine\CJpsMgr.h>
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
+#include <Script\CInterfaceScript.h>
 
 CSawScript::CSawScript()
 	:CScript{ SCRIPT_TYPE::SAWSCRIPT }
@@ -17,7 +18,16 @@ CSawScript::CSawScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 {
-	m_fFullHp = 125;
+	m_fFullHp = 200.f;
+
+	m_iGold = -4;
+	m_iWorker = -4;
+	m_iFood = 0;
+	m_iColony = 0;
+
+	m_iGoldOut = 300;
+	m_iWoodOut = 0;
+	m_iIronOut = 0;
 
 	SetName(L"CSawScript");
 
@@ -68,6 +78,9 @@ void CSawScript::tick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
 	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
@@ -159,17 +172,14 @@ void CSawScript::tick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SawMillPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 1);
+				Create(L"SawMillPrefab", m_vMousePos);
 			}
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
 		m_fHP += DT * 10.f;
-
+		g_iWoodInc += m_iWood;
 		if (m_fHP > m_fFullHp)
 		{
 			m_fHP = m_fFullHp;
@@ -424,6 +434,8 @@ void CSawScript::clear()
 
 		for (size_t i{}; i < 40000; ++i)
 			m_bCheck[i] = false;
+
+		m_iWood = 0;
 	}
 }
 

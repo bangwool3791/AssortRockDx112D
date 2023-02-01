@@ -10,6 +10,7 @@
 #include <Engine\CInterfaceMgr.h>
 #include <Engine\CJpsMgr.h>
 #include <Script\CMouseScript.h>
+#include <Script\CInterfaceScript.h>
 
 CTentScript::CTentScript()
 	:CScript{ SCRIPT_TYPE::TENTSCRIPT }
@@ -19,10 +20,14 @@ CTentScript::CTentScript()
 {
 	m_fFullHp = 60;
 
-	m_iGold = 4;
+	m_iGold = 8;
 	m_iWorker = 4;
 	m_iFood = -4;
 	m_iColony = 4;
+
+	m_iGoldOut = 30;
+	m_iWoodOut = 0;
+	m_iIronOut = 0;
 
 	SetName(L"CTentScript");
 
@@ -95,6 +100,11 @@ void CTentScript::finaltick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+		{
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
+		}
 	}
 
 	m_fDt += DT;
@@ -140,10 +150,7 @@ void CTentScript::finaltick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"TentPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 1);
+				Create(L"TentPrefab", m_vMousePos);
 
 			}
 			m_fDt2 = 0.5f;

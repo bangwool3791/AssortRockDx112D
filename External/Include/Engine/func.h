@@ -202,3 +202,14 @@ const wchar_t* ToWString(RES_TYPE);
 void DebugDrawRect(Vec4 _vColor, Vec3 _vPosition, Vec3 _vScale, Vec3 _vRotation, float _fDuration = 0.f);
 void DebugDrawCircle(Vec4 _vColor, Vec3 _vPosition, float _fRadius, float _fDuration = 0.f);
 #endif
+
+extern int g_iColony;
+extern int g_iWorker;
+extern int g_iFood;
+extern int g_iGold;
+extern int g_iWood;
+extern int g_iIron;
+ 
+extern int g_iGoldInc;
+extern int g_iWoodInc;
+extern int g_iIronInc;

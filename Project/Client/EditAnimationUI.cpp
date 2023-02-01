@@ -327,7 +327,7 @@ void EditAnimationUI::render_update()
     ImGui::SameLine();
     if (ImGui::Button("Del##1", ImVec2(40.f, 20.f)))
     {
-        if(m_iCurIdx > 0)
+        if(m_iCurIdx >= 0)
             m_iCurIdx = m_pAnimator->Delete_Animation2D(m_iCurIdx);
 
         Refresh_Animation((float)m_pAtlasTexture->GetWidth(), (float)m_pAtlasTexture->GetHeight());

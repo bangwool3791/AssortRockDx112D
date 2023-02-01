@@ -158,3 +158,14 @@ const Ray& GetRay()
 	ray.direction = raydirection;
 	return ray;
 }
+
+int g_iColony;
+int g_iWorker;
+int g_iFood;
+int g_iGold;
+int g_iWood;
+int g_iIron;
+
+int g_iGoldInc;
+int g_iWoodInc;
+int g_iIronInc;

@@ -9,7 +9,8 @@
 
 #include <Engine\CInterfaceMgr.h>
 #include <Script\CMouseScript.h>
-
+#include <Script\CInterfaceScript.h>
+#include <Engine\CJpsMgr.h>
 CQuarryScript::CQuarryScript()
 	:CScript{ SCRIPT_TYPE::QUARRYSCRIPT }
 	, m_vMousePos{}
@@ -17,7 +18,16 @@ CQuarryScript::CQuarryScript()
 	, m_eBuildState{ BUILD_STATE::READY }
 {
 
-	m_fFullHp = 125;
+	m_fFullHp = 200.f;
+
+	m_iGold = -6;
+	m_iWorker = -4;
+	m_iFood = 0;
+	m_iColony = 0;
+
+	m_iGoldOut = 300;
+	m_iWoodOut = 30;
+	m_iIronOut = 0;
 
 	SetName(L"CQuarryScript");
 
@@ -68,6 +78,9 @@ void CQuarryScript::tick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectWoodPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
 	}
 
 	if (BUILD_STATE::READY == m_eBuildState)
@@ -160,17 +173,14 @@ void CQuarryScript::tick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"QuarryPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				Instantiate(pObj, m_vMousePos, 1);
+				Create(L"QuarryPrefab", m_vMousePos);
 			}
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
 		m_fHP += DT * 10.f;
-
+		g_iIronInc += m_iIron;
 		if (m_fHP > m_fFullHp)
 		{
 			m_fHP = m_fFullHp;
@@ -232,6 +242,7 @@ void CQuarryScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _v
 			Int32 x = data % TILEX;
 			Int32 z = data / TILEZ;
 			m_vecBlock.push_back(tBlock{ x,z });
+			CJpsMgr::GetInst()->SetCollision(x, z);
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		}
 
@@ -419,6 +430,8 @@ void CQuarryScript::clear()
 			m_bCheck[i] = false;
 
 		m_vecMask.clear();
+
+		m_iIron = 0;
 	}
 }
 

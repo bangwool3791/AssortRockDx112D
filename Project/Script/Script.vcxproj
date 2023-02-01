@@ -180,6 +180,7 @@ call CodeGen.exe</Command>
     <ClInclude Include="CAssistScript.h" />
     <ClInclude Include="CCircleArrowScript.h" />
     <ClInclude Include="CEffectScript.h" />
+    <ClInclude Include="CHillScript.h" />
     <ClInclude Include="CRangerScript.h" />
     <ClInclude Include="CCrystalScript.h" />
     <ClInclude Include="CHuntScript.h" />
@@ -228,6 +229,7 @@ call CodeGen.exe</Command>
     <ClCompile Include="CArrowScript.cpp" />
     <ClCompile Include="CCircleArrowScript.cpp" />
     <ClCompile Include="CEffectScript.cpp" />
+    <ClCompile Include="CHillScript.cpp" />
     <ClCompile Include="CRangerScript.cpp" />
     <ClCompile Include="CCrystalScript.cpp" />
     <ClCompile Include="CHuntScript.cpp" />

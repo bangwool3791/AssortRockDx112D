@@ -669,6 +669,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\sprite\\Interface_HQ.dds", L"texture\\sprite\\Interface_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\Portraits_HQ.dds", L"texture\\sprite\\Portraits_HQ.dds");
 	Load<CTexture>(L"texture\\sprite\\Geology_HQ.dds", L"texture\\sprite\\Geology_HQ.dds");
+	Load<CTexture>(L"texture\\sprite\\Vegetation_HQ.dds", L"texture\\sprite\\Vegetation_HQ.dds");
 	//sprite png
 	Load<CTexture>(L"texture\\sprite\\HumansA_LQ.png", L"texture\\sprite\\HumansA_LQ.png");
 	Load<CTexture>(L"texture\\sprite\\AnimalsA_HQ.png", L"texture\\sprite\\AnimalsA_HQ.png");
@@ -696,6 +697,7 @@ void CResMgr::CreateDefaultTexture()
 	Load<CTexture>(L"texture\\sprite\\Interface_HQ.png", L"texture\\sprite\\Interface_HQ.png");
 	Load<CTexture>(L"texture\\sprite\\Portraits_HQ.png", L"texture\\sprite\\Portraits_HQ.png");
 	Load<CTexture>(L"texture\\sprite\\Geology_HQ.png", L"texture\\sprite\\Geology_HQ.png");
+	Load<CTexture>(L"texture\\sprite\\Vegetation_HQ.png", L"texture\\sprite\\Vegetation_HQ.png");
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);

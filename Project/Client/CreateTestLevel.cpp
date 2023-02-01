@@ -365,7 +365,7 @@ void CreateTestLelvel()
 	pGameObect->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"BorderMesh"));
 	pGameObect->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BorderMtrl"));
 	
-	pGameObect->GetScript<CAssistScript>()->SetGridColor(Vec4(0.2f, 0.9f, 0.2f, 1.f));
+	pGameObect->GetScript<CAssistScript>()->SetGridColor(Vec4(1.f, 1.f, 1.f, 1.f));
 	pGameObect->GetScript<CAssistScript>()->SetGridInterval(100.f);
 	pGameObect->GetScript<CAssistScript>()->SetThickness(2.f);
 	
@@ -375,9 +375,6 @@ void CreateTestLelvel()
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 1);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 2);
-	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 3);
 	
 	//CCollisionMgr::GetInst()->CollisionLayerCheck(4, 3);
 	pLevel->begin();

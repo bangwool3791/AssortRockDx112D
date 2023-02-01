@@ -11,7 +11,7 @@
 #include <Script\CMouseScript.h>
 
 CWWCScript::CWWCScript()
-	:CScript{ SCRIPT_TYPE::WWCSCRIPT }
+	:CScript{ SCRIPT_TYPE::WWCSCRIPT } 
 	, m_eBuildState{ BUILD_STATE::BUILD }
 {
 	SetName(L"CWWCScript");

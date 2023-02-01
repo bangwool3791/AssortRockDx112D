@@ -12,6 +12,7 @@
 #include <Engine\CInterfaceMgr.h>
 
 #include "CButtonScript.h"
+#include "CInterfaceScript.h"
 
 CSCScript::CSCScript()
 	:CScript{ SCRIPT_TYPE::SCSCRIPT }
@@ -20,10 +21,16 @@ CSCScript::CSCScript()
 	, m_eBuildState{ BUILD_STATE::READY }
 	, m_pGameObject{}
 {
-	m_fFullHp = 500;
+	m_fFullHp = 800.f;
 
 	m_iGold = -14;
 	m_iWorker = -8;
+	m_iFood = 0;
+	m_iColony = 0;
+
+	m_iGoldOut = 450;
+	m_iWoodOut = 20;
+	m_iIronOut = 20;
 
 	SetName(L"CSCScript");
 
@@ -78,6 +85,11 @@ void CSCScript::begin()
 	Instantiate(m_pRallyPoint, 0);
 
 	GetOwner()->GetChilds()[2]->GetRenderComponent()->Deactivate();
+
+	g_iGoldInc += m_iGold;
+	g_iColony += m_iColony;
+	g_iWorker += m_iWorker;
+	g_iFood += m_iFood;
 }
 
 void CSCScript::tick()
@@ -93,6 +105,9 @@ void CSCScript::finaltick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectExplosionPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
 	}
 	m_fDt += DT;
 	m_fDt2 += DT;
@@ -152,17 +167,14 @@ void CSCScript::finaltick()
 				SetTile(m_iIndex, (UINT)TILE_TYPE::HARVEST);
 				m_eBuildState = BUILD_STATE::BUILD;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"SCPrefab");
-				m_pBuildObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(m_pBuildObj);
-				Instantiate(m_pBuildObj, m_vMousePos, 1);
+				Create(L"SCPrefab", m_vMousePos);
 			}
 			m_fDt2 = 0.5f;
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		m_fHP += DT * 10.f;
+		m_fHP += DT * 40.f;
 
 		if (m_fHP > m_fFullHp)
 		{
@@ -206,6 +218,8 @@ void CSCScript::finaltick()
 			{
 				m_strPrefab = L"CSniperPrefab";
 			}
+
+			++g_iColony;
 
 			Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(m_strPrefab);
 			CGameObject* pUnit = prefab->Instantiate();

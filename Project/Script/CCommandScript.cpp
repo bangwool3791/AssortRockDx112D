@@ -15,6 +15,8 @@
 
 #include "CButtonScript.h"
 
+#include "CInterfaceScript.h"
+
 CCommandScript::CCommandScript()
 	:CScript{ SCRIPT_TYPE::COMMANDSCRIPT }
 	, m_vMousePos{}
@@ -106,6 +108,9 @@ void CCommandScript::begin()
 	GetOwner()->Transform()->SetRelativePos(ttile.vPos);
 
 	GetOwner()->GetChilds()[2]->GetRenderComponent()->Deactivate();
+
+	g_iGoldInc += m_iGold;
+	g_iFood += m_iFood;
 }
 
 void CCommandScript::tick()

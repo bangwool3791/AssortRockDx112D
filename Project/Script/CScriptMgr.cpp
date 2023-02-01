@@ -10,6 +10,7 @@
 #include "CDragScript.h"
 #include "CEditorMouseScript.h"
 #include "CEffectScript.h"
+#include "CHillScript.h"
 #include "CHuntScript.h"
 #include "CInfectedGiantScript.h"
 #include "CInfectedMedium_A.h"
@@ -56,6 +57,7 @@ void CScriptMgr::GetScriptInfo(vector<wstring>& _vec)
 	_vec.push_back(L"CDragScript");
 	_vec.push_back(L"CEditorMouseScript");
 	_vec.push_back(L"CEffectScript");
+	_vec.push_back(L"CHillScript");
 	_vec.push_back(L"CHuntScript");
 	_vec.push_back(L"CInfectedGiantScript");
 	_vec.push_back(L"CInfectedMedium_A");
@@ -104,6 +106,7 @@ void CScriptMgr::GetScriptInfo(vector<string>& _vec)
 	_vec.push_back("CDragScript");
 	_vec.push_back("CEditorMouseScript");
 	_vec.push_back("CEffectScript");
+	_vec.push_back("CHillScript");
 	_vec.push_back("CHuntScript");
 	_vec.push_back("CInfectedGiantScript");
 	_vec.push_back("CInfectedMedium_A");
@@ -160,6 +163,8 @@ CScript * CScriptMgr::GetScript(const wstring& _strScriptName)
 		return new CEditorMouseScript;
 	if (L"CEffectScript" == _strScriptName)
 		return new CEffectScript;
+	if (L"CHillScript" == _strScriptName)
+		return new CHillScript;
 	if (L"CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if (L"CInfectedGiantScript" == _strScriptName)
@@ -251,6 +256,8 @@ CScript * CScriptMgr::GetScript(const string& _strScriptName)
 		return new CEditorMouseScript;
 	if ("CEffectScript" == _strScriptName)
 		return new CEffectScript;
+	if ("CHillScript" == _strScriptName)
+		return new CHillScript;
 	if ("CHuntScript" == _strScriptName)
 		return new CHuntScript;
 	if ("CInfectedGiantScript" == _strScriptName)
@@ -352,6 +359,9 @@ CScript * CScriptMgr::GetScript(UINT _iScriptType)
 		break;
 	case (UINT)SCRIPT_TYPE::EFFECTSCRIPT:
 		return new CEffectScript;
+		break;
+	case (UINT)SCRIPT_TYPE::HILLSCRIPT:
+		return new CHillScript;
 		break;
 	case (UINT)SCRIPT_TYPE::HUNTSCRIPT:
 		return new CHuntScript;
@@ -497,6 +507,10 @@ const wchar_t * CScriptMgr::GetScriptWName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EFFECTSCRIPT:
 		return L"CEffectScript";
+		break;
+
+	case SCRIPT_TYPE::HILLSCRIPT:
+		return L"CHillScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:
@@ -677,6 +691,10 @@ const char* CScriptMgr::GetScriptName(CScript * _pScript)
 
 	case SCRIPT_TYPE::EFFECTSCRIPT:
 		return "CEffectScript";
+		break;
+
+	case SCRIPT_TYPE::HILLSCRIPT:
+		return "CHillScript";
 		break;
 
 	case SCRIPT_TYPE::HUNTSCRIPT:

@@ -119,7 +119,10 @@ void CRangerScript::tick()
 	__super::tick();
 
 	if (0 > m_fHP)
+	{
+		g_iColony--;
 		m_eState = UNIT_STATE::DEAD;
+	}
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
 		m_pTargetObject = nullptr;

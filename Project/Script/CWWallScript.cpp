@@ -32,7 +32,11 @@ CWWallScript::CWWallScript()
 		}
 	}
 
-	m_fFullHp = 125.f;
+	m_iGoldOut = 10;
+	m_iWoodOut = 3;
+	m_iIronOut = 0;
+
+	m_fFullHp = 400.f;
 
 	m_iArmor = 10.f;
 
@@ -86,6 +90,10 @@ void CWWallScript::finaltick()
 		CGameObject* pObj = CResMgr::GetInst()->FindRes<CPrefab>(L"CEffectExplosionPrefab")->Instantiate();
 		Instantiate(pObj, Transform()->GetRelativePos(), 3);
 		GetOwner()->Destroy();
+
+		for (size_t i{}; i < m_vecBlock.size(); ++i)
+			CJpsMgr::GetInst()->ClearCollision(m_vecBlock[i].x, m_vecBlock[i].z);
+
 	}
 
 	m_fDt += DT;
@@ -137,17 +145,14 @@ void CWWallScript::finaltick()
 
 			m_arr[m_iIndex].bChecked = true;
 
-			Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"WoodWallPrefab");
-			CGameObject* pObj = pUIPrefab->Instantiate();
-			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-			Instantiate(pObj, m_vMousePos, 1);
+			Create(L"WoodWallPrefab", m_vMousePos);
 
 			ChildWallProcess();
 		}
 	}
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
-		m_fHP += DT * 10.f;
+		m_fHP += DT * 30.f;
 
 		if (m_fHP > m_fFullHp)
 		{

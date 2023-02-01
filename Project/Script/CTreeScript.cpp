@@ -35,12 +35,10 @@ void CTreeScript::begin()
 	Vec3 vPos = GetOwner()->Transform()->GetRelativePos();
 
 	tTile tTile = m_pTileObject->TileMap()->GetInfo(vPos);
-
+	tTile.vPos.z += Transform()->GetRelativeScale().z * 0.5f;
 	GetOwner()->Transform()->SetRelativePos(tTile.vPos);
 
 	SetTile(tTile.iIndex, (UINT)TILE_TYPE::WOOD);
-
-	m_pTileObject->TileMap()->On();
 }
 
 void CTreeScript::tick()

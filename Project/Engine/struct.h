@@ -188,6 +188,14 @@ struct tBlock
 	int z;
 };
 
+struct tTextInfo
+{
+	wchar_t sz[50];
+	Vec2 vPos;
+	float fSize;
+	Vec4 vColor;
+};
+
 extern tGlobalData g_global;
 extern  tTransform g_transform;
 extern  std::vector<tObjectRender>	g_vecInfoObject;
