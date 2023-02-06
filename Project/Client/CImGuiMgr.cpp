@@ -56,12 +56,14 @@ void CImGuiMgr::init(HWND _hWnd)
     ImGui_ImplDX11_Init(DEVICE, CONTEXT);
 
     // UI 생성
+    //GUI 주석
     CreateUI();
 
-    // 파일 변경감지 핸들 등록
+     //파일 변경감지 핸들 등록
     m_NotifyHandle = FindFirstChangeNotification(
         CPathMgr::GetInst()->GetContentPath(), true,
         FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME);
+   // GUI 주석 끝
 }
 
 void CImGuiMgr::progress()

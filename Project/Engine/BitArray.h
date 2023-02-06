@@ -40,7 +40,7 @@ public:
 
 		this->m_wordwidths = dv.quot;							// 64bit로 개산한 가로 개수
 		this->m_bitswidths = this->m_wordwidths * __NBITMASK;	// 64bit로 개산한 가로 개수가 표현가능한 bit 개수
-		this->resize(this->m_wordwidths * depth, val);			// wordwidths_ * depth = 총 64bit 개수
+		this->resize((UINT)this->m_wordwidths * (UINT)depth, val);			// wordwidths_ * depth = 총 64bit 개수
 
 		this->m_width = width;
 		this->m_depth = depth;

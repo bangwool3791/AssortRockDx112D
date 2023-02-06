@@ -34,7 +34,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
    //_CrtSetBreakAlloc(2200);
 
-    srand(0.f);
+    srand(0);
 
     g_hInst = hInstance;
     // 전역 문자열을 초기화합니다.
@@ -55,11 +55,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         MessageBox(nullptr, L"엔진 초기화 실패", L"에러", MB_OK);
         return 0;
     }
+
+    ::SetMenu(g_hWnd, NULL);
+
     CSaveLoadMgr::GetInst()->init();
     CreateTestLelvel();
+    //GUI 주석
     CEditor::GetInst()->init();
     // ImGui 초기화  
     CImGuiMgr::GetInst()->init(g_hWnd);
+   // 주석 끝
     // 기본 메시지 루프입니다:
     while (true)
     {
@@ -77,10 +82,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             CEngine::GetInst()->progress();
-
+            //GUI 주석
             CEditor::GetInst()->progress();
 
             CImGuiMgr::GetInst()->progress();
+            // 주석 끝
             // Present(SwapChain)
             CDevice::GetInst()->Present();
         }
@@ -230,7 +236,7 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-#ifdef _DEBUG
+
 void D3DMemoryLeakCheck()
 {
     HMODULE dxgidebugdll = GetModuleHandleW(L"DXGIDebug.dll");
@@ -244,4 +250,3 @@ void D3DMemoryLeakCheck()
     debug->Release();
    // decltype GetDebugInterface = 
 }
-#endif

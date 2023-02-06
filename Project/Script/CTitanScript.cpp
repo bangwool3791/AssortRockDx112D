@@ -23,7 +23,7 @@
 
 CTitanScript::CTitanScript()
 	:CScript{ TITANSCRIPT }
-	, m_fSpeed{ 100.f }
+	, m_fSpeed{ 150.f }
 	, m_eState{ UNIT_STATE::NORMAL }
 {
 	m_fHP = 100;
@@ -88,6 +88,8 @@ CTitanScript::~CTitanScript()
 
 void CTitanScript::begin()
 {
+	__super::begin();
+
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
 	if (nullptr == Animator)
@@ -116,7 +118,7 @@ void CTitanScript::tick()
 
 	if (0 > m_fHP)
 	{
-		g_iColony--;
+		
 		m_eState = UNIT_STATE::DEAD;
 	}
 

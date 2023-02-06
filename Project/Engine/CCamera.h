@@ -31,7 +31,7 @@ private:
     vector<CGameObject* >                    m_vecOpaque;
     vector<CGameObject* >                    m_vecMask;
     vector<CGameObject* >                    m_vecTransparent;
-
+    vector<CGameObject* >   m_vecSound;
     map<const wstring, vector<CGameObject*>> m_mapOpaqueVec;
     map<const wstring, vector<CGameObject*>> m_mapMaskVec;
     map<const wstring, vector<CGameObject*>> m_mapTransparentVec;
@@ -44,6 +44,7 @@ private :
     void render_mask();
     void render_transparent();
     void render_postprocess();
+    void Sound();
     //void update_render(Ptr<CMesh> p);
 public :
     virtual void finaltick();

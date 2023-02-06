@@ -23,8 +23,11 @@
 
 CArrowScript::CArrowScript()
 	:CScript{ ARROWSCRIPT }
-	, m_fSpeed{ 100.f }
+	, m_fSpeed{ 300.f }
+	, m_pTargetObject{}
+	, m_fAccTime{0.f}
 {
+	m_iAttack = 7;
 	SetName(L"CArrowScript");
 
 	//AddScriptParam(SCRIPT_PARAM::FLOAT, "Player MoveSpeed", &m_fSpeed);

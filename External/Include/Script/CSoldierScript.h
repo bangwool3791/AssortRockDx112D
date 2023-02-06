@@ -37,6 +37,7 @@ public :
     virtual void PhaseEventOn() override;
     virtual void PhaseEventOff() override;
     virtual void Move(Int32 x, Int32 z) override;
+    virtual void sound();
     void Attck(Int32 x, Int32 z) {}
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);

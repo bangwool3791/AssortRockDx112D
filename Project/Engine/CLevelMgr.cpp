@@ -38,20 +38,26 @@ void CLevelMgr::init()
 
 void CLevelMgr::progress()
 {
-	m_pCurLevel->ClearLayer();
 
+	//m_pCurLevel->ClearLayer();
+	//m_pCurLevel->tick();
+	//m_pCurLevel->finaltick();
+	 
+	//GUI 주석
+	m_pCurLevel->ClearLayer();
 	if (LEVEL_STATE::PLAY == m_pCurLevel->GetState())
 	{
 		//키 입력이 안먹는다.
 		m_pCurLevel->tick();
 		m_pCurLevel->finaltick();
 	}
+	//GUI 주석 끝
 	//엔진에서 제공하는 Component(Transform, register 맵핑, Particle) finaltick동작
 }
 
 void CLevelMgr::render()
 {
-	//m_pCurLevel->render();
+	m_pCurLevel->render();
 }
 
 CGameObject* CLevelMgr::FindObjectByName(const wstring& _strName)
@@ -80,8 +86,12 @@ void CLevelMgr::ChangeLevelState(LEVEL_STATE _State)
 	
 	m_pCurLevel->SetState(_State);
 	
-	if (LEVEL_STATE::PLAY == _State)
-		m_pCurLevel->begin();
+	//[23.02.03]수정
+	//저장 로드 시에는 Play를 하지 않는다.
+	//관련 없음
+	//에디터 Play 반복 시 타일 데이터 이상
+	//if (LEVEL_STATE::PLAY == _State)
+	//	m_pCurLevel->begin();
 }
 
 LEVEL_STATE CLevelMgr::GetLevelState()

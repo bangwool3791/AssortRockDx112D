@@ -16,6 +16,8 @@
 
 #include "CKeyMgr.h"
 
+#include "CScript.h"
+
 //스레드 A종류
 //스레드 B종류
 /*
@@ -45,9 +47,19 @@ CCamera::CCamera()
 
 CCamera::CCamera(const CCamera& rhs)
 	: CComponent(rhs)
+	//, m_pObjectRenderBuffer{ rhs .m_pObjectRenderBuffer}
+	//, m_iLayerMask{ rhs.m_iLayerMask }
+	//, m_iCamIdx{ rhs.m_iCamIdx }
+	//, m_fScale{ rhs.m_fScale }
+	//, m_fNear{ rhs.m_fNear }
+	//, m_fFar{ rhs.m_fFar }
+	//, m_fAspectRatio{ rhs.m_fAspectRatio }
+	//, m_eProjType{ rhs.m_eProjType }
+	//
 {
 
 }
+
 CCamera::~CCamera()
 {
 	Safe_Delete(m_pObjectRenderBuffer);
@@ -118,6 +130,7 @@ void CCamera::render()
 	render_mask();
 	render_transparent();
 	render_postprocess();
+	Sound();
 }
 
 /*
@@ -292,6 +305,28 @@ void CCamera::SortObject()
 					continue;
 				}
 
+				if (i != 0 && i != 31)
+				{
+					BoundingFrustum fr(m_matProj);
+
+					static Vec3 vPos{};
+					static Vec3 vCamPos{};
+					vCamPos = GetOwner()->Transform()->GetRelativePos();
+					vPos = vecGameObject[j]->Transform()->GetWorldPos() - GetOwner()->Transform()->GetRelativePos();
+					Vec2 vRes = CDevice::GetInst()->GetRenderResolution();
+					float fDelta = Camera()->GetFar() - Camera()->GetNear();
+					BoundingBox box(vPos, Vec3(vRes.x, vRes.y, fDelta));
+					
+					if (fr.Contains(box))
+					{
+						m_vecSound.push_back(vecGameObject[j]);
+					}
+					else
+					{
+						continue;
+					}
+				}
+
 				Ptr<CGraphicsShader> GraphicsShader = RenderCompoent->GetCurMaterial()->GetShader();
 
 				SHADER_DOMAIN eDomain = GraphicsShader->GetDomain();
@@ -371,6 +406,19 @@ void CCamera::LoadFromFile(FILE* _File)
 	fread(&m_fScale, sizeof(float), 1, _File);
 	fread(&m_iLayerMask, sizeof(UINT), 1, _File);
 	fread(&m_iCamIdx, sizeof(int), 1, _File);
+}
+
+void CCamera::Sound()
+{
+	std::vector<CGameObject*>::iterator iter = m_vecSound.begin();
+
+	for (; iter != m_vecSound.end(); ++iter)
+	{
+		if(!(*iter)->GetScripts().empty())
+			(*iter)->GetScripts()[0]->sound();
+	}
+
+	m_vecSound.clear();
 }
 
 Ray CCamera::CalRay()

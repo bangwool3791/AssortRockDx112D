@@ -45,6 +45,8 @@ CWWCScript::~CWWCScript()
 
 void CWWCScript::begin()
 {
+	__super::begin();
+
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_0, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\buildings\\Atlas1_LQ.dds"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);

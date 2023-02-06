@@ -60,7 +60,9 @@ void CRenderMgr::render()
 	pGlobalCB->SetData(&g_global);
 	pGlobalCB->UpdateData(PIPELINE_STAGE::ALL_STAGE);
 	pGlobalCB->UpdateData_CS();
-
+	
+	//render_game();
+	//GUI 주석
 	CLevel* pLevel = CLevelMgr::GetInst()->GetCurLevel();
 
 	if (LEVEL_STATE::PLAY == pLevel->GetState())
@@ -71,6 +73,7 @@ void CRenderMgr::render()
 	{
 		render_editor();
 	}
+	//GUI 주석 끝
 
 }
 

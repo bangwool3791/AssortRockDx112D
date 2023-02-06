@@ -57,12 +57,14 @@ CQuarryScript::~CQuarryScript()
 
 void CQuarryScript::begin()
 {
+	__super::begin();
+
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }
 
 void CQuarryScript::tick()
@@ -180,9 +182,10 @@ void CQuarryScript::tick()
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
 		m_fHP += DT * 10.f;
-		g_iIronInc += m_iIron;
+
 		if (m_fHP > m_fFullHp)
 		{
+			g_iIronInc += m_iIron;
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
@@ -463,7 +466,7 @@ void CQuarryScript::PhaseEventOn()
 	for (size_t i{}; i < 6; ++i)
 		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Activate();
 }
 
 void CQuarryScript::PhaseEventOff()
@@ -475,5 +478,5 @@ void CQuarryScript::PhaseEventOff()
 	for (size_t i{}; i < m_vecIcon.size(); ++i)
 		m_vecIcon[i]->MeshRender()->Deactivate();
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }

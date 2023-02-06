@@ -40,7 +40,7 @@ CInfectedStrong_A::CInfectedStrong_A()
 	, m_bAttack{ true }
 {
 	m_fHP = 100.f;
-	m_iAttack = 15.f;
+	m_iAttack = 15;
 
 	SetName(L"CInfectedStrong_A");
 
@@ -79,7 +79,10 @@ void CInfectedStrong_A::tick()
 		m_eState = UNIT_STATE::DEAD;
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
+	{
 		m_pTargetObject = nullptr;
+		m_eState = UNIT_STATE::NORMAL;
+	}
 
 	m_fTick += DT;
 

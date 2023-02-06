@@ -21,6 +21,7 @@ CCommandScript::CCommandScript()
 	:CScript{ SCRIPT_TYPE::COMMANDSCRIPT }
 	, m_vMousePos{}
 	, m_pTileObject{}
+	, m_pLevelMouseObject{}
 {
 	m_eBuildState = BUILD_STATE::COMPLETE;
 	m_fHP = 5000;
@@ -68,6 +69,8 @@ CCommandScript::~CCommandScript()
 
 void CCommandScript::begin()
 {
+	__super::begin();
+
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
@@ -173,11 +176,16 @@ void CCommandScript::SetTileInfo(queue<UINT>& que, queue<UINT>& result, UINT val
 		tTile tTile = m_pTileObject->TileMap()->GetInfo(data);
 
 		if ((UINT)TILE_TYPE::NOTUSED == tTile.iInfo)
+		{
+			m_bCheck[data] = true;
 			m_pTileObject->TileMap()->SetInfo(data, value);
+		}
 		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo)
+		{
+			m_bCheck[data] = true;
 			m_pTileObject->TileMap()->SetInfo(data, value);
+		}
 
-		m_bCheck[data] = true;
 
 		if (((UINT)TILE_TYPE::NOTUSED) == value)
 		{

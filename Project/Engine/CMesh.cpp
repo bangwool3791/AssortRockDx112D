@@ -22,7 +22,7 @@ CMesh::~CMesh()
 int CMesh::Create(void* _pVtxSysmem, size_t _iVtxCount, void* _pIdxSysmem, size_t _iIdxCount)
 {
 	m_tVBDesc.ByteWidth = UINT(sizeof(Vtx) * _iVtxCount); 
-	m_iVtxCount = _iVtxCount;
+	m_iVtxCount = (UINT)_iVtxCount;
 	m_tVBDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	m_tVBDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_tVBDesc.CPUAccessFlags = 0;

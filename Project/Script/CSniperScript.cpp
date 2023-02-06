@@ -25,12 +25,12 @@
 
 CSniperScript::CSniperScript()
 	:CScript{ SNIPERSCRIPT }
-	, m_fSpeed{ 100.f }
+	, m_fSpeed{ 200.f }
 	, m_eState{ UNIT_STATE::NORMAL }
 {
 	m_fHP = 100;
 	m_fFullHp = 100;
-	m_iAttack = 15;
+	m_iAttack = 5;
 
 	m_iArmor = 1;
 	m_iSpeed = 4;
@@ -90,6 +90,8 @@ CSniperScript::~CSniperScript()
 
 void CSniperScript::begin()
 {
+	__super::begin();
+
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
 	if (nullptr == Animator)
@@ -118,7 +120,6 @@ void CSniperScript::tick()
 
 	if (0 > m_fHP)
 	{
-		g_iColony--;
 		m_eState = UNIT_STATE::DEAD;
 	}
 
@@ -193,14 +194,15 @@ void CSniperScript::tick()
 			m_pTargetObject = nullptr;
 		}
 
-		if (m_fDeltaTime >= 1.5f)
+		if (Animator2D()->IsEnd())
 		{
 			//ÇÇ±ï±â
 			if (m_pTargetObject)
 			{
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\sniper_attack.wav");
+				pSound->Play(1, 1.f, true);
 				SetMonsterHP();
 			}
-			m_fDeltaTime -= 1.5f;
 		}
 
 		if (m_pTargetObject)
@@ -562,3 +564,20 @@ void CSniperScript::PhaseEventOff()
 
 	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
 }
+
+void CSniperScript::sound() 
+{
+	//static float fDT = DT;
+	//static float fCnt = DT;
+	//fDT += DT;
+	//if (fDT > 2.5f)
+	//{
+	//	if (UNIT_STATE::ATTACK == m_eState)
+	//	{
+	//		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\sniper_attack.wav");
+	//		pSound->Play(1, 1.f, true);
+	//	}
+	//	fDT = 0.f;
+	//}
+}
+

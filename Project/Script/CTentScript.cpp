@@ -65,6 +65,8 @@ CTentScript::~CTentScript()
 
 void CTentScript::begin()
 {
+	__super::begin();
+
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 	//GetOwner()->GetRenderComponent()->GetCurMaterial()->SetTexParam(TEX_1, CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\buildmask.png"));

@@ -180,7 +180,10 @@ void ContentUI::render_update()
 
 			if (m_pLevelTerrain->Terrain()->GetMesh()->GetPosition(ray, vMousePos))
 			{
-				BoundingBox box(vMousePos - vCameraPos, Vec3(1400.f, 1600.f, 1600.f));
+				Vec2 vRes = CDevice::GetInst()->GetRenderResolution();
+
+				float fDelta = m_pLevelCamera->Camera()->GetFar() - m_pLevelCamera->Camera()->GetNear();
+				BoundingBox box(vMousePos - vCameraPos, Vec3(vRes.x, vRes.y, fDelta));
 				BoundingFrustum fr(m_pLevelCamera->Camera()->GetProjMat());
 
 				if (fr.Contains(box))

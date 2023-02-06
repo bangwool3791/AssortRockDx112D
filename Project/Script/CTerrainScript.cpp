@@ -59,7 +59,7 @@ void CTerrainScript::tick()
 		ray.direction = raydirection;
 		cout << "¸¶¿ì½º [x] " << rayorigin.x << "[y] " << rayorigin.y << "[z] " << rayorigin.z << endl;
 
-		GetOwner()->Terrain()->GetMesh()->SetTextureID(ray, m_id);
+		GetOwner()->Terrain()->GetMesh()->SetTextureID(ray, (float)m_id);
 
 		//
 	}

@@ -25,12 +25,16 @@
 
 CSoldierScript::CSoldierScript()
 	:CScript{ SOLDIERSCRIPT }
-	, m_fSpeed{ 100.f }
+	, m_fSpeed{ 200.f }
 	, m_eState{UNIT_STATE::NORMAL}
+	, m_z{}
+	, m_x{}
+	, m_pTargetObject{}
+	, m_fAccTime{}
 {
 	m_fHP = 100;
 	m_fFullHp = 100;
-	m_iAttack = 15;
+	m_iAttack = 5;
 
 	m_iArmor = 1;
 	m_iSpeed = 4;
@@ -89,6 +93,8 @@ CSoldierScript::~CSoldierScript()
 
 void CSoldierScript::begin()
 {
+	__super::begin();
+
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
 	if (nullptr == Animator)
@@ -117,7 +123,6 @@ void CSoldierScript::tick()
 
 	if (0 > m_fHP)
 	{
-		g_iColony--;
 		m_eState = UNIT_STATE::DEAD;
 	}		
 
@@ -192,14 +197,15 @@ void CSoldierScript::tick()
 			m_pTargetObject = nullptr;
 		}
 
-		if (m_fDeltaTime >= 1.5f)
+		if (Animator2D()->IsEnd())
 		{
 			//ÇÇ±ï±â
 			if (m_pTargetObject)
 			{
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\soldier_attack.wav");
+				pSound->Play(1, 1.f, true);
 				SetMonsterHP();
 			}
-			m_fDeltaTime -= 1.5f;
 		}
 
 		if (m_pTargetObject)
@@ -523,6 +529,20 @@ void CSoldierScript::PhaseEventOn()
 {
 	__super::PhaseEventOn();
 
+	Ptr<CSound> pSound{};
+
+	if (UNIT_STATE::ATTACK == m_eState)
+	{
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\soldier_loadattack.wav");
+		pSound->Play(1, 1.f, false);
+	}
+	else
+	{
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\soldier_normal.wav");
+		pSound->Play(1, 1.f, false);
+	}
+
+
 	lstrcpy(CEngine::g_szFullName, L"Ranger");
 
 	//lstrcpy(g_szHp, to_wstring(m_fHP));
@@ -563,4 +583,20 @@ void CSoldierScript::PhaseEventOff()
 		m_vecIcon[i]->MeshRender()->Deactivate();
 
 	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+}
+
+void CSoldierScript::sound()
+{
+	//static float fDT = DT;
+	//static float fCnt = DT;
+	//fDT += DT;
+	//if (fDT > 1.5f)
+	//{
+	//	if (UNIT_STATE::ATTACK == m_eState)
+	//	{
+	//		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\soldier_attack.wav");
+	//		pSound->Play(1, 1.f, true);
+	//	}
+	//	fDT = 0.f;
+	//}
 }

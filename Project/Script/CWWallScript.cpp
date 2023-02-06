@@ -66,6 +66,8 @@ CWWallScript::~CWWallScript()
 
 void CWWallScript::begin()
 {
+	__super::begin();
+
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 

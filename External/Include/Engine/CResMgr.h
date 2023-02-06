@@ -55,6 +55,7 @@ public:
 
 private:
 	void CreateDefaultMesh();
+	void CreateDefaultSound();
 	void CreateDefaultTexture();
 	void CreateDefaultGraphicsShader();
 	void CreateDefaultMaterial();

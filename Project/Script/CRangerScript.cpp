@@ -24,8 +24,10 @@
 
 CRangerScript::CRangerScript()
 	:CScript{ RANGERSCRIPT }
-	, m_fSpeed{ 100.f }
+	, m_fSpeed{ 200.f }
 	, m_eState{ UNIT_STATE::NORMAL }
+	, m_fAccTime{}
+	, m_pTargetObject{}
 {
 	m_fHP = 100;
 	m_fFullHp = 100;
@@ -91,6 +93,8 @@ CRangerScript::~CRangerScript()
 
 void CRangerScript::begin()
 {
+	__super::begin();
+
 	CAnimator2D* Animator = GetOwner()->Animator2D();
 
 	if (nullptr == Animator)
@@ -120,7 +124,6 @@ void CRangerScript::tick()
 
 	if (0 > m_fHP)
 	{
-		g_iColony--;
 		m_eState = UNIT_STATE::DEAD;
 	}
 
@@ -195,11 +198,14 @@ void CRangerScript::tick()
 			m_pTargetObject = nullptr;
 		}
 
-		if (m_fDeltaTime >= 1.5f)
+		if (Animator2D()->IsEnd())
 		{
 			//ÇÇ±ï±â
 			if (m_pTargetObject)
 			{
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_attack.wav");
+				pSound->Play(1, 1.f, true);
+
 				Ptr<CPrefab> pPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CArrowPrefab");
 				Vec3 vPos = Transform()->GetRelativePos();
 				vPos.x += Transform()->GetRelativeScale().x * 0.5f;
@@ -207,7 +213,6 @@ void CRangerScript::tick()
 				pObj->GetScript<CArrowScript>()->SetTarget(m_pTargetObject);
 				Instantiate(pObj, vPos, 3);
 			}
-			m_fDeltaTime -= 1.5f;
 		}
 
 		if (m_pTargetObject)
@@ -228,7 +233,7 @@ void CRangerScript::tick()
 				m_eState = UNIT_STATE::ATTACK;
 				SetDestPos(vPos);
 			}
-			m_fDeltaTime -= 1.5f;
+			m_fDeltaTime  = 0.f;
 		}
 
 	}
@@ -242,6 +247,9 @@ void CRangerScript::tick()
 
 		if (Animator2D()->IsEnd())
 		{
+			Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_dead.wav");
+			pSound->Play(1, 1.f, false);
+
 			Destroy();
 		}
 	}
@@ -518,6 +526,25 @@ void CRangerScript::PhaseEventOn()
 {
 	__super::PhaseEventOn();
 
+	Ptr<CSound> pSound{};
+
+	int irand = rand() % 3;
+	if (0 == irand)
+	{
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_loadattack.wav");
+		pSound->Play(1, 1.f, false);
+	}
+	else if (1 == irand)
+	{
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_normal.wav");
+		pSound->Play(1, 1.f, false);
+	}
+	else if (2 == irand)
+	{
+		pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_run.wav");
+		pSound->Play(1, 1.f, false);
+	}
+
 	lstrcpy(CEngine::g_szFullName, L"Ranger");
 
 	//lstrcpy(g_szHp, to_wstring(m_fHP));
@@ -558,4 +585,28 @@ void CRangerScript::PhaseEventOff()
 		m_vecIcon[i]->MeshRender()->Deactivate();
 
 	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+}
+
+void CRangerScript::sound()
+{
+	static float fDT = DT;
+	static float fCnt = DT;
+	fDT += DT;
+	if (fDT > 10.f)
+	{
+		if (UNIT_STATE::ATTACK == m_eState)
+		{
+			if (8 > fCnt)
+			{
+				++fCnt;
+				Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\ranger_attack.wav");
+				pSound->Play(1, 1.f, true);
+			}
+			else
+			{
+				--fCnt;
+			}
+		}
+		fDT = 0.f;
+	}
 }

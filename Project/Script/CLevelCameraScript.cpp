@@ -5,6 +5,7 @@
 CLevelCameraScript::CLevelCameraScript()
 	:CScript(SCRIPT_TYPE::LEVELCAMERASCRIPT)
 	, m_fSpeed(300.f)
+	, m_vPos{}
 {
 }
 
@@ -14,6 +15,7 @@ CLevelCameraScript::~CLevelCameraScript()
 
 void CLevelCameraScript::begin()
 {
+	m_fScale = Camera()->GetOrthographicScale();
 }
 
 void CLevelCameraScript::tick()
@@ -23,6 +25,9 @@ void CLevelCameraScript::tick()
 
 void CLevelCameraScript::Move()
 {
+	static float fdt = DT;
+	fdt += DT;
+
 	Vec3 vPos = Transform()->GetRelativePos();
 
 	float fSpeed = m_fSpeed;
@@ -61,7 +66,13 @@ void CLevelCameraScript::Move()
 
 		if (KEY_PRESSED(KEY::SPACE))
 		{
-			Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+			if (fdt > 0.5f)
+			{
+				Camera()->SetProjType(PROJ_TYPE::ORTHOGRAHPICS);
+				Camera()->SetOrthographicScale(m_fScale);
+				Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
+				fdt = 0.f;
+			}
 		}
 	}
 
@@ -85,20 +96,25 @@ void CLevelCameraScript::Move()
 
 		if (KEY_PRESSED(KEY::NUM_1))
 		{
-			float fScale = Camera()->GetOrthographicScale();
-			fScale += DT;
-			Camera()->SetOrthographicScale(fScale);
+			m_fScale = Camera()->GetOrthographicScale();
+			m_fScale += DT;
+			Camera()->SetOrthographicScale(m_fScale);
 		}
 		else if (KEY_PRESSED(KEY::NUM_2))
 		{
-			float fScale = Camera()->GetOrthographicScale();
-			fScale -= DT;
-			Camera()->SetOrthographicScale(fScale);
+			m_fScale = Camera()->GetOrthographicScale();
+			m_fScale -= DT;
+			Camera()->SetOrthographicScale(m_fScale);
 		}
 
 		if (KEY_PRESSED(KEY::SPACE))
 		{
-			Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+			if (fdt > 0.5f)
+			{
+				m_vPos = Transform()->GetRelativeDir(DIR::FRONT);
+				Camera()->SetProjType(PROJ_TYPE::PERSPECTIVE);
+				fdt = 0.f;
+			}
 		}
 	}
 }

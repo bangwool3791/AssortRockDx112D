@@ -46,6 +46,8 @@ void CUiScript::begin()
 {
 	m_IconAtlas = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Icons.png");
 	m_AtlasAlpha = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
+
+	GetOwner()->MeshRender()->Deactivate();
 }
 
 void CUiScript::tick()

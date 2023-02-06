@@ -18,6 +18,7 @@ CHuntScript::CHuntScript()
 	, m_vMousePos{}
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
+	, m_pLevelMouseObject{}
 {
 	m_fFullHp = 160.f;
 
@@ -29,9 +30,6 @@ CHuntScript::CHuntScript()
 	m_iGoldOut = 80;
 	m_iWoodOut = 0;
 	m_iIronOut = 0;
-
-	int m_iWoodOut;
-	int m_iIronOut;
 
 	Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageHunterCottagePrefab");
 
@@ -69,6 +67,8 @@ CHuntScript::~CHuntScript()
 
 void CHuntScript::begin()
 {
+	__super::begin();
+
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
@@ -175,6 +175,7 @@ void CHuntScript::finaltick()
 
 		if (m_fHP > m_fFullHp)
 		{
+			g_iFood = m_iFood;
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
@@ -239,7 +240,10 @@ void CHuntScript::SetTileInfo(vector<UINT>& que, vector<UINT>& result, UINT _val
 		if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::EMPTY == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::EMPTY == tTile.iInfo && (UINT)TILE_TYPE::BEFORE_HUNTED == _value)
+		{
+			++m_iFood;
 			m_pTileObject->TileMap()->SetInfo(data, _value);
+		}
 		else if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::HUNTED == _value)
 			m_pTileObject->TileMap()->SetInfo(data, _value);
 		else if ((UINT)TILE_TYPE::BEFORE_HUNTED == tTile.iInfo && (UINT)TILE_TYPE::USED == _value)
@@ -391,6 +395,8 @@ void CHuntScript::clear()
 
 		for (size_t i{}; i < 40000; ++i)
 			m_bCheck[i] = false;
+
+		m_iFood = 0;
 	}
 }
 

@@ -57,12 +57,14 @@ CSawScript::~CSawScript()
 
 void CSawScript::begin()
 {
+	__super::begin();
+
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }
 
 void CSawScript::tick()
@@ -179,9 +181,10 @@ void CSawScript::tick()
 	else if (m_eBuildState == BUILD_STATE::BUILD)
 	{
 		m_fHP += DT * 10.f;
-		g_iWoodInc += m_iWood;
+
 		if (m_fHP > m_fFullHp)
 		{
+			g_iWoodInc += m_iWood;
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
@@ -390,7 +393,6 @@ bool  CSawScript::IsBlocked(UINT _iTile)
 	{
 		if ((UINT)TILE_TYPE::BUILD != iter->iInfo)
 		{
-			cout << "BUILD가 아니라서 " << iter->iInfo << endl;
 			return true;
 		}
 	}
@@ -399,10 +401,10 @@ bool  CSawScript::IsBlocked(UINT _iTile)
 	{
 		if ((UINT)TILE_TYPE::BEFROE_WOOD == iter->iInfo)
 		{
-			cout << "나무가 있어서 false" << endl;
 			return false;
 		}
 	}
+	return true;
 }
 
 
@@ -467,7 +469,7 @@ void CSawScript::PhaseEventOn()
 	for (size_t i{}; i < 6; ++i)
 		vec[i]->GetScript<CButtonScript>()->SetColumn((UINT)TAP_CATEGORY_UPGRADE);
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Activate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Activate();
 }
 
 void CSawScript::PhaseEventOff()
@@ -479,5 +481,5 @@ void CSawScript::PhaseEventOff()
 	for (size_t i{}; i < m_vecIcon.size(); ++i)
 		m_vecIcon[i]->MeshRender()->Deactivate();
 
-	GetOwner()->GetChilds()[0]->GetRenderComponent()->Deactivate();
+	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }

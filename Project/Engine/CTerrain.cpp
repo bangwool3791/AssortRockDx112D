@@ -128,5 +128,5 @@ void CTerrain::LoadFromFile(FILE* _File)
 
 void CTerrain::SetTextureID(Ray _ray, UINT i)
 {
-	GetMesh()->SetTextureID(_ray, i);
+	GetMesh()->SetTextureID(_ray, (float)i);
 }

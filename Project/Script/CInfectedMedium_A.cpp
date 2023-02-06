@@ -38,9 +38,11 @@ CInfectedMedium_A::CInfectedMedium_A()
 	, m_eState{ UNIT_STATE::NORMAL }
 	, m_fTick{ 0.f }
 	, m_bAttack{ true }
+	, m_pTargetObject{}
+	, m_fAccTime{}
 {
 	m_fHP = 100.f;
-	m_iAttack = 15.f;
+	m_iAttack = 15;
 
 	SetName(L"CInfectedMedium_A");
 
@@ -85,7 +87,10 @@ void CInfectedMedium_A::tick()
 	}
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
+	{
 		m_pTargetObject = nullptr;
+		m_eState = UNIT_STATE::NORMAL;
+	}
 
 	m_fTick += DT;
 
@@ -346,17 +351,37 @@ void CInfectedMedium_A::BeginOverlap(CCollider2D* _pOther)
 
 void CInfectedMedium_A::Overlap(CCollider2D* _pOther)
 {
-	Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
-	Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
-	Vec3 vDiff{};
-	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
-	Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
-	vDir = vDir.Normalize();
+	//유닛 공통 영역
+	const wstring& str = _pOther->GetOwner()->GetName();
 
-	Vec3 vPos = Transform()->GetRelativePos();
+	if (L"Solider" == str || L"CRanger" == str || L"CSniper" == str || L"CTitan" == str)
+	{
+		Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+		Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
+		Vec3 vDiff{};
+		vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+		vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+		Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+		vDir = vDir.Normalize();
 
-	Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+		Vec3 vPos = Transform()->GetRelativePos();
+
+		Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+	}
+	else if (str.find(L"CInfected") != std::wstring::npos)
+	{
+		Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+		Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
+		Vec3 vDiff{};
+		vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+		vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+		Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+		vDir = vDir.Normalize();
+
+		Vec3 vPos = Transform()->GetRelativePos();
+
+		Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+	}
 }
 
 void CInfectedMedium_A::EndOverlap(CCollider2D* _pOther)
@@ -400,7 +425,7 @@ void CInfectedMedium_A::ProcessEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 50.f)
 		{
 			m_pTargetObject = vecEnemy[0];
 			m_eState = UNIT_STATE::ATTACK;
@@ -430,7 +455,7 @@ void CInfectedMedium_A::ChaseEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 50.f)
 		{
 			tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vEnemyPos);
 			Int32 x = tTile.iIndex % TILEX;
@@ -460,5 +485,18 @@ void CInfectedMedium_A::SetPlayerHP()
 		float fHp = m_pTargetObject->GetScripts()[0]->GetHp();
 		fHp -= m_iAttack;
 		m_pTargetObject->GetScripts()[0]->SetHp(fHp);
+	}
+}
+
+
+void CInfectedMedium_A::sound()
+{
+	static float fDT = DT;
+	fDT += DT;
+	if (fDT > 30.f)
+	{
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\zombie_man_normal.wav");
+		pSound->Play(1, 0.6f, false);
+		fDT = 0.f;
 	}
 }

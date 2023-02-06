@@ -96,6 +96,7 @@ public:
     int GetFood() { return m_iFood; }
     int GetColony() { return m_iColony; }
 public:
+    virtual void begin();
     virtual void tick();
     virtual void finaltick() {};
 
@@ -114,5 +115,6 @@ public:
     virtual void PhaseEventOff();
     virtual void Move(Int32 x, Int32 z) {};
     virtual void clear() {};
+    virtual void sound() {};
 };
 

@@ -38,6 +38,8 @@ CInfectedGiantScript::CInfectedGiantScript()
 	, m_eState{ UNIT_STATE::NORMAL }
 	, m_fTick{0.f}
 	, m_bAttack {true}
+	, m_fAccTime{}
+	, m_pTargetObject{}
 {
 	m_fHP = 100;
 	m_iAttack = 15;
@@ -85,7 +87,10 @@ void CInfectedGiantScript::tick()
 	}
 
 	if (m_pTargetObject && m_pTargetObject->IsDead())
+	{
 		m_pTargetObject = nullptr;
+		m_eState = UNIT_STATE::NORMAL;
+	}
 
 	m_fTick += DT;
 
@@ -345,17 +350,36 @@ void CInfectedGiantScript::BeginOverlap(CCollider2D* _pOther)
 void CInfectedGiantScript::Overlap(CCollider2D* _pOther)
 {
 	//유닛 공통 영역
-	Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
-	Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
-	Vec3 vDiff{};
-	vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
-	vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
-	Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
-	vDir = vDir.Normalize();
+	const wstring& str = _pOther->GetOwner()->GetName();
 
-	Vec3 vPos = Transform()->GetRelativePos();
+	if (L"Solider" == str || L"CRanger" == str || L"CSniper" == str || L"CTitan" == str)
+	{
+		Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+		Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
+		Vec3 vDiff{};
+		vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+		vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+		Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+		vDir = vDir.Normalize();
 
-	Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+		Vec3 vPos = Transform()->GetRelativePos();
+
+		Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+	}
+	else if (str.find(L"CInfected") != std::wstring::npos)
+	{
+		Vec2 vRelativePos = GetOwner()->Collider2D()->GetFinalPos() - _pOther->GetFinalPos();
+		Vec2 vScale = (GetOwner()->Collider2D()->GetScale() + _pOther->GetScale()) * 0.5f;
+		Vec3 vDiff{};
+		vDiff.x = fabsf(vScale.x - fabsf(vRelativePos.x));
+		vDiff.z = fabsf(vScale.y - fabsf(vRelativePos.y));
+		Vec3 vDir = { vRelativePos.x , 0.f, vRelativePos.y };
+		vDir = vDir.Normalize();
+
+		Vec3 vPos = Transform()->GetRelativePos();
+
+		Transform()->SetRelativePos(vPos + vDiff * vDir * DT * 8);
+	}
 }
 
 void CInfectedGiantScript::EndOverlap(CCollider2D* _pOther)
@@ -399,7 +423,7 @@ void CInfectedGiantScript::ProcessEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) <= vScale1.Distance(vScale1, vScale2) + 50.f)
 		{
 			m_pTargetObject = vecEnemy[0];
 			m_eState = UNIT_STATE::LOADATTACK;
@@ -429,7 +453,7 @@ void CInfectedGiantScript::ChaseEnemy()
 		Vec3 vScale1 = vecEnemy[0]->Transform()->GetRelativeScale() * 0.5f;
 		Vec3 vScale2 = Transform()->GetRelativeScale() * 0.5f;
 
-		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 100.f)
+		if (m_vSource.Distance(m_vSource, vEnemyPos) > vScale1.Distance(vScale1, vScale2) + 50.f)
 		{
 			tTile tTile = CJpsMgr::GetInst()->GetTileObj()->TileMap()->GetInfo(vEnemyPos);
 			Int32 x = tTile.iIndex % TILEX;
@@ -459,5 +483,17 @@ void CInfectedGiantScript::SetPlayerHP()
 		float fHp = m_pTargetObject->GetScripts()[0]->GetHp();
 		fHp -= m_iAttack;
 		m_pTargetObject->GetScripts()[0]->SetHp(fHp);
+	}
+}
+
+void CInfectedGiantScript::sound()
+{
+	static float fDT = DT;
+	fDT += DT;
+	if (fDT > 30.f)
+	{
+		Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\zombie_man_normal.wav");
+		pSound->Play(1, 0.6f, false);
+		fDT = 0.f;
 	}
 }

@@ -23,6 +23,8 @@ void CResMgr::init()
 
 	CreateDefaultMaterial();
 
+	CreateDefaultSound();
+
 }
 
 Ptr<CTexture> CResMgr::CreateTexture(const wstring& _strKey, UINT _iWidth, UINT _iHeight, DXGI_FORMAT _eFormat, UINT _iBindFlag)
@@ -568,7 +570,7 @@ void CResMgr::CreateDefaultMesh()
 
 				v.vPos = Vec3{ fX, 0.f, fZ };
 				v.vColor = Vec4(0.f, 0.f, 0.f, 1.f);
-				v.vColor = Vec4(i * TILEZ + j, 0.f, 0.f, 0.f);
+				v.vColor = Vec4(i * (float)TILEZ + j, 0.f, 0.f, 0.f);
 				*iterVtx = v;
 			}
 		}
@@ -701,6 +703,23 @@ void CResMgr::CreateDefaultTexture()
 
 	CreateTexture(L"UAVTex", 1024, 1024, DXGI_FORMAT_R8G8B8A8_UNORM, D3D11_BIND_SHADER_RESOURCE |
 		D3D11_BIND_UNORDERED_ACCESS);
+}
+
+void CResMgr::CreateDefaultSound()
+{
+	Load<CSound>(L"sound\\background.wav", L"sound\\background.wav");
+	Load<CSound>(L"sound\\ranger_attack.wav", L"sound\\ranger_attack.wav");
+	Load<CSound>(L"sound\\ranger_dead.wav", L"sound\\ranger_dead.wav");
+	Load<CSound>(L"sound\\ranger_loadattack.wav", L"sound\\ranger_loadattack.wav");
+	Load<CSound>(L"sound\\ranger_normal.wav", L"sound\\ranger_normal.wav");
+	Load<CSound>(L"sound\\ranger_run.wav", L"sound\\ranger_run.wav");
+	Load<CSound>(L"sound\\sniper_attack.wav", L"sound\\sniper_attack.wav");
+	Load<CSound>(L"sound\\soldier_loadattack.wav", L"sound\\soldier_loadattack.wav");
+	Load<CSound>(L"sound\\soldier_normal.wav", L"sound\\soldier_normal.wav");
+	Load<CSound>(L"sound\\zombie_man_normal.wav", L"sound\\zombie_man_normal.wav");
+	Load<CSound>(L"sound\\zombie_woman_normal.wav", L"sound\\zombie_woman_normal.wav");
+	Load<CSound>(L"sound\\soldier_attack.wav", L"sound\\soldier_attack.wav");
+
 }
 
 void CResMgr::CreateDefaultGraphicsShader()
@@ -906,7 +925,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::ALPHABLEND);
 	pShader->SetDSType(DS_TYPE::LESS);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 	pShader->SetTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D10_PRIMITIVE_TOPOLOGY_LINELIST);
 	AddRes<CGraphicsShader>(L"BorderShader", pShader);
 
@@ -916,7 +935,7 @@ void CResMgr::CreateDefaultGraphicsShader()
 	pShader->SetRSType(RS_TYPE::CULL_NONE);
 	pShader->SetBSType(BS_TYPE::DEFAULT);
 	pShader->SetDSType(DS_TYPE::NO_TEST_NO_WRITE);
-	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_OPAQUE);
+	pShader->SetDomain(SHADER_DOMAIN::DOMAIN_MASK);
 	AddRes<CGraphicsShader>(L"UiTileShader", pShader);
 
 	//Building Red, Green

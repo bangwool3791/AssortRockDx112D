@@ -17,6 +17,11 @@ CScript::~CScript()
 
 }
 
+void CScript::begin()
+{
+	m_pPortrait->GetRenderComponent()->Deactivate();
+}
+
 void CScript::tick()
 {
 	if (m_bDesc)

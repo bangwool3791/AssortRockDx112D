@@ -173,7 +173,7 @@ int  CAnimation2D::Delete_Animation2D(int _iIndex)
 		if (iCur == _iIndex)
 		{
 			iter = m_vecFrm.erase(iter);
-			m_iCurIdx = m_vecFrm.size() - 1;
+			m_iCurIdx = (int)(m_vecFrm.size() - 1);
 			break;
 		}
 		++iCur;

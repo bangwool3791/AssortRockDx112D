@@ -20,6 +20,7 @@ CSCScript::CSCScript()
 	, m_pTileObject{}
 	, m_eBuildState{ BUILD_STATE::READY }
 	, m_pGameObject{}
+	, m_pLevelMouseObject{}
 {
 	m_fFullHp = 800.f;
 
@@ -62,6 +63,8 @@ CSCScript::~CSCScript()
 
 void CSCScript::begin()
 {
+	__super::begin();
+
 	m_pLevelMouseObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"MouseObject");
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
@@ -189,6 +192,25 @@ void CSCScript::finaltick()
 	}
 	else if (m_eBuildState == BUILD_STATE::CREATE_UNIT)
 	{
+		if (m_bEvent)
+		{
+			for (size_t i{ 0 }; i < m_pCreateUnit->GetChilds().size(); ++i)
+				m_pCreateUnit->GetChilds()[i]->MeshRender()->Activate();
+
+			for (size_t i{}; i < m_queUnit.size(); ++i)
+			{
+				CGameObject* pObj = m_queUnit.front();
+				m_queUnit.pop();
+				Vec3 vScale = m_pCreateUnit->GetChilds()[i]->Transform()->GetRelativeScale();
+				pObj->Transform()->SetRelativeScale(vScale);
+				pObj->Transform()->SetRelativePos(60.f * i, 0.f, -600.f);
+				pObj->MeshRender()->Activate();
+				m_pCreateUnit->GetChilds()[i]->MeshRender()->Deactivate();
+				m_queUnit.push(pObj);
+			}
+			m_bEvent = false;
+		}
+
 		CGameObject* pObj = m_pProgressBar->GetChilds()[0];
 		Vec3 vScale = pObj->Transform()->GetRelativeScale();
 
@@ -258,7 +280,7 @@ void CSCScript::finaltick()
 
 					Vec3 vScale = m_pCreateUnit->GetChilds()[i]->Transform()->GetRelativeScale();
 					pObj->Transform()->SetRelativeScale(vScale);
-					pObj->Transform()->SetRelativePos(60 * i, 0.f, -600.f);
+					pObj->Transform()->SetRelativePos(60.f * i, 0.f, -600.f);
 					m_pCreateUnit->GetChilds()[i]->MeshRender()->Deactivate();
 
 					m_queUnit.push(pObj);
@@ -462,6 +484,8 @@ void CSCScript::CreateUnit(const wstring& _str)
 {
 	if ((BUILD_STATE::COMPLETE == m_eBuildState || BUILD_STATE::CREATE_UNIT == m_eBuildState) && 5 > m_queUnit.size())
 	{
+		m_bEvent = true;
+
 		m_pProgressBar->MeshRender()->Activate();
 		m_pProgressBar->GetChilds()[0]->MeshRender()->Activate();
 
@@ -479,6 +503,8 @@ void CSCScript::CreateUnit(const wstring& _str)
 
 			Ptr<CPrefab> prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CDescCreateUnitPrefab");
 			m_pCreateUnit = prefab->Instantiate();
+			//for (size_t i{ 0 }; i < m_pCreateUnit->GetChilds().size(); ++i)
+			//	m_pCreateUnit->GetChilds()[i]->MeshRender()->Activate();
 			m_pCreateUnit->Transform()->SetRelativePos(0.f, 0.f, -600.f);
 			Instantiate(m_pCreateUnit, 31);
 		}
@@ -495,12 +521,15 @@ void CSCScript::CreateUnit(const wstring& _str)
 		{
 			prefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CImageSniperPrefab");
 		}
+
 		CGameObject* pObj = prefab->Instantiate();
+
 		m_queUnit.push(pObj);
 		Instantiate(pObj, 31);
 
 		m_eBuildState = BUILD_STATE::CREATE_UNIT;
 		m_strPrefab = _str;
+		size_t index = 0;
 
 		for (size_t i{}; i < m_queUnit.size(); ++i)
 		{
@@ -508,15 +537,17 @@ void CSCScript::CreateUnit(const wstring& _str)
 			m_queUnit.pop();
 			Vec3 vScale = m_pCreateUnit->GetChilds()[i]->Transform()->GetRelativeScale();
 			pObj->Transform()->SetRelativeScale(vScale);
-			pObj->Transform()->SetRelativePos(60 * i, 0.f, -600.f);
+			pObj->Transform()->SetRelativePos(60.f * i, 0.f, -600.f);
+			pObj->GetRenderComponent()->Activate();
 			m_pCreateUnit->GetChilds()[i]->MeshRender()->Deactivate();
 			m_queUnit.push(pObj);
+			++index;
 		}
 
-		size_t iSize = m_pCreateUnit->GetChilds().size() - m_queUnit.size();
+		size_t iSize = m_pCreateUnit->GetChilds().size() - m_queUnit.size() ;
 
-		for (size_t i{ iSize }; i < m_pCreateUnit->GetChilds().size(); ++i)
-			m_pCreateUnit->GetChilds()[i]->MeshRender()->Activate();
+		for (size_t i{ index }; i < m_pCreateUnit->GetChilds().size(); ++i)
+			m_pCreateUnit->GetChilds()[index]->MeshRender()->Activate();
 	}
 }
 
@@ -554,7 +585,7 @@ void CSCScript::PhaseEventOn()
 			m_queUnit.pop();
 			Vec3 vScale = m_pCreateUnit->GetChilds()[i]->Transform()->GetRelativeScale();
 			pObj->Transform()->SetRelativeScale(vScale);
-			pObj->Transform()->SetRelativePos(60 * i, 0.f, -600.f);
+			pObj->Transform()->SetRelativePos(60.f * i, 0.f, -600.f);
 			pObj->MeshRender()->Activate();
 			m_pCreateUnit->GetChilds()[i]->MeshRender()->Deactivate();
 			m_queUnit.push(pObj);

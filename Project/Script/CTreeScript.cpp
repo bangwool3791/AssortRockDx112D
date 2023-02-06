@@ -24,6 +24,15 @@ CTreeScript::~CTreeScript()
 
 void CTreeScript::begin()
 {
+	static int this_ = 0;
+
+	if(0 == this_)
+		this_ = (int)this;
+
+	if (this_ == (int)this)
+	{
+		int a = 0;
+	}
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\vegetation\\Atlas1_HQ.dds");
 
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");

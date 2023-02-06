@@ -29,6 +29,8 @@
 
 void CreateDefaultPrefab()
 {
+	CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
+
 	CGameObject* pObject = new CGameObject;
 	pObject->SetName(L"Missile");
 	pObject->AddComponent(new CTransform);
@@ -104,12 +106,78 @@ void CreateDefaultPrefab()
 
 void CreateTestLelvel()
 {
-	CreateDefaultPrefab();
-	//CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
-	//\CLevelMgr::GetInst()->ChangeLevel(Level);
-	//\Level->begin();
-	//\return;
+	Ptr<CSound> pSound = CResMgr::GetInst()->FindRes<CSound>(L"sound\\background.wav");
+	pSound->Play(100, 1.f, false);
 
+	CGameObject* pGameObect{};
+
+	CreateDefaultPrefab();
+
+	CLevel* Level = CSaveLoadMgr::GetInst()->LoadLevel(L"level\\Test.lv");
+
+	Level->GetLayer(0)->SetName(L"Terrain");
+	Level->GetLayer(1)->SetName(L"Player");
+	Level->GetLayer(2)->SetName(L"PlayerProjecttile");
+	Level->GetLayer(3)->SetName(L"Monster");
+	Level->GetLayer(4)->SetName(L"MonsterProjecttile");
+
+	//지형은 매시만 로드하면 됨.
+	pGameObect = new CGameObject;
+	pGameObect->AddComponent(new CTransform);
+	pGameObect->AddComponent(new CTerrain);
+	pGameObect->SetName(L"LevelTerrain");
+
+	pGameObect->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pGameObect->Transform()->SetRelativeScale(1.f, 1.f, 1.f);
+	pGameObect->begin();
+
+	for (UINT i{}; i < TEX_32 + 1; ++i)
+	{
+		wstring str = L"texture\\Terrain\\Tile\\Tile";
+		str += std::to_wstring(i);
+		str += L".png";
+		pGameObect->Terrain()->SetTileAtlas(CResMgr::GetInst()->FindRes<CTexture>(str));
+	}
+
+	pGameObect->Terrain()->GetMesh()->Load(L"Terrain\\Terrain.dat");
+	Level->GetLayer(L"Terrain")->AddGameObject(pGameObect);
+
+	pGameObect = new CGameObject;
+	pGameObect->AddComponent(new CTransform);
+	pGameObect->AddComponent(new CTileMap);
+	pGameObect->AddComponent(new CTileScript);
+	pGameObect->SetName(L"LevelTile");
+
+	pGameObect->Transform()->SetRelativePos(0.f, 0.f, 0.f);
+	pGameObect->Transform()->SetRelativeScale(1.f, 1.f, 1.f);
+	pGameObect->begin();
+
+	Level->GetLayer(L"Terrain")->AddGameObject(pGameObect);
+
+	//보조 Mesh 추가
+
+	pGameObect = new CGameObject;
+	pGameObect->SetName(L"Grid Object");
+
+	pGameObect->AddComponent(new CTransform);
+	pGameObect->AddComponent(new CMeshRender);
+	pGameObect->AddComponent(new CAssistScript);
+
+	pGameObect->MeshRender()->SetMesh(CResMgr::GetInst()->FindRes<CMesh>(L"BorderMesh"));
+	pGameObect->MeshRender()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BorderMtrl"));
+
+	pGameObect->GetScript<CAssistScript>()->SetGridColor(Vec4(1.f, 1.f, 1.f, 1.f));
+	pGameObect->GetScript<CAssistScript>()->SetGridInterval(100.f);
+	pGameObect->GetScript<CAssistScript>()->SetThickness(2.f);
+
+	pGameObect->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
+	Level->GetLayer(L"Terrain")->AddGameObject(pGameObect);
+
+	CLevelMgr::GetInst()->ChangeLevel(Level);
+	Level->begin();
+	return;
+
+	//주석 경계 
 	CLevel* pLevel = new CLevel;
 	pLevel->SetName(L"Level");
 #if true
@@ -118,8 +186,6 @@ void CreateTestLelvel()
 	pLevel->GetLayer(2)->SetName(L"PlayerProjecttile");
 	pLevel->GetLayer(3)->SetName(L"Monster");
 	pLevel->GetLayer(4)->SetName(L"MonsterProjecttile");
-
-	CSaveLoadMgr::GetInst()->LoadPrefab(L"prefab\\prefab.dat");
 
 	// Camera Object 추가
 	CGameObject* pCamObj = new CGameObject;
@@ -153,14 +219,14 @@ void CreateTestLelvel()
 	pCamObj->Transform()->SetRelativeRotation(Vec3(XM_PI * 0.25f, 0.f, 0.f));
 	pLevel->AddGameObject(pCamObj, 0);
 
-	// Directional Light 추가
-	CGameObject* pDirLight = new CGameObject;
-	pDirLight->SetName(L"DirectionalLight");
-	pDirLight->AddComponent(new CTransform);
-	pDirLight->AddComponent(new CLight2D);
-	pDirLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
-	pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
-	pLevel->AddGameObject(pDirLight, 0);
+	//// Directional Light 추가
+	//CGameObject* pDirLight = new CGameObject;
+	//pDirLight->SetName(L"DirectionalLight");
+	//pDirLight->AddComponent(new CTransform);
+	//pDirLight->AddComponent(new CLight2D);
+	//pDirLight->Light2D()->SetLightColor(Vec3(0.5f, 0.5f, 0.5f));
+	//pDirLight->Light2D()->SetLightType(LIGHT_TYPE::DIRECTIONAL);
+	//pLevel->AddGameObject(pDirLight, 0);
 
 	pCamObj = new CGameObject;
 	pCamObj->SetName(L"MouseObject");
@@ -171,7 +237,7 @@ void CreateTestLelvel()
 	CreateInterface(pLevel);
 
 	// PointLight 추가
-	CGameObject* pPointLight{};// = new CGameObject;
+	//CGameObject* pPointLight{};// = new CGameObject;
 	//pPointLight->SetName(L"PointLight");
 
 	//pPointLight->AddComponent(new CTransform);
@@ -319,8 +385,8 @@ void CreateTestLelvel()
 	//CCollisionMgr::GetInst()->CollisionLayerCheck(30, 31);
 #endif
 
-		//지형은 매시만 로드하면 됨.
-	CGameObject* pGameObect = new CGameObject;
+	//	//지형은 매시만 로드하면 됨.
+	pGameObect = new CGameObject;
 	pGameObect->AddComponent(new CTransform);
 	pGameObect->AddComponent(new CTerrain);
 	pGameObect->SetName(L"LevelTerrain"); 
@@ -375,8 +441,9 @@ void CreateTestLelvel()
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 1);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
-	
-	//CCollisionMgr::GetInst()->CollisionLayerCheck(4, 3);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 3);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 3);
+
 	pLevel->begin();
 }
 

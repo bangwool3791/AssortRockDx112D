@@ -54,11 +54,11 @@ void CButtonScript::begin()
 	m_AtlasAlpha = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Mask\\TileMask.png");
 
 	Ptr<CTexture> TexPortraits = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Portraits.dds");
-	float fPortraitWidth = TexPortraits->GetWidth();
-	float fPortraitHeight = TexPortraits->GetHeight();
+	float fPortraitWidth = (float)TexPortraits->GetWidth();
+	float fPortraitHeight = (float)TexPortraits->GetHeight();
 
-	float width = m_Atlas->GetWidth();
-	float height = m_Atlas->GetHeight();
+	float width = (float)m_Atlas->GetWidth();
+	float height = (float)m_Atlas->GetHeight();
 	GetOwner()->MeshRender()->GetCurMaterial()->SetTexParam(TEX_PARAM::TEX_0, m_Atlas);
 	int a = 1;
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &a);
@@ -67,8 +67,8 @@ void CButtonScript::begin()
 	Vec2 vSlice = { 100.f / width, 100.f / height };
 	GetOwner()->GetRenderComponent()->GetCurMaterial()->SetScalarParam(SCALAR_PARAM::VEC2_1, &vSlice);
 
-	float fIconWidth = m_IconAtlas->GetWidth();
-	float fIconHeight = m_IconAtlas->GetHeight();
+	float fIconWidth = (float)m_IconAtlas->GetWidth();
+	float fIconHeight = (float)m_IconAtlas->GetHeight();
 
 	m_arrTab[COMMAND_CENTER][0].Texture = m_IconAtlas;
 	m_arrTab[COMMAND_CENTER][0].vUV.x = 275.f / fIconWidth;

@@ -51,7 +51,7 @@ void CTileMap::begin()
 
 	m_TileBuffer->Create(sizeof(tTile), TILEX * TILEZ, SB_TYPE::SRV_ONLY, m_vecInfo.data(), true);
 
-	m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+	m_TileBuffer->SetData(m_vecInfo.data(), (UINT)m_vecInfo.size());
 
 	CJpsMgr::GetInst()->Initialize(GetMesh());
 }
@@ -120,7 +120,7 @@ void CTileMap::SetInfo(Vec3 _vPos, UINT _iInfo)
 		if (-1 != index)
 		{
 			m_vecInfo[index].iInfo = _iInfo;
-			m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+			m_TileBuffer->SetData(m_vecInfo.data(), (UINT)m_vecInfo.size());
 			return;
 		}
 	}
@@ -131,7 +131,7 @@ void CTileMap::SetInfo(int _iIndex, UINT _iInfo)
 	if (0 <= _iIndex && _iIndex < m_vecInfo.size())
 	{
 		m_vecInfo[_iIndex].iInfo = _iInfo;
-		m_TileBuffer->SetData(m_vecInfo.data(), m_vecInfo.size());
+		m_TileBuffer->SetData(m_vecInfo.data(), (UINT)m_vecInfo.size());
 	}
 }
 
@@ -230,6 +230,8 @@ void CTileMap::LoadFromFile(FILE* _File)
 	{
 		fread(&m_vecInfo[i], sizeof(tTile), 1, _File);
 	}
+	m_vecInfo.clear();
+	m_vecInfo.shrink_to_fit();
 }
 
 void CTileMap::On()

@@ -55,8 +55,8 @@ CInterfaceScript::~CInterfaceScript()
 void CInterfaceScript::begin()
 {
 	Ptr<CTexture> pTex = CResMgr::GetInst()->FindRes<CTexture>(L"texture\\Interface\\Atlas1_LQ.dds");
-	float width = pTex->GetWidth();
-	float height = pTex->GetHeight();
+	float width = (float)pTex->GetWidth();
+	float height = (float)pTex->GetHeight();
 	GetOwner()->MeshRender()->GetDynamicMaterial()->SetTexParam(TEX_PARAM::TEX_0, pTex);
 	int a = 1;
 	GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(SCALAR_PARAM::INT_0, &a);
@@ -81,16 +81,50 @@ void CInterfaceScript::begin()
 	m_pGoldBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressGold");
 	m_pWoodBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressWood");
 	m_pIronBar = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"CProgressIron");
+
 }
 
 void CInterfaceScript::tick()
 {
+	static bool bCheck = false;
+
+	if (!bCheck)
+	{
+		const vector<CGameObject*> vec = GetOwner()->GetChilds();
+
+		for (size_t i{}; i < vec.size(); ++i)
+		{
+			if (vec[i]->GetName().find(L"CDesc") != std::wstring::npos)
+			{
+				if (vec[i]->GetName().find(L"Detail") == std::wstring::npos)
+				{
+					vec[i]->GetRenderComponent()->Activate();
+				}
+			}
+		}
+		bCheck = true;
+	}
 	Resource();
 
 	if (m_pTarget && m_pTarget->IsDead())
 	{
 		CInterfaceMgr::GetInst()->SetTarget(nullptr);
 		m_pTarget = nullptr;
+	}
+	
+	if (!m_vecDragObj.empty())
+	{
+		for (auto iter{ m_vecDragObj.begin() }; iter != m_vecDragObj.end();)
+		{
+			if ((*iter)->IsDead())
+			{
+				iter = m_vecDragObj.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
 	}
 
 	if (CInterfaceMgr::GetInst()->GetBuildObj())
@@ -214,10 +248,31 @@ void CInterfaceScript::finaltick()
 				}
 			}
 		}
+		if (!m_vecDragObj.empty())
+		{
+			if (m_pTarget)
+			{
+				//CSelectCirclePrefab
+				for (size_t i{}; i < m_pTarget->GetChilds().size(); ++i)
+				{
+					const wstring& str = m_pTarget->GetChilds()[i]->GetName();
+
+					if (str == L"CSelectCircle")
+					{
+						m_pTarget->GetChilds()[i]->GetRenderComponent()->Deactivate();
+						break;
+					}
+				}
+			}
+
+			for (size_t i{}; i < m_vecDragObj.size(); ++i)
+				m_vecDragObj[i]->GetChilds()[0]->GetRenderComponent()->Activate();
+		}
 		m_bActiveDrag = false;
 	}
 	else if (!m_vecDragObj.empty())
 	{
+
 		if (KEY_TAP(KEY::RBTN))
 		{
 			const Ray& ray = GetRay();
@@ -565,12 +620,12 @@ void CInterfaceScript::finaltick()
 		//}
 
 		sort(vecPair.begin(), vecPair.end(), [&](pair<CGameObject*, float> lhs, pair<CGameObject*, float> rhs)
-		{
-			if (lhs.second < rhs.second)
-				return true;
-			else
-				return false;
-		});
+			{
+				if (lhs.second < rhs.second)
+					return true;
+				else
+					return false;
+			});
 
 		if (!vecPair.empty())
 		{
@@ -586,10 +641,22 @@ void CInterfaceScript::finaltick()
 		}
 	}
 
-
 	////타겟 미 선택 버튼 선택 일 경우 해지
-	//for (size_t i{}; i < 6; ++i)
-	//	m_arrTapButton[i]->GetScript<CButtonScript>()->Release();
+	for (size_t i{}; i < 6; ++i)
+	{
+		if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
+		{
+			if (m_bActiveMouse)
+			{
+				m_pDragObj->GetRenderComponent()->Deactivate();
+				Vec3 vScale{ 0.f, 0.f, 0.f };
+				m_pDragObj->Transform()->SetRelativeScale(vScale);
+				m_bActiveDrag = false;
+				m_bActiveMouse = false;
+			}
+		}
+	}
+		
 }
 
 void CInterfaceScript::BeginOverlap(CCollider2D* _pOther)
@@ -608,9 +675,19 @@ void CInterfaceScript::Resource()
 {
 	m_fDeltaTime += DT;
 
+	if (g_iGold > m_iGoldTotal)
+		g_iGold = m_iGoldTotal;
+
+	if (g_iWood > m_iWoodTotal)
+		g_iWood = m_iWoodTotal;
+
+	if (g_iIron > m_iIronTotal)
+		g_iIron = m_iIronTotal;
+
+
 	if (m_fDeltaTime >= 10.f)
 	{
-		if(g_iGold < m_iGoldTotal)
+		if (g_iGold < m_iGoldTotal)
 			g_iGold += g_iGoldInc;
 		else
 			g_iGold = m_iGoldTotal;
@@ -625,46 +702,44 @@ void CInterfaceScript::Resource()
 		else
 			g_iIron = m_iIronTotal;
 
-		CEngine::g_vecUiText.clear();
-		CEngine::g_vecUiText.shrink_to_fit();
-
-		tTextInfo tInfo{};
-
-		lstrcat(tInfo.sz, std::to_wstring(g_iColony).c_str());
-		tInfo.vPos = Vec2{ 1392.f, 813.f };
-		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
-		tInfo.fSize = 14.f;
-		CEngine::g_vecUiText.push_back(tInfo);
-
-		memset(&tInfo, 0, sizeof(tTextInfo));
-
-		lstrcat(tInfo.sz, std::to_wstring(g_iWorker).c_str());
-		tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f };
-		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
-		tInfo.fSize = 14.f;
-		CEngine::g_vecUiText.push_back(tInfo);
-
-		memset(&tInfo, 0, sizeof(tTextInfo));
-
-		lstrcat(tInfo.sz, std::to_wstring(g_iGold).c_str());
-		tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f * 2.f };
-		tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
-		tInfo.fSize = 14.f;
-		CEngine::g_vecUiText.push_back(tInfo);
-
-		BarText();
-
-		IncText();
-		//Progress bar
-
-		ProgressBar(g_iGold, m_iGoldTotal, m_pGoldBar);
-		ProgressBar(g_iWood, m_iWoodTotal, m_pWoodBar);
-		ProgressBar(g_iIron, m_iIronTotal, m_pIronBar);
-
-
 		m_fDeltaTime = 0;
-
 	}
+
+	CEngine::g_vecUiText.clear();
+	CEngine::g_vecUiText.shrink_to_fit();
+
+	tTextInfo tInfo{};
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iColony).c_str());
+	tInfo.vPos = Vec2{ 1392.f, 813.f };
+	tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iWorker).c_str());
+	tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f };
+	tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcat(tInfo.sz, std::to_wstring(g_iFood).c_str());
+	tInfo.vPos = Vec2{ 1392.f, 813.f + 29.f * 2.f };
+	tInfo.vColor = Vec4{ 20.f, 200.f, 20.f, 200.f };
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	BarText();
+
+	IncText();
+	//Progress bar
+
+	ProgressBar(g_iGold, m_iGoldTotal, m_pGoldBar);
+	ProgressBar(g_iIron, m_iIronTotal, m_pIronBar);
+	ProgressBar(g_iWood, m_iWoodTotal, m_pWoodBar);
 }
 
 void CInterfaceScript::ProgressBar(int _iValue, int iTotal, CGameObject* pProObj)
@@ -698,7 +773,7 @@ void CInterfaceScript::BarText()
 
 	memset(&tInfo, 0, sizeof(tTextInfo));
 
-	lstrcat(tInfo.sz, std::to_wstring(g_iWood).c_str());
+	lstrcat(tInfo.sz, std::to_wstring(g_iIron).c_str());
 	tInfo.vPos = Vec2{ 1592.f - 100.f, 813.f + 29.f - 2.f };
 	tInfo.vColor = Vec4{ 255.f, 255.f, 255.f, 255.f };
 	tInfo.fSize = 15.f;
@@ -706,7 +781,7 @@ void CInterfaceScript::BarText()
 
 	memset(&tInfo, 0, sizeof(tTextInfo));
 
-	lstrcat(tInfo.sz, std::to_wstring(g_iIron).c_str());
+	lstrcat(tInfo.sz, std::to_wstring(g_iWood).c_str());
 	tInfo.vPos = Vec2{ 1592.f - 100.f, 813.f + 29.f * 2.f - 2.f };
 	tInfo.vColor = Vec4{ 255.f, 255.f, 255.f, 255.f };
 	tInfo.fSize = 15.f;
@@ -717,24 +792,27 @@ void CInterfaceScript::IncText()
 {
 	tTextInfo tInfo{};
 
+	lstrcpy(tInfo.sz, L"+");
 	lstrcat(tInfo.sz, std::to_wstring(g_iGoldInc).c_str());
-	tInfo.vPos = Vec2{ 1550.f, 813.f + 2.f };
+	tInfo.vPos = Vec2{ 1550.f, 813.f - 2.f };
 	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f};
 	tInfo.fSize = 14.f;
 	CEngine::g_vecUiText.push_back(tInfo);
 
 	memset(&tInfo, 0, sizeof(tTextInfo));
 
-	lstrcat(tInfo.sz, std::to_wstring(g_iWoodInc).c_str());
-	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f + 2.f };
-	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f};
-	tInfo.fSize = 14.f;
-	CEngine::g_vecUiText.push_back(tInfo);
-
-	memset(&tInfo, 0, sizeof(tTextInfo));
-
+	lstrcpy(tInfo.sz, L"+");
 	lstrcat(tInfo.sz, std::to_wstring(g_iIronInc).c_str());
-	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f * 2.f + 2.f };
+	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f - 2.f };
+	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f };
+	tInfo.fSize = 14.f;
+	CEngine::g_vecUiText.push_back(tInfo);
+
+	memset(&tInfo, 0, sizeof(tTextInfo));
+
+	lstrcpy(tInfo.sz, L"+");
+	lstrcat(tInfo.sz, std::to_wstring(g_iWoodInc).c_str());
+	tInfo.vPos = Vec2{ 1550.f, 813.f + 29.f * 2.f - 2.f };
 	tInfo.vColor = Vec4{ 0.f, 180.f, 0.f, 255.f };
 	tInfo.fSize = 14.f;
 	CEngine::g_vecUiText.push_back(tInfo);

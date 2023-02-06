@@ -28,7 +28,7 @@ void CAnimator2DUI::update()
 			m_vecKey[i] = WStringToString(vec[i]);
 
 			if (m_CurKey == m_vecKey[i])
-				m_iCurIndex = i;
+				m_iCurIndex = (int)i;
 		}
 	}
 

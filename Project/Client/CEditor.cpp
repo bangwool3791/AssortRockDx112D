@@ -258,6 +258,14 @@ void CEditor::debug_render()
 		}
 	}
 	vecInfo.clear();
+
+	CCamera* pCamera = CRenderMgr::GetInst()->GetMainCam();
+
+	if (pCamera)
+	{
+		g_transform.matView = pCamera->GetViewMat();
+		g_transform.matProj = pCamera->GetProjMat();
+	}
 }
 
 void CEditor::CreateDebugDrawObject()
@@ -377,8 +385,8 @@ void CEditor::DebugDraw(tDebugShapeInfo& _info)
 	pDebugObj->Transform()->finaltick();
 
 	g_transform.matWorld = pDebugObj->Transform()->GetWorldMat();
-	g_transform.matView = CRenderMgr::GetInst()->GetMainCam()->GetViewMat();
-	g_transform.matProj = CRenderMgr::GetInst()->GetMainCam()->GetProjMat();
+	//g_transform.matView = CRenderMgr::GetInst()->GetMainCam()->GetViewMat();
+	//g_transform.matProj = CRenderMgr::GetInst()->GetMainCam()->GetProjMat();
 
 	pDebugObj->MeshRender()->SetInstancingType(INSTANCING_TYPE::NONE);
 	pDebugObj->render();

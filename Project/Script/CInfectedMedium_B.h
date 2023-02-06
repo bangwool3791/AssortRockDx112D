@@ -26,12 +26,13 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
+    virtual void sound() override;
     CLONE(CInfectedMedium_B);
 public:
     void JpsAlgorithm(Int32 x, Int32 z);
     void SetDestPos(Vec3 _vPos);
    float GetHp() { return m_fHP; }
-    void SetHp(UINT _iHp) { m_fHP = _iHp; }
+    void SetHp(float _iHp) { m_fHP = _iHp; }
 private:
     bool Func(CGameObject* _lhs, CGameObject* _rhs);
     void ProcessEnemy();

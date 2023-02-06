@@ -26,6 +26,7 @@ public:
     virtual void BeginOverlap(CCollider2D* _pOther);
     virtual void Overlap(CCollider2D* _pOther);
     virtual void EndOverlap(CCollider2D* _pOther);
+    virtual void sound() override;
     CLONE(CInfectedGiantScript);
 public:
     void JpsAlgorithm(Int32 x, Int32 z);

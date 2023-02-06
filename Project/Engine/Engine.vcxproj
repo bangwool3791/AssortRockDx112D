@@ -182,8 +182,9 @@ call EngineCopy.bat</Command>
 call EngineCopy.bat</Command>
     </PreBuildEvent>
     <FxCompile>
-      <ShaderModel>4.0_level_9_3</ShaderModel>
+      <ShaderModel>5.0</ShaderModel>
       <EntryPointName>main</EntryPointName>
+      <ShaderType>Effect</ShaderType>
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

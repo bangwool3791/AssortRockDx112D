@@ -20,7 +20,7 @@ private:
 	Vec3		m_vRelativeDir[(UINT)DIR::END];
 	Vec3		m_vWorldDir[(UINT)DIR::END];
 	Matrix		m_matWorld;
-
+	vector<Vec3> m_vecPoint;
 	//부모 행렬의 영향을 받을지 않받을지 결정하는 bool 변수
 	bool		m_blgnParentScale;
 public:

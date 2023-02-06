@@ -5,6 +5,7 @@ class CSCScript :
     public CScript
 {
 private:
+    bool                        m_bEvent= false;
     wstring                     m_strPrefab;
     BUILD_STATE                 m_eBuildState;
     Vec3                        m_vMousePos;

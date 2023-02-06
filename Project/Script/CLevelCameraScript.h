@@ -5,7 +5,8 @@ class CLevelCameraScript :
 {
 private:
     float   m_fSpeed;
-
+    float   m_fScale;
+    Vec3    m_vPos;
 public:
     virtual void begin() override;
     virtual void tick() override;
