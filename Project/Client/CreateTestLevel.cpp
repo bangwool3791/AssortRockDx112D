@@ -120,6 +120,7 @@ void CreateTestLelvel()
 	Level->GetLayer(2)->SetName(L"PlayerProjecttile");
 	Level->GetLayer(3)->SetName(L"Monster");
 	Level->GetLayer(4)->SetName(L"MonsterProjecttile");
+	Level->GetLayer(5)->SetName(L"Building");
 
 	//지형은 매시만 로드하면 됨.
 	pGameObect = new CGameObject;
@@ -443,6 +444,7 @@ void CreateTestLelvel()
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 2);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(1, 3);
 	CCollisionMgr::GetInst()->CollisionLayerCheck(2, 3);
+	CCollisionMgr::GetInst()->CollisionLayerCheck(3, 5);
 
 	pLevel->begin();
 }

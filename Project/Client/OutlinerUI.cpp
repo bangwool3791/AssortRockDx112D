@@ -78,7 +78,8 @@ void OutlinerUI::render_update()
 
 	if (ImGui::IsMouseClicked(1))
 	{
-		ImGui::OpenPopup("my_select_popup");
+		if(EDIT_MODE::OBJECT != CEditor::GetInst()->GetEditMode())
+			ImGui::OpenPopup("my_select_popup");
 	}
 
 	ImGui::SameLine();

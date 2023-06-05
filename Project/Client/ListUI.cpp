@@ -70,12 +70,10 @@ void ListUI::Close()
 	ResetFocus();
 }
 
-
 void ListUI::SetItemList(const vector<string>& _inList)
 {
 	m_ItemList = _inList;
 }
-
 
 void ListUI::SetItemList(const vector<wstring>& _inList)
 {

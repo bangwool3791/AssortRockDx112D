@@ -61,6 +61,9 @@ void CTeslaTowerScript::begin()
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
 	GetOwner()->GetChilds()[2]->GetRenderComponent()->Deactivate();
 }
 
@@ -119,11 +122,15 @@ void CTeslaTowerScript::finaltick()
 				int a = 0;
 
 				if (IsBlocked(m_iIndex))
+				{
 					GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+					GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				}
 				else
 				{
 					a = 1;
 					GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+					GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 				}
 
 				m_fDt = 0.f;
@@ -151,11 +158,12 @@ void CTeslaTowerScript::finaltick()
 				m_fDt = 0.f;
 				m_fDt2 = 0.f;
 
-				Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CTeslaTowerPrefab");
-				CGameObject* pObj = pUIPrefab->Instantiate();
-				CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-				m_vMousePos.z += Transform()->GetRelativeScale().z * 0.5f;
-				Instantiate(pObj, m_vMousePos, 1);
+				//Ptr<CPrefab> pUIPrefab = CResMgr::GetInst()->FindRes<CPrefab>(L"CTeslaTowerPrefab");
+				//CGameObject* pObj = pUIPrefab->Instantiate();
+				//CInterfaceMgr::GetInst()->SetBuildObj(pObj);
+				m_vMousePos.z += Transform()->GetRelativeScale().z;
+				Create(L"CTeslaTowerPrefab", m_vMousePos);
+				//Instantiate(pObj, m_vMousePos, 5);
 			}
 		}
 	}
@@ -168,6 +176,9 @@ void CTeslaTowerScript::finaltick()
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
 		}
 	}

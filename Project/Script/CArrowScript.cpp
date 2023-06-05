@@ -98,15 +98,18 @@ void CArrowScript::BeginOverlap(CCollider2D* _pOther)
 
 void CArrowScript::Overlap(CCollider2D* _pOther)
 {
-	wstring wstrName = m_pTargetObject->GetName();
+	if (m_pTargetObject)
+	{
+		wstring wstrName = m_pTargetObject->GetName();
 
-	float fHp{};
+		float fHp{};
 
-	fHp = m_pTargetObject->GetScripts()[0]->GetHp();
-	fHp -= m_iAttack;
-	m_pTargetObject->GetScripts()[0]->SetHp(fHp);
+		fHp = m_pTargetObject->GetScripts()[0]->GetHp();
+		fHp -= m_iAttack;
+		m_pTargetObject->GetScripts()[0]->SetHp(fHp);
 
-	Destroy();
+		Destroy();
+	}
 }
 
 void CArrowScript::EndOverlap(CCollider2D* _pOther)

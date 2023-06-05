@@ -120,7 +120,7 @@ bool CScript::Create(const wstring& _str)
 		else
 		{
 			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-			Instantiate(pObj, 1);
+			Instantiate(pObj, 5);
 			return true;
 		}
 	}
@@ -174,7 +174,7 @@ bool CScript::Create(const wstring& _str, Vec3 vPos)
 			g_iWood -= _iWood;
 			g_iIron -= _iIron;
 			CInterfaceMgr::GetInst()->SetBuildObj(pObj);
-			Instantiate(pObj, vPos, 1);
+			Instantiate(pObj, vPos, 5);
 			return true;
 		}
 	}

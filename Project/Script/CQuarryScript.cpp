@@ -64,6 +64,9 @@ void CQuarryScript::begin()
 	GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
 	GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
 	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }
 
@@ -189,6 +192,9 @@ void CQuarryScript::tick()
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
 			m_fDt = 0.f;
 		}

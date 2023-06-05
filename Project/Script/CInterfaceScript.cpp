@@ -567,57 +567,17 @@ void CInterfaceScript::finaltick()
 		{
 			if (vecObj[i]->Transform()->Picking(ray, fDist))
 			{
-				//BUILD_STATE eState{};
-
-				//if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-				//else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
-				//	eState = vecObj[i]->GetScripts()[0]->GetState();
-
-				//if ((BUILD_STATE::COMPLETE == eState) || (BUILD_STATE::CREATE_UNIT == eState))
-				//{
-				//	vecPair.push_back(make_pair(vecObj[i], fDist));
-				//}
 				vecPair.push_back(make_pair(vecObj[i], fDist));
 			}
 		}
 
-		//const vector<CGameObject*>& vecUnit = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(1)->GetParentObjects();
+		const vector<CGameObject*>& vecUnit = CLevelMgr::GetInst()->GetCurLevel()->GetLayer(5)->GetParentObjects();
 
-		//for (size_t i{}; i < vecUnit.size(); ++i)
-		//{
-		//	if (!lstrcmp(vecObj[i]->GetName().data(), L"CmdCenter"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"Tent"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"HuntHouse"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"SawMill"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"Quarry"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"SC"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"WoodWorkshop"))
-		//		continue;
-		//	else if (!lstrcmp(vecObj[i]->GetName().data(), L"POS"))
-		//		continue;
-
-		//	if (vecUnit[i]->Transform()->Picking(ray, fDist))
-		//		vecPair.push_back(make_pair(vecUnit[i], fDist));
-		//}
+		for (size_t i{}; i < vecUnit.size(); ++i)
+		{
+			if (vecUnit[i]->Transform()->Picking(ray, fDist))
+				vecPair.push_back(make_pair(vecUnit[i], fDist));
+		}
 
 		sort(vecPair.begin(), vecPair.end(), [&](pair<CGameObject*, float> lhs, pair<CGameObject*, float> rhs)
 			{
@@ -627,7 +587,16 @@ void CInterfaceScript::finaltick()
 					return false;
 			});
 
-		if (!vecPair.empty())
+		bool bClick = true;
+		for (size_t i{}; i < 6; ++i)
+		{
+			if (m_arrTapButton[i]->GetScript<CButtonScript>()->IsClicked())
+			{
+				bClick = false;
+			}
+		}
+
+		if (!vecPair.empty() && bClick)
 		{
 			CInterfaceMgr::GetInst()->SetTarget(vecPair[0].first);
 

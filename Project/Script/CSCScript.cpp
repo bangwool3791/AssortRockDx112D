@@ -156,9 +156,13 @@ void CSCScript::finaltick()
 			{
 				a = 1;
 				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 			}
 			else
+			{
 				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+			}
 
 			m_fDt -= 0.15f;
 		}

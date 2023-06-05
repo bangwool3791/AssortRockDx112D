@@ -16,7 +16,6 @@
 #include "CEditor.h"
 
 #include "CImGuiMgr.h"
-#include "ListUI.h"
 
 #include "CGameObjectEx.h"
 
@@ -1008,7 +1007,6 @@ void EditAnimationUI::SetTextureUI()
 {
     //Texture 파일 경로 찾기
     wstring wstrFilePath = CPathMgr::GetInst()->GetContentPath();
-    m_fileDialogInfo.fileName;
     string strFilePath = string(wstrFilePath.begin(), wstrFilePath.end());
     string strFullPath = m_fileDialogInfo.resultPath.string();
 

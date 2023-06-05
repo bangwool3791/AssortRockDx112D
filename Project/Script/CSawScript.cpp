@@ -64,6 +64,9 @@ void CSawScript::begin()
 
 	m_pTileObject = CLevelMgr::GetInst()->GetCurLevel()->FindObjectByName(L"LevelTile");
 
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"BuildMtrl"));
+	GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
 	GetOwner()->GetChilds()[1]->GetRenderComponent()->Deactivate();
 }
 
@@ -135,9 +138,13 @@ void CSawScript::tick()
 			{
 				a = 1;
 				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
 			}
 			else
+			{
 				GetOwner()->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+				GetOwner()->GetChilds()[0]->GetRenderComponent()->GetDynamicMaterial()->SetScalarParam(INT_0, &a);
+			}
 
 			m_fDt -= 0.15f;
 		}
@@ -188,6 +195,9 @@ void CSawScript::tick()
 			m_fHP = m_fFullHp;
 			GetOwner()->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
 			GetOwner()->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
+
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetSharedMaterial(CResMgr::GetInst()->FindRes<CMaterial>(L"ObjectMtrl"));
+			GetOwner()->GetChilds()[0]->GetRenderComponent()->SetInstancingType(INSTANCING_TYPE::USED);
 			m_eBuildState = BUILD_STATE::COMPLETE;
 		}
 	}

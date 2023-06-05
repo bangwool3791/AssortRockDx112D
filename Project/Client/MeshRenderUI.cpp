@@ -47,6 +47,7 @@ void MeshRenderUI::render_update()
 	ImGui::SameLine(); 
 	ImGui::InputText("##MeshName", (char*)MeshName.data(), MeshName.length(), ImGuiInputTextFlags_ReadOnly);
 	ImGui::SameLine();
+
 	if (ImGui::Button("##MeshBtn", Vec2(15.f, 15.f)))
 	{
 		ListUI* pListUI = dynamic_cast<ListUI*>(CImGuiMgr::GetInst()->FindUI("ListUI"));

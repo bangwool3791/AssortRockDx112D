@@ -383,9 +383,34 @@ void CButtonScript::tick()
 	m_fDt += DT;
 	if (m_fDt > 0.25f)
 	{
-		if (KEY_PRESSED(KEY::LBTN))
+		if (KEY_TAP(KEY::LBTN))
 		{
-			if (GetOwner()->Transform()->Picking(m_pLevelMouseObject->GetScript<CMouseScript>()->GetUiRay(), m_vMousePos))
+			Vec2 p = CKeyMgr::GetInst()->GetMousePos();
+			Vec2 vResolution = CDevice::GetInst()->GetRenderResolution();
+			//float fScale = m_pCameraObejct->Camera()->GetOrthographicScale();
+			//vResolution = vResolution * fScale;
+
+			p.x = (2.0f * p.x) / vResolution.x - 1.0f;
+			p.y = 1.0f - (2.0f * p.y) / vResolution.y;
+
+			XMVECTOR det; //Determinant, needed for matrix inverse function call
+			Vector3 origin = Vector3(p.x, p.y, -1);
+			Vector3 faraway = Vector3(p.x, p.y, 1);
+
+			CGameObject* pUiCam = CLevelMgr::GetInst()->GetCurLevel()->FindParentObjectByName(L"UICamera");
+
+			const Matrix& matView = pUiCam->Camera()->GetViewMat();
+			const Matrix& matProj = pUiCam->Camera()->GetProjMat();
+			XMMATRIX invViewProj = XMMatrixInverse(&det, matView * matProj);
+			Vector3 rayorigin = XMVector3Transform(origin, invViewProj);
+			Vector3 rayend = XMVector3Transform(faraway, invViewProj);
+			Vector3 raydirection = rayend - rayorigin;
+			raydirection.Normalize();
+			Ray tRay;
+			tRay.position = rayorigin;
+			tRay.direction = raydirection;
+
+			if (GetOwner()->Transform()->Picking(tRay, m_vMousePos))
 			{
 				m_bClicked = true;
 			}
